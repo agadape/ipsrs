@@ -199,25 +199,70 @@ class Aset extends BaseController
 
     public function ping(string $id)
     {
+        // 1. Parse JSON body securely
         $body = $this->request->getJSON(true) ?? [];
-        $lat  = array_key_exists('lat', $body) ? (float)$body['lat'] : null;
-        $lng  = array_key_exists('lng', $body) ? (float)$body['lng'] : null;
+        $lat  = $body['lat'] ?? null;
+        $lng  = $body['lng'] ?? null;
 
-        if ($lat === null || $lng === null) {
-            return $this->response->setStatusCode(400)->setJSON(['ok' => false, 'msg' => 'no coords']);
+        // 2. Strict Input Validation for GPS Coordinates
+        if ($lat === null || $lng === null || !is_numeric($lat) || !is_numeric($lng)) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'ok' => false, 
+                'msg' => 'Data koordinat GPS tidak valid atau tidak lengkap'
+            ]);
+        }
+
+        $lat = (float) $lat;
+        $lng = (float) $lng;
+
+        // Validasi jangkauan GPS (-90 sd 90 untuk Latitude, -180 sd 180 untuk Longitude)
+        if ($lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'ok' => false, 
+                'msg' => 'Kordinat GPS di luar jangkauan logika pemetaan bumi'
+            ]);
         }
 
         try {
+            // 3. Validasi Keberadaan Aset di Database
+            $aset = $this->model->getById($id);
+            if (!$aset) {
+                return $this->response->setStatusCode(404)->setJSON([
+                    'ok' => false, 
+                    'msg' => 'Aset tidak ditemukan di sistem, ID mungkin tidak valid'
+                ]);
+            }
+
+            // 4. Rate Limiting Sederhana (Cegah spam ping berturut-turut dalam 10 detik)
+            if (!empty($aset['last_seen_at'])) {
+                $lastSeen = strtotime($aset['last_seen_at']);
+                if (time() - $lastSeen < 10) {
+                    return $this->response->setJSON([
+                        'ok' => true, 
+                        'msg' => 'Lokasi sudah diperbarui beberapa detik yang lalu (Spam Protection)'
+                    ]);
+                }
+            }
+
+            // 5. Eksekusi Update ke Database
             $this->model->update($id, [
-                'last_seen_at'  => date('Y-m-d H:i:s'),
+                'last_seen_at'  => date('Y-m-d H:i:s'), // Format MySQL Timestamp yang presisi
                 'last_seen_lat' => $lat,
                 'last_seen_lng' => $lng,
-                'last_seen_by'  => session('user_name') ?? 'Anonim',
+                'last_seen_by'  => session('user_name') ?? 'Guest System (QR Scan)',
             ]);
-            return $this->response->setJSON(['ok' => true]);
+
+            return $this->response->setJSON([
+                'ok' => true,
+                'msg' => 'Titik lokasi berhasil diamankan'
+            ]);
+
         } catch (\Throwable $e) {
-            log_message('error', '[Aset::ping] ' . $e->getMessage());
-            return $this->response->setStatusCode(500)->setJSON(['ok' => false, 'msg' => 'failed to update']);
+            log_message('critical', '[Aset::ping] Gagal memperbarui lokasi aset: ' . $e->getMessage());
+            return $this->response->setStatusCode(500)->setJSON([
+                'ok' => false, 
+                'msg' => 'Terjadi kendala pada server saat menyimpan koordinat'
+            ]);
         }
     }
 
