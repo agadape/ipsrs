@@ -77,7 +77,7 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'nama', 'jenis', 'kategori', 'lokasi', 'gedung', 'ruangan',
+                'nomor_aset', 'nama', 'jenis', 'kategori', 'lokasi', 'gedung', 'lantai', 'ruangan',
                 'unit', 'kondisi', 'merk', 'model', 'no_seri', 'tahun',
                 'kapasitas', 'keterangan', 'status',
             ]);
@@ -133,7 +133,7 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'nama', 'jenis', 'kategori', 'lokasi', 'gedung', 'ruangan',
+                'nomor_aset', 'nama', 'jenis', 'kategori', 'lokasi', 'gedung', 'lantai', 'ruangan',
                 'unit', 'kondisi', 'merk', 'model', 'no_seri', 'tahun',
                 'kapasitas', 'keterangan', 'status',
             ]);
