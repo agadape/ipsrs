@@ -301,9 +301,13 @@ $id = $aset['id'] ?? '';
   var params = new URLSearchParams(window.location.search);
   if (params.get('via') !== 'qr') return;
 
-  if (!navigator.geolocation) return;
+  if (!navigator.geolocation) {
+    alert("Browser HP Anda tidak mendukung deteksi lokasi (GPS).");
+    return;
+  }
+
   navigator.geolocation.getCurrentPosition(function(pos) {
-    fetch('/ipsrs/aset/<?= esc($id) ?>/ping', {
+    fetch('<?= site_url("ipsrs/aset/" . esc($id) . "/ping") ?>', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', 
@@ -320,8 +324,14 @@ $id = $aset['id'] ?? '';
           el.querySelector('svg').classList.replace('text-gray-400','text-emerald-600');
           el.querySelector('p').textContent = '📍 Lokasi berhasil direkam. Refresh untuk melihat detail.';
         }
+      } else {
+        r.json().then(data => alert("Gagal menyimpan lokasi ke server: " + (data.msg || r.statusText))).catch(() => alert("Error " + r.status));
       }
-    }).catch(function(){});
-  }, function(){}, { timeout: 8000, maximumAge: 60000 });
+    }).catch(function(err){
+      alert("Gagal menghubungi server: " + err.message);
+    });
+  }, function(err){
+    alert("Gagal membaca GPS HP Anda: " + err.message + "\n(Pastikan izin Lokasi/GPS menyala saat scan)");
+  }, { timeout: 15000, maximumAge: 60000, enableHighAccuracy: true });
 })();
 </script>
