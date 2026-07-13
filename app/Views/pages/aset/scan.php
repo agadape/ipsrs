@@ -3,179 +3,130 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>A.I. Tracker — <?= esc($aset['nama'] ?? 'Detail') ?></title>
+  <title>Verifikasi Lokasi — <?= esc($aset['nama'] ?? 'Detail Aset') ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    body { font-family: 'Space Grotesk', sans-serif; background: #020617; min-height: 100vh; overflow-x: hidden; color: #e2e8f0; }
+    body { font-family: 'Public Sans', sans-serif; background-color: #f8f9fa; color: #435971; }
+    .card { background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 0.25rem 1.125rem rgba(75, 70, 92, 0.1); }
     
-    /* Cyberpunk Grid Background */
-    .cyber-grid {
-      position: fixed; inset: 0; z-index: -2;
-      background-size: 50px 50px;
-      background-image: linear-gradient(to right, rgba(99, 102, 241, 0.05) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
-      mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-    }
-
-    /* Radar Sweeper */
-    .radar-sweep {
-      position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; z-index: -1;
-      background: conic-gradient(from 0deg, transparent 70%, rgba(99,102,241,0.1) 100%);
-      animation: sweep 4s linear infinite; opacity: 0.5;
-    }
-    @keyframes sweep { to { transform: rotate(360deg); } }
-
-    /* High-tech HUD Card */
-    .hud-card {
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.2), inset 0 0 20px rgba(99, 102, 241, 0.05);
-      border-radius: 1rem; position: relative;
-    }
-    .hud-card::before, .hud-card::after {
-      content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid #6366f1;
-    }
-    .hud-card::before { top: -1px; left: -1px; border-right: none; border-bottom: none; border-top-left-radius: 1rem; }
-    .hud-card::after { bottom: -1px; right: -1px; border-left: none; border-top: none; border-bottom-right-radius: 1rem; }
-
-    /* Flashing Red Warning UI for Geofence Breach */
-    body.breach-mode { background: #450a0a !important; }
-    body.breach-mode .cyber-grid { background-image: linear-gradient(to right, rgba(239, 68, 68, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(239, 68, 68, 0.1) 1px, transparent 1px); }
-    body.breach-mode .radar-sweep { background: conic-gradient(from 0deg, transparent 70%, rgba(239,68,68,0.2) 100%); }
-    body.breach-mode .hud-card { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 0 50px rgba(239, 68, 68, 0.3), inset 0 0 20px rgba(239, 68, 68, 0.1); }
-    body.breach-mode .hud-card::before, body.breach-mode .hud-card::after { border-color: #ef4444; }
-    .breach-text { color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
-    .breach-animate { animation: breachFlash 1s ease-in-out infinite; }
-    @keyframes breachFlash { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-    /* Map & UI Elements */
-    #map-wrapper { transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); max-height: 0; opacity: 0; overflow: hidden; }
-    #map-wrapper.show { max-height: 800px; opacity: 1; margin-top: 1.5rem; }
+    .btn-primary { background-color: #696cff; color: #fff; border-color: #696cff; box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4); transition: all 0.2s ease-in-out; }
+    .btn-primary:hover { background-color: #5f61e6; border-color: #5f61e6; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
     
-    .btn-cyber {
-      background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.5);
-      color: #818cf8; text-transform: uppercase; letter-spacing: 2px;
-      transition: all 0.3s; position: relative; overflow: hidden;
-    }
-    .btn-cyber:hover { background: rgba(99, 102, 241, 0.2); box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
-    .btn-cyber:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-    
-    .btn-cyber.success { background: rgba(16, 185, 129, 0.1); border-color: #10b981; color: #34d399; box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); }
-    .btn-cyber.danger { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; color: #f87171; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); animation: breachFlash 1s infinite; }
+    .btn-success { background-color: #71dd37; color: #fff; border-color: #71dd37; box-shadow: 0 0.125rem 0.25rem 0 rgba(113, 221, 55, 0.4); }
+    .btn-danger { background-color: #ff3e1d; color: #fff; border-color: #ff3e1d; box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 62, 29, 0.4); }
 
-    .telemetry-row { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 0.5rem 0; font-family: monospace; font-size: 0.75rem; }
-    .telemetry-label { color: #64748b; text-transform: uppercase; }
-    .telemetry-val { color: #38bdf8; font-weight: bold; }
-    body.breach-mode .telemetry-val { color: #f87171; }
+    .badge-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: #a1acb8; margin-bottom: 0.25rem; }
+    .data-value { font-weight: 600; color: #566a7f; font-size: 0.875rem; }
+
+    #map-wrapper { transition: all 0.5s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
+    #map-wrapper.show { max-height: 800px; opacity: 1; margin-top: 1rem; }
+
+    .custom-map-dot { border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.3); border: 2px solid white; }
   </style>
 </head>
-<body class="flex flex-col items-center justify-center p-4">
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
 
-  <div class="cyber-grid"></div>
-  <div class="radar-sweep"></div>
-
-  <!-- Header -->
-  <div class="w-full max-w-md flex items-center justify-between mb-4 mt-2 px-2">
-    <div class="flex items-center gap-2">
-      <div id="status-indicator" class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
-      <span class="text-indigo-400/80 font-bold tracking-widest text-[10px] uppercase">Aset Telemetry System</span>
+  <!-- Logo & Header -->
+  <div class="w-full max-w-md flex flex-col items-center mb-6 mt-4">
+    <div class="w-12 h-12 rounded-lg bg-[#696cff]/10 flex items-center justify-center mb-3">
+      <svg class="w-7 h-7 text-[#696cff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
     </div>
-    <span class="text-slate-500 font-mono text-[10px]" id="clock">00:00:00</span>
+    <h2 class="text-xl font-bold text-[#566a7f]">IPSRS RSUD JOGJA</h2>
+    <p class="text-sm text-[#a1acb8]">Sistem Verifikasi Lokasi Aset</p>
   </div>
 
-  <div class="hud-card w-full max-w-md p-6 text-center z-10 transition-colors duration-500">
+  <div class="card w-full max-w-md p-6 relative z-10">
     
-    <!-- Radar Scanner UI -->
-    <div id="radar-container" class="relative w-24 h-24 mx-auto mb-6">
-      <div id="radar-ring-1" class="absolute inset-0 border-2 border-indigo-500/30 rounded-full"></div>
-      <div id="radar-ring-2" class="absolute inset-2 border border-indigo-400/20 rounded-full animate-[spin_3s_linear_infinite] border-t-indigo-400"></div>
-      <div class="relative w-full h-full rounded-full flex items-center justify-center bg-indigo-900/20 backdrop-blur-sm">
-        <svg id="radar-icon" class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
-        </svg>
+    <!-- Asset Info -->
+    <div class="text-center mb-6 pb-6 border-b border-gray-100">
+      <h1 class="text-2xl font-bold text-[#566a7f] mb-1"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
+      <span class="inline-block px-3 py-1 rounded-full bg-gray-100 text-[#566a7f] text-xs font-semibold">
+        ID: <?= esc($aset['nomor_aset'] ?? '-') ?>
+      </span>
+    </div>
+
+    <!-- Data Grid -->
+    <div class="grid grid-cols-2 gap-4 text-left mb-6">
+      <div class="bg-slate-50 rounded-lg p-3 border border-slate-100">
+        <p class="badge-label">Kategori</p>
+        <p class="data-value"><?= esc($aset['kategori'] ?? '-') ?></p>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-3 border border-slate-100">
+        <p class="badge-label">Kondisi</p>
+        <div class="flex items-center gap-1.5">
+          <?php $isBaik = strtolower($aset['kondisi'] ?? '') === 'baik'; ?>
+          <span class="h-2.5 w-2.5 rounded-full <?= $isBaik ? 'bg-green-500' : 'bg-yellow-500' ?>"></span>
+          <p class="data-value"><?= esc($aset['kondisi'] ?? '-') ?></p>
+        </div>
+      </div>
+      <div class="col-span-2 bg-slate-50 rounded-lg p-3 border border-slate-100">
+        <p class="badge-label">Lokasi Saat Ini (Sistem)</p>
+        <p class="data-value"><?= esc($aset['lokasi'] ?? '-') ?> <span class="text-gray-400 font-normal">/ <?= esc($aset['ruangan'] ?? '-') ?></span></p>
       </div>
     </div>
 
-    <!-- Data -->
-    <h1 class="text-xl font-bold text-white mb-1 uppercase tracking-wider" id="asset-name"><?= esc($aset['nama'] ?? 'Unknown Asset') ?></h1>
-    <p class="text-xs font-mono text-indigo-300 mb-6 border border-indigo-500/20 bg-indigo-500/10 inline-block px-3 py-1 rounded">ID: <?= esc($aset['nomor_aset'] ?? 'N/A') ?></p>
-
     <!-- Map & Advanced Telemetry Container -->
-    <div id="map-wrapper" class="text-left w-full">
+    <div id="map-wrapper" class="w-full mb-6">
       <!-- Warning Banner -->
-      <div id="breach-warning" class="hidden mb-4 p-3 bg-red-950/50 border border-red-500/50 rounded-lg text-center breach-animate">
-        <p class="text-red-400 font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-          PELANGGARAN ZONA
-        </p>
-        <p class="text-red-300/80 text-[10px] mt-1 font-mono">Aset terdeteksi di luar perimeter RSUD Kota Yogyakarta!</p>
+      <div id="breach-warning" class="hidden mb-3 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+        <svg class="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <div>
+          <h4 class="text-red-700 font-bold text-sm">Peringatan: Di Luar Area RSUD</h4>
+          <p class="text-red-600 text-xs mt-0.5">Aset terdeteksi berada jauh dari kawasan Rumah Sakit.</p>
+        </div>
       </div>
       
       <!-- Safe Banner -->
-      <div id="safe-warning" class="hidden mb-4 p-3 bg-emerald-950/30 border border-emerald-500/30 rounded-lg text-center">
-        <p class="text-emerald-400 font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          ZONA AMAN
-        </p>
+      <div id="safe-warning" class="hidden mb-3 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
+        <svg class="w-5 h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <h4 class="text-green-700 font-bold text-sm">Aset berada di dalam kawasan RSUD.</h4>
       </div>
 
-      <div class="relative rounded-lg overflow-hidden border border-slate-700 h-48 mb-4">
-        <div id="map-container" class="absolute inset-0 z-0"></div>
-        <div class="absolute inset-0 pointer-events-none border-[4px] border-indigo-500/20 z-10" id="map-border"></div>
-        <!-- Target Reticle Overlay -->
-        <div class="absolute inset-0 pointer-events-none flex items-center justify-center z-10 opacity-30">
-          <svg class="w-full h-full text-indigo-400" viewBox="0 0 100 100" preserveAspectRatio="none"><path stroke="currentColor" stroke-width="0.5" d="M0,50 L100,50 M50,0 L50,100"/></svg>
-        </div>
+      <div class="relative rounded-lg overflow-hidden border border-gray-200 h-48 mb-3 z-0">
+        <div id="map-container" class="absolute inset-0"></div>
       </div>
 
-      <!-- Live Telemetry HUD -->
-      <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-800 mb-2">
-        <div class="telemetry-row">
-          <span class="telemetry-label">Reverse Geocoding</span>
-          <span class="telemetry-val text-right truncate w-48" id="tlm-address">Scanning...</span>
+      <!-- Live Telemetry -->
+      <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 space-y-2">
+        <div class="flex justify-between items-start border-b border-gray-200 pb-2">
+          <span class="text-xs text-gray-500 font-semibold w-1/3">Alamat Deteksi</span>
+          <span class="text-xs text-[#566a7f] font-medium text-right w-2/3" id="tlm-address">Scanning...</span>
         </div>
-        <div class="telemetry-row">
-          <span class="telemetry-label">Jarak dr Pusat RSUD</span>
-          <span class="telemetry-val" id="tlm-distance">Menghitung...</span>
+        <div class="flex justify-between items-center border-b border-gray-200 pb-2">
+          <span class="text-xs text-gray-500 font-semibold">Jarak dari RS</span>
+          <span class="text-xs text-[#566a7f] font-medium" id="tlm-distance">Menghitung...</span>
         </div>
-        <div class="telemetry-row">
-          <span class="telemetry-label">Akurasi Satelit</span>
-          <span class="telemetry-val" id="tlm-accuracy">0 m</span>
-        </div>
-        <div class="telemetry-row border-none">
-          <span class="telemetry-label">Telemetry Auth</span>
-          <span class="telemetry-val">VERIFIED SECURE</span>
+        <div class="flex justify-between items-center">
+          <span class="text-xs text-gray-500 font-semibold">Akurasi GPS</span>
+          <span class="text-xs text-[#566a7f] font-medium" id="tlm-accuracy">0 m</span>
         </div>
       </div>
     </div>
 
     <!-- Action Button -->
-    <div class="mt-4">
-      <button id="btn-lokasi" onclick="triggerBrutalTracker()" 
-              class="btn-cyber w-full py-4 rounded-lg font-bold text-sm flex justify-center items-center gap-2">
+    <div class="mt-2">
+      <button id="btn-lokasi" onclick="triggerLocationScan()" 
+              class="btn-primary w-full py-3 rounded-lg font-bold text-sm flex justify-center items-center gap-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
         </svg>
-        <span id="btn-text">INisialisasi Pindai Lokasi</span>
+        <span id="btn-text">Verifikasi Posisi Saat Ini</span>
       </button>
 
-      <a href="/ipsrs/aset/<?= esc($aset['id'] ?? '') ?>" class="inline-flex items-center justify-center gap-2 mt-6 text-xs text-slate-500 hover:text-indigo-400 transition-colors uppercase tracking-widest font-bold">
-        <span>Buka Panel Master</span>
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-      </a>
+      <div class="text-center mt-4">
+        <a href="/ipsrs/aset/<?= esc($aset['id'] ?? '') ?>" class="text-sm text-[#696cff] hover:text-[#5f61e6] font-medium inline-flex items-center gap-1 transition-colors">
+          Kembali ke Detail Aset
+        </a>
+      </div>
     </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Live Clock
-    setInterval(() => {
-      document.getElementById('clock').textContent = new Date().toLocaleTimeString('id-ID');
-    }, 1000);
-
     // Geofencing Constants (Kordinat RSUD Kota Yogyakarta)
     const RSUD_LAT = -7.8256;
     const RSUD_LNG = 110.3780;
@@ -194,20 +145,19 @@
       return R * c; // in metres
     }
 
-    function triggerBrutalTracker() {
+    function triggerLocationScan() {
       const btn = document.getElementById('btn-lokasi');
-      const statusInd = document.getElementById('status-indicator');
       
       btn.disabled = true;
-      btn.innerHTML = `<span class="animate-pulse flex items-center gap-2">MENGAKSES SATELIT GPS...</span>`;
-      statusInd.className = 'w-2 h-2 rounded-full bg-yellow-400 animate-pulse';
+      btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Mengakses GPS...</span>`;
 
       if (!navigator.geolocation) {
-        alert("Sistem Tertolak: Modul GPS tidak ditemukan di perangkat ini.");
+        alert("Modul GPS tidak ditemukan di browser Anda.");
+        resetBtn();
         return;
       }
 
-      // Vibrate if supported (Tactile start)
+      // Vibrate if supported
       if(navigator.vibrate) navigator.vibrate(50);
 
       navigator.geolocation.getCurrentPosition(async function(pos) {
@@ -215,7 +165,7 @@
         const lng = pos.coords.longitude;
         const acc = pos.coords.accuracy;
         
-        btn.innerHTML = `<span class="animate-pulse">MENGUNGGAH TELEMETRY...</span>`;
+        btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Menyimpan Data...</span>`;
         
         try {
           const res = await fetch('<?= site_url("ipsrs/aset/" . esc($aset['id'] ?? '')) ?>/ping', {
@@ -224,7 +174,7 @@
             body: JSON.stringify({ lat: lat, lng: lng })
           });
           
-          if (!res.ok) throw new Error("Gagal menyimpan ke server RSUD.");
+          if (!res.ok) throw new Error("Gagal menyimpan lokasi ke server.");
 
           // Geofencing Logic
           const distance = calcDistance(lat, lng, RSUD_LAT, RSUD_LNG);
@@ -236,62 +186,68 @@
             else navigator.vibrate([100, 50, 100]); // Safe pattern
           }
 
-          // UI Alteration based on Geofence
+          // UI Update
           document.getElementById('map-wrapper').classList.add('show');
           document.getElementById('tlm-distance').textContent = Math.round(distance) + " Meter";
-          document.getElementById('tlm-accuracy').textContent = "±" + Math.round(acc) + " Meter";
+          document.getElementById('tlm-accuracy').textContent = "± " + Math.round(acc) + " Meter";
 
           if(isBreach) {
-            document.body.classList.add('breach-mode');
             document.getElementById('breach-warning').classList.remove('hidden');
-            document.getElementById('map-border').className = "absolute inset-0 pointer-events-none border-[4px] border-red-500/50 z-10 breach-animate";
-            statusInd.className = 'w-2 h-2 rounded-full bg-red-500 shadow-[0_0_10px_red]';
-            
-            btn.className = "btn-cyber danger w-full py-4 rounded-lg font-bold text-sm flex justify-center items-center gap-2";
-            btn.innerHTML = `<span>OUT OF BOUNDS DETECTED</span>`;
+            document.getElementById('safe-warning').classList.add('hidden');
+            btn.className = "btn-danger w-full py-3 rounded-lg font-bold text-sm flex justify-center items-center gap-2";
+            btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><span>Tersimpan (Luar Zona)</span>`;
           } else {
             document.getElementById('safe-warning').classList.remove('hidden');
-            statusInd.className = 'w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]';
-            
-            btn.className = "btn-cyber success w-full py-4 rounded-lg font-bold text-sm flex justify-center items-center gap-2";
-            btn.innerHTML = `<span>KORDINAT DIAMANKAN</span>`;
+            document.getElementById('breach-warning').classList.add('hidden');
+            btn.className = "btn-success w-full py-3 rounded-lg font-bold text-sm flex justify-center items-center gap-2";
+            btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>Lokasi Diverifikasi</span>`;
           }
 
           // Leaflet Map Initialization
           if (!mapInstance) {
             setTimeout(() => {
-              mapInstance = L.map('map-container', { zoomControl: false, attributionControl: false }).setView([lat, lng], 17);
-              // Dark tactical map style
-              L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png').addTo(mapInstance);
+              mapInstance = L.map('map-container', { zoomControl: false, attributionControl: false }).setView([lat, lng], 16);
+              // Clean map style
+              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapInstance);
               
-              const dotColor = isBreach ? '#ef4444' : '#10b981';
+              const dotColor = isBreach ? '#ff3e1d' : '#71dd37';
               const mapDot = L.divIcon({
                 className: 'custom-map-dot',
-                html: `<div style="width:16px;height:16px;background:${dotColor};border-radius:50%;box-shadow:0 0 20px ${dotColor};border:2px solid white;animation: breachFlash 1s infinite;"></div>`,
+                html: `<div style="width:16px;height:16px;background:${dotColor};border-radius:50%;"></div>`,
                 iconSize: [16,16], iconAnchor: [8,8]
               });
               L.marker([lat, lng], {icon: mapDot}).addTo(mapInstance);
-            }, 600);
+            }, 500);
           }
 
           // Reverse Geocoding via Nominatim
           fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
             .then(r => r.json())
             .then(data => {
-               document.getElementById('tlm-address').textContent = data.display_name || "Unknown Zone";
+               document.getElementById('tlm-address').textContent = data.display_name || "Detail alamat tidak ditemukan";
             }).catch(() => {
-               document.getElementById('tlm-address').textContent = "Satelit Gagal Menerjemahkan Alamat";
+               document.getElementById('tlm-address').textContent = "Gagal menerjemahkan nama jalan";
             });
 
         } catch (error) {
           alert("SISTEM ERROR: " + error.message);
-          location.reload();
+          resetBtn();
         }
 
       }, function(err){
-        alert("AKSES GPS DITOLAK ATAU SATELIT TIDAK DITEMUKAN. (Kode: " + err.code + ")");
-        location.reload();
+        let reason = "Gagal mengambil lokasi.";
+        if(err.code === 1) reason = "Izin akses lokasi ditolak.";
+        if(err.code === 2) reason = "Posisi GPS tidak tersedia.";
+        if(err.code === 3) reason = "Waktu pencarian lokasi habis.";
+        alert(reason);
+        resetBtn();
       }, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true });
+    }
+
+    function resetBtn() {
+      const btn = document.getElementById('btn-lokasi');
+      btn.disabled = false;
+      btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span>Coba Verifikasi Ulang</span>`;
     }
   </script>
 </body>
