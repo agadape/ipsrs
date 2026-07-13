@@ -16,6 +16,9 @@ class StokModel extends BaseModel
     public function catatTransaksi(array $txData): array
     {
         // Insert riwayat transaksi
+        if (!isset($txData['id'])) {
+            $txData['id'] = $this->generateUUID();
+        }
         $this->qb('riwayat_transaksi_stok')->insert($txData);
         $this->throwIfError();
         $row = $txData;

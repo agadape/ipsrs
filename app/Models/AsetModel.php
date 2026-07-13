@@ -24,6 +24,9 @@ class AsetModel extends BaseModel
 
     public function insertRiwayatLokasi(array $data): void
     {
+        if (!isset($data['id'])) {
+            $data['id'] = $this->generateUUID();
+        }
         $this->qb('riwayat_lokasi_aset')->insert($data);
     }
 

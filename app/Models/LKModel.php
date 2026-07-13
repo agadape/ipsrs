@@ -39,6 +39,9 @@ class LKModel extends BaseModel
 
     public function addSukuCadang(array $data): array
     {
+        if (!isset($data['id'])) {
+            $data['id'] = $this->generateUUID();
+        }
         $this->qb('detail_suku_cadang_lk')->insert($data);
         return $data;
     }
@@ -55,6 +58,9 @@ class LKModel extends BaseModel
 
     public function addVendor(array $data): array
     {
+        if (!isset($data['id'])) {
+            $data['id'] = $this->generateUUID();
+        }
         $this->qb('detail_vendor_lk')->insert($data);
         return $data;
     }
