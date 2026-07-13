@@ -295,43 +295,4 @@ $id = $aset['id'] ?? '';
   <?php endif; ?>
 </div>
 
-<script>
-(function() {
-  // Only fire geolocation when page opened via QR scan (?via=qr)
-  var params = new URLSearchParams(window.location.search);
-  if (params.get('via') !== 'qr') return;
 
-  if (!navigator.geolocation) {
-    alert("Browser HP Anda tidak mendukung deteksi lokasi (GPS).");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(function(pos) {
-    fetch('<?= site_url("ipsrs/aset/" . esc($id) . "/ping") ?>', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', 
-        'X-Requested-With': 'XMLHttpRequest',
-        '<?= csrf_header() ?>': '<?= csrf_hash() ?>'
-      },
-      body: JSON.stringify({ lat: pos.coords.latitude, lng: pos.coords.longitude })
-    }).then(function(r) {
-      if (r.ok) {
-        var el = document.getElementById('geo-status');
-        if (el) {
-          el.className = el.className.replace('border-gray-200','border-emerald-400');
-          el.querySelector('div').className = el.querySelector('div').className.replace('bg-gray-100','bg-emerald-100');
-          el.querySelector('svg').classList.replace('text-gray-400','text-emerald-600');
-          el.querySelector('p').textContent = '📍 Lokasi berhasil direkam. Refresh untuk melihat detail.';
-        }
-      } else {
-        r.json().then(data => alert("Gagal menyimpan lokasi ke server: " + (data.msg || r.statusText))).catch(() => alert("Error " + r.status));
-      }
-    }).catch(function(err){
-      alert("Gagal menghubungi server: " + err.message);
-    });
-  }, function(err){
-    alert("Gagal membaca GPS HP Anda: " + err.message + "\n(Pastikan izin Lokasi/GPS menyala saat scan)");
-  }, { timeout: 15000, maximumAge: 60000, enableHighAccuracy: true });
-})();
-</script>

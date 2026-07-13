@@ -43,6 +43,11 @@ class Aset extends BaseController
         if (!$aset) {
             return redirect()->to('/ipsrs/aset')->with('error', 'Aset tidak ditemukan');
         }
+
+        if ($this->request->getGet('via') === 'qr') {
+            return view('pages/aset/scan', compact('aset'));
+        }
+
         $riwayat   = $this->model->getRiwayatLokasi($id);
         $riwayatLK = (new LKModel())->getByAset($id);
         $komponen  = (new \App\Models\KomponenAsetModel())->getByAset($id);
