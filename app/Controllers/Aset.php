@@ -204,7 +204,7 @@ class Aset extends BaseController
 
         try {
             $this->model->update($id, [
-                'last_seen_at'  => date('c'),
+                'last_seen_at'  => date('Y-m-d H:i:s'),
                 'last_seen_lat' => $lat,
                 'last_seen_lng' => $lng,
                 'last_seen_by'  => session('user_name') ?? 'Anonim',

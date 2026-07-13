@@ -63,9 +63,7 @@
 
   <script>
     <?php
-      $scheme = (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO'] : (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http'));
-      $host   = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? 'localhost:8080';
-      $qrUrl  = $scheme . '://' . $host . '/ipsrs/aset/' . ($aset['id'] ?? '') . '?via=qr';
+      $qrUrl = base_url('/ipsrs/aset/' . ($aset['id'] ?? '')) . '?via=qr';
     ?>
     var url = '<?= esc($qrUrl) ?>';
     new QRCode(document.getElementById('qrcode'), {
