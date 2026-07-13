@@ -89,6 +89,10 @@ class LK extends BaseController
             $updateLokasi = !empty($data['update_lokasi_aset']);
             unset($data['update_lokasi_aset']);
 
+            if (empty($data['id_aset'])) {
+                $data['id_aset'] = null;
+            }
+
             $lk = $this->model->createWithRetry(
                 $data,
                 fn() => $this->model->nextNoOrder(),
