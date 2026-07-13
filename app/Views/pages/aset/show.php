@@ -301,7 +301,11 @@ $id = $aset['id'] ?? '';
   navigator.geolocation.getCurrentPosition(function(pos) {
     fetch('/ipsrs/aset/<?= esc($id) ?>/ping', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'},
+      headers: {
+        'Content-Type': 'application/json', 
+        'X-Requested-With': 'XMLHttpRequest',
+        '<?= csrf_header() ?>': '<?= csrf_hash() ?>'
+      },
       body: JSON.stringify({ lat: pos.coords.latitude, lng: pos.coords.longitude })
     }).then(function(r) {
       if (r.ok) {
