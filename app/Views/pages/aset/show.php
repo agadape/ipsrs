@@ -5,17 +5,20 @@ $id = $aset['id'] ?? '';
 <!-- Page Header -->
 <div class="flex items-center justify-between mb-6">
   <div class="flex items-center gap-3">
+    <?php if (session('user_id')): ?>
     <a href="/ipsrs/aset"
        class="w-9 h-9 flex items-center justify-center rounded-xl bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-colors text-gray-500 hover:text-gray-700">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
       </svg>
     </a>
+    <?php endif; ?>
     <div>
       <h1 class="text-xl font-bold text-gray-800"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
       <p class="text-xs font-mono text-indigo-600 mt-0.5"><?= esc($aset['nomor_aset'] ?? $id) ?></p>
     </div>
   </div>
+  <?php if (session('user_id')): ?>
   <div class="flex items-center gap-2">
     <a href="/ipsrs/aset/<?= esc($id) ?>/qr"
        class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm border border-gray-200 hover:shadow-md">
@@ -32,6 +35,7 @@ $id = $aset['id'] ?? '';
       Edit Aset
     </a>
   </div>
+  <?php endif; ?>
 </div>
 
 <!-- Info Grid -->
