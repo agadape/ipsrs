@@ -32,15 +32,19 @@
 </head>
 <body class="min-h-screen">
 
+<?php $isLoggedIn = session()->has('user_id'); ?>
+
+<?php if ($isLoggedIn): ?>
 <?= view('layout/sidebar') ?>
 <?= view('layout/topbar') ?>
 
 <!-- Mobile sidebar overlay -->
 <div id="sidebar-overlay" onclick="closeSidebar()"
      class="fixed inset-0 bg-black/50 z-20 hidden md:hidden"></div>
+<?php endif; ?>
 
-<main id="main-content" class="md:ml-60 pt-14 min-h-screen">
-  <div class="p-4 md:p-6 max-w-[1400px]">
+<main id="main-content" class="<?= $isLoggedIn ? 'md:ml-60 pt-14' : 'pt-6' ?> min-h-screen flex justify-center">
+  <div class="p-4 md:p-6 w-full <?= $isLoggedIn ? 'max-w-[1400px]' : 'max-w-[800px]' ?>">
 
     <?php if (session()->getFlashdata('success')): ?>
       <div class="flash-success rounded-xl px-4 py-3 mb-4 text-sm flex items-center gap-2">
