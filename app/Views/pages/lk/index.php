@@ -82,6 +82,7 @@ $total = count($lk ?? []);
           <th class="text-left px-5 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Lokasi</th>
           <th class="text-left px-5 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Status</th>
           <th class="text-left px-5 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Respon</th>
+          <th class="text-right px-5 py-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest">Aksi</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-50">
@@ -93,21 +94,28 @@ $total = count($lk ?? []);
           $rtClass = $rt > 15 ? 'font-semibold text-red-600' : 'text-gray-600';
         ?>
         <tr class="hover:bg-indigo-50/40 transition-colors group cursor-pointer">
-          <td class="px-5 py-3.5">
+          <td class="px-5 py-3.5" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'">
             <span class="font-mono text-xs text-indigo-600 font-semibold"><?= esc($item['no_order'] ?? '-') ?></span>
           </td>
-          <td class="px-5 py-3.5 max-w-[220px]">
+          <td class="px-5 py-3.5 max-w-[220px]" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'">
             <a href="/ipsrs/lk/<?= esc($item['id'] ?? '') ?>" class="text-gray-800 hover:text-indigo-600 font-medium truncate block transition-colors">
               <?= esc($item['keluhan'] ?? '-') ?>
             </a>
           </td>
-          <td class="px-5 py-3.5">
+          <td class="px-5 py-3.5" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'">
             <p class="text-gray-700 font-medium"><?= esc($item['pelapor'] ?? '-') ?></p>
             <p class="text-xs text-gray-400"><?= esc($item['unit_pelapor'] ?? '') ?></p>
           </td>
-          <td class="px-5 py-3.5 text-gray-600"><?= esc($item['lokasi'] ?? '-') ?></td>
-          <td class="px-5 py-3.5"><span class="<?= $sBadge ?>"><?= esc($s) ?></span></td>
-          <td class="px-5 py-3.5 <?= $rtClass ?>"><?= $rt > 0 ? $rt.' mnt' : '-' ?></td>
+          <td class="px-5 py-3.5 text-gray-600" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'"><?= esc($item['lokasi'] ?? '-') ?></td>
+          <td class="px-5 py-3.5" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'"><span class="<?= $sBadge ?>"><?= esc($s) ?></span></td>
+          <td class="px-5 py-3.5 <?= $rtClass ?>" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'"><?= $rt > 0 ? $rt.' mnt' : '-' ?></td>
+          <td class="px-5 py-3.5 text-right">
+            <form action="/ipsrs/lk/<?= esc($item['id'] ?? '') ?>/delete" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus Laporan Kerusakan ini? Semua data terkait (suku cadang, dsb) akan ikut terhapus!');">
+              <button type="submit" class="text-red-500 hover:text-red-700 p-1 rounded-md hover:bg-red-50 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+            </form>
+          </td>
         </tr>
         <?php endforeach; ?>
       </tbody>

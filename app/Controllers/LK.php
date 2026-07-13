@@ -129,6 +129,17 @@ class LK extends BaseController
         }
     }
 
+    public function delete(string $id)
+    {
+        try {
+            $this->model->delete($id);
+            return redirect()->to('/ipsrs/lk')->with('success', 'Laporan kerusakan berhasil dihapus');
+        } catch (\Throwable $e) {
+            log_message('error', '[LK::delete] ' . $e->getMessage());
+            return redirect()->to('/ipsrs/lk')->with('error', 'Gagal menghapus laporan: ' . $e->getMessage());
+        }
+    }
+
     public function claim(string $id)
     {
         $lk = $this->model->getById($id);

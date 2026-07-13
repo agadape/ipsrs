@@ -32,6 +32,7 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('lk/baru',     'LK::create');
     $routes->post('lk/baru',    'LK::store');
     $routes->get('lk/claim/(:segment)',         'LK::claim/$1');
+    $routes->post('lk/(:segment)/delete',       'LK::delete/$1');
     $routes->get('lk/(:segment)',               'LK::show/$1');
     $routes->post('lk/(:segment)/status',       'LK::updateStatus/$1');
     $routes->post('lk/(:segment)/suku-cadang',  'LK::addSukuCadang/$1');
