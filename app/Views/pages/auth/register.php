@@ -111,8 +111,8 @@
   </div>
 
   <!-- ── Right panel ─────────────────────────────────────────────────── -->
-  <div class="flex-1 bg-white flex items-center justify-center px-8">
-    <div class="w-full max-w-[360px]">
+  <div class="flex-1 bg-white flex items-center justify-center px-8 overflow-y-auto">
+    <div class="w-full max-w-[360px] py-10">
 
       <!-- Mobile logo -->
       <div class="flex items-center gap-2 mb-8 lg:hidden">
@@ -125,25 +125,41 @@
         </div>
       </div>
 
-      <h2 class="text-2xl font-bold text-gray-900">Masuk ke Akun</h2>
-      <p class="mt-1 text-sm text-gray-500">Gunakan kredensial yang diberikan oleh admin sistem.</p>
+      <h2 class="text-2xl font-bold text-gray-900">Daftar Akun Pelapor</h2>
+      <p class="mt-1 text-sm text-gray-500">Buat akun untuk melaporkan kerusakan aset RS.</p>
 
-      <?php if (!empty($error)): ?>
+      <?php if (!empty(session()->getFlashdata('error'))): ?>
       <div class="mt-5 flex items-start gap-2.5 px-4 py-3 rounded-xl bg-red-50 border border-red-100">
         <svg class="w-4 h-4 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
-        <p class="text-sm text-red-700"><?= esc($error) ?></p>
+        <p class="text-sm text-red-700"><?= esc(session()->getFlashdata('error')) ?></p>
       </div>
       <?php endif; ?>
 
-      <form method="POST" action="/login" class="mt-8 flex flex-col gap-4">
+      <form method="POST" action="/register" class="mt-8 flex flex-col gap-4">
         <?= csrf_field() ?>
+
+        <!-- Nama Lengkap -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+          <input type="text" name="nama_lengkap" required value="<?= old('nama_lengkap') ?>"
+                 placeholder="Nama Lengkap Anda"
+                 class="w-full px-4 py-3.5 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+        </div>
+
+        <!-- Unit Kerja -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 mb-1.5">Unit Kerja / Ruangan</label>
+          <input type="text" name="unit_kerja" required value="<?= old('unit_kerja') ?>"
+                 placeholder="Contoh: IGD, Rawat Inap Melati"
+                 class="w-full px-4 py-3.5 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+        </div>
 
         <!-- Email -->
         <div>
           <label class="block text-xs font-semibold text-gray-700 mb-1.5">Alamat Email</label>
-          <input type="email" name="email" required autocomplete="email"
+          <input type="email" name="email" required autocomplete="email" value="<?= old('email') ?>"
                  placeholder="nama@rsud.go.id"
                  class="w-full px-4 py-3.5 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
         </div>
@@ -152,7 +168,7 @@
         <div>
           <label class="block text-xs font-semibold text-gray-700 mb-1.5">Kata Sandi</label>
           <div class="relative">
-            <input type="password" name="password" id="pw" required autocomplete="current-password"
+            <input type="password" name="password" id="pw" required autocomplete="new-password"
                    placeholder="••••••••"
                    class="w-full px-4 py-3.5 pr-11 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
             <button type="button" onclick="togglePw()" tabindex="-1"
@@ -174,15 +190,14 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
           </svg>
-          <span id="btn-text">Masuk</span>
+          <span id="btn-text">Daftar Sekarang</span>
         </button>
       </form>
 
       <p class="mt-8 text-center text-xs text-gray-500">
-        Pelapor Kerusakan? 
-        <a href="/register" class="text-indigo-600 font-semibold hover:underline">Daftar Akun Baru</a>
+        Sudah punya akun? 
+        <a href="/login" class="text-indigo-600 font-semibold hover:underline">Masuk di sini</a>
       </p>
-      <p class="mt-2 text-center text-xs text-gray-400">Lupa kata sandi? Hubungi admin sistem.</p>
     </div>
   </div>
 
@@ -203,7 +218,7 @@
     }
     document.querySelector('form').addEventListener('submit', function() {
       document.getElementById('btn-loader').classList.remove('hidden');
-      document.getElementById('btn-text').textContent = 'Memproses…';
+      document.getElementById('btn-text').textContent = 'Memproses...';
       document.getElementById('btn-submit').disabled = true;
     });
   </script>

@@ -32,6 +32,10 @@ class LK extends BaseController
         if ($status) { $lk = array_filter($lk, fn($l) => $l['status'] === $status); }
         if ($kode)   { $lk = array_filter($lk, fn($l) => $l['kode'] === $kode); }
 
+        if (session('user_role') === 'pelapor') {
+            $lk = array_filter($lk, fn($l) => ($l['id_pengguna_pelapor'] ?? '') === session('user_id'));
+        }
+
         return $this->render('pages/lk/index', [
             'lk'            => array_values($lk),
             'search'        => $search,
@@ -174,7 +178,7 @@ class LK extends BaseController
         $lk   = $this->model->getById($id);
         $post = $this->whitelist([
             'status_baru', 'teknisi', 'tindakan', 'proses',
-            'tanggal_cek', 'jam_cek', 'tanggal_selesai', 'jam_selesai',
+            'tanggal_cek', 'jam_cek', 'tanggal_selesai', 'jam_selesai', 'ttd_pelapor'
         ]);
         $next = $post['status_baru'] ?? null;
 
@@ -192,7 +196,13 @@ class LK extends BaseController
                 'jam_cek'         => $post['jam_cek']         ?? null,
                 'tanggal_selesai' => $post['tanggal_selesai'] ?? null,
                 'jam_selesai'     => $post['jam_selesai']     ?? null,
+                'ttd_pelapor'     => $post['ttd_pelapor']     ?? null,
             ], fn($v) => $v !== null && $v !== '');
+
+            // Logika menyimpan id_pengguna_pelapor jika pelapor login dan update status ke selesai
+            if (session('user_role') === 'pelapor' && $next === 'Selesai') {
+                $data['id_pengguna_pelapor'] = session('user_id');
+            }
 
             $this->calcResponseTime($lk, $next, $data);
             $this->calcDownTime($lk, $next, $data);
@@ -201,8 +211,7 @@ class LK extends BaseController
             $this->model->update($id, $data);
             return redirect()->to('/ipsrs/lk/' . $id)->with('success', 'Status LK diperbarui');
         } catch (\Throwable $e) {
-            log_message('error', '[LK::updateStatus] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal memperbarui status: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal update status: ' . $e->getMessage());
         }
     }
 

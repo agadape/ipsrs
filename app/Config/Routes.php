@@ -7,9 +7,11 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', function () { return redirect()->to('/ipsrs'); });
 
 // Auth
-$routes->get('login',  'Auth::login');
-$routes->post('login', 'Auth::doLogin');
-$routes->get('logout', 'Auth::logout');
+$routes->get('login',    'Auth::login');
+$routes->post('login',   'Auth::doLogin');
+$routes->get('register', 'Auth::register');
+$routes->post('register','Auth::doRegister');
+$routes->get('logout',   'Auth::logout');
 
 $routes->group('ipsrs', function ($routes) {
     // Dashboard

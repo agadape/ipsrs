@@ -166,6 +166,15 @@ $prosesLabels = ['I' => 'Proses I — Perbaikan Langsung', 'II' => 'Proses II �
       <p class="text-sm text-gray-800 leading-relaxed"><?= esc($lk['tindakan']) ?></p>
     </div>
     <?php endif; ?>
+
+    <?php if (!empty($lk['ttd_pelapor'])): ?>
+    <div class="md:col-span-1 border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6">
+      <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Tanda Tangan Pelapor</p>
+      <div class="mt-2 w-32 h-20 border border-gray-200 rounded-lg overflow-hidden bg-white flex items-center justify-center">
+        <img src="<?= esc($lk['ttd_pelapor']) ?>" alt="Tanda Tangan" class="max-w-full max-h-full object-contain">
+      </div>
+    </div>
+    <?php endif; ?>
   </div>
 </div>
 <?php endif; ?>
@@ -517,7 +526,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
       <!-- Status Baru -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Status Baru <span class="text-red-500">*</span></label>
-        <select name="status_baru" required
+        <select name="status_baru" id="status_baru" required onchange="toggleSignature()"
                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Status --</option>
           <option value="Dalam Perbaikan">Dalam Perbaikan</option>
@@ -561,10 +570,21 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
         <input type="time" name="jam_selesai" value="<?= date('H:i') ?>"
                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
+
+      <!-- Tanda Tangan Pelapor (Hidden by default, shown when Selesai) -->
+      <div id="signature-container" class="md:col-span-2 hidden mt-2">
+        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanda Tangan Pelapor (Wajib)</label>
+        <p class="text-[11px] text-gray-400 mb-2">Silakan tanda tangan di dalam kotak di bawah ini sebagai bukti perbaikan telah selesai dan diserahterimakan.</p>
+        <div class="border-2 border-dashed border-gray-300 rounded-xl bg-white overflow-hidden" style="width: 100%; max-width: 400px;">
+          <canvas id="signature-pad" class="w-full h-48 cursor-crosshair touch-none"></canvas>
+        </div>
+        <button type="button" onclick="clearSignature()" class="mt-2 text-xs text-red-500 hover:text-red-700 font-medium">Kosongkan Tanda Tangan</button>
+        <input type="hidden" name="ttd_pelapor" id="ttd_pelapor">
+      </div>
     </div>
 
     <div class="mt-4 flex items-center gap-3">
-      <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+      <button type="submit" onclick="return saveSignature()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
         Simpan
       </button>
       <p class="text-xs text-gray-400">Jam selesai diisi otomatis saat status → Selesai</p>
@@ -573,3 +593,54 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
   <?php endif; ?>
 </div>
 <?php endif; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script>
+  let signaturePad = null;
+
+  function toggleSignature() {
+    const statusSelect = document.getElementById('status_baru');
+    const sigContainer = document.getElementById('signature-container');
+    
+    if (statusSelect && statusSelect.value === 'Selesai') {
+      sigContainer.classList.remove('hidden');
+      if (!signaturePad) {
+        const canvas = document.getElementById('signature-pad');
+        // Fix for HDPI screens
+        const ratio =  Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext("2d").scale(ratio, ratio);
+        
+        signaturePad = new SignaturePad(canvas, {
+          backgroundColor: 'rgb(255, 255, 255)'
+        });
+      }
+    } else {
+      if (sigContainer) sigContainer.classList.add('hidden');
+    }
+  }
+
+  function clearSignature() {
+    if (signaturePad) {
+      signaturePad.clear();
+    }
+  }
+
+  function saveSignature() {
+    const statusSelect = document.getElementById('status_baru');
+    
+    if (statusSelect && statusSelect.value === 'Selesai') {
+      if (signaturePad && signaturePad.isEmpty()) {
+        alert("Tanda Tangan Pelapor wajib diisi jika status Selesai!");
+        return false;
+      }
+      
+      if (signaturePad) {
+        const dataUrl = signaturePad.toDataURL('image/png');
+        document.getElementById('ttd_pelapor').value = dataUrl;
+      }
+    }
+    return true;
+  }
+</script>
