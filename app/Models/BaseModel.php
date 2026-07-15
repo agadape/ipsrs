@@ -181,7 +181,7 @@ abstract class BaseModel
     }
 
     /** Helper to generate UUID v4 */
-    protected function generateUUID(): string
+    public function generateUUID(): string
     {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff),

@@ -63,7 +63,7 @@ class Auth extends BaseController
         ];
 
         try {
-            $this->penggunaModel->insert($data);
+            $this->penggunaModel->create($data);
             return redirect()->to('/login')->with('success', 'Pendaftaran berhasil. Silakan login.');
         } catch (\Throwable $e) {
             log_message('error', '[Auth::doRegister] ' . $e->getMessage());
