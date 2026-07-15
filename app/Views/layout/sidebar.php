@@ -6,7 +6,26 @@ $authInitial = session('user_initial') ?? strtoupper(substr($authName, 0, 1));
 $authRole    = session('user_role')    ?? 'Pengguna';
 
 function navLink(string $href, string $label, string $icon, string $current, ?int $badge = null): string {
-    $active = $current === $href || ($href !== '/ipsrs' && str_starts_with($current, $href));
+    // Exact match is always active
+    if ($current === $href) {
+        $active = true;
+    } else {
+        // If not exact match, check if it's a sub-page (e.g., /ipsrs/aset/edit/1)
+        // We must prevent sibling sidebar items from highlighting their parent.
+        // E.g., /ipsrs/aset/tambah should NOT highlight /ipsrs/aset
+        $isSubPage = ($href !== '/ipsrs' && str_starts_with($current, $href . '/'));
+        
+        // Exclude specific known sibling paths from triggering the parent's active state
+        if ($href === '/ipsrs/aset' && (str_starts_with($current, '/ipsrs/aset/tambah') || str_starts_with($current, '/ipsrs/aset/mutasi'))) {
+            $isSubPage = false;
+        }
+        if ($href === '/ipsrs/stok' && str_starts_with($current, '/ipsrs/stok/riwayat')) {
+            $isSubPage = false;
+        }
+
+        $active = $isSubPage;
+    }
+
     $cls = $active
         ? 'text-indigo-700 font-bold bg-indigo-50 shadow-sm shadow-indigo-100 ring-1 ring-indigo-500/10'
         : 'text-gray-500 hover:text-indigo-600 hover:bg-indigo-50/50 font-medium';
