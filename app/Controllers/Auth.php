@@ -47,7 +47,7 @@ class Auth extends BaseController
         }
 
         // Cek email eksis
-        $existing = $this->penggunaModel->where('email', $email)->first();
+        $existing = $this->penggunaModel->findByEmail($email, false);
         if ($existing) {
             return redirect()->back()->with('error', 'Email sudah terdaftar.')->withInput();
         }

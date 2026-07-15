@@ -30,13 +30,15 @@ class PenggunaModel extends BaseModel
             ->getResultArray();
     }
 
-    public function findByEmail(string $email): ?array
+    public function findByEmail(string $email, bool $activeOnly = true): ?array
     {
-        $row = $this->qb($this->table)
-            ->where('email', $email)
-            ->where('aktif', 1)
-            ->get()
-            ->getRowArray();
+        $builder = $this->qb($this->table)->where('email', $email);
+        
+        if ($activeOnly) {
+            $builder->where('aktif', 1);
+        }
+        
+        $row = $builder->get()->getRowArray();
         return $row ?: null;
     }
 }
