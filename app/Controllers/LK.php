@@ -63,7 +63,8 @@ class LK extends BaseController
 
     public function create(): string
     {
-        return $this->render('pages/lk/form', [
+        $view = session('user_role') === 'pelapor' ? 'pages/lk/form_pelapor' : 'pages/lk/form';
+        return $this->render($view, [
             'aset'           => (new AsetModel())->getAll(),
             'kodeKerusakan'  => (new \App\Models\KodeKerusakanModel())->getAll(),
         ]);

@@ -64,22 +64,6 @@
                   class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 resize-none"><?= esc(old('keluhan') ?? '') ?></textarea>
       </div>
 
-      <!-- Kode -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kode Pekerjaan <span class="text-red-500">*</span></label>
-        <select name="kode" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
-          <option value="">-- Pilih Kode --</option>
-          <?php foreach (($kodeKerusakan ?? []) as $kk): ?>
-          <option value="<?= esc($kk['kode'] ?? '') ?>"
-                  <?= old('kode') === ($kk['kode'] ?? '') ? 'selected' : '' ?>>
-            <?= esc(($kk['kode'] ?? '').' — '.($kk['nama'] ?? '')) ?>
-          </option>
-          <?php endforeach; ?>
-        </select>
-        <p class="text-[11px] text-gray-400 mt-1">Kode tidak ada? Tambahkan di <a href="/ipsrs/kode-kerusakan" class="text-indigo-500 hover:underline">Menu Kode Kerusakan</a></p>
-      </div>
-
       <!-- Lokasi -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi <span class="text-red-500">*</span></label>
@@ -88,27 +72,11 @@
                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
-      <!-- Aset (optional) -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Aset Terkait <span class="text-gray-400 font-normal">(opsional)</span></label>
-        <select name="id_aset"
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
-          <option value="">-- Pilih Aset --</option>
-          <?php foreach (($aset ?? []) as $a): ?>
-          <option value="<?= esc($a['id'] ?? '') ?>"
-                  data-lokasi="<?= esc($a['lokasi'] ?? '') ?>"
-                  <?= old('id_aset') == ($a['id'] ?? '') ? 'selected' : '' ?>>
-            <?= esc(($a['id'] ?? '').' — '.($a['nama'] ?? '')) ?>
-          </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
       <!-- Nama Aset -->
       <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Aset <span class="text-gray-400 font-normal">(jika tidak ada di daftar)</span></label>
+        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Aset yang Rusak <span class="text-gray-400 font-normal">(jika tahu)</span></label>
         <input type="text" name="nama_aset" value="<?= esc(old('nama_aset') ?? '') ?>"
-               placeholder="Nama aset manual"
+               placeholder="Nama alat atau barang"
                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
@@ -119,51 +87,10 @@
   <div class="flex items-center gap-3">
     <button type="submit"
             class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
-      Buat LK
+      Kirim Laporan
     </button>
     <a href="/ipsrs/lk" class="px-5 py-2.5 text-sm text-gray-500 hover:text-gray-700 bg-white rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
       Batal
     </a>
   </div>
-
-  <div id="lokasi-warning" class="hidden mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
-    ⚠️ <strong>Perhatian:</strong> Aset ini tercatat di <span id="lokasi-terdaftar" class="font-mono font-semibold"></span>,
-    tapi lokasi laporan berbeda. Apakah aset sudah berpindah?
-    <label class="flex items-center gap-2 mt-2 cursor-pointer">
-      <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded">
-      <span>Ya, perbarui lokasi aset sesuai lokasi laporan ini</span>
-    </label>
-  </div>
 </form>
-
-<script>
-(function() {
-  var selAset   = document.querySelector('select[name="id_aset"]');
-  var inpLokasi = document.querySelector('input[name="lokasi"]');
-  var warning   = document.getElementById('lokasi-warning');
-  var spanLok   = document.getElementById('lokasi-terdaftar');
-
-  function check() {
-    if (!selAset || !inpLokasi || !warning) return;
-    var opt = selAset.options[selAset.selectedIndex];
-    var lokasiAset = opt ? (opt.dataset.lokasi || '') : '';
-    var lokasiLaporan = inpLokasi.value.trim();
-
-    if (lokasiAset && lokasiLaporan && lokasiLaporan !== lokasiAset) {
-      spanLok.textContent = lokasiAset;
-      warning.classList.remove('hidden');
-    } else {
-      warning.classList.add('hidden');
-    }
-
-    // Auto-fill lokasi from aset if lokasi field is empty
-    if (lokasiAset && !lokasiLaporan) {
-      inpLokasi.value = lokasiAset;
-    }
-  }
-
-  if (selAset)   selAset.addEventListener('change', check);
-  if (inpLokasi) inpLokasi.addEventListener('input', check);
-  check();
-})();
-</script>
