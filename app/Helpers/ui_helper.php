@@ -30,7 +30,10 @@ if (! function_exists('status_aset_badge')) {
             'Dalam Perbaikan'      => 'badge bg-indigo-100 text-indigo-700',
             'Menunggu Suku Cadang' => 'badge bg-amber-100 text-amber-700',
             'Menunggu Vendor'      => 'badge bg-orange-100 text-orange-700',
+            'Di Gudang'            => 'badge bg-blue-100 text-blue-700',
+            'Kanibal'              => 'badge bg-purple-100 text-purple-700',
             'Usulan Penghapusan'   => 'badge bg-red-100 text-red-600',
+            'Dibuang'              => 'badge bg-red-200 text-red-700',
             'Dihapuskan'           => 'badge bg-red-200 text-red-700',
             default                => 'badge bg-gray-100 text-gray-500',
         };

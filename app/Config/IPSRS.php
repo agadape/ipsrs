@@ -47,9 +47,11 @@ class IPSRS
         'Menunggu Suku Cadang',
         'Menunggu Vendor',
         'Tidak Aktif',
-        'Usulan Penghapusan',
-        'Dihapuskan',
+        'Di Gudang',
         'Kanibal',
+        'Usulan Penghapusan',
+        'Dibuang',
+        'Dihapuskan',
     ];
 
     // ── Laporan Kerusakan ────────────────────────────────────────────────

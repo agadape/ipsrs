@@ -146,8 +146,28 @@ class LK extends BaseController
     public function delete(string $id)
     {
         try {
+            $lk = $this->model->getById($id);
+            if ($lk) {
+                // Rollback Suku Cadang if any were used
+                $sukuCadang = $this->model->getSukuCadang($id);
+                if (!empty($sukuCadang)) {
+                    $stokModel = new \App\Models\StokModel();
+                    foreach ($sukuCadang as $sc) {
+                        $stokModel->catatTransaksi([
+                            'id_barang'   => $sc['id_barang'],
+                            'nama_barang' => $sc['nama_barang'],
+                            'jenis'       => 'Masuk',
+                            'jumlah'      => (int)$sc['jumlah'],
+                            'tanggal'     => date('Y-m-d'),
+                            'no_dokumen'  => 'Rollback Hapus LK ' . ($lk['no_order'] ?? $id),
+                            'keterangan'  => 'Pengembalian stok dari penghapusan LK',
+                            'petugas'     => session('user_name') ?? 'Sistem',
+                        ]);
+                    }
+                }
+            }
             $this->model->delete($id);
-            return redirect()->to('/ipsrs/lk')->with('success', 'Laporan kerusakan berhasil dihapus');
+            return redirect()->to('/ipsrs/lk')->with('success', 'Laporan kerusakan berhasil dihapus dan stok terkait dikembalikan');
         } catch (\Throwable $e) {
             log_message('error', '[LK::delete] ' . $e->getMessage());
             return redirect()->to('/ipsrs/lk')->with('error', 'Gagal menghapus laporan: ' . $e->getMessage());
