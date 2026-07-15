@@ -712,7 +712,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
     
     if (statusSelect && statusSelect.value === 'Selesai') {
       if (signaturePad && signaturePad.isEmpty()) {
-        alert("Tanda Tangan Pelapor wajib diisi jika status Selesai!");
+        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Tanda Tangan Pelapor wajib diisi jika status Selesai!' });
         return false;
       }
       

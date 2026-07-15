@@ -181,21 +181,57 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
   <!-- Pipeline Chart -->
   <div class="card p-5">
     <h2 class="text-sm font-semibold text-gray-800 mb-5">Pipeline Perbaikan</h2>
-    <?php $pMax = max(1, (int) ($pipelineMax ?? 1)); ?>
-    <div class="flex items-end gap-2.5 h-36">
-      <?php foreach (($pipeline ?? []) as $bar): ?>
-      <?php
-        $barH = max(6, round(((int) $bar['count'] / $pMax) * 100));
-        $barColor = esc($bar['color'] ?? 'bg-indigo-400');
-      ?>
-      <div class="flex-1 flex flex-col items-center gap-1.5">
-        <span class="text-xs font-bold text-gray-700"><?= (int) $bar['count'] ?></span>
-        <div class="w-full rounded-t-lg <?= $barColor ?> transition-all" style="height:<?= $barH ?>%"></div>
-        <span class="text-[10px] text-gray-400 text-center leading-tight"><?= esc($bar['label'] ?? '') ?></span>
-      </div>
-      <?php endforeach; ?>
+    <div class="relative h-48 w-full">
+      <canvas id="pipelineChart"></canvas>
     </div>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const ctx = document.getElementById('pipelineChart');
+      if (ctx) {
+        <?php
+          $labels = [];
+          $data = [];
+          $colors = [];
+          foreach (($pipeline ?? []) as $bar) {
+            $labels[] = $bar['label'];
+            $data[] = (int) $bar['count'];
+            
+            // Map tailwind color classes to hex for Chart.js
+            $bg = '#e2e8f0';
+            if (str_contains($bar['color'], 'indigo')) $bg = '#6366f1';
+            if (str_contains($bar['color'], 'amber')) $bg = '#fbbf24';
+            if (str_contains($bar['color'], 'blue')) $bg = '#3b82f6';
+            if (str_contains($bar['color'], 'emerald')) $bg = '#34d399';
+            $colors[] = $bg;
+          }
+        ?>
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: <?= json_encode($labels) ?>,
+            datasets: [{
+              label: 'Jumlah',
+              data: <?= json_encode($data) ?>,
+              backgroundColor: <?= json_encode($colors) ?>,
+              borderRadius: 6,
+              barThickness: 30
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { stepSize: 1 } },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      }
+    });
+  </script>
 
   <!-- Upcoming Jadwal -->
   <div class="card p-5">

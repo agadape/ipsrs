@@ -177,10 +177,9 @@ $filterParam = $filter ?? '';
                 Hasil
               </a>
               <?php endif; ?>
-              <form method="POST" action="/ipsrs/preventif/<?= esc($jid) ?>/hapus" class="inline">
+              <form method="POST" action="/ipsrs/preventif/<?= esc($jid) ?>/hapus" class="inline" onsubmit="confirmFormSubmit(event, this, 'Hapus jadwal preventif ini?');">
                 <?= csrf_field() ?>
                 <button type="submit"
-                        onclick="return confirm('Hapus jadwal ini?')"
                         class="text-xs font-medium px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
                   Hapus
                 </button>

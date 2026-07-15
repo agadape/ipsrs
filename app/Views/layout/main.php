@@ -15,8 +15,19 @@
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- CDNs for UI/UX Enhancements -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  
+  <!-- DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); background-attachment: fixed; }
     .scrollbar-dark::-webkit-scrollbar { width: 3px; }
@@ -25,8 +36,12 @@
     .sidebar-active { background: linear-gradient(90deg, rgba(79,70,229,0.15) 0%, transparent 100%); border-left: 3px solid #6366f1; }
     .card { background: rgba(255,255,255,0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 1.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.03); border: 1px solid rgba(255,255,255,0.7); }
     .badge { display:inline-flex; align-items:center; gap:.375rem; padding:.25rem .625rem; border-radius:9999px; font-size:.75rem; font-weight:500; white-space:nowrap; }
-    .flash-success { background:#ecfdf5; border:1px solid #6ee7b7; color:#065f46; }
-    .flash-error   { background:#fef2f2; border:1px solid #fca5a5; color:#991b1b; }
+    
+    /* Custom DataTables styling to match theme */
+    .dataTables_wrapper .dataTables_filter input { border-radius: 0.5rem; border: 1px solid #e2e8f0; padding: 0.25rem 0.75rem; margin-left: 0.5rem; outline: none; }
+    .dataTables_wrapper .dataTables_filter input:focus { border-color: #6366f1; ring: 2px solid #c7d2fe; }
+    table.dataTable.no-footer { border-bottom: 1px solid #f1f5f9; }
+    
     #sidebar { transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
   </style>
 </head>
@@ -46,23 +61,83 @@
 <main id="main-content" class="<?= $isLoggedIn ? 'md:ml-60 pt-14' : 'pt-6' ?> min-h-screen flex justify-center">
   <div class="p-4 md:p-6 w-full <?= $isLoggedIn ? 'max-w-[1400px]' : 'max-w-[800px]' ?>">
 
-    <?php if (session()->getFlashdata('success')): ?>
-      <div class="flash-success rounded-xl px-4 py-3 mb-4 text-sm flex items-center gap-2">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-        <?= session()->getFlashdata('success') ?>
-      </div>
-    <?php endif; ?>
-    <?php if (session()->getFlashdata('error')): ?>
-      <div class="flash-error rounded-xl px-4 py-3 mb-4 text-sm">
-        <?= session()->getFlashdata('error') ?>
-      </div>
-    <?php endif; ?>
-
     <?= view($content_view, get_defined_vars()) ?>
   </div>
 </main>
 
 <script>
+// SweetAlert Toast Configuration
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
+
+// Flash Messages Handled via SweetAlert2
+<?php if (session()->getFlashdata('success')): ?>
+  Toast.fire({ icon: 'success', title: '<?= addslashes(session()->getFlashdata('success')) ?>' });
+<?php endif; ?>
+<?php if (session()->getFlashdata('error')): ?>
+  Toast.fire({ icon: 'error', title: '<?= addslashes(session()->getFlashdata('error')) ?>' });
+<?php endif; ?>
+
+// Global Confirmation for Delete Actions
+function confirmDelete(url) {
+  Swal.fire({
+    title: 'Apakah Anda yakin?',
+    text: "Data yang dihapus tidak dapat dikembalikan!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#9ca3af',
+    confirmButtonText: 'Ya, hapus!',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = url;
+    }
+  });
+}
+
+function confirmFormSubmit(event, formElement, message = 'Data yang dihapus tidak dapat dikembalikan!') {
+  event.preventDefault();
+  Swal.fire({
+    title: 'Apakah Anda yakin?',
+    text: message,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#9ca3af',
+    confirmButtonText: 'Ya, hapus!',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Bypasses the SweetAlert on the actual submit
+      formElement.submit();
+    }
+  });
+}
+
+// Form Loading State Prevent Double Submit
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function() {
+      const btn = this.querySelector('button[type="submit"]');
+      if (btn && !btn.hasAttribute('data-no-loading')) {
+        btn.disabled = true;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `<svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memproses...`;
+      }
+    });
+  });
+});
+
 function openSidebar() {
   document.getElementById('sidebar').classList.remove('-translate-x-full');
   document.getElementById('sidebar-overlay').classList.remove('hidden');

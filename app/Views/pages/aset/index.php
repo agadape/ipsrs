@@ -65,15 +65,16 @@ $total = count($aset ?? []);
 <!-- Table -->
 <div class="card overflow-hidden">
   <?php if (empty($aset)): ?>
-  <div class="text-center py-16">
-    <svg class="w-12 h-12 text-gray-200 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-    </svg>
-    <p class="text-sm text-gray-400">Tidak ada aset ditemukan.</p>
+  <div class="p-12 text-center flex flex-col items-center justify-center">
+    <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+      <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+    </div>
+    <h3 class="text-lg font-bold text-gray-800 mb-1">Belum Ada Aset</h3>
+    <p class="text-sm text-gray-500 max-w-sm mx-auto mb-6">Data aset saat ini kosong atau tidak ditemukan.</p>
   </div>
   <?php else: ?>
   <div class="overflow-x-auto">
-    <table class="w-full text-sm">
+    <table id="tabel-data" class="w-full text-sm">
       <thead class="bg-gray-50 border-b border-gray-100">
         <tr>
           <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">ID Aset</th>
@@ -122,3 +123,15 @@ $total = count($aset ?? []);
   </div>
   <?php endif; ?>
 </div>
+
+<script>
+$(document).ready(function() {
+    if ($('#tabel-data').length) {
+        $('#tabel-data').DataTable({
+            language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json' },
+            pageLength: 25,
+            order: [[0, 'desc']]
+        });
+    }
+});
+</script>
