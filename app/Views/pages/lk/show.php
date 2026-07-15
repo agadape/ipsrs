@@ -459,8 +459,8 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
 </div>
 <?php endif; ?>
 
-<!-- ── Update Status Form (hidden when Selesai) ──────────────────────── -->
-<?php if (!$isSelesai): ?>
+<!-- ── Update Status Form (hidden when Selesai or if user is pelapor) ──────────────────────── -->
+<?php if (!$isSelesai && $authRole !== 'pelapor'): ?>
 <div class="card p-6">
   <h2 class="text-sm font-semibold text-gray-700 mb-5">Update Status</h2>
 

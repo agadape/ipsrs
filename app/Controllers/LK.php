@@ -92,6 +92,10 @@ class LK extends BaseController
 
             $updateLokasi = !empty($data['update_lokasi_aset']);
             unset($data['update_lokasi_aset']);
+            
+            if (session('user_role') === 'pelapor') {
+                $data['id_pengguna_pelapor'] = session('user_id');
+            }
 
             if (empty($data['id_aset'])) {
                 $data['id_aset'] = null;
