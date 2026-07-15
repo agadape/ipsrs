@@ -56,6 +56,7 @@ class LK extends BaseController
             'vendorDetail' => $this->model->getVendor($id),
             'vendorList'   => (new \App\Models\VendorModel())->getAll(),
             'aset'         => (new AsetModel())->getAll(),
+            'kodeKerusakan'=> (new \App\Models\KodeKerusakanModel())->getAll(),
             'teknisiList'  => (new \App\Models\PenggunaModel())->getByRole('Teknisi'),
         ]);
     }
@@ -70,15 +71,20 @@ class LK extends BaseController
 
     public function store()
     {
-        $v = $this->validateOrFail([
+        $rules = [
             'tanggal'      => 'required',
             'jam_laporan'  => 'required',
             'pelapor'      => 'required',
             'unit_pelapor' => 'required',
             'keluhan'      => 'required',
-            'kode'         => 'required|max_length[10]',
             'lokasi'       => 'required',
-        ], 'Mohon lengkapi seluruh data laporan yang wajib diisi.');
+        ];
+        
+        if (session('user_role') !== 'pelapor') {
+            $rules['kode'] = 'required|max_length[10]';
+        }
+
+        $v = $this->validateOrFail($rules, 'Mohon lengkapi seluruh data laporan yang wajib diisi.');
         if ($v !== true) return $v;
 
         try {
@@ -175,6 +181,34 @@ class LK extends BaseController
             log_message('error', '[LK::claim] ' . $e->getMessage());
             return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal klaim pekerjaan: ' . $e->getMessage());
         }
+    }
+
+    public function updateDetail(string $id)
+    {
+        if (session('user_role') === 'pelapor') return redirect()->to('/ipsrs/lk');
+        
+        $lk = $this->model->getById($id);
+        if (!$lk) return redirect()->to('/ipsrs/lk');
+        
+        $post = $this->request->getPost();
+        
+        $data = [];
+        if (!empty($post['kode'])) $data['kode'] = $post['kode'];
+        if (!empty($post['id_aset'])) $data['id_aset'] = $post['id_aset'];
+        if (!empty($post['lokasi'])) $data['lokasi'] = $post['lokasi'];
+        if (!empty($post['keluhan'])) $data['keluhan'] = $post['keluhan'];
+        if (!empty($post['nama_aset'])) $data['nama_aset'] = $post['nama_aset'];
+        
+        if (!empty($data)) {
+            $this->model->update($id, $data);
+            
+            // If aset is changed, maybe update aset location
+            if (!empty($post['id_aset']) && !empty($post['update_lokasi_aset']) && !empty($post['lokasi'])) {
+                (new AsetModel())->update($post['id_aset'], ['lokasi' => $post['lokasi']]);
+            }
+        }
+        
+        return redirect()->to('/ipsrs/lk/' . $id)->with('success', 'Detail Laporan berhasil dilengkapi.');
     }
 
     public function updateStatus(string $id)

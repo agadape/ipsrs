@@ -42,12 +42,21 @@ $prosesLabels = ['I' => 'Proses I — Perbaikan Langsung', 'II' => 'Proses II �
         <?= !empty($lk['jam_laporan']) ? ' · ' . esc($lk['jam_laporan']) : '' ?>
       </p>
     </div>
-    <?php if (!$isSelesai): ?>
-    <a href="/ipsrs/lk/baru"
-       class="flex items-center gap-2 text-xs font-medium px-3 py-2 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors">
-      + LK Baru
-    </a>
-    <?php endif; ?>
+    <div class="flex items-center gap-2">
+      <?php if (session('user_role') !== 'pelapor' && $status === 'Laporan Masuk'): ?>
+      <button onclick="document.getElementById('modal-edit-detail').classList.remove('hidden')" 
+         class="flex items-center gap-2 text-xs font-medium px-3 py-2 rounded-xl bg-amber-50 text-amber-600 hover:bg-amber-100 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        Lengkapi Data
+      </button>
+      <?php endif; ?>
+      <?php if (!$isSelesai): ?>
+      <a href="/ipsrs/lk/baru"
+         class="flex items-center gap-2 text-xs font-medium px-3 py-2 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors">
+        + LK Baru
+      </a>
+      <?php endif; ?>
+    </div>
   </div>
 
   <div class="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-4">
@@ -593,6 +602,77 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
   <?php endif; ?>
 </div>
 <?php endif; ?>
+
+<!-- Modal Edit Detail (Admin/Teknisi) -->
+<div id="modal-edit-detail" class="fixed inset-0 z-[60] hidden overflow-y-auto">
+  <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" onclick="document.getElementById('modal-edit-detail').classList.add('hidden')"></div>
+  <div class="flex min-h-full items-center justify-center p-4">
+    <div class="relative w-full max-w-lg transform rounded-2xl bg-white p-6 shadow-2xl transition-all">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="text-lg font-bold text-gray-900">Lengkapi Data Laporan</h3>
+        <button onclick="document.getElementById('modal-edit-detail').classList.add('hidden')" class="text-gray-400 hover:text-gray-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form action="/ipsrs/lk/<?= esc($id) ?>/detail" method="POST">
+        <?= csrf_field() ?>
+        
+        <div class="space-y-4">
+          <!-- Kode -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kode Pekerjaan <span class="text-red-500">*</span></label>
+            <select name="kode" required class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+              <option value="">-- Pilih Kode --</option>
+              <?php foreach (($kodeKerusakan ?? []) as $kk): ?>
+              <option value="<?= esc($kk['kode'] ?? '') ?>" <?= ($lk['kode'] ?? '') === ($kk['kode'] ?? '') ? 'selected' : '' ?>>
+                <?= esc(($kk['kode'] ?? '').' — '.($kk['nama'] ?? '')) ?>
+              </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          
+          <!-- Aset -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Hubungkan ke Aset</label>
+            <select name="id_aset" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+              <option value="">-- Pilih Aset dari Database --</option>
+              <?php foreach (($aset ?? []) as $a): ?>
+              <option value="<?= esc($a['id'] ?? '') ?>" <?= ($lk['id_aset'] ?? '') == ($a['id'] ?? '') ? 'selected' : '' ?>>
+                <?= esc(($a['id'] ?? '').' — '.($a['nama'] ?? '')) ?>
+              </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+
+          <!-- Nama Aset Manual -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Aset (Manual)</label>
+            <input type="text" name="nama_aset" value="<?= esc($lk['nama_aset'] ?? '') ?>" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+          </div>
+          
+          <!-- Lokasi -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi</label>
+            <input type="text" name="lokasi" value="<?= esc($lk['lokasi'] ?? '') ?>" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+          </div>
+          
+          <!-- Update Aset Checkbox -->
+          <div>
+            <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
+              <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded text-indigo-600 focus:ring-indigo-500">
+              Perbarui lokasi master aset sesuai lokasi ini
+            </label>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" onclick="document.getElementById('modal-edit-detail').classList.add('hidden')" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">Batal</button>
+          <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 <script>

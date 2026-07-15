@@ -64,6 +64,7 @@
                   class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 resize-none"><?= esc(old('keluhan') ?? '') ?></textarea>
       </div>
 
+      <?php if (session('user_role') !== 'pelapor'): ?>
       <!-- Kode -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kode Pekerjaan <span class="text-red-500">*</span></label>
@@ -79,6 +80,7 @@
         </select>
         <p class="text-[11px] text-gray-400 mt-1">Kode tidak ada? Tambahkan di <a href="/ipsrs/kode-kerusakan" class="text-indigo-500 hover:underline">Menu Kode Kerusakan</a></p>
       </div>
+      <?php endif; ?>
 
       <!-- Lokasi -->
       <div>
@@ -88,6 +90,7 @@
                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
+      <?php if (session('user_role') !== 'pelapor'): ?>
       <!-- Aset (optional) -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Aset Terkait <span class="text-gray-400 font-normal">(opsional)</span></label>
@@ -103,6 +106,7 @@
           <?php endforeach; ?>
         </select>
       </div>
+      <?php endif; ?>
 
       <!-- Nama Aset -->
       <div>
