@@ -270,6 +270,6 @@ class Aset extends BaseController
     {
         $aset = $this->model->getById($id);
         if (!$aset) { return redirect()->to('/ipsrs/aset'); }
-        return $this->render('pages/aset/qr', compact('aset'));
+        return view('pages/aset/qr', compact('aset'));
     }
 }
