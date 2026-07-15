@@ -23,35 +23,33 @@ $authName    = session('user_name')    ?? 'User';
 $authInitial = session('user_initial') ?? strtoupper(substr($authName, 0, 1));
 $authRole    = session('user_role')    ?? 'Pengguna';
 ?>
-<header class="fixed top-0 left-0 md:left-64 right-0 h-16 bg-[#0A0D14]/80 backdrop-blur-2xl flex items-center justify-between px-4 md:px-6 z-20 border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+<header class="fixed top-0 left-0 md:left-64 right-0 h-16 bg-white/70 backdrop-blur-xl flex items-center justify-between px-4 md:px-6 z-20 border-b border-white/80 shadow-sm">
 
   <div class="flex items-center gap-3">
     <!-- Hamburger — mobile only -->
-    <button onclick="openSidebar()" class="md:hidden w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors text-gray-400">
+    <button onclick="openSidebar()" class="md:hidden w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/80 transition-colors text-gray-600">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
     </button>
-    <p class="text-[13px] font-bold text-white uppercase tracking-wider font-display"><?= esc($label) ?></p>
+    <p class="text-sm font-semibold text-gray-800"><?= esc($label) ?></p>
   </div>
 
   <div class="relative flex items-center gap-2">
     <button onclick="toggleUserMenu()"
-            class="flex items-center gap-2.5 px-2.5 md:px-3 py-1.5 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
-      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00F0FF] to-[#0099FF] p-[1px] shadow-[0_0_10px_rgba(0,240,255,0.2)] flex items-center justify-center">
-        <div class="w-full h-full bg-[#0A0D14] rounded-[7px] flex items-center justify-center text-white text-xs font-bold">
-          <?= esc($authInitial) ?>
-        </div>
+            class="flex items-center gap-2.5 px-2.5 md:px-3 py-2 rounded-xl hover:bg-gray-100/80 transition-colors">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20 flex items-center justify-center text-white text-xs font-bold">
+        <?= esc($authInitial) ?>
       </div>
-      <span class="hidden sm:inline text-sm font-semibold text-white"><?= esc($authName) ?></span>
-      <svg class="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <span class="hidden sm:inline text-sm font-semibold text-gray-700"><?= esc($authName) ?></span>
+      <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
       </svg>
     </button>
 
-    <div id="user-menu" class="hidden absolute right-0 top-full mt-2 w-52 bg-[#121620]/60 rounded-2xl shadow-xl border border-white/5 z-50 overflow-hidden">
-      <div class="px-4 py-3 border-b border-white/5">
-        <p class="text-sm font-semibold text-white"><?= esc($authName) ?></p>
+    <div id="user-menu" class="hidden absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden">
+      <div class="px-4 py-3 border-b border-gray-100">
+        <p class="text-sm font-semibold text-gray-900"><?= esc($authName) ?></p>
         <p class="text-xs text-gray-400 mt-0.5"><?= esc($authRole) ?></p>
       </div>
       <div class="p-1">

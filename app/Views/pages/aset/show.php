@@ -7,21 +7,21 @@ $id = $aset['id'] ?? '';
   <div class="flex items-center gap-3">
     <?php if (session('user_id')): ?>
     <a href="/ipsrs/aset"
-       class="w-9 h-9 flex items-center justify-center rounded-xl bg-[#121620]/60 shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-white/5 hover:border-gray-200 transition-colors text-gray-400 hover:text-gray-700">
+       class="w-9 h-9 flex items-center justify-center rounded-xl bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-colors text-gray-500 hover:text-gray-700">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
       </svg>
     </a>
     <?php endif; ?>
     <div>
-      <h1 class="text-xl font-bold text-gray-100"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
-      <p class="text-xs font-mono text-[#CCFF00] mt-0.5"><?= esc($aset['nomor_aset'] ?? $id) ?></p>
+      <h1 class="text-xl font-bold text-gray-800"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
+      <p class="text-xs font-mono text-indigo-600 mt-0.5"><?= esc($aset['nomor_aset'] ?? $id) ?></p>
     </div>
   </div>
   <?php if (session('user_id')): ?>
   <div class="flex items-center gap-2">
     <a href="/ipsrs/aset/<?= esc($id) ?>/qr"
-       class="inline-flex items-center gap-2 bg-[#121620]/60 hover:bg-white/5 text-gray-200 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-[0_4px_20px_rgba(0,0,0,0.5)] border border-white/10 hover:shadow-md">
+       class="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm border border-gray-200 hover:shadow-md">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5V16M4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"/>
       </svg>
@@ -40,7 +40,7 @@ $id = $aset['id'] ?? '';
 
 <!-- Info Grid -->
 <div class="card p-6 mb-6">
-  <h2 class="text-sm font-semibold text-gray-200 mb-5 pb-3 border-b border-white/5">Informasi Aset</h2>
+  <h2 class="text-sm font-semibold text-gray-700 mb-5 pb-3 border-b border-gray-100">Informasi Aset</h2>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-5">
     <?php
     $fields = [
@@ -69,8 +69,8 @@ $id = $aset['id'] ?? '';
         'Rusak Ringan'  => 'badge bg-orange-100 text-orange-700',
         'Rusak Berat'   => 'badge bg-red-100 text-red-600',
         'Aktif'         => 'badge bg-emerald-100 text-emerald-700',
-        'Tidak Aktif'   => 'badge bg-[#202532] text-gray-400',
-        default         => 'badge bg-[#202532] text-gray-400',
+        'Tidak Aktif'   => 'badge bg-gray-100 text-gray-500',
+        default         => 'badge bg-gray-100 text-gray-500',
       };
     ?>
     <div>
@@ -78,9 +78,9 @@ $id = $aset['id'] ?? '';
       <?php if (!empty($f['badge'])): ?>
         <span class="<?= $kondisiBadge ?>"><?= esc($val) ?></span>
       <?php elseif (!empty($f['mono'])): ?>
-        <p class="text-sm font-mono font-semibold text-gray-100"><?= esc($val) ?></p>
+        <p class="text-sm font-mono font-semibold text-gray-800"><?= esc($val) ?></p>
       <?php else: ?>
-        <p class="text-sm font-medium text-gray-100"><?= esc($val) ?></p>
+        <p class="text-sm font-medium text-gray-800"><?= esc($val) ?></p>
       <?php endif; ?>
     </div>
     <?php endforeach; ?>
@@ -88,7 +88,7 @@ $id = $aset['id'] ?? '';
     <?php if (!empty($aset['keterangan'])): ?>
     <div class="col-span-2 md:col-span-3">
       <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Keterangan</p>
-      <p class="text-sm text-gray-200 leading-relaxed"><?= esc($aset['keterangan']) ?></p>
+      <p class="text-sm text-gray-700 leading-relaxed"><?= esc($aset['keterangan']) ?></p>
     </div>
     <?php endif; ?>
   </div>
@@ -105,7 +105,7 @@ $id = $aset['id'] ?? '';
   </div>
   <div class="flex-1 min-w-0">
     <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Terakhir Terlihat</p>
-    <p class="text-sm font-semibold text-gray-100 mt-0.5">
+    <p class="text-sm font-semibold text-gray-800 mt-0.5">
       <?= tgl($aset['last_seen_at'], 'd/m/Y H:i') ?>
       &middot; oleh <?= esc($aset['last_seen_by'] ?? 'Anonim') ?>
     </p>
@@ -119,8 +119,8 @@ $id = $aset['id'] ?? '';
   <?php endif; ?>
 </div>
 <?php else: ?>
-<div class="card p-4 mb-6 flex items-center gap-3 border-l-4 border-white/10" id="geo-status">
-  <div class="w-9 h-9 rounded-xl bg-[#202532] flex items-center justify-center flex-shrink-0">
+<div class="card p-4 mb-6 flex items-center gap-3 border-l-4 border-gray-200" id="geo-status">
+  <div class="w-9 h-9 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
     </svg>
@@ -133,12 +133,12 @@ $id = $aset['id'] ?? '';
 <?php if (!empty($komponen)): ?>
 <div class="card p-6 mb-6">
   <div class="flex items-center justify-between mb-4">
-    <h2 class="text-sm font-semibold text-gray-200">Komponen Aset</h2>
+    <h2 class="text-sm font-semibold text-gray-700">Komponen Aset</h2>
     <span class="text-xs text-gray-400"><?= count($komponen) ?> komponen</span>
   </div>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
-      <thead class="bg-[#181C25]/80">
+      <thead class="bg-gray-50">
         <tr>
           <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider rounded-l-xl">Nama Komponen</th>
           <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Kondisi</th>
@@ -153,18 +153,18 @@ $id = $aset['id'] ?? '';
             'Baik'        => 'bg-emerald-100 text-emerald-700',
             'Kurang Baik' => 'bg-amber-100 text-amber-700',
             'Rusak'       => 'bg-red-100 text-red-600',
-            'Tidak Ada'   => 'bg-[#202532] text-gray-400 line-through',
-            default       => 'bg-[#202532] text-gray-400',
+            'Tidak Ada'   => 'bg-gray-100 text-gray-400 line-through',
+            default       => 'bg-gray-100 text-gray-500',
           };
           $asalBadge = ($k['asal'] ?? '') === 'Hasil Kanibal'
             ? 'bg-amber-100 text-amber-700'
             : 'bg-blue-100 text-blue-700';
         ?>
         <tr>
-          <td class="px-4 py-3 font-medium text-gray-100 komponen-nama"><?= esc($k['nama_komponen'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-medium text-gray-800 komponen-nama"><?= esc($k['nama_komponen'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="badge <?= $kondisiBadge ?> text-[10px]"><?= esc($k['kondisi'] ?? '-') ?></span></td>
           <td class="px-4 py-3"><span class="badge <?= $asalBadge ?> text-[10px]"><?= esc($k['asal'] ?? 'Original') ?></span></td>
-          <td class="px-4 py-3 text-gray-400 text-xs"><?= esc($k['keterangan'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-500 text-xs"><?= esc($k['keterangan'] ?? '-') ?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
@@ -177,12 +177,12 @@ $id = $aset['id'] ?? '';
 <?php if (!empty($riwayatKanibal)): ?>
 <div class="card p-6 mb-6 border-l-4 border-amber-400">
   <div class="flex items-center justify-between mb-4">
-    <h2 class="text-sm font-semibold text-gray-200">Riwayat Kanibal</h2>
-    <a href="/ipsrs/kanibal" class="text-xs font-medium text-[#CCFF00] hover:underline">Lihat Semua</a>
+    <h2 class="text-sm font-semibold text-gray-700">Riwayat Kanibal</h2>
+    <a href="/ipsrs/kanibal" class="text-xs font-medium text-indigo-600 hover:underline">Lihat Semua</a>
   </div>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
-      <thead class="bg-[#181C25]/80">
+      <thead class="bg-gray-50">
         <tr>
           <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider rounded-l-xl">Tanggal</th>
           <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Komponen</th>
@@ -194,8 +194,8 @@ $id = $aset['id'] ?? '';
       <tbody class="divide-y divide-gray-50">
         <?php foreach ($riwayatKanibal as $rk): ?>
         <tr>
-          <td class="px-4 py-3 text-gray-300"><?= tgl($rk['tanggal'] ?? '') ?></td>
-          <td class="px-4 py-3 font-medium text-gray-100"><?= esc($rk['nama_komponen'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-600"><?= tgl($rk['tanggal'] ?? '') ?></td>
+          <td class="px-4 py-3 font-medium text-gray-800"><?= esc($rk['nama_komponen'] ?? '-') ?></td>
           <td class="px-4 py-3">
             <?php if (($rk['id_aset_donor'] ?? '') === $id): ?>
             <span class="badge bg-red-100 text-red-600 text-[10px]">Donor (Dipanen)</span>
@@ -203,8 +203,8 @@ $id = $aset['id'] ?? '';
             <span class="badge bg-emerald-100 text-emerald-700 text-[10px]">Penerima (Diperbaiki)</span>
             <?php endif; ?>
           </td>
-          <td class="px-4 py-3 text-gray-300"><?= esc($rk['petugas'] ?? '-') ?></td>
-          <td class="px-4 py-3 text-gray-400 text-xs"><?= esc($rk['keterangan'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-600"><?= esc($rk['petugas'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-500 text-xs"><?= esc($rk['keterangan'] ?? '-') ?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
@@ -216,15 +216,15 @@ $id = $aset['id'] ?? '';
 <!-- Riwayat Laporan Kerusakan -->
 <div class="card p-6 mb-6">
   <div class="flex items-center justify-between mb-4">
-    <h2 class="text-sm font-semibold text-gray-200">Riwayat Laporan Kerusakan</h2>
-    <a href="/ipsrs/lk/baru" class="text-xs font-medium text-[#CCFF00] hover:underline">+ Buat LK</a>
+    <h2 class="text-sm font-semibold text-gray-700">Riwayat Laporan Kerusakan</h2>
+    <a href="/ipsrs/lk/baru" class="text-xs font-medium text-indigo-600 hover:underline">+ Buat LK</a>
   </div>
   <?php if (empty($riwayatLK)): ?>
   <p class="text-sm text-gray-400 text-center py-6">Belum ada laporan kerusakan untuk aset ini.</p>
   <?php else: ?>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
-      <thead class="bg-[#181C25]/80">
+      <thead class="bg-gray-50">
         <tr>
           <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider rounded-l-xl">No. Order</th>
           <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal</th>
@@ -242,11 +242,11 @@ $id = $aset['id'] ?? '';
           $rt = (int)($lk['response_time'] ?? 0);
         ?>
         <tr class="hover:bg-gray-50/60 transition-colors">
-          <td class="px-4 py-3 font-mono text-xs text-[#CCFF00] font-semibold"><?= esc($lk['no_order'] ?? '-') ?></td>
-          <td class="px-4 py-3 text-gray-300"><?= tgl($lk['tanggal']) ?></td>
-          <td class="px-4 py-3 text-gray-100 max-w-[200px] truncate"><?= esc($lk['keluhan'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-mono text-xs text-indigo-600 font-semibold"><?= esc($lk['no_order'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-600"><?= tgl($lk['tanggal']) ?></td>
+          <td class="px-4 py-3 text-gray-800 max-w-[200px] truncate"><?= esc($lk['keluhan'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="<?= $sb ?>"><?= esc($s) ?></span></td>
-          <td class="px-4 py-3 text-xs <?= $rt > 15 ? 'text-red-600 font-semibold' : 'text-gray-300' ?>">
+          <td class="px-4 py-3 text-xs <?= $rt > 15 ? 'text-red-600 font-semibold' : 'text-gray-600' ?>">
             <?= $rt > 0 ? $rt.' mnt' : '-' ?>
           </td>
           <td class="px-4 py-3">
@@ -262,13 +262,13 @@ $id = $aset['id'] ?? '';
 
 <!-- Riwayat Lokasi -->
 <div class="card p-6">
-  <h2 class="text-sm font-semibold text-gray-200 mb-4">Riwayat Lokasi</h2>
+  <h2 class="text-sm font-semibold text-gray-700 mb-4">Riwayat Lokasi</h2>
   <?php if (empty($riwayat)): ?>
   <p class="text-sm text-gray-400 text-center py-8">Belum ada riwayat perpindahan lokasi.</p>
   <?php else: ?>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
-      <thead class="bg-[#181C25]/80 rounded-xl">
+      <thead class="bg-gray-50 rounded-xl">
         <tr>
           <th class="text-left px-4 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider rounded-l-xl">Tanggal</th>
           <th class="text-left px-4 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Dari</th>
@@ -281,12 +281,12 @@ $id = $aset['id'] ?? '';
       <tbody class="divide-y divide-gray-50">
         <?php foreach ($riwayat as $r): ?>
         <tr class="hover:bg-gray-50/60 transition-colors">
-          <td class="px-4 py-3 text-gray-300"><?= tgl($r['tanggal']) ?></td>
-          <td class="px-4 py-3 text-gray-200"><?= esc($r['dari'] ?? $r['lokasi_asal'] ?? '-') ?></td>
-          <td class="px-4 py-3 text-gray-200"><?= esc($r['ke'] ?? $r['lokasi_tujuan'] ?? '-') ?></td>
-          <td class="px-4 py-3 text-gray-300"><?= esc($r['alasan'] ?? '-') ?></td>
-          <td class="px-4 py-3 text-gray-300"><?= esc($r['petugas'] ?? '-') ?></td>
-          <td class="px-4 py-3 text-gray-400 max-w-[200px] truncate"><?= esc($r['catatan'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-600"><?= tgl($r['tanggal']) ?></td>
+          <td class="px-4 py-3 text-gray-700"><?= esc($r['dari'] ?? $r['lokasi_asal'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-700"><?= esc($r['ke'] ?? $r['lokasi_tujuan'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-600"><?= esc($r['alasan'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-600"><?= esc($r['petugas'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-500 max-w-[200px] truncate"><?= esc($r['catatan'] ?? '-') ?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>

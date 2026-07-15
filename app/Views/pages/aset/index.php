@@ -5,7 +5,7 @@ $total = count($aset ?? []);
 <!-- Page Header -->
 <div class="flex items-center justify-between mb-6">
   <div>
-    <h1 class="text-xl font-bold text-gray-100">Daftar Aset</h1>
+    <h1 class="text-xl font-bold text-gray-800">Daftar Aset</h1>
     <p class="text-sm text-gray-400 mt-0.5">Kelola inventaris aset rumah sakit</p>
   </div>
   <a href="/ipsrs/aset/tambah"
@@ -21,19 +21,19 @@ $total = count($aset ?? []);
 <div class="card p-4 mb-5">
   <form method="GET" action="/ipsrs/aset" class="flex flex-wrap gap-3 items-end">
     <div class="flex-1 min-w-[200px]">
-      <label class="block text-xs font-medium text-gray-400 mb-1.5">Cari Aset</label>
+      <label class="block text-xs font-medium text-gray-500 mb-1.5">Cari Aset</label>
       <div class="relative">
         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-linecap="round"/>
         </svg>
         <input type="text" name="q" value="<?= esc($search ?? '') ?>"
                placeholder="Nama, ID, kode aset..."
-               class="w-full pl-9 pr-3 py-2.5 text-sm bg-[#181C25]/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
     </div>
     <div class="min-w-[160px]">
-      <label class="block text-xs font-medium text-gray-400 mb-1.5">Jenis</label>
-      <select name="jenis" class="w-full px-3 py-2.5 text-sm bg-[#181C25]/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+      <label class="block text-xs font-medium text-gray-500 mb-1.5">Jenis</label>
+      <select name="jenis" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
         <option value="">Semua Jenis</option>
         <option value="Sarana"      <?= ($jenis ?? '') === 'Sarana'      ? 'selected' : '' ?>>Sarana</option>
         <option value="Prasarana"   <?= ($jenis ?? '') === 'Prasarana'   ? 'selected' : '' ?>>Prasarana</option>
@@ -41,8 +41,8 @@ $total = count($aset ?? []);
       </select>
     </div>
     <div class="min-w-[160px]">
-      <label class="block text-xs font-medium text-gray-400 mb-1.5">Status</label>
-      <select name="status" class="w-full px-3 py-2.5 text-sm bg-[#181C25]/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+      <label class="block text-xs font-medium text-gray-500 mb-1.5">Status</label>
+      <select name="status" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
         <option value="">Semua Status</option>
         <option value="Aktif"   <?= ($status ?? '') === 'Aktif'   ? 'selected' : '' ?>>Aktif</option>
         <option value="Tidak Aktif" <?= ($status ?? '') === 'Tidak Aktif' ? 'selected' : '' ?>>Tidak Aktif</option>
@@ -54,13 +54,13 @@ $total = count($aset ?? []);
       Filter
     </button>
     <?php if (!empty($search) || !empty($jenis) || !empty($status)): ?>
-    <a href="/ipsrs/aset" class="px-4 py-2.5 text-sm text-gray-400 hover:text-gray-700 rounded-xl bg-[#202532] hover:bg-white/15 transition-colors">Reset</a>
+    <a href="/ipsrs/aset" class="px-4 py-2.5 text-sm text-gray-500 hover:text-gray-700 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors">Reset</a>
     <?php endif; ?>
   </form>
 </div>
 
 <!-- Count -->
-<p class="text-sm text-gray-400 mb-3">Menampilkan <span class="font-semibold text-gray-200"><?= $total ?></span> aset</p>
+<p class="text-sm text-gray-500 mb-3">Menampilkan <span class="font-semibold text-gray-700"><?= $total ?></span> aset</p>
 
 <!-- Table -->
 <div class="card overflow-hidden">
@@ -74,7 +74,7 @@ $total = count($aset ?? []);
   <?php else: ?>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
-      <thead class="bg-[#181C25]/80 border-b border-white/5">
+      <thead class="bg-gray-50 border-b border-gray-100">
         <tr>
           <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">ID Aset</th>
           <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Nama Aset</th>
@@ -92,28 +92,28 @@ $total = count($aset ?? []);
           $stBadge = status_aset_badge($st);
           $jn = $a['jenis'] ?? '';
           $jnBadge = match($jn) {
-            'Sarana'         => 'badge bg-[#CCFF00]/10 text-indigo-700',
+            'Sarana'         => 'badge bg-indigo-50 text-indigo-700',
             'Prasarana'      => 'badge bg-slate-100 text-slate-600',
-            'Alat Non Medis' => 'badge bg-[#202532] text-gray-300',
-            default          => 'badge bg-[#202532] text-gray-400',
+            'Alat Non Medis' => 'badge bg-gray-100 text-gray-600',
+            default          => 'badge bg-gray-100 text-gray-500',
           };
         ?>
         <tr class="hover:bg-indigo-50/40 transition-colors group">
           <td class="px-5 py-3.5">
-            <span class="font-mono text-xs text-[#CCFF00] font-semibold"><?= esc($a['nomor_aset'] ?? $a['id'] ?? '-') ?></span>
+            <span class="font-mono text-xs text-indigo-600 font-semibold"><?= esc($a['nomor_aset'] ?? $a['id'] ?? '-') ?></span>
           </td>
           <td class="px-5 py-3.5">
-            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="font-medium text-gray-100 hover:text-indigo-600 transition-colors">
+            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="font-medium text-gray-800 hover:text-indigo-600 transition-colors">
               <?= esc($a['nama'] ?? '-') ?>
             </a>
           </td>
-          <td class="px-5 py-3.5 text-gray-300"><?= esc($a['kategori'] ?? '-') ?></td>
+          <td class="px-5 py-3.5 text-gray-600"><?= esc($a['kategori'] ?? '-') ?></td>
           <td class="px-5 py-3.5"><span class="<?= $jnBadge ?>"><?= esc($jn ?: '-') ?></span></td>
-          <td class="px-5 py-3.5 text-gray-300"><?= esc($a['lokasi'] ?? '-') ?></td>
+          <td class="px-5 py-3.5 text-gray-600"><?= esc($a['lokasi'] ?? '-') ?></td>
           <td class="px-5 py-3.5"><span class="<?= $stBadge ?>"><?= esc($st ?: '-') ?></span></td>
           <td class="px-5 py-3.5">
             <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>/edit"
-               class="text-xs text-[#CCFF00] hover:text-indigo-800 font-medium hover:underline">Edit</a>
+               class="text-xs text-indigo-600 hover:text-indigo-800 font-medium hover:underline">Edit</a>
           </td>
         </tr>
         <?php endforeach; ?>

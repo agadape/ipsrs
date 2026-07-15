@@ -9,68 +9,25 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { 
-            sans: ['"Onest"', 'sans-serif'],
-            display: ['"Syne"', 'sans-serif']
-          },
-          colors: { 
-            brand: { DEFAULT: '#CCFF00', hover: '#B3E600' }
-          },
-          animation: {
-            'fade-up': 'fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards'
-          },
-          keyframes: {
-            fadeUp: {
-              '0%': { opacity: '0', transform: 'translateY(20px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' }
-            }
-          }
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+          colors: { brand: { DEFAULT: '#4F46E5', hover: '#4338CA' } }
         }
       }
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    body { 
-      font-family: 'Onest', sans-serif; 
-      background-color: #0A0D14;
-      background-image: 
-        radial-gradient(circle at 15% 50%, rgba(204, 255, 0, 0.05), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.05), transparent 25%),
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
-      color: #F3F4F6;
-    }
-    h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Syne', sans-serif; }
-    
-    .scrollbar-dark::-webkit-scrollbar { width: 4px; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); background-attachment: fixed; }
+    .scrollbar-dark::-webkit-scrollbar { width: 3px; }
     .scrollbar-dark::-webkit-scrollbar-track { background: transparent; }
     .scrollbar-dark::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
-    
-    .sidebar-active { background: linear-gradient(90deg, rgba(204, 255, 0, 0.1) 0%, transparent 100%); border-left: 3px solid #CCFF00; color: #CCFF00 !important; }
-    
-    .card { 
-      background: rgba(18, 22, 32, 0.6); 
-      backdrop-filter: blur(20px); 
-      -webkit-backdrop-filter: blur(20px); 
-      border-radius: 1.25rem; 
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
-      border: 1px solid rgba(255, 255, 255, 0.05); 
-    }
-    
-    .badge { display:inline-flex; align-items:center; gap:.375rem; padding:.25rem .75rem; border-radius:9999px; font-size:.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; white-space:nowrap; }
-    .flash-success { background:rgba(204, 255, 0, 0.1); border:1px solid rgba(204, 255, 0, 0.3); color:#CCFF00; backdrop-filter: blur(10px); }
-    .flash-error   { background:rgba(255, 51, 102, 0.1); border:1px solid rgba(255, 51, 102, 0.3); color:#FF3366; backdrop-filter: blur(10px); }
-    
-    #sidebar { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); border-right: 1px solid rgba(255,255,255,0.05); background: rgba(10, 13, 20, 0.8); backdrop-filter: blur(20px); }
-    
-    /* Staggered Animations for Anti-Slop Delight */
-    .stagger-1 { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; }
-    .stagger-2 { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
-    .stagger-3 { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards; }
-    .stagger-4 { opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; }
+    .sidebar-active { background: linear-gradient(90deg, rgba(79,70,229,0.15) 0%, transparent 100%); border-left: 3px solid #6366f1; }
+    .card { background: rgba(255,255,255,0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 1.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.03); border: 1px solid rgba(255,255,255,0.7); }
+    .badge { display:inline-flex; align-items:center; gap:.375rem; padding:.25rem .625rem; border-radius:9999px; font-size:.75rem; font-weight:500; white-space:nowrap; }
+    .flash-success { background:#ecfdf5; border:1px solid #6ee7b7; color:#065f46; }
+    .flash-error   { background:#fef2f2; border:1px solid #fca5a5; color:#991b1b; }
+    #sidebar { transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
   </style>
 </head>
 <body class="min-h-screen">
