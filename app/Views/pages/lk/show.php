@@ -31,11 +31,11 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
   <div class="flex flex-wrap items-start justify-between gap-4 mb-5">
     <div>
       <div class="flex items-center gap-3 flex-wrap mb-2">
-        <span class="font-mono text-lg font-bold text-teal-600"><?= esc($lk['no_order'] ?? '-') ?></span>
+        <span class="font-mono text-lg font-bold text-indigo-600"><?= esc($lk['no_order'] ?? '-') ?></span>
         <span class="<?= $sBadge ?>"><?= esc($status) ?></span>
         <span class="<?= kode_badge($lk['kode'] ?? '') ?>"><?= esc($lk['kode'] ?? '-') ?></span>
         <?php if (!empty($lk['proses'])): ?>
-        <span class="badge bg-teal-50 text-teal-600">Proses <?= esc($lk['proses']) ?></span>
+        <span class="badge bg-indigo-50 text-indigo-600">Proses <?= esc($lk['proses']) ?></span>
         <?php endif; ?>
       </div>
       <p class="text-gray-500 text-sm"><?= tgl($lk['tanggal'], 'd F Y') ?>
@@ -52,7 +52,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
       <?php endif; ?>
       <?php if (!$isSelesai): ?>
       <a href="/ipsrs/lk/baru"
-         class="flex items-center gap-2 text-xs font-medium px-3 py-2 rounded-xl bg-teal-50 text-teal-600 hover:bg-teal-100 transition-colors">
+         class="flex items-center gap-2 text-xs font-medium px-3 py-2 rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors">
         + LK Baru
       </a>
       <?php endif; ?>
@@ -80,7 +80,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
     <div>
       <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Aset Terkait</p>
       <?php if (!empty($lk['id_aset'])): ?>
-      <a href="/ipsrs/aset/<?= esc($lk['id_aset']) ?>" class="text-sm font-medium text-teal-600 hover:underline">
+      <a href="/ipsrs/aset/<?= esc($lk['id_aset']) ?>" class="text-sm font-medium text-indigo-600 hover:underline">
         <?= esc($lk['nama_aset'] ?? $lk['id_aset']) ?>
       </a>
       <?php else: ?>
@@ -100,13 +100,13 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
     <div class="flex items-center gap-0 shrink-0">
       <div class="flex flex-col items-center">
         <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all
-          <?= $done ? 'bg-teal-600 border-indigo-600 text-white' : ($current ? 'bg-white border-indigo-600 text-teal-600' : 'bg-white border-gray-200 text-gray-400') ?>">
+          <?= $done ? 'bg-indigo-600 border-indigo-600 text-white' : ($current ? 'bg-white border-indigo-600 text-indigo-600' : 'bg-white border-gray-200 text-gray-400') ?>">
           <?php if ($done): ?>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
           <?php else: ?><?= $i + 1 ?><?php endif; ?>
         </div>
         <span class="mt-1.5 text-[10px] font-medium text-center leading-tight max-w-[70px]
-          <?= $current ? 'text-teal-600' : ($done ? 'text-gray-500' : 'text-gray-300') ?>">
+          <?= $current ? 'text-indigo-600' : ($done ? 'text-gray-500' : 'text-gray-300') ?>">
           <?= esc($step) ?>
         </span>
       </div>
@@ -229,7 +229,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
     <div class="flex gap-2 mb-4" id="sc-source-toggle">
       <button type="button" onclick="setScSource('Gudang')"
               id="btn-gudang"
-              class="px-4 py-2 text-xs font-semibold rounded-xl transition-colors bg-teal-600 text-white">
+              class="px-4 py-2 text-xs font-semibold rounded-xl transition-colors bg-indigo-600 text-white">
         Dari Gudang
       </button>
       <button type="button" onclick="setScSource('Kanibal')"
@@ -248,7 +248,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         <div class="md:col-span-2">
           <label class="block text-xs font-medium text-gray-500 mb-1">Barang <span class="text-red-500">*</span></label>
           <select name="id_barang" required
-                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
             <option value="">-- Pilih Barang --</option>
             <?php foreach (($stokTersedia ?? []) as $s): ?>
             <?php if ((int)($s['stok_tersedia'] ?? 0) > 0): ?>
@@ -262,11 +262,11 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">Jumlah <span class="text-red-500">*</span></label>
           <input type="number" name="jumlah" min="1" required
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
         <div>
           <button type="submit"
-                  class="w-full px-4 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors">
+                  class="w-full px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">
             Pakai
           </button>
         </div>
@@ -284,7 +284,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">Aset Donor <span class="text-red-500">*</span></label>
           <select name="id_aset_donor" required id="kanibal-donor"
-                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none"
+                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none"
                   onchange="loadKomponenDonor(this.value)">
             <option value="">-- Pilih Aset Donor --</option>
             <?php foreach (($aset ?? []) as $a): ?>
@@ -300,13 +300,13 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
           <label class="block text-xs font-medium text-gray-500 mb-1">Nama Komponen <span class="text-red-500">*</span></label>
           <input type="text" name="nama_komponen" required placeholder="Contoh: Kompresor, Motor Fan, PCB"
                  list="komponen-donor-list"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
           <datalist id="komponen-donor-list"></datalist>
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">Kondisi Komponen</label>
           <select name="kondisi_komponen"
-                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
             <option value="Baik">Baik</option>
             <option value="Kurang Baik">Kurang Baik</option>
             <option value="Rusak">Rusak</option>
@@ -315,12 +315,12 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">Disetujui Oleh</label>
           <input type="text" name="disetujui_oleh" placeholder="Admin / Ka IPSRS"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
         <div class="md:col-span-2">
           <label class="block text-xs font-medium text-gray-500 mb-1">Keterangan</label>
           <input type="text" name="keterangan" placeholder="Catatan kanibal"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
       </div>
       <div class="mt-3">
@@ -338,7 +338,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
     document.getElementById('form-gudang').classList.toggle('hidden', sumber !== 'Gudang');
     document.getElementById('form-kanibal').classList.toggle('hidden', sumber !== 'Kanibal');
     document.getElementById('btn-gudang').className = sumber === 'Gudang'
-      ? 'px-4 py-2 text-xs font-semibold rounded-xl transition-colors bg-teal-600 text-white'
+      ? 'px-4 py-2 text-xs font-semibold rounded-xl transition-colors bg-indigo-600 text-white'
       : 'px-4 py-2 text-xs font-semibold rounded-xl transition-colors bg-gray-100 text-gray-500 hover:bg-gray-200';
     document.getElementById('btn-kanibal').className = sumber === 'Kanibal'
       ? 'px-4 py-2 text-xs font-semibold rounded-xl transition-colors bg-amber-600 text-white'
@@ -418,7 +418,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">Pilih Vendor</label>
           <select name="id_vendor"
-                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
             <option value="">-- Pilih Vendor Terdaftar --</option>
             <?php foreach ($vendorList as $vd): ?>
             <option value="<?= esc($vd['id'] ?? '') ?>"><?= esc($vd['nama_vendor'] ?? '') ?></option>
@@ -428,37 +428,37 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">atau Vendor Baru</label>
           <input type="text" name="nama_vendor_baru" placeholder="Nama vendor baru"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">Kontak <span class="text-gray-400 font-normal">(vendor baru)</span></label>
           <input type="text" name="kontak" placeholder="No. telp / email"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">Tanggal Kirim</label>
           <input type="date" name="tanggal_kirim"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">Estimasi Selesai</label>
           <input type="date" name="estimasi_selesai"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
         <div>
           <label class="block text-xs font-medium text-gray-500 mb-1">Tanggal Kembali</label>
           <input type="date" name="tanggal_kembali"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
         <div class="md:col-span-2">
           <label class="block text-xs font-medium text-gray-500 mb-1">Keterangan / Ringkasan RAB</label>
           <input type="text" name="keterangan" placeholder="Catatan, biaya, atau ringkasan RAB"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
       </div>
       <div class="mt-3">
         <button type="submit"
-                class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors">
+                class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">
           Simpan Vendor
         </button>
       </div>
@@ -481,7 +481,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Teknisi <span class="text-red-500">*</span></label>
         <select name="teknisi" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Teknisi --</option>
           <?php foreach (($teknisiList ?? []) as $t): ?>
           <option value="<?= esc($t['nama_lengkap']) ?>" <?= ($lk['teknisi'] ?? '') === $t['nama_lengkap'] ? 'selected' : '' ?>><?= esc($t['nama_lengkap']) ?></option>
@@ -491,7 +491,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Status Baru <span class="text-red-500">*</span></label>
         <select name="status_baru" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Status --</option>
           <option value="Didisposisi">Didisposisi</option>
           <option value="Survei">Survei</option>
@@ -500,16 +500,16 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal Cek</label>
         <input type="date" name="tanggal_cek" value="<?= date('Y-m-d') ?>"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Jam Cek</label>
         <input type="time" name="jam_cek" value="<?= date('H:i') ?>"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
     </div>
     <div class="mt-4">
-      <button type="submit" class="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+      <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
         Simpan
       </button>
     </div>
@@ -524,7 +524,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Teknisi</label>
         <select name="teknisi"
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih --</option>
           <?php foreach (($teknisiList ?? []) as $t): ?>
           <option value="<?= esc($t['nama_lengkap']) ?>" <?= ($lk['teknisi'] ?? '') === $t['nama_lengkap'] ? 'selected' : '' ?>><?= esc($t['nama_lengkap']) ?></option>
@@ -536,7 +536,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Status Baru <span class="text-red-500">*</span></label>
         <select name="status_baru" id="status_baru" required onchange="toggleSignature()"
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Status --</option>
           <option value="Dalam Perbaikan">Dalam Perbaikan</option>
           <option value="Menunggu Suku Cadang">Menunggu Suku Cadang</option>
@@ -553,7 +553,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
           <label class="flex items-center gap-2 cursor-pointer">
             <input type="radio" name="proses" value="<?= $val ?>"
                    <?= ($lk['proses'] ?? '') === $val ? 'checked' : '' ?>
-                   class="w-4 h-4 text-teal-600 focus:ring-teal-400/50">
+                   class="w-4 h-4 text-indigo-600 focus:ring-indigo-400/50">
             <span class="text-sm text-gray-700"><?= $label ?></span>
           </label>
           <?php endforeach; ?>
@@ -565,19 +565,19 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tindakan yang Dilakukan</label>
         <textarea name="tindakan" rows="3"
                   placeholder="Deskripsikan tindakan perbaikan..."
-                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 resize-none"><?= esc($lk['tindakan'] ?? '') ?></textarea>
+                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 resize-none"><?= esc($lk['tindakan'] ?? '') ?></textarea>
       </div>
 
       <!-- Tanggal & Jam Selesai -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal Selesai</label>
         <input type="date" name="tanggal_selesai" value="<?= date('Y-m-d') ?>"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Jam Selesai</label>
         <input type="time" name="jam_selesai" value="<?= date('H:i') ?>"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Tanda Tangan Pelapor (Hidden by default, shown when Selesai) -->
@@ -593,7 +593,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
     </div>
 
     <div class="mt-4 flex items-center gap-3">
-      <button type="submit" onclick="return saveSignature()" class="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+      <button type="submit" onclick="return saveSignature()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
         Simpan
       </button>
       <p class="text-xs text-gray-400">Jam selesai diisi otomatis saat status â†’ Selesai</p>
@@ -621,7 +621,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
           <!-- Kode -->
           <div>
             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kode Pekerjaan <span class="text-red-500">*</span></label>
-            <select name="kode" required class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+            <select name="kode" required class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
               <option value="">-- Pilih Kode --</option>
               <?php foreach (($kodeKerusakan ?? []) as $kk): ?>
               <option value="<?= esc($kk['kode'] ?? '') ?>" <?= ($lk['kode'] ?? '') === ($kk['kode'] ?? '') ? 'selected' : '' ?>>
@@ -634,7 +634,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
           <!-- Aset -->
           <div>
             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Hubungkan ke Aset</label>
-            <select name="id_aset" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+            <select name="id_aset" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
               <option value="">-- Pilih Aset dari Database --</option>
               <?php foreach (($aset ?? []) as $a): ?>
               <option value="<?= esc($a['id'] ?? '') ?>" <?= ($lk['id_aset'] ?? '') == ($a['id'] ?? '') ? 'selected' : '' ?>>
@@ -647,19 +647,19 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
           <!-- Nama Aset Manual -->
           <div>
             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Aset (Manual)</label>
-            <input type="text" name="nama_aset" value="<?= esc($lk['nama_aset'] ?? '') ?>" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+            <input type="text" name="nama_aset" value="<?= esc($lk['nama_aset'] ?? '') ?>" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
           </div>
           
           <!-- Lokasi -->
           <div>
             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi</label>
-            <input type="text" name="lokasi" value="<?= esc($lk['lokasi'] ?? '') ?>" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+            <input type="text" name="lokasi" value="<?= esc($lk['lokasi'] ?? '') ?>" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
           </div>
           
           <!-- Update Aset Checkbox -->
           <div>
             <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700">
-              <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded text-teal-600 focus:ring-teal-500">
+              <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded text-indigo-600 focus:ring-indigo-500">
               Perbarui lokasi master aset sesuai lokasi ini
             </label>
           </div>
@@ -667,7 +667,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
 
         <div class="mt-6 flex justify-end gap-3">
           <button type="button" onclick="document.getElementById('modal-edit-detail').classList.add('hidden')" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors">Batal</button>
-          <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 rounded-xl transition-colors">Simpan Data</button>
+          <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors">Simpan Data</button>
         </div>
       </form>
     </div>

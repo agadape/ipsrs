@@ -15,7 +15,7 @@ $period = $period ?? 'bulan';
     <?php foreach (['minggu' => 'Minggu', 'bulan' => 'Bulan', 'tahun' => 'Tahun'] as $val => $label): ?>
     <a href="/ipsrs/laporan?period=<?= $val ?>"
        class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-300
-         <?= $period === $val ? 'bg-teal-600 text-white shadow-md' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' ?>">
+         <?= $period === $val ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50' ?>">
       <?= $label ?>
     </a>
     <?php endforeach; ?>
@@ -29,7 +29,7 @@ $period = $period ?? 'bulan';
     <div class="flex items-center bg-white border border-indigo-100 rounded-xl p-1 shadow-sm hover:border-indigo-300 transition-colors">
       <span class="text-[10px] font-bold text-indigo-400 px-3 uppercase tracking-wider border-r border-gray-100">Lap. Kerusakan</span>
       <a href="/ipsrs/laporan/export-print?period=<?= urlencode($period) ?>" target="_blank"
-         class="flex items-center gap-1.5 px-3 py-1.5 hover:bg-teal-50 text-teal-600 text-xs font-bold rounded-lg transition-colors">
+         class="flex items-center gap-1.5 px-3 py-1.5 hover:bg-indigo-50 text-indigo-600 text-xs font-bold rounded-lg transition-colors">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
         Cetak PDF
       </a>
@@ -64,7 +64,7 @@ $period = $period ?? 'bulan';
   $stats = [
     ['label' => 'Total LK',    'value' => $totalLK ?? 0,         'unit' => '',      'color' => 'text-gray-800'],
     ['label' => 'Selesai',     'value' => $selesai ?? 0,          'unit' => '',      'color' => 'text-emerald-600'],
-    ['label' => 'Aktif',       'value' => $aktif ?? 0,            'unit' => '',      'color' => 'text-teal-600'],
+    ['label' => 'Aktif',       'value' => $aktif ?? 0,            'unit' => '',      'color' => 'text-indigo-600'],
     ['label' => 'SLA',         'value' => number_format($slaPct ?? 0, 1), 'unit' => '%', 'color' => 'text-gray-800'],
     ['label' => 'Avg. Respon', 'value' => number_format($avgRespon ?? 0, 0), 'unit' => ' mnt', 'color' => 'text-gray-800'],
     ['label' => 'PM Selesai',  'value' => ($jadwalSelesai ?? 0).'/'
@@ -87,7 +87,7 @@ $period = $period ?? 'bulan';
     <h2 class="text-sm font-semibold text-gray-700 mb-4">LK Berdasarkan Kode</h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
       <?php
-      $kodeColors = ['AC' => 'bg-teal-50 text-teal-700 border-indigo-100', 'PR' => 'bg-slate-50 text-slate-700 border-slate-200', 'NM' => 'bg-gray-50 text-gray-700 border-gray-200', 'AL' => 'bg-gray-50 text-gray-500 border-gray-200'];
+      $kodeColors = ['AC' => 'bg-indigo-50 text-indigo-700 border-indigo-100', 'PR' => 'bg-slate-50 text-slate-700 border-slate-200', 'NM' => 'bg-gray-50 text-gray-700 border-gray-200', 'AL' => 'bg-gray-50 text-gray-500 border-gray-200'];
       $kodeLabels = ['AC' => 'Air Conditioning', 'PR' => 'Prasarana', 'NM' => 'Non Medis', 'AL' => 'Alat Lainnya'];
       foreach (['AC', 'PR', 'NM', 'AL'] as $kode):
         $count = ($kodeGroups ?? [])[$kode] ?? 0;
@@ -160,8 +160,8 @@ $period = $period ?? 'bulan';
           $sBadge = status_lk_badge($s);
           $rt = (int)($lk['response_time'] ?? 0);
         ?>
-        <tr class="hover:bg-teal-50/40 transition-colors group">
-          <td class="px-4 py-3 font-mono text-xs text-teal-600 font-semibold"><?= esc($lk['no_order'] ?? '-') ?></td>
+        <tr class="hover:bg-indigo-50/40 transition-colors group">
+          <td class="px-4 py-3 font-mono text-xs text-indigo-600 font-semibold"><?= esc($lk['no_order'] ?? '-') ?></td>
           <td class="px-4 py-3 text-gray-600"><?= tgl($lk['tanggal']) ?></td>
           <td class="px-4 py-3 text-gray-800 max-w-[220px] truncate"><?= esc($lk['keluhan'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="<?= $sBadge ?>"><?= esc($s) ?></span></td>

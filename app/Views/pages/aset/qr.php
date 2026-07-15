@@ -19,7 +19,7 @@
   <!-- Print button -->
   <div class="no-print mb-6 flex gap-3">
     <button onclick="window.print()"
-            class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+            class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
       🖨️ Cetak / Simpan PDF
     </button>
     <a href="/ipsrs/aset/<?= esc($aset['id'] ?? '') ?>"
@@ -32,7 +32,7 @@
   <div class="print-card bg-white rounded-2xl shadow-lg p-8 w-72 flex flex-col items-center gap-4">
     <!-- Header -->
     <div class="text-center">
-      <p class="text-xs font-bold text-teal-600 uppercase tracking-widest">RSUD IPSRS</p>
+      <p class="text-xs font-bold text-indigo-600 uppercase tracking-widest">RSUD IPSRS</p>
       <p class="text-xs text-gray-400 mt-0.5">Scan untuk info aset</p>
     </div>
 
@@ -41,7 +41,7 @@
 
     <!-- Asset info -->
     <div class="text-center border-t border-gray-100 pt-4 w-full">
-      <p class="text-xs font-mono font-bold text-teal-600"><?= esc($aset['id'] ?? '') ?></p>
+      <p class="text-xs font-mono font-bold text-indigo-600"><?= esc($aset['id'] ?? '') ?></p>
       <p class="text-sm font-bold text-gray-800 mt-1"><?= esc($aset['nama'] ?? '') ?></p>
       <p class="text-xs text-gray-500 mt-0.5"><?= esc($aset['lokasi'] ?? '') ?></p>
     </div>

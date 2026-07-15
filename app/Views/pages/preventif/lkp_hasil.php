@@ -26,7 +26,7 @@ $hasilBadge = $hasil === 'Siap Pakai'
     </a>
     <div>
       <h1 class="text-xl font-bold text-gray-800">Hasil Lembar Kerja Preventif</h1>
-      <p class="text-sm font-medium text-teal-600 mt-0.5"><?= esc($jadwal['aset'] ?? $jadwal['nama_aset'] ?? '-') ?></p>
+      <p class="text-sm font-medium text-indigo-600 mt-0.5"><?= esc($jadwal['aset'] ?? $jadwal['nama_aset'] ?? '-') ?></p>
     </div>
   </div>
   <?php if ($lkp): ?>
@@ -40,7 +40,7 @@ $hasilBadge = $hasil === 'Siap Pakai'
 <?php if (!$lkp): ?>
 <div class="card p-6 border-l-4 border-gray-200">
   <p class="text-sm text-gray-500">Belum ada LKP tersimpan untuk jadwal ini.
-    <a href="/ipsrs/preventif/lkp/<?= esc($jid) ?>" class="text-teal-600 hover:underline">Isi LKP sekarang →</a>
+    <a href="/ipsrs/preventif/lkp/<?= esc($jid) ?>" class="text-indigo-600 hover:underline">Isi LKP sekarang →</a>
   </p>
 </div>
 <?php else: ?>
@@ -49,10 +49,10 @@ $hasilBadge = $hasil === 'Siap Pakai'
 <div class="card p-6 mb-6">
   <div class="flex flex-wrap items-start justify-between gap-4 mb-5">
     <div class="flex items-center gap-3 flex-wrap">
-      <span class="font-mono text-lg font-bold text-teal-600"><?= esc($lkp['no_order'] ?? '-') ?></span>
+      <span class="font-mono text-lg font-bold text-indigo-600"><?= esc($lkp['no_order'] ?? '-') ?></span>
       <span class="<?= $hasilBadge ?>"><?= esc($hasil ?: '-') ?></span>
       <?php if (!empty($lkp['kategori'])): ?>
-      <span class="badge bg-teal-50 text-teal-600"><?= esc($lkp['kategori']) ?></span>
+      <span class="badge bg-indigo-50 text-indigo-600"><?= esc($lkp['kategori']) ?></span>
       <?php endif; ?>
     </div>
   </div>
@@ -86,7 +86,7 @@ $hasilBadge = $hasil === 'Siap Pakai'
     <?php foreach ($grup as $jenis => $items): ?>
     <?php if (empty($items)) continue; ?>
     <?php
-      $badge = $jenis === 'Inspeksi' ? 'bg-teal-50 text-teal-700'
+      $badge = $jenis === 'Inspeksi' ? 'bg-indigo-50 text-indigo-700'
              : ($jenis === 'Service' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700');
     ?>
     <div>

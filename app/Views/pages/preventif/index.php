@@ -13,8 +13,8 @@ $filterParam = $filter ?? '';
 <!-- Inline Add Form -->
 <div class="card p-6 mb-6">
   <div class="flex items-center gap-2 mb-5">
-    <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
-      <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+      <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/>
       </svg>
     </div>
@@ -29,7 +29,7 @@ $filterParam = $filter ?? '';
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Aset <span class="text-red-500">*</span></label>
         <select name="id_aset"
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
           <option value="<?= esc($a['id'] ?? '') ?>"
@@ -45,7 +45,7 @@ $filterParam = $filter ?? '';
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Aset</label>
         <input type="text" name="aset"
                placeholder="Nama aset (jika tidak ada di list)"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Lokasi -->
@@ -53,7 +53,7 @@ $filterParam = $filter ?? '';
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi</label>
         <input type="text" name="lokasi"
                placeholder="Lokasi aset"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Teknisi -->
@@ -61,21 +61,21 @@ $filterParam = $filter ?? '';
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Teknisi <span class="text-red-500">*</span></label>
         <input type="text" name="teknisi" required
                placeholder="Nama teknisi"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Tanggal -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal <span class="text-red-500">*</span></label>
         <input type="date" name="tanggal" value="<?= esc($today ?? date('Y-m-d')) ?>" required
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Jam -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Jam <span class="text-red-500">*</span></label>
         <input type="time" name="jam" required
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Keterangan -->
@@ -83,13 +83,13 @@ $filterParam = $filter ?? '';
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Keterangan</label>
         <input type="text" name="keterangan"
                placeholder="Catatan jadwal (opsional)"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
     </div>
     <div class="mt-4 flex justify-end">
       <button type="submit"
-              class="px-8 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5 text-white text-[14px] font-bold rounded-2xl transition-all duration-300">
+              class="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 text-white text-[14px] font-bold rounded-2xl transition-all duration-300">
         Tambah Jadwal
       </button>
     </div>
@@ -105,7 +105,7 @@ $filterParam = $filter ?? '';
   ?>
   <a href="/ipsrs/preventif<?= $val ? '?status='.urlencode($val) : '' ?>"
      class="px-5 py-2.5 rounded-xl text-[13px] font-bold transition-all duration-300
-       <?= $active ? 'bg-teal-600 text-white shadow-md shadow-teal-500/30' : 'bg-white/80 text-gray-500 hover:bg-white hover:text-gray-800 border border-gray-200' ?>">
+       <?= $active ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30' : 'bg-white/80 text-gray-500 hover:bg-white hover:text-gray-800 border border-gray-200' ?>">
     <?= $label ?>
   </a>
   <?php endforeach; ?>
@@ -149,7 +149,7 @@ $filterParam = $filter ?? '';
           };
           $jid = $j['id'] ?? '';
         ?>
-        <tr class="hover:bg-teal-50/40 transition-colors group">
+        <tr class="hover:bg-indigo-50/40 transition-colors group">
           <td class="px-5 py-3.5 text-gray-700"><?= tgl($jDate) ?></td>
           <td class="px-5 py-3.5 font-medium text-gray-800"><?= esc($j['aset'] ?? $j['nama_aset'] ?? '-') ?></td>
           <td class="px-5 py-3.5 text-gray-600"><?= esc($j['lokasi'] ?? '-') ?></td>
@@ -168,7 +168,7 @@ $filterParam = $filter ?? '';
               </form>
               <?php endif; ?>
               <a href="/ipsrs/preventif/lkp/<?= esc($jid) ?>"
-                 class="text-xs font-medium px-3 py-1.5 rounded-lg bg-teal-50 text-teal-700 hover:bg-teal-100 transition-colors">
+                 class="text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors">
                 LKP
               </a>
               <?php if (($j['status'] ?? '') === 'Selesai'): ?>

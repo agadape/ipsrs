@@ -15,7 +15,7 @@ $id = $aset['id'] ?? '';
     <?php endif; ?>
     <div>
       <h1 class="text-xl font-bold text-gray-800"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
-      <p class="text-xs font-mono text-teal-600 mt-0.5"><?= esc($aset['nomor_aset'] ?? $id) ?></p>
+      <p class="text-xs font-mono text-indigo-600 mt-0.5"><?= esc($aset['nomor_aset'] ?? $id) ?></p>
     </div>
   </div>
   <?php if (session('user_id')): ?>
@@ -28,7 +28,7 @@ $id = $aset['id'] ?? '';
       QR Code
     </a>
     <a href="/ipsrs/aset/<?= esc($id) ?>/edit"
-       class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-emerald-500 hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300">
+       class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
       </svg>
@@ -113,7 +113,7 @@ $id = $aset['id'] ?? '';
   <?php if (!empty($aset['last_seen_lat']) && !empty($aset['last_seen_lng'])): ?>
   <a href="https://maps.google.com/?q=<?= $aset['last_seen_lat'] ?>,<?= $aset['last_seen_lng'] ?>"
      target="_blank"
-     class="text-xs text-teal-500 hover:underline flex-shrink-0">
+     class="text-xs text-indigo-500 hover:underline flex-shrink-0">
     Lihat peta
   </a>
   <?php endif; ?>
@@ -178,7 +178,7 @@ $id = $aset['id'] ?? '';
 <div class="card p-6 mb-6 border-l-4 border-amber-400">
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-sm font-semibold text-gray-700">Riwayat Kanibal</h2>
-    <a href="/ipsrs/kanibal" class="text-xs font-medium text-teal-600 hover:underline">Lihat Semua</a>
+    <a href="/ipsrs/kanibal" class="text-xs font-medium text-indigo-600 hover:underline">Lihat Semua</a>
   </div>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
@@ -217,7 +217,7 @@ $id = $aset['id'] ?? '';
 <div class="card p-6 mb-6">
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-sm font-semibold text-gray-700">Riwayat Laporan Kerusakan</h2>
-    <a href="/ipsrs/lk/baru" class="text-xs font-medium text-teal-600 hover:underline">+ Buat LK</a>
+    <a href="/ipsrs/lk/baru" class="text-xs font-medium text-indigo-600 hover:underline">+ Buat LK</a>
   </div>
   <?php if (empty($riwayatLK)): ?>
   <p class="text-sm text-gray-400 text-center py-6">Belum ada laporan kerusakan untuk aset ini.</p>
@@ -242,7 +242,7 @@ $id = $aset['id'] ?? '';
           $rt = (int)($lk['response_time'] ?? 0);
         ?>
         <tr class="hover:bg-gray-50/60 transition-colors">
-          <td class="px-4 py-3 font-mono text-xs text-teal-600 font-semibold"><?= esc($lk['no_order'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-mono text-xs text-indigo-600 font-semibold"><?= esc($lk['no_order'] ?? '-') ?></td>
           <td class="px-4 py-3 text-gray-600"><?= tgl($lk['tanggal']) ?></td>
           <td class="px-4 py-3 text-gray-800 max-w-[200px] truncate"><?= esc($lk['keluhan'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="<?= $sb ?>"><?= esc($s) ?></span></td>
@@ -250,7 +250,7 @@ $id = $aset['id'] ?? '';
             <?= $rt > 0 ? $rt.' mnt' : '-' ?>
           </td>
           <td class="px-4 py-3">
-            <a href="/ipsrs/lk/<?= esc($lk['id'] ?? '') ?>" class="text-xs text-teal-500 hover:underline">Detail</a>
+            <a href="/ipsrs/lk/<?= esc($lk['id'] ?? '') ?>" class="text-xs text-indigo-500 hover:underline">Detail</a>
           </td>
         </tr>
         <?php endforeach; ?>

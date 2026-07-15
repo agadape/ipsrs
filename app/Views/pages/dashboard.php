@@ -8,58 +8,58 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
 <!-- ════════════════════════════════════════════════════════════════════════
      HERO BANNER — Gradient + Greeting + KPI
      ════════════════════════════════════════════════════════════════════════ -->
-<div class="rounded-2xl p-6 md:p-8 mb-8 text-white relative overflow-hidden stagger-1"
-     style="background: linear-gradient(135deg, #0F766E 0%, #059669 100%); box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.05);">
+<div class="rounded-2xl p-6 md:p-8 mb-8 text-white relative overflow-hidden"
+     style="background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #6366F1 100%);">
 
   <!-- Decorative circles -->
-  <div class="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/10 blur-xl"></div>
-  <div class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-white/10 blur-xl"></div>
+  <div class="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5"></div>
+  <div class="absolute -bottom-20 -left-20 w-48 h-48 rounded-full bg-white/5"></div>
 
   <!-- Greeting -->
   <div class="relative z-10 mb-6">
-    <p class="text-teal-100 text-xs font-semibold tracking-widest uppercase mb-1"><?= tgl($today, 'l, d F Y') ?></p>
-    <h1 class="font-display text-3xl md:text-4xl font-bold leading-tight"><?= esc($sapa) ?>, <?= esc($firstName) ?> 👋</h1>
+    <p class="text-indigo-200 text-sm font-medium mb-1"><?= tgl($today, 'l, d F Y') ?></p>
+    <h1 class="text-2xl md:text-3xl font-bold leading-tight"><?= esc($sapa) ?>, <?= esc($firstName) ?> 👋</h1>
   </div>
 
   <!-- KPI Cards — Glass Morphism -->
   <div class="relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
     <!-- SLA -->
-    <div class="bg-black/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 shadow-sm stagger-2">
-      <p class="text-teal-100 text-[10px] font-bold uppercase tracking-widest mb-2">SLA Respon</p>
-      <p class="font-display text-3xl font-bold leading-none text-white"><?= number_format($slaPct ?? 0, 1) ?><span class="text-lg text-teal-200 font-medium">%</span></p>
-      <div class="mt-3 h-1.5 rounded-full bg-black/20">
+    <div class="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+      <p class="text-indigo-200 text-[11px] font-semibold uppercase tracking-wider mb-2">SLA Respon</p>
+      <p class="text-3xl font-bold leading-none"><?= number_format($slaPct ?? 0, 1) ?><span class="text-lg text-indigo-200 font-medium">%</span></p>
+      <div class="mt-3 h-1.5 rounded-full bg-white/20">
         <div class="h-1.5 rounded-full bg-white" style="width:<?= min(100, (float) ($slaPct ?? 0)) ?>%"></div>
       </div>
-      <p class="text-teal-100 text-[11px] mt-1.5">&lt;15 menit</p>
+      <p class="text-indigo-200 text-[11px] mt-1.5">&lt;15 menit</p>
     </div>
 
     <!-- Rata-rata Respon -->
-    <div class="bg-black/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 shadow-sm stagger-2">
-      <p class="text-teal-100 text-[10px] font-bold uppercase tracking-widest mb-2">Rata-rata Respon</p>
-      <p class="font-display text-3xl font-bold leading-none text-white"><?= number_format($avgRespon ?? 0, 0) ?><span class="text-lg text-teal-200 font-medium"> mnt</span></p>
+    <div class="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+      <p class="text-indigo-200 text-[11px] font-semibold uppercase tracking-wider mb-2">Rata-rata Respon</p>
+      <p class="text-3xl font-bold leading-none"><?= number_format($avgRespon ?? 0, 0) ?><span class="text-lg text-indigo-200 font-medium"> mnt</span></p>
       <div class="mt-3 flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5 text-teal-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <p class="text-teal-100 text-[11px]">Waktu respons</p>
+        <svg class="w-3.5 h-3.5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p class="text-indigo-200 text-[11px]">Waktu respons</p>
       </div>
     </div>
 
     <!-- PM Progress -->
-    <div class="bg-black/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 shadow-sm stagger-2">
-      <p class="text-teal-100 text-[10px] font-bold uppercase tracking-widest mb-2">Preventif</p>
-      <p class="font-display text-3xl font-bold leading-none text-white"><?= (int) ($jadwalSelesai ?? 0) ?><span class="text-lg text-teal-200 font-medium"> / <?= (int) ($jadwalTotal ?? 0) ?></span></p>
-      <div class="mt-3 h-1.5 rounded-full bg-black/20">
+    <div class="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+      <p class="text-indigo-200 text-[11px] font-semibold uppercase tracking-wider mb-2">Preventif</p>
+      <p class="text-3xl font-bold leading-none"><?= (int) ($jadwalSelesai ?? 0) ?><span class="text-lg text-indigo-200 font-medium"> / <?= (int) ($jadwalTotal ?? 0) ?></span></p>
+      <div class="mt-3 h-1.5 rounded-full bg-white/20">
         <div class="h-1.5 rounded-full bg-emerald-300" style="width:<?= min(100, (float) ($pmPct ?? 0)) ?>%"></div>
       </div>
-      <p class="text-teal-100 text-[11px] mt-1.5"><?= number_format($pmPct ?? 0, 0) ?>% selesai</p>
+      <p class="text-indigo-200 text-[11px] mt-1.5"><?= number_format($pmPct ?? 0, 0) ?>% selesai</p>
     </div>
 
     <!-- LK Aktif -->
-    <div class="bg-black/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 shadow-sm stagger-2">
-      <p class="text-teal-100 text-[10px] font-bold uppercase tracking-widest mb-2">LK Aktif</p>
-      <p class="font-display text-3xl font-bold leading-none text-white"><?= (int) ($activeLK ?? 0) ?></p>
+    <div class="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+      <p class="text-indigo-200 text-[11px] font-semibold uppercase tracking-wider mb-2">LK Aktif</p>
+      <p class="text-3xl font-bold leading-none"><?= (int) ($activeLK ?? 0) ?></p>
       <div class="mt-3 flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5 text-teal-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-        <p class="text-teal-100 text-[11px]">Sedang ditangani</p>
+        <svg class="w-3.5 h-3.5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <p class="text-indigo-200 text-[11px]">Sedang ditangani</p>
       </div>
     </div>
   </div>
@@ -128,7 +128,7 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
       <a href="/ipsrs/lk?status=Dalam+Perbaikan"
          class="group flex items-center gap-4 p-5 rounded-2xl bg-white/60 hover:bg-white hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 border border-white/50 transition-all duration-300">
         <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-          <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+          <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
         </div>
         <div>
           <p class="text-2xl font-bold text-gray-800 leading-none"><?= (int) ($mnggSC ?? 0) ?></p>
@@ -201,7 +201,7 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
   <div class="card p-5">
     <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
       <h2 class="text-sm font-semibold text-gray-800">Lembar Preventif Mendatang</h2>
-      <a href="/ipsrs/preventif" class="text-[11px] font-bold text-teal-600 hover:text-teal-800 hover:underline">Lihat semua →</a>
+      <a href="/ipsrs/preventif" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline">Lihat semua →</a>
     </div>
     <?php if (empty($upcoming)): ?>
     <div class="flex flex-col items-center justify-center py-8 text-center">
@@ -215,9 +215,9 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
       <?php foreach ($upcoming as $j): ?>
       <div class="flex items-center justify-between gap-3 px-3.5 py-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
         <div class="flex items-center gap-3 min-w-0">
-          <div class="w-10 h-10 rounded-xl bg-teal-50 flex flex-col items-center justify-center shrink-0">
-            <span class="text-[11px] font-bold text-teal-700 leading-none"><?= tgl($j['tanggal'], 'd') ?></span>
-            <span class="text-[9px] text-teal-500 uppercase leading-none mt-0.5"><?= tgl($j['tanggal'], 'M') ?></span>
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 flex flex-col items-center justify-center shrink-0">
+            <span class="text-[11px] font-bold text-indigo-700 leading-none"><?= tgl($j['tanggal'], 'd') ?></span>
+            <span class="text-[9px] text-indigo-500 uppercase leading-none mt-0.5"><?= tgl($j['tanggal'], 'M') ?></span>
           </div>
           <div class="min-w-0">
             <p class="text-sm font-medium text-gray-800 truncate"><?= esc($j['aset'] ?? $j['nama_aset'] ?? '-') ?></p>
@@ -242,7 +242,7 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
 <div class="card">
   <div class="flex items-center justify-between p-5 pb-0">
     <h2 class="text-sm font-semibold text-gray-800">Laporan Kerusakan Terbaru</h2>
-    <a href="/ipsrs/lk" class="text-xs text-teal-600 hover:text-teal-700 font-medium hover:underline">Lihat semua →</a>
+    <a href="/ipsrs/lk" class="text-xs text-indigo-600 hover:text-indigo-700 font-medium hover:underline">Lihat semua →</a>
   </div>
 
   <?php if (empty($recentLK)): ?>
@@ -275,7 +275,7 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
         ?>
         <tr class="hover:bg-gray-50/50 transition-colors">
           <td class="py-3.5 px-5">
-            <a href="/ipsrs/lk/<?= esc($lk['id'] ?? '') ?>" class="font-mono text-xs text-teal-600 hover:text-teal-700 hover:underline font-medium"><?= esc($lk['no_order'] ?? '-') ?></a>
+            <a href="/ipsrs/lk/<?= esc($lk['id'] ?? '') ?>" class="font-mono text-xs text-indigo-600 hover:text-indigo-700 hover:underline font-medium"><?= esc($lk['no_order'] ?? '-') ?></a>
           </td>
           <td class="py-3.5 px-5 max-w-[200px]">
             <p class="text-gray-800 truncate"><?= esc($lk['keluhan'] ?? '-') ?></p>

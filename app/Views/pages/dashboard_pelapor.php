@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 <div class="space-y-6 max-w-5xl mx-auto">
   <!-- Header / Greeting -->
-  <div class="bg-gradient-to-br from-teal-500 to-emerald-500 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden">
+  <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden">
     <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
       <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13.5h-13L12 6.5z"/></svg>
     </div>
@@ -18,7 +18,7 @@
       </div>
       
       <div class="shrink-0">
-        <a href="/ipsrs/aset" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-600 hover:bg-teal-50 font-bold rounded-xl transition-all shadow-sm">
+        <a href="/ipsrs/aset" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-600 hover:bg-indigo-50 font-bold rounded-xl transition-all shadow-sm">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           Lapor Kerusakan Baru
         </a>
@@ -63,7 +63,7 @@
   <div class="bg-white rounded-3xl shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-gray-100 overflow-hidden">
     <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
       <h2 class="font-bold text-gray-800">5 Laporan Terakhir Anda</h2>
-      <a href="/ipsrs/lk" class="text-sm font-bold text-teal-600 hover:text-teal-700">Lihat Semua →</a>
+      <a href="/ipsrs/lk" class="text-sm font-bold text-indigo-600 hover:text-indigo-700">Lihat Semua →</a>
     </div>
     
     <?php if (empty($recentLK)): ?>
@@ -87,13 +87,13 @@
                 // Determine badge style
                 $badgeCls = 'bg-gray-100 text-gray-700';
                 if ($lk['status'] === \App\Config\IPSRS::STATUS_LK[0]) $badgeCls = 'bg-red-50 text-red-600 ring-red-500/20'; // Belum disurvei
-                if (in_array($lk['status'], [\App\Config\IPSRS::STATUS_LK[1], \App\Config\IPSRS::STATUS_LK[2]])) $badgeCls = 'bg-teal-50 text-teal-600 ring-teal-500/20'; // Disposisi/Survei
+                if (in_array($lk['status'], [\App\Config\IPSRS::STATUS_LK[1], \App\Config\IPSRS::STATUS_LK[2]])) $badgeCls = 'bg-indigo-50 text-indigo-600 ring-indigo-500/20'; // Disposisi/Survei
                 if (in_array($lk['status'], [\App\Config\IPSRS::STATUS_LK[3], \App\Config\IPSRS::STATUS_LK[4], \App\Config\IPSRS::STATUS_LK[5]])) $badgeCls = 'bg-amber-50 text-amber-600 ring-amber-500/20'; // Perbaikan/Mngg
                 if ($lk['status'] === \App\Config\IPSRS::STATUS_LK[6]) $badgeCls = 'bg-emerald-50 text-emerald-600 ring-emerald-500/20'; // Selesai
             ?>
               <tr class="hover:bg-gray-50/30 transition-colors group cursor-pointer" onclick="window.location.href='/ipsrs/lk/<?= esc($lk['id'] ?? '') ?>'">
                 <td class="px-6 py-4">
-                  <span class="font-mono text-xs font-bold text-gray-600 group-hover:text-teal-600 transition-colors"><?= esc($lk['no_order'] ?? '') ?></span>
+                  <span class="font-mono text-xs font-bold text-gray-600 group-hover:text-indigo-600 transition-colors"><?= esc($lk['no_order'] ?? '') ?></span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <p class="text-sm font-semibold text-gray-800"><?= esc(date('d M Y', strtotime($lk['tanggal'] ?? date('Y-m-d')))) ?></p>

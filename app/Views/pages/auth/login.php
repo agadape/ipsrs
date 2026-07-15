@@ -61,7 +61,7 @@
       <ul class="mt-10 space-y-5">
         <!-- Feature 1 -->
         <li class="flex items-center gap-4 group">
-          <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400 shrink-0 group-hover:bg-teal-500/20 group-hover:text-indigo-300 transition-all duration-300 shadow-inner">
+          <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400 shrink-0 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-all duration-300 shadow-inner">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
             </svg>
@@ -73,7 +73,7 @@
         </li>
         <!-- Feature 2 -->
         <li class="flex items-center gap-4 group">
-          <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-purple-400 shrink-0 group-hover:bg-emerald-500/20 group-hover:text-purple-300 transition-all duration-300 shadow-inner">
+          <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-purple-400 shrink-0 group-hover:bg-purple-500/20 group-hover:text-purple-300 transition-all duration-300 shadow-inner">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
             </svg>
@@ -154,7 +154,7 @@
           <label class="block text-xs font-semibold text-gray-700 mb-1.5">Alamat Email</label>
           <input type="email" name="email" required autocomplete="email"
                  placeholder="nama@rsud.go.id"
-                 class="w-full px-4 py-3.5 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-teal-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+                 class="w-full px-4 py-3.5 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
         </div>
 
         <!-- Password -->
@@ -163,7 +163,7 @@
           <div class="relative">
             <input type="password" name="password" id="pw" required autocomplete="current-password"
                    placeholder="••••••••"
-                   class="w-full px-4 py-3.5 pr-11 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-teal-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+                   class="w-full px-4 py-3.5 pr-11 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
             <button type="button" onclick="togglePw()" tabindex="-1"
                     class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 transition-colors">
               <svg id="ico-eye" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -178,7 +178,7 @@
 
         <!-- Submit -->
         <button type="submit" id="btn-submit"
-                class="mt-4 w-full py-3.5 rounded-2xl bg-gradient-to-r from-teal-500 to-emerald-500 hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5 text-white text-[15px] font-bold flex items-center justify-center gap-2 transition-all duration-300">
+                class="mt-4 w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 text-white text-[15px] font-bold flex items-center justify-center gap-2 transition-all duration-300">
           <svg id="btn-loader" class="hidden w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
@@ -189,7 +189,7 @@
 
       <p class="mt-8 text-center text-xs text-gray-500">
         Pelapor Kerusakan? 
-        <a href="/register" class="text-teal-600 font-semibold hover:underline">Daftar Akun Baru</a>
+        <a href="/register" class="text-indigo-600 font-semibold hover:underline">Daftar Akun Baru</a>
       </p>
       <p class="mt-2 text-center text-xs text-gray-400">Lupa kata sandi? Hubungi admin sistem.</p>
     </div>

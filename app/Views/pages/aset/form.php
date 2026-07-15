@@ -38,7 +38,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Nomor Aset / Kode RS <span class="text-red-500">*</span></label>
         <input type="text" name="nomor_aset" value="<?= old_val($a, 'nomor_aset') ?>" required
                placeholder="Contoh: M-BDG-001"
-               class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-shadow shadow-inner">
+               class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-shadow shadow-inner">
       </div>
 
       <!-- Nama -->
@@ -46,14 +46,14 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Nama Aset <span class="text-red-500">*</span></label>
         <input type="text" name="nama" value="<?= old_val($a, 'nama') ?>" required
                placeholder="Contoh: AC Split 1 PK"
-               class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-shadow shadow-inner">
+               class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-shadow shadow-inner">
       </div>
 
       <!-- Jenis -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Jenis <span class="text-red-500">*</span></label>
         <select name="jenis" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Jenis --</option>
           <?php foreach (['Sarana', 'Prasarana', 'Alat Non Medis'] as $opt): ?>
           <option value="<?= $opt ?>" <?= old_val($a, 'jenis') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
@@ -65,7 +65,7 @@ function old_val(array $a, string $key, string $default = ''): string {
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kategori <span class="text-red-500">*</span></label>
         <select name="kategori" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Kategori --</option>
           <?php foreach (($kategoriAset ?? []) as $k): ?>
           <option value="<?= esc($k['nama_kategori'] ?? '') ?>"
@@ -74,7 +74,7 @@ function old_val(array $a, string $key, string $default = ''): string {
           </option>
           <?php endforeach; ?>
         </select>
-        <p class="text-[11px] text-gray-400 mt-1">Kategori tidak ada? Tambahkan di <a href="/ipsrs/kategori-aset" class="text-teal-500 hover:underline">Menu Kategori Aset</a></p>
+        <p class="text-[11px] text-gray-400 mt-1">Kategori tidak ada? Tambahkan di <a href="/ipsrs/kategori-aset" class="text-indigo-500 hover:underline">Menu Kategori Aset</a></p>
       </div>
 
       <!-- Lokasi -->
@@ -82,7 +82,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi <span class="text-red-500">*</span></label>
         <input type="text" name="lokasi" value="<?= old_val($a, 'lokasi') ?>" required
                placeholder="Contoh: Gedung A - Lantai 2"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Gedung -->
@@ -90,7 +90,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Gedung <span class="text-red-500">*</span></label>
         <input type="text" name="gedung" value="<?= old_val($a, 'gedung') ?>" required
                placeholder="Contoh: Gedung A"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Lantai -->
@@ -98,7 +98,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lantai</label>
         <input type="text" name="lantai" value="<?= old_val($a, 'lantai') ?>"
                placeholder="Contoh: 2"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Ruangan -->
@@ -106,7 +106,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Ruangan <span class="text-red-500">*</span></label>
         <input type="text" name="ruangan" value="<?= old_val($a, 'ruangan') ?>" required
                placeholder="Contoh: Ruang Operasi"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Unit -->
@@ -114,7 +114,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Unit <span class="text-red-500">*</span></label>
         <input type="text" name="unit" value="<?= old_val($a, 'unit') ?>" required
                placeholder="Contoh: IGD, ICU, Radiologi"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Merk -->
@@ -122,7 +122,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Merk</label>
         <input type="text" name="merk" value="<?= old_val($a, 'merk') ?>"
                placeholder="Contoh: Daikin, Philips"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Model -->
@@ -130,7 +130,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Model</label>
         <input type="text" name="model" value="<?= old_val($a, 'model') ?>"
                placeholder="Nomor model"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- No Seri -->
@@ -138,7 +138,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">No. Seri</label>
         <input type="text" name="no_seri" value="<?= old_val($a, 'no_seri') ?>"
                placeholder="Nomor seri / serial number"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Kapasitas -->
@@ -146,7 +146,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kapasitas</label>
         <input type="text" name="kapasitas" value="<?= old_val($a, 'kapasitas') ?>"
                placeholder="Contoh: 1 PK, 5000 VA"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Tahun -->
@@ -154,14 +154,14 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tahun Pengadaan</label>
         <input type="number" name="tahun" value="<?= old_val($a, 'tahun') ?>"
                min="1990" max="<?= date('Y') + 1 ?>" placeholder="<?= date('Y') ?>"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Kondisi -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kondisi <span class="text-red-500">*</span></label>
         <select name="kondisi" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Kondisi --</option>
           <?php foreach (['Baik', 'Kurang Baik', 'Rusak Ringan', 'Rusak Berat'] as $opt): ?>
           <option value="<?= $opt ?>" <?= old_val($a, 'kondisi') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
@@ -174,7 +174,7 @@ function old_val(array $a, string $key, string $default = ''): string {
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Keterangan</label>
         <textarea name="keterangan" rows="3"
                   placeholder="Catatan tambahan (opsional)"
-                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 resize-none"><?= old_val($a, 'keterangan') ?></textarea>
+                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 resize-none"><?= old_val($a, 'keterangan') ?></textarea>
       </div>
 
     </div>
@@ -183,7 +183,7 @@ function old_val(array $a, string $key, string $default = ''): string {
   <!-- Actions -->
   <div class="flex items-center gap-3">
     <button type="submit"
-            class="px-8 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5 text-white text-[15px] font-bold rounded-2xl transition-all duration-300">
+            class="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 text-white text-[15px] font-bold rounded-2xl transition-all duration-300">
       Simpan Aset
     </button>
     <a href="/ipsrs/aset" class="px-6 py-3 text-[15px] font-semibold text-gray-500 hover:text-gray-800 bg-white rounded-2xl border border-gray-200 hover:bg-gray-50 hover:shadow-sm transition-all">
