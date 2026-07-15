@@ -267,6 +267,25 @@ class LK extends BaseController
             $this->syncAsetStatus($lk, $next);
 
             $this->model->update($id, $data);
+
+            // WhatsApp Notification to Technician
+            $newTeknisi = $data['teknisi'] ?? null;
+            $oldTeknisi = $lk['teknisi'] ?? null;
+            if ($newTeknisi && $newTeknisi !== $oldTeknisi && in_array($next, ['Didisposisi', 'Survei'])) {
+                // In a real scenario, you'd fetch the technician's phone number from Pengguna table.
+                // For now, we broadcast to the default group / number.
+                $waMessage = "🛠️ *Tugas Perbaikan Baru!*\n\n"
+                           . "No Order: " . ($lk['no_order'] ?? $id) . "\n"
+                           . "Teknisi: {$newTeknisi}\n"
+                           . "Unit: {$lk['unit_pelapor']}\n"
+                           . "Keluhan: {$lk['keluhan']}\n\n"
+                           . "Silakan segera menuju lokasi.";
+                
+                $wa = new \App\Libraries\WhatsAppAPI();
+                // To send to a specific number: $wa->sendBroadcast($waMessage, $technicianPhoneNumber);
+                $wa->sendBroadcast($waMessage);
+            }
+
             return redirect()->to('/ipsrs/lk/' . $id)->with('success', 'Status LK diperbarui');
         } catch (\Throwable $e) {
             return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal update status: ' . $e->getMessage());
