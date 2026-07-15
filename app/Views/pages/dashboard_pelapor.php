@@ -91,21 +91,21 @@
                 if (in_array($lk['status'], [\App\Config\IPSRS::STATUS_LK[3], \App\Config\IPSRS::STATUS_LK[4], \App\Config\IPSRS::STATUS_LK[5]])) $badgeCls = 'bg-amber-50 text-amber-600 ring-amber-500/20'; // Perbaikan/Mngg
                 if ($lk['status'] === \App\Config\IPSRS::STATUS_LK[6]) $badgeCls = 'bg-emerald-50 text-emerald-600 ring-emerald-500/20'; // Selesai
             ?>
-              <tr class="hover:bg-gray-50/30 transition-colors group cursor-pointer" onclick="window.location.href='/ipsrs/lk/<?= esc($lk['id']) ?>'">
+              <tr class="hover:bg-gray-50/30 transition-colors group cursor-pointer" onclick="window.location.href='/ipsrs/lk/<?= esc($lk['id'] ?? '') ?>'">
                 <td class="px-6 py-4">
-                  <span class="font-mono text-xs font-bold text-gray-600 group-hover:text-indigo-600 transition-colors"><?= esc($lk['no_order']) ?></span>
+                  <span class="font-mono text-xs font-bold text-gray-600 group-hover:text-indigo-600 transition-colors"><?= esc($lk['no_order'] ?? '') ?></span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <p class="text-sm font-semibold text-gray-800"><?= date('d M Y', strtotime($lk['tanggal'])) ?></p>
-                  <p class="text-xs text-gray-400"><?= date('H:i', strtotime($lk['jam_laporan'])) ?></p>
+                  <p class="text-sm font-semibold text-gray-800"><?= esc(date('d M Y', strtotime($lk['tanggal'] ?? date('Y-m-d')))) ?></p>
+                  <p class="text-xs text-gray-400"><?= esc(date('H:i', strtotime($lk['jam_laporan'] ?? date('H:i:s')))) ?></p>
                 </td>
                 <td class="px-6 py-4">
-                  <p class="text-sm font-bold text-gray-800 line-clamp-1"><?= esc($lk['nama_aset']) ?></p>
-                  <p class="text-xs text-gray-500 line-clamp-1 mt-0.5"><?= esc($lk['keluhan']) ?></p>
+                  <p class="text-sm font-bold text-gray-800 line-clamp-1"><?= esc($lk['nama_aset'] ?? '') ?></p>
+                  <p class="text-xs text-gray-500 line-clamp-1 mt-0.5"><?= esc($lk['keluhan'] ?? '') ?></p>
                 </td>
                 <td class="px-6 py-4 text-right">
                   <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ring-1 ring-inset <?= $badgeCls ?>">
-                    <?= esc($lk['status']) ?>
+                    <?= esc($lk['status'] ?? 'UNKNOWN') ?>
                   </span>
                 </td>
               </tr>
