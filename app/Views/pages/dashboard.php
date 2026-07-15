@@ -82,21 +82,21 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
       </div>
       <h2 class="text-sm font-semibold text-gray-800">Perlu Ditindak</h2>
     </div>
-    <div class="space-y-2.5">
-      <?php foreach ($priority as $p): ?>
-      <?php $accent = ($p['level'] === 'critical') ? 'border-red-400 bg-red-50/80' : 'border-amber-400 bg-amber-50/80'; ?>
-      <div class="flex items-center justify-between gap-3 pl-3 pr-3 py-2.5 rounded-xl border-l-4 <?= $accent ?>">
-        <div class="min-w-0">
-          <p class="text-[13px] font-semibold text-gray-800 leading-snug"><?= esc($p['title'] ?? '') ?></p>
-          <p class="text-[11px] text-gray-500 mt-0.5 truncate"><?= esc($p['desc'] ?? '') ?></p>
+      <div class="space-y-2.5">
+        <?php foreach ($priority as $p): ?>
+        <?php $accent = ($p['level'] === 'critical') ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50'; ?>
+        <div class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border <?= $accent ?>">
+          <div class="min-w-0">
+            <p class="text-[13px] font-semibold text-gray-800 leading-snug"><?= esc($p['title'] ?? '') ?></p>
+            <p class="text-[11px] text-gray-500 mt-0.5 truncate"><?= esc($p['desc'] ?? '') ?></p>
+          </div>
+          <a href="<?= esc($p['path'] ?? '#') ?>"
+             class="shrink-0 text-[11px] font-medium px-2.5 py-1 rounded bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors">
+            <?= esc($p['action'] ?? 'Lihat') ?>
+          </a>
         </div>
-        <a href="<?= esc($p['path'] ?? '#') ?>"
-           class="shrink-0 text-[11px] font-medium px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors">
-          <?= esc($p['action'] ?? 'Lihat') ?>
-        </a>
+        <?php endforeach; ?>
       </div>
-      <?php endforeach; ?>
-    </div>
   </div>
   <?php else: ?>
   <div class="card p-5 flex flex-col items-center justify-center text-center">
