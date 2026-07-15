@@ -9,7 +9,7 @@ $total = count($lk ?? []);
     <p class="text-sm text-gray-400 mt-0.5">Kelola dan pantau laporan kerusakan aset</p>
   </div>
   <a href="/ipsrs/lk/baru"
-     class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300">
+     class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-emerald-500 hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all duration-300">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/>
     </svg>
@@ -28,12 +28,12 @@ $total = count($lk ?? []);
         </svg>
         <input type="text" name="q" value="<?= esc($search ?? '') ?>"
                placeholder="No. order, keluhan, pelapor..."
-               class="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
     </div>
     <div class="min-w-[170px]">
       <label class="block text-xs font-medium text-gray-500 mb-1.5">Status</label>
-      <select name="status" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+      <select name="status" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
         <option value="">Semua Status</option>
         <?php foreach (['Laporan Masuk', 'Didisposisi', 'Survei', 'Menunggu Suku Cadang', 'Dalam Perbaikan', 'Selesai'] as $opt): ?>
         <option value="<?= $opt ?>" <?= ($status ?? '') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
@@ -42,7 +42,7 @@ $total = count($lk ?? []);
     </div>
     <div class="min-w-[140px]">
       <label class="block text-xs font-medium text-gray-500 mb-1.5">Kode</label>
-      <select name="kode" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+      <select name="kode" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
         <option value="">Semua Kode</option>
         <?php foreach (($kodeKerusakan ?? []) as $kk): ?>
         <option value="<?= esc($kk['kode'] ?? '') ?>" <?= ($kode ?? '') === ($kk['kode'] ?? '') ? 'selected' : '' ?>><?= esc($kk['kode'] ?? '') ?></option>
@@ -93,12 +93,12 @@ $total = count($lk ?? []);
           $rt = (int)($item['response_time'] ?? 0);
           $rtClass = $rt > 15 ? 'font-semibold text-red-600' : 'text-gray-600';
         ?>
-        <tr class="hover:bg-indigo-50/40 transition-colors group cursor-pointer">
+        <tr class="hover:bg-teal-50/40 transition-colors group cursor-pointer">
           <td class="px-5 py-3.5" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'">
-            <span class="font-mono text-xs text-indigo-600 font-semibold"><?= esc($item['no_order'] ?? '-') ?></span>
+            <span class="font-mono text-xs text-teal-600 font-semibold"><?= esc($item['no_order'] ?? '-') ?></span>
           </td>
           <td class="px-5 py-3.5 max-w-[220px]" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'">
-            <a href="/ipsrs/lk/<?= esc($item['id'] ?? '') ?>" class="text-gray-800 hover:text-indigo-600 font-medium truncate block transition-colors">
+            <a href="/ipsrs/lk/<?= esc($item['id'] ?? '') ?>" class="text-gray-800 hover:text-teal-600 font-medium truncate block transition-colors">
               <?= esc($item['keluhan'] ?? '-') ?>
             </a>
           </td>

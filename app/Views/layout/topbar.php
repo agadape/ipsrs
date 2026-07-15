@@ -32,13 +32,13 @@ $authRole    = session('user_role')    ?? 'Pengguna';
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
     </button>
-    <p class="text-sm font-semibold text-gray-800"><?= esc($label) ?></p>
+    <p class="text-[15px] font-bold text-gray-800 font-display tracking-tight"><?= esc($label) ?></p>
   </div>
 
   <div class="relative flex items-center gap-2">
     <button onclick="toggleUserMenu()"
             class="flex items-center gap-2.5 px-2.5 md:px-3 py-2 rounded-xl hover:bg-gray-100/80 transition-colors">
-      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/20 flex items-center justify-center text-white text-xs font-bold">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-emerald-500 shadow-md shadow-teal-500/20 flex items-center justify-center text-white text-xs font-bold">
         <?= esc($authInitial) ?>
       </div>
       <span class="hidden sm:inline text-sm font-semibold text-gray-700"><?= esc($authName) ?></span>

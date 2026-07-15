@@ -14,7 +14,7 @@ $kategoriList = $kategoriList ?? [];
   </a>
   <div>
     <h1 class="text-xl font-bold text-gray-800">Lembar Kerja Preventif</h1>
-    <p class="text-sm font-medium text-indigo-600 mt-0.5"><?= esc($jadwal['aset'] ?? $jadwal['nama_aset'] ?? '-') ?></p>
+    <p class="text-sm font-medium text-teal-600 mt-0.5"><?= esc($jadwal['aset'] ?? $jadwal['nama_aset'] ?? '-') ?></p>
   </div>
 </div>
 
@@ -61,7 +61,7 @@ $kategoriList = $kategoriList ?? [];
       <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kategori Alat <span class="text-red-500">*</span></label>
       <input type="text" name="kategori" id="kategori-select" required
              list="kategori-datalist" placeholder="Pilih atau ketik custom kategori..."
-             class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+             class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       <datalist id="kategori-datalist">
         <?php foreach ($kategoriList as $k): ?>
         <option value="<?= esc($k) ?>"></option>
@@ -76,7 +76,7 @@ $kategoriList = $kategoriList ?? [];
     <div class="card p-6 mb-6">
       <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
         <h2 class="text-sm font-semibold text-gray-700">Checklist Pemeriksaan</h2>
-        <button type="button" onclick="addCustomRow()" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors">
+        <button type="button" onclick="addCustomRow()" class="text-xs font-semibold text-teal-600 hover:text-teal-800 bg-teal-50 px-3 py-1.5 rounded-lg transition-colors">
           + Tambah Baris
         </button>
       </div>
@@ -89,7 +89,7 @@ $kategoriList = $kategoriList ?? [];
       <!-- Tambah Baris Actions -->
       <div class="mt-6 pt-5 border-t border-dashed border-gray-200 flex flex-wrap gap-3 hidden" id="add-buttons">
         <span class="text-xs font-medium text-gray-400 flex items-center mr-2">Tambah Item:</span>
-        <button type="button" onclick="addCustomRow('Inspeksi')" class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg transition-colors">
+        <button type="button" onclick="addCustomRow('Inspeksi')" class="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-semibold rounded-lg transition-colors">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           Inspeksi (Pilihan)
         </button>
@@ -113,13 +113,13 @@ $kategoriList = $kategoriList ?? [];
           <div class="flex flex-wrap gap-3">
             <label class="flex items-center gap-2.5 cursor-pointer group">
               <input type="radio" name="hasil_pemeriksaan" value="Siap Pakai" required
-                     class="w-4 h-4 text-indigo-600 focus:ring-indigo-400/50 cursor-pointer">
+                     class="w-4 h-4 text-teal-600 focus:ring-teal-400/50 cursor-pointer">
               <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">Siap Pakai</span>
               <span class="badge bg-emerald-100 text-emerald-700">Normal</span>
             </label>
             <label class="flex items-center gap-2.5 cursor-pointer group">
               <input type="radio" name="hasil_pemeriksaan" value="Perlu Perbaikan" required
-                     class="w-4 h-4 text-indigo-600 focus:ring-indigo-400/50 cursor-pointer">
+                     class="w-4 h-4 text-teal-600 focus:ring-teal-400/50 cursor-pointer">
               <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">Perlu Perbaikan</span>
               <span class="badge bg-amber-100 text-amber-700">Tindak Lanjut</span>
             </label>
@@ -137,7 +137,7 @@ $kategoriList = $kategoriList ?? [];
             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Pengguna / User <span class="text-red-500">*</span></label>
             <input type="text" name="nama_user_ttd" value="<?= esc(old('nama_user_ttd') ?? '') ?>" required
                    placeholder="Nama perwakilan unit yang menandatangani"
-                   class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+                   class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
           </div>
         </div>
 
@@ -145,14 +145,14 @@ $kategoriList = $kategoriList ?? [];
           <label class="block text-xs font-semibold text-gray-600 mb-1.5">Catatan Tambahan</label>
           <textarea name="catatan" rows="3"
                     placeholder="Catatan khusus, rekomendasi perbaikan, atau kondisi yang perlu diperhatikan..."
-                    class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 resize-none"><?= esc(old('catatan') ?? '') ?></textarea>
+                    class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 resize-none"><?= esc(old('catatan') ?? '') ?></textarea>
         </div>
       </div>
     </div>
 
     <div class="flex items-center gap-3">
       <button type="submit"
-              class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+              class="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
         Simpan LKP
       </button>
       <a href="/ipsrs/preventif" class="px-5 py-2.5 text-sm text-gray-500 hover:text-gray-700 bg-white rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">
@@ -184,7 +184,7 @@ $kategoriList = $kategoriList ?? [];
         <div class="flex items-center bg-gray-100 p-1 rounded-xl w-full">
           <label class="flex-1 text-center cursor-pointer relative group">
             <input type="radio" name="items[${i}][hasil]" value="${val1}" class="peer sr-only" required ${!isOpt2 && prefilledValue ? 'checked' : ''}>
-            <div class="px-2 py-1.5 text-[11px] font-bold tracking-wide uppercase text-gray-500 rounded-lg peer-checked:bg-white peer-checked:text-indigo-600 peer-checked:shadow-sm transition-all">${val1}</div>
+            <div class="px-2 py-1.5 text-[11px] font-bold tracking-wide uppercase text-gray-500 rounded-lg peer-checked:bg-white peer-checked:text-teal-600 peer-checked:shadow-sm transition-all">${val1}</div>
           </label>
           <label class="flex-1 text-center cursor-pointer relative group">
             <input type="radio" name="items[${i}][hasil]" value="${val2}" class="peer sr-only" required ${isOpt2 ? 'checked' : ''}>
@@ -193,13 +193,13 @@ $kategoriList = $kategoriList ?? [];
         </div>`;
     } else if (type === 'Pengukuran') {
         html = `
-        <div class="flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-indigo-400/50 focus-within:border-indigo-400 transition-all w-full">
+        <div class="flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-teal-400/50 focus-within:border-indigo-400 transition-all w-full">
            <input type="number" step="any" name="items[${i}][hasil]" value="${prefilledValue}" placeholder="Angka..." class="w-full px-3 py-1.5 bg-transparent text-sm font-medium outline-none text-gray-800" required>
            <input type="text" name="items[${i}][satuan]" value="${prefilledSatuan}" placeholder="Satuan" class="w-16 px-2 py-1.5 bg-gray-100 text-xs font-semibold text-gray-500 outline-none border-l border-gray-200">
         </div>`;
     } else {
         html = `
-        <input type="text" name="items[${i}][hasil]" value="${prefilledValue}" placeholder="Teks hasil observasi..." class="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-indigo-400/50 focus:border-indigo-400 transition-all text-gray-800" required>
+        <input type="text" name="items[${i}][hasil]" value="${prefilledValue}" placeholder="Teks hasil observasi..." class="w-full px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-teal-400/50 focus:border-indigo-400 transition-all text-gray-800" required>
         `;
     }
     container.innerHTML = html;
@@ -208,11 +208,11 @@ $kategoriList = $kategoriList ?? [];
   function createRow(data = {}) {
     const i = rowIdx++;
     const tr = document.createElement('div');
-    tr.className = 'row-card group flex flex-col md:flex-row items-start md:items-center gap-3 p-3 bg-white border border-gray-100 rounded-2xl hover:border-indigo-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300';
+    tr.className = 'row-card group flex flex-col md:flex-row items-start md:items-center gap-3 p-3 bg-white border border-gray-100 rounded-2xl hover:border-teal-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300';
     tr.innerHTML = `
       <div class="w-full md:w-36 shrink-0 relative">
         <input type="hidden" name="items[${i}][no_item]" value="${i}">
-        <select name="items[${i}][jenis]" onchange="updateInputUI(this, ${i})" class="w-full px-3 py-2 bg-gray-50 border-0 hover:bg-gray-100 focus:bg-white focus:ring-2 focus:ring-indigo-400/50 rounded-xl text-[11px] font-bold uppercase tracking-wider text-gray-600 appearance-none cursor-pointer transition-colors">
+        <select name="items[${i}][jenis]" onchange="updateInputUI(this, ${i})" class="w-full px-3 py-2 bg-gray-50 border-0 hover:bg-gray-100 focus:bg-white focus:ring-2 focus:ring-teal-400/50 rounded-xl text-[11px] font-bold uppercase tracking-wider text-gray-600 appearance-none cursor-pointer transition-colors">
           <option value="Inspeksi" ${data.jenis === 'Inspeksi' ? 'selected' : ''}>Inspeksi</option>
           <option value="Service" ${data.jenis === 'Service' ? 'selected' : ''}>Service</option>
           <option value="Pengukuran" ${data.jenis === 'Pengukuran' ? 'selected' : ''}>Pengukuran</option>

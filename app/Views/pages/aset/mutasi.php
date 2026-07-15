@@ -13,8 +13,8 @@ $alasanFilter = $alasan ?? '';
 <!-- Inline Form: Catat Perpindahan -->
 <div class="card p-6 mb-6">
   <div class="flex items-center gap-2 mb-5">
-    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-      <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+      <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
       </svg>
     </div>
@@ -29,7 +29,7 @@ $alasanFilter = $alasan ?? '';
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Aset <span class="text-red-500">*</span></label>
         <select name="id_aset" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
           <option value="<?= esc($a['id'] ?? '') ?>">
@@ -44,14 +44,14 @@ $alasanFilter = $alasan ?? '';
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi Tujuan <span class="text-red-500">*</span></label>
         <input type="text" name="lokasi_tujuan" required
                placeholder="Gedung / Ruangan tujuan"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
       <!-- Alasan -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Alasan <span class="text-red-500">*</span></label>
         <select name="alasan" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
           <option value="">-- Pilih Alasan --</option>
           <?php foreach (['Pemindahan', 'Perbaikan', 'Pengembalian', 'Lainnya'] as $opt): ?>
           <option value="<?= $opt ?>"><?= $opt ?></option>
@@ -63,7 +63,7 @@ $alasanFilter = $alasan ?? '';
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Update Status Aset</label>
         <select name="status_baru"
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
           <option value="">-- Tetap (Tidak Diubah) --</option>
           <?php foreach (\App\Config\IPSRS::STATUS_ASET as $opt): ?>
           <option value="<?= $opt ?>"><?= $opt ?></option>
@@ -76,14 +76,14 @@ $alasanFilter = $alasan ?? '';
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Petugas <span class="text-red-500">*</span></label>
         <input type="text" name="petugas" required
                placeholder="Nama petugas"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
       <!-- Tanggal -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal <span class="text-red-500">*</span></label>
         <input type="date" name="tanggal" value="<?= date('Y-m-d') ?>" required
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
       <!-- Catatan -->
@@ -91,13 +91,13 @@ $alasanFilter = $alasan ?? '';
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Catatan</label>
         <input type="text" name="catatan"
                placeholder="Catatan tambahan (opsional)"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
     </div>
     <div class="mt-4 flex justify-end">
       <button type="submit"
-              class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+              class="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
         Simpan Mutasi
       </button>
     </div>
@@ -110,7 +110,7 @@ $alasanFilter = $alasan ?? '';
   <?php foreach ($alasanOpts as $val => $label): ?>
   <?php $active = $alasanFilter === $val; ?>
   <a href="/ipsrs/aset/mutasi<?= $val ? '?alasan='.urlencode($val) : '' ?>"
-     class="px-4 py-1.5 rounded-xl text-sm font-medium transition-colors <?= $active ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200' ?>">
+     class="px-4 py-1.5 rounded-xl text-sm font-medium transition-colors <?= $active ? 'bg-teal-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200' ?>">
     <?= $label ?>
   </a>
   <?php endforeach; ?>

@@ -44,7 +44,7 @@ $riwayatList = $riwayat ?? [];
         <tr>
           <td class="px-4 py-3 text-gray-600"><?= tgl($r['tanggal'] ?? '') ?></td>
           <td class="px-4 py-3">
-            <span class="font-mono text-xs font-semibold text-indigo-600"><?= esc($r['no_order_lk'] ?? '-') ?></span>
+            <span class="font-mono text-xs font-semibold text-teal-600"><?= esc($r['no_order_lk'] ?? '-') ?></span>
           </td>
           <td class="px-4 py-3 text-gray-800"><?= esc($donorNama) ?></td>
           <td class="px-4 py-3 font-medium text-gray-800"><?= esc($r['nama_komponen'] ?? '-') ?></td>

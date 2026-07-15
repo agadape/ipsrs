@@ -10,8 +10,8 @@
 <!-- Tambah Kategori -->
 <div class="card p-6 mb-6">
   <div class="flex items-center gap-2 mb-5">
-    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-      <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+      <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/>
       </svg>
     </div>
@@ -24,18 +24,18 @@
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Kategori <span class="text-red-500">*</span></label>
         <input type="text" name="nama_kategori" value="<?= esc(old('nama_kategori') ?? '') ?>" required
                placeholder="Contoh: HVAC, Listrik, Elektronik"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Deskripsi</label>
         <input type="text" name="deskripsi" value="<?= esc(old('deskripsi') ?? '') ?>"
                placeholder="Deskripsi singkat kategori (opsional)"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
     </div>
     <div class="mt-4 flex justify-end">
       <button type="submit"
-              class="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 text-white text-[14px] font-bold rounded-2xl transition-all duration-300">
+              class="px-8 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5 text-white text-[14px] font-bold rounded-2xl transition-all duration-300">
         Simpan Kategori
       </button>
     </div>
@@ -49,7 +49,7 @@
       <label class="block text-xs font-medium text-gray-500 mb-1.5">Cari Kategori</label>
       <input type="text" name="q" value="<?= esc($search ?? '') ?>"
              placeholder="Nama kategori..."
-             class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+             class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
     </div>
     <button type="submit" class="px-6 py-2.5 bg-gray-800 hover:bg-gray-900 text-white text-sm font-semibold rounded-xl hover:shadow-lg transition-all duration-300">Cari</button>
     <?php if (!empty($search)): ?>
@@ -78,7 +78,7 @@
       </thead>
       <tbody class="divide-y divide-gray-50">
         <?php foreach ($kategori as $k): ?>
-        <tr class="hover:bg-indigo-50/40 transition-colors group">
+        <tr class="hover:bg-teal-50/40 transition-colors group">
           <td class="px-5 py-3.5 font-medium text-gray-800"><?= esc($k['nama_kategori'] ?? '-') ?></td>
           <td class="px-5 py-3.5 text-gray-500 max-w-[300px] truncate"><?= esc($k['deskripsi'] ?? '-') ?></td>
           <td class="px-5 py-3.5 text-right">
@@ -87,7 +87,7 @@
                     data-id="<?= esc($k['id'] ?? '') ?>"
                     data-nama="<?= esc($k['nama_kategori'] ?? '') ?>"
                     data-deskripsi="<?= esc($k['deskripsi'] ?? '') ?>"
-                    class="text-xs text-indigo-600 hover:text-indigo-800 font-medium hover:underline">Edit</button>
+                    class="text-xs text-teal-600 hover:text-teal-800 font-medium hover:underline">Edit</button>
           </td>
         </tr>
         <?php endforeach; ?>
@@ -108,17 +108,17 @@
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Kategori <span class="text-red-500">*</span></label>
           <input type="text" name="nama_kategori" id="edit-nama" required
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1.5">Deskripsi</label>
           <input type="text" name="deskripsi" id="edit-deskripsi"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
         </div>
       </div>
       <div class="mt-5 flex items-center justify-end gap-3">
         <button type="button" onclick="closeEdit()" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700">Batal</button>
-        <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">Simpan</button>
+        <button type="submit" class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors">Simpan</button>
       </div>
     </form>
   </div>

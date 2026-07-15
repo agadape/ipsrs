@@ -9,25 +9,62 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-          colors: { brand: { DEFAULT: '#4F46E5', hover: '#4338CA' } }
+          fontFamily: { 
+            sans: ['"Schibsted Grotesk"', 'sans-serif'],
+            display: ['"Bricolage Grotesque"', 'sans-serif']
+          },
+          colors: { brand: { DEFAULT: '#0F766E', hover: '#0D9488' } },
+          animation: {
+            'fade-up': 'fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards'
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(15px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          }
         }
       }
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;600;700&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); background-attachment: fixed; }
-    .scrollbar-dark::-webkit-scrollbar { width: 3px; }
+    body { 
+      font-family: 'Schibsted Grotesk', sans-serif; 
+      background-color: #F4F7F7;
+      background-image: radial-gradient(#d4d4d8 1px, transparent 1px);
+      background-size: 24px 24px;
+      color: #334155;
+    }
+    h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Bricolage Grotesque', sans-serif; letter-spacing: -0.02em; }
+    
+    .scrollbar-dark::-webkit-scrollbar { width: 4px; }
     .scrollbar-dark::-webkit-scrollbar-track { background: transparent; }
-    .scrollbar-dark::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
-    .sidebar-active { background: linear-gradient(90deg, rgba(79,70,229,0.15) 0%, transparent 100%); border-left: 3px solid #6366f1; }
-    .card { background: rgba(255,255,255,0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 1.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.03); border: 1px solid rgba(255,255,255,0.7); }
-    .badge { display:inline-flex; align-items:center; gap:.375rem; padding:.25rem .625rem; border-radius:9999px; font-size:.75rem; font-weight:500; white-space:nowrap; }
-    .flash-success { background:#ecfdf5; border:1px solid #6ee7b7; color:#065f46; }
-    .flash-error   { background:#fef2f2; border:1px solid #fca5a5; color:#991b1b; }
-    #sidebar { transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
+    .scrollbar-dark::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 999px; }
+    
+    .sidebar-active { background: linear-gradient(90deg, rgba(13, 148, 136, 0.08) 0%, transparent 100%); border-left: 4px solid #0F766E; }
+    
+    .card { 
+      background: rgba(255, 255, 255, 0.85); 
+      backdrop-filter: blur(12px); 
+      -webkit-backdrop-filter: blur(12px); 
+      border-radius: 1rem; 
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 0 3px rgba(15, 23, 42, 0.02); 
+      border: 1px solid rgba(255, 255, 255, 1); 
+    }
+    
+    .badge { display:inline-flex; align-items:center; gap:.375rem; padding:.25rem .75rem; border-radius:9999px; font-size:.7rem; font-weight:600; white-space:nowrap; }
+    .flash-success { background:#ecfdf5; border:1px solid #6ee7b7; color:#065f46; box-shadow: 0 4px 12px rgba(52, 211, 153, 0.1); }
+    .flash-error   { background:#fef2f2; border:1px solid #fca5a5; color:#991b1b; box-shadow: 0 4px 12px rgba(248, 113, 113, 0.1); }
+    
+    #sidebar { transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    
+    /* Subtle Staggered Animations */
+    .stagger-1 { opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s forwards; }
+    .stagger-2 { opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
+    .stagger-3 { opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s forwards; }
+    .stagger-4 { opacity: 0; animation: fadeUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
   </style>
 </head>
 <body class="min-h-screen">

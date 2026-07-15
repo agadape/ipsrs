@@ -23,14 +23,14 @@
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal <span class="text-red-500">*</span></label>
         <input type="date" name="tanggal" value="<?= old('tanggal') ?? date('Y-m-d') ?>" required
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
       <!-- Jam Laporan -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Jam Laporan <span class="text-red-500">*</span></label>
         <input type="time" name="jam_laporan" value="<?= old('jam_laporan') ?? date('H:i') ?>" required
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
       <!-- Pelapor -->
@@ -38,7 +38,7 @@
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Pelapor <span class="text-red-500">*</span></label>
         <input type="text" name="pelapor" value="<?= esc(old('pelapor') ?? session('user_name') ?? '') ?>" required
                placeholder="Nama lengkap pelapor"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
       <!-- Unit Pelapor -->
@@ -46,7 +46,7 @@
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Unit Pelapor <span class="text-red-500">*</span></label>
         <input type="text" name="unit_pelapor" value="<?= esc(old('unit_pelapor') ?? '') ?>" required
                placeholder="Contoh: IGD, ICU, Poli Umum"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
     </div>
@@ -61,7 +61,7 @@
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Keluhan <span class="text-red-500">*</span></label>
         <textarea name="keluhan" rows="3" required
                   placeholder="Deskripsikan keluhan atau kerusakan yang dilaporkan..."
-                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 resize-none"><?= esc(old('keluhan') ?? '') ?></textarea>
+                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 resize-none"><?= esc(old('keluhan') ?? '') ?></textarea>
       </div>
 
       <?php if (session('user_role') !== 'pelapor'): ?>
@@ -69,7 +69,7 @@
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kode Pekerjaan <span class="text-red-500">*</span></label>
         <select name="kode" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
           <option value="">-- Pilih Kode --</option>
           <?php foreach (($kodeKerusakan ?? []) as $kk): ?>
           <option value="<?= esc($kk['kode'] ?? '') ?>"
@@ -78,7 +78,7 @@
           </option>
           <?php endforeach; ?>
         </select>
-        <p class="text-[11px] text-gray-400 mt-1">Kode tidak ada? Tambahkan di <a href="/ipsrs/kode-kerusakan" class="text-indigo-500 hover:underline">Menu Kode Kerusakan</a></p>
+        <p class="text-[11px] text-gray-400 mt-1">Kode tidak ada? Tambahkan di <a href="/ipsrs/kode-kerusakan" class="text-teal-500 hover:underline">Menu Kode Kerusakan</a></p>
       </div>
       <?php endif; ?>
 
@@ -87,7 +87,7 @@
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi <span class="text-red-500">*</span></label>
         <input type="text" name="lokasi" value="<?= esc(old('lokasi') ?? '') ?>" required
                placeholder="Gedung / Ruangan / Area"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
       <?php if (session('user_role') !== 'pelapor'): ?>
@@ -95,7 +95,7 @@
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Aset Terkait <span class="text-gray-400 font-normal">(opsional)</span></label>
         <select name="id_aset"
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 appearance-none">
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
           <option value="<?= esc($a['id'] ?? '') ?>"
@@ -113,7 +113,7 @@
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Aset <span class="text-gray-400 font-normal">(jika tidak ada di daftar)</span></label>
         <input type="text" name="nama_aset" value="<?= esc(old('nama_aset') ?? '') ?>"
                placeholder="Nama aset manual"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
 
     </div>
@@ -122,7 +122,7 @@
   <!-- Actions -->
   <div class="flex items-center gap-3">
     <button type="submit"
-            class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+            class="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
       Buat LK
     </button>
     <a href="/ipsrs/lk" class="px-5 py-2.5 text-sm text-gray-500 hover:text-gray-700 bg-white rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors">

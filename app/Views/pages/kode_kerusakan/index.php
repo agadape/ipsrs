@@ -10,8 +10,8 @@
 <!-- Tambah Kode -->
 <div class="card p-6 mb-6">
   <div class="flex items-center gap-2 mb-5">
-    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-      <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center">
+      <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/>
       </svg>
     </div>
@@ -25,18 +25,18 @@
         <input type="text" name="kode" value="<?= esc(old('kode') ?? '') ?>" required
                placeholder="Contoh: AC, PR, NM"
                maxlength="10"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 uppercase">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 uppercase">
       </div>
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama / Keterangan <span class="text-red-500">*</span></label>
         <input type="text" name="nama" value="<?= esc(old('nama') ?? '') ?>" required
                placeholder="Contoh: Air Conditioning"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
       </div>
     </div>
     <div class="mt-4 flex justify-end">
       <button type="submit"
-              class="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 text-white text-[14px] font-bold rounded-2xl transition-all duration-300">
+              class="px-8 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5 text-white text-[14px] font-bold rounded-2xl transition-all duration-300">
         Simpan Kode
       </button>
     </div>
@@ -50,7 +50,7 @@
       <label class="block text-xs font-medium text-gray-500 mb-1.5">Cari Kode</label>
       <input type="text" name="q" value="<?= esc($search ?? '') ?>"
              placeholder="Kode atau nama..."
-             class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+             class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
     </div>
     <button type="submit" class="px-6 py-2.5 bg-gray-800 hover:bg-gray-900 text-white text-sm font-semibold rounded-xl hover:shadow-lg transition-all duration-300">Cari</button>
     <?php if (!empty($search)): ?>
@@ -79,7 +79,7 @@
       </thead>
       <tbody class="divide-y divide-gray-50">
         <?php foreach ($kodeKerusakan as $kk): ?>
-        <tr class="hover:bg-indigo-50/40 transition-colors group">
+        <tr class="hover:bg-teal-50/40 transition-colors group">
           <td class="px-5 py-3.5">
             <span class="inline-flex px-2.5 py-0.5 rounded-lg text-xs font-bold bg-gray-100 text-gray-700 font-mono"><?= esc($kk['kode'] ?? '-') ?></span>
           </td>
@@ -90,7 +90,7 @@
                     data-id="<?= esc($kk['id'] ?? '') ?>"
                     data-kode="<?= esc($kk['kode'] ?? '') ?>"
                     data-nama="<?= esc($kk['nama'] ?? '') ?>"
-                    class="text-xs text-indigo-600 hover:text-indigo-800 font-medium hover:underline">Edit</button>
+                    class="text-xs text-teal-600 hover:text-teal-800 font-medium hover:underline">Edit</button>
           </td>
         </tr>
         <?php endforeach; ?>
@@ -111,17 +111,17 @@
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kode <span class="text-red-500">*</span></label>
           <input type="text" name="kode" id="edit-kode" required maxlength="10"
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 uppercase">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50 uppercase">
         </div>
         <div>
           <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama / Keterangan <span class="text-red-500">*</span></label>
           <input type="text" name="nama" id="edit-nama" required
-                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400/50">
         </div>
       </div>
       <div class="mt-5 flex items-center justify-end gap-3">
         <button type="button" onclick="closeEdit()" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700">Batal</button>
-        <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">Simpan</button>
+        <button type="submit" class="px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-xl transition-colors">Simpan</button>
       </div>
     </form>
   </div>

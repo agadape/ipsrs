@@ -16,9 +16,9 @@ $filterParam = $filter ?? '';
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
   <!-- Trigger: Tambah Barang -->
   <button type="button" onclick="toggleStokForm('form-tambah')"
-          class="group card p-5 flex flex-col items-center justify-center text-center hover:shadow-xl hover:-translate-y-1 hover:shadow-indigo-500/10 transition-all duration-300 border border-transparent hover:border-indigo-200">
+          class="group card p-5 flex flex-col items-center justify-center text-center hover:shadow-xl hover:-translate-y-1 hover:shadow-indigo-500/10 transition-all duration-300 border border-transparent hover:border-teal-200">
     <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-      <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
+      <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
     </div>
     <h2 class="text-sm font-bold text-gray-800">Barang Baru</h2>
     <p class="text-[11px] text-gray-400 mt-1">Daftarkan item ke master data</p>
@@ -49,7 +49,7 @@ $filterParam = $filter ?? '';
 <div id="stok-forms-container">
   
   <!-- Form Tambah Barang -->
-  <div id="form-tambah" class="stok-form hidden card p-6 md:p-8 mb-6 border-t-4 border-indigo-500 shadow-xl shadow-indigo-500/10">
+  <div id="form-tambah" class="stok-form hidden card p-6 md:p-8 mb-6 border-t-4 border-teal-500 shadow-xl shadow-indigo-500/10">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-base font-bold text-gray-800">Daftarkan Barang Baru</h2>
       <button onclick="toggleStokForm('form-tambah')" class="text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 p-2 rounded-xl transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
@@ -58,11 +58,11 @@ $filterParam = $filter ?? '';
       <?= csrf_field() ?>
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Nama Barang <span class="text-red-500">*</span></label>
-        <input type="text" name="nama" required placeholder="Contoh: Lampu LED Philips 12W" class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-inner">
+        <input type="text" name="nama" required placeholder="Contoh: Lampu LED Philips 12W" class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500/50 shadow-inner">
       </div>
       <div>
         <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Kategori</label>
-        <select name="kategori" class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none shadow-inner">
+        <select name="kategori" class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500/50 appearance-none shadow-inner">
           <option value="">-- Pilih Kategori --</option>
           <?php foreach (['Suku Cadang AC', 'Material Listrik', 'Perpipaan', 'Alat Ukur', 'Consumable', 'Lainnya'] as $opt): ?>
           <option value="<?= $opt ?>"><?= $opt ?></option>
@@ -71,17 +71,17 @@ $filterParam = $filter ?? '';
       </div>
       <div>
         <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Satuan</label>
-        <select name="satuan" class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none shadow-inner">
+        <select name="satuan" class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500/50 appearance-none shadow-inner">
           <option value="pcs">pcs</option><option value="unit">unit</option><option value="meter">meter</option>
           <option value="liter">liter</option><option value="kg">kg</option><option value="set">set</option><option value="roll">roll</option>
         </select>
       </div>
       <div class="md:col-span-2">
         <label class="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">Stok Minimum (Peringatan)</label>
-        <input type="number" name="minimum_stok" min="0" value="5" class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-inner">
+        <input type="number" name="minimum_stok" min="0" value="5" class="w-full px-4 py-3 text-[15px] bg-gray-50 border-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500/50 shadow-inner">
       </div>
       <div class="md:col-span-2 pt-2">
-        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 text-white text-[15px] font-bold rounded-2xl transition-all duration-300">
+        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:shadow-lg hover:shadow-teal-500/30 hover:-translate-y-0.5 text-white text-[15px] font-bold rounded-2xl transition-all duration-300">
           Simpan Barang ke Master Data
         </button>
       </div>
@@ -198,7 +198,7 @@ function toggleStokForm(formId) {
   ?>
   <a href="/ipsrs/stok<?= $val ? '?status='.urlencode($val) : '' ?>"
      class="px-5 py-2.5 rounded-xl text-[13px] font-bold transition-all duration-300
-       <?= $active ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30' : 'bg-white/80 text-gray-500 hover:bg-white hover:text-gray-800 border border-gray-200' ?>">
+       <?= $active ? 'bg-teal-600 text-white shadow-md shadow-teal-500/30' : 'bg-white/80 text-gray-500 hover:bg-white hover:text-gray-800 border border-gray-200' ?>">
     <?= $label ?>
     <?php if ($val === 'Menipis'): ?>
     <span class="ml-1 text-[11px] px-2 py-0.5 rounded-full <?= $active ? 'bg-white/20 text-white' : 'bg-amber-100 text-amber-700' ?>">
@@ -246,7 +246,7 @@ function toggleStokForm(formId) {
           $minimum  = (int)($s['minimum_stok'] ?? 0);
           $numClass = $tersedia <= 0 ? 'font-bold text-red-600 bg-red-50 px-2 py-1 rounded-lg' : ($tersedia <= $minimum ? 'font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-lg' : 'font-bold text-gray-800');
         ?>
-        <tr class="hover:bg-indigo-50/40 transition-colors group cursor-pointer">
+        <tr class="hover:bg-teal-50/40 transition-colors group cursor-pointer">
           <td class="px-6 py-4 font-bold text-gray-800"><?= esc($s['nama'] ?? '-') ?></td>
           <td class="px-6 py-4 text-gray-600 font-medium"><?= esc($s['kategori'] ?? '-') ?></td>
           <td class="px-6 py-4 text-gray-500"><?= esc($s['satuan'] ?? '-') ?></td>

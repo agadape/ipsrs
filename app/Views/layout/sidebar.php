@@ -27,10 +27,10 @@ function navLink(string $href, string $label, string $icon, string $current, ?in
     }
 
     $cls = $active
-        ? 'text-indigo-700 font-bold bg-indigo-50 shadow-sm shadow-indigo-100 ring-1 ring-indigo-500/10'
-        : 'text-gray-500 hover:text-indigo-600 hover:bg-indigo-50/50 font-medium';
+        ? 'text-teal-700 font-bold bg-teal-50 shadow-sm shadow-teal-100 ring-1 ring-teal-500/10'
+        : 'text-gray-500 hover:text-teal-600 hover:bg-teal-50/50 font-medium';
     $badgeHtml = ($badge !== null && $badge > 0)
-        ? "<span class='text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600'>{$badge}</span>"
+        ? "<span class='text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-600'>{$badge}</span>"
         : '';
     return <<<HTML
     <a href="{$href}" onclick="closeSidebar()" class="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[14px] transition-all duration-300 {$cls}">
@@ -49,12 +49,12 @@ function ico(string $d, string $size = '18'): string {
   <!-- Logo + close button on mobile -->
   <div class="flex items-center justify-between px-6 py-6">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/30 flex items-center justify-center shrink-0 text-white">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-500 shadow-md shadow-teal-500/30 flex items-center justify-center shrink-0 text-white">
         <?= ico('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>') ?>
       </div>
       <div>
-        <p class="text-indigo-950 font-black text-[15px] leading-none tracking-tight">IPSRS</p>
-        <p class="text-indigo-600/70 font-medium text-[10px] mt-1 leading-none uppercase tracking-wider">RSUD YK</p>
+        <p class="text-teal-950 font-black text-[15px] leading-none tracking-tight">IPSRS</p>
+        <p class="text-teal-600/70 font-medium text-[10px] mt-1 leading-none uppercase tracking-wider">RSUD YK</p>
       </div>
     </div>
     <button onclick="closeSidebar()" class="md:hidden text-gray-400 hover:text-gray-700 bg-gray-100 p-1.5 rounded-xl transition-colors">
@@ -118,7 +118,7 @@ function ico(string $d, string $size = '18'): string {
   <!-- User Profile Section -->
   <div class="px-5 py-5 border-t border-gray-200/50 bg-white/40 backdrop-blur-xl">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[13px] font-bold shrink-0 shadow-md shadow-indigo-500/20">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center text-white text-[13px] font-bold shrink-0 shadow-md shadow-teal-500/20">
         <?= esc($authInitial) ?>
       </div>
       <div class="min-w-0">

@@ -8,7 +8,7 @@ $filterParam = $filter ?? '';
     <h1 class="text-xl font-bold text-gray-800">Riwayat Transaksi</h1>
     <p class="text-sm text-gray-400 mt-0.5">Histori keluar masuk stok suku cadang</p>
   </div>
-  <a href="/ipsrs/stok" class="text-sm text-indigo-600 hover:underline flex items-center gap-1">
+  <a href="/ipsrs/stok" class="text-sm text-teal-600 hover:underline flex items-center gap-1">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
     </svg>
@@ -25,7 +25,7 @@ $filterParam = $filter ?? '';
   ?>
   <a href="/ipsrs/stok/riwayat<?= $val ? '?jenis='.urlencode($val) : '' ?>"
      class="px-4 py-1.5 rounded-xl text-sm font-medium transition-colors
-       <?= $active ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200' ?>">
+       <?= $active ? 'bg-teal-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200' ?>">
     <?= $label ?>
   </a>
   <?php endforeach; ?>
