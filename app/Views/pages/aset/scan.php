@@ -235,11 +235,14 @@
         }
 
       }, function(err){
-        let reason = "Gagal mengambil lokasi.";
-        if(err.code === 1) reason = "Izin akses lokasi ditolak.";
-        if(err.code === 2) reason = "Posisi GPS tidak tersedia.";
-        if(err.code === 3) reason = "Waktu pencarian lokasi habis.";
-        alert(reason);
+        if(err.code === 1) {
+          document.getElementById('ios-permission-modal').classList.remove('hidden');
+        } else {
+          let reason = "Gagal mengambil lokasi.";
+          if(err.code === 2) reason = "Posisi GPS tidak tersedia.";
+          if(err.code === 3) reason = "Waktu pencarian lokasi habis.";
+          alert(reason);
+        }
         resetBtn();
       }, { timeout: 15000, maximumAge: 0, enableHighAccuracy: true });
     }
@@ -249,6 +252,52 @@
       btn.disabled = false;
       btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span>Coba Verifikasi Ulang</span>`;
     }
+
+    function closeIosModal() {
+      document.getElementById('ios-permission-modal').classList.add('hidden');
+    }
   </script>
+
+  <!-- iOS Permission Guide Modal -->
+  <div id="ios-permission-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative overflow-hidden animate-[bounce_0.5s_ease-out]">
+      <!-- Top decorative gradient -->
+      <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-500 to-orange-400"></div>
+      
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-gray-900">Akses Lokasi Ditolak</h3>
+        </div>
+      </div>
+      
+      <div class="text-sm text-gray-600 space-y-3 mb-6 leading-relaxed">
+        <p>Browser Anda memblokir fitur GPS. Aplikasi ini <b>wajib</b> mengetahui lokasi Anda untuk memverifikasi posisi aset secara *real-time*.</p>
+        <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+          <p class="font-bold text-gray-800 mb-1">Jika Anda menggunakan iPhone (iOS):</p>
+          <ol class="list-decimal pl-5 space-y-1 text-xs text-gray-600">
+            <li>Buka <b>Pengaturan</b> (Settings) HP Anda</li>
+            <li>Pilih <b>Privasi & Keamanan</b></li>
+            <li>Pilih <b>Layanan Lokasi</b></li>
+            <li>Cari browser Anda (<b>Safari</b> / Chrome)</li>
+            <li>Ubah izin menjadi <b>"Izinkan"</b> (Allow)</li>
+            <li><b>Refresh/Muat Ulang</b> halaman ini</li>
+          </ol>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+          <p class="font-bold text-gray-800 mb-1">Jika Anda menggunakan Android:</p>
+          <p class="text-xs text-gray-600">Klik icon <b>gembok 🔒</b> di pojok kiri atas baris URL browser, pilih <b>Izin (Permissions)</b>, dan aktifkan <b>Lokasi</b>.</p>
+        </div>
+      </div>
+      
+      <button type="button" onclick="closeIosModal()" class="w-full py-3 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors">
+        Saya Mengerti
+      </button>
+    </div>
+  </div>
 </body>
 </html>
