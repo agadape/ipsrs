@@ -27,10 +27,10 @@ function navLink(string $href, string $label, string $icon, string $current, ?in
     }
 
     $cls = $active
-        ? 'text-indigo-700 font-bold bg-indigo-50 shadow-sm shadow-indigo-100 ring-1 ring-indigo-500/10'
-        : 'text-gray-500 hover:text-indigo-600 hover:bg-indigo-50/50 font-medium';
+        ? 'text-[#CCFF00] font-bold bg-[#CCFF00]/10 shadow-[0_0_15px_rgba(204,255,0,0.15)] ring-1 ring-[#CCFF00]/30'
+        : 'text-gray-400 hover:text-white hover:bg-white/5 font-medium';
     $badgeHtml = ($badge !== null && $badge > 0)
-        ? "<span class='text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600'>{$badge}</span>"
+        ? "<span class='text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#CCFF00]/20 text-[#CCFF00]'>{$badge}</span>"
         : '';
     return <<<HTML
     <a href="{$href}" onclick="closeSidebar()" class="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[14px] transition-all duration-300 {$cls}">
@@ -44,20 +44,22 @@ function ico(string $d, string $size = '18'): string {
     return "<svg xmlns='http://www.w3.org/2000/svg' width='{$size}' height='{$size}' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>{$d}</svg>";
 }
 ?>
-<aside id="sidebar" class="fixed left-0 top-0 h-screen w-64 flex flex-col z-30 -translate-x-full md:translate-x-0 bg-white/70 backdrop-blur-2xl border-r border-white/80 shadow-[4px_0_24px_rgba(0,0,0,0.03)] transition-transform duration-300">
+<aside id="sidebar" class="fixed left-0 top-0 h-screen w-64 flex flex-col z-30 -translate-x-full md:translate-x-0 bg-[#0A0D14]/80 backdrop-blur-3xl border-r border-white/5 shadow-[4px_0_24px_rgba(0,0,0,0.5)] transition-transform duration-300">
 
   <!-- Logo + close button on mobile -->
   <div class="flex items-center justify-between px-6 py-6">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md shadow-indigo-500/30 flex items-center justify-center shrink-0 text-white">
-        <?= ico('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>') ?>
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#00F0FF] to-[#CCFF00] p-[2px] shadow-[0_0_15px_rgba(204,255,0,0.3)]">
+        <div class="w-full h-full bg-[#0A0D14] rounded-[10px] flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
       </div>
       <div>
-        <p class="text-indigo-950 font-black text-[15px] leading-none tracking-tight">IPSRS</p>
-        <p class="text-indigo-600/70 font-medium text-[10px] mt-1 leading-none uppercase tracking-wider">RSUD YK</p>
+        <h1 class="text-lg font-display font-bold text-white leading-tight tracking-tight">IPSRS</h1>
+        <p class="text-[10px] font-semibold text-[#00F0FF] uppercase tracking-widest leading-none mt-1">Sistem Aktif</p>
       </div>
     </div>
-    <button onclick="closeSidebar()" class="md:hidden text-gray-400 hover:text-gray-700 bg-gray-100 p-1.5 rounded-xl transition-colors">
+    <button onclick="closeSidebar()" class="md:hidden text-gray-400 hover:text-gray-700 bg-[#202532] p-1.5 rounded-xl transition-colors">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
       </svg>
@@ -116,16 +118,18 @@ function ico(string $d, string $size = '18'): string {
   </nav>
 
   <!-- User Profile Section -->
-  <div class="px-5 py-5 border-t border-gray-200/50 bg-white/40 backdrop-blur-xl">
+  <div class="px-5 py-5 border-t border-white/5 bg-[#0A0D14]/80 backdrop-blur-xl">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[13px] font-bold shrink-0 shadow-md shadow-indigo-500/20">
-        <?= esc($authInitial) ?>
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#00F0FF] to-[#0099FF] p-[1px] shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+        <div class="w-full h-full bg-[#0A0D14] rounded-[10px] flex items-center justify-center text-white text-[13px] font-bold">
+          <?= esc($authInitial) ?>
+        </div>
       </div>
       <div class="min-w-0">
-        <p class="text-gray-800 text-sm font-bold truncate leading-tight"><?= esc($authName) ?></p>
-        <p class="text-gray-500 text-[11px] mt-0.5 truncate font-medium"><?= esc($authRole) ?></p>
+        <p class="text-white text-sm font-bold truncate leading-tight"><?= esc($authName) ?></p>
+        <p class="text-[#00F0FF] text-[10px] mt-0.5 uppercase tracking-widest truncate font-bold"><?= esc($authRole) ?></p>
       </div>
-      <a href="/logout" class="ml-auto text-gray-400 hover:text-red-500 bg-white hover:bg-red-50 p-2 rounded-xl transition-colors shrink-0 shadow-sm border border-gray-100" title="Keluar">
+      <a href="/logout" class="ml-auto text-gray-400 hover:text-[#FF3366] bg-white/5 hover:bg-[#FF3366]/10 p-2 rounded-xl transition-colors shrink-0 border border-white/5 shadow-[0_0_10px_rgba(255,51,102,0)] hover:shadow-[0_0_15px_rgba(255,51,102,0.3)] hover:border-[#FF3366]/30" title="Keluar">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
         </svg>

@@ -35,7 +35,7 @@
         </svg>
         IPSRS
       </div>
-      <span class="text-gray-500 text-xs">RSUD Kota Yogyakarta</span>
+      <span class="text-gray-400 text-xs">RSUD Kota Yogyakarta</span>
     </div>
 
     <!-- Headline -->
@@ -104,14 +104,14 @@
         <div class="w-1 h-6 rounded-full" style="background:linear-gradient(to bottom,#4F6EF7,#7C3AED)"></div>
         <div>
           <p class="text-white text-xs font-medium">RSUD Kota Yogyakarta</p>
-          <p class="text-gray-500 text-xs">Instalasi Pemeliharaan Sarana Rumah Sakit</p>
+          <p class="text-gray-400 text-xs">Instalasi Pemeliharaan Sarana Rumah Sakit</p>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ── Right panel ─────────────────────────────────────────────────── -->
-  <div class="flex-1 bg-white flex items-center justify-center px-8">
+  <div class="flex-1 bg-[#121620]/60 flex items-center justify-center px-8">
     <div class="w-full max-w-[360px]">
 
       <!-- Mobile logo -->
@@ -125,8 +125,8 @@
         </div>
       </div>
 
-      <h2 class="text-2xl font-bold text-gray-900">Masuk ke Akun</h2>
-      <p class="mt-1 text-sm text-gray-500">Gunakan kredensial yang diberikan oleh admin sistem.</p>
+      <h2 class="text-2xl font-bold text-white">Masuk ke Akun</h2>
+      <p class="mt-1 text-sm text-gray-400">Gunakan kredensial yang diberikan oleh admin sistem.</p>
 
       <?php if (!empty(session()->getFlashdata('error'))): ?>
       <div class="mt-5 flex items-start gap-2.5 px-4 py-3 rounded-xl bg-red-50 border border-red-100">
@@ -151,19 +151,19 @@
 
         <!-- Email -->
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1.5">Alamat Email</label>
+          <label class="block text-xs font-semibold text-gray-200 mb-1.5">Alamat Email</label>
           <input type="email" name="email" required autocomplete="email"
                  placeholder="nama@rsud.go.id"
-                 class="w-full px-4 py-3.5 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+                 class="w-full px-4 py-3.5 rounded-2xl bg-[#181C25]/80 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-white placeholder:text-gray-400 outline-none transition-all shadow-inner">
         </div>
 
         <!-- Password -->
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1.5">Kata Sandi</label>
+          <label class="block text-xs font-semibold text-gray-200 mb-1.5">Kata Sandi</label>
           <div class="relative">
             <input type="password" name="password" id="pw" required autocomplete="current-password"
                    placeholder="••••••••"
-                   class="w-full px-4 py-3.5 pr-11 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+                   class="w-full px-4 py-3.5 pr-11 rounded-2xl bg-[#181C25]/80 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-white placeholder:text-gray-400 outline-none transition-all shadow-inner">
             <button type="button" onclick="togglePw()" tabindex="-1"
                     class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 transition-colors">
               <svg id="ico-eye" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -187,9 +187,9 @@
         </button>
       </form>
 
-      <p class="mt-8 text-center text-xs text-gray-500">
+      <p class="mt-8 text-center text-xs text-gray-400">
         Pelapor Kerusakan? 
-        <a href="/register" class="text-indigo-600 font-semibold hover:underline">Daftar Akun Baru</a>
+        <a href="/register" class="text-[#CCFF00] font-semibold hover:underline">Daftar Akun Baru</a>
       </p>
       <p class="mt-2 text-center text-xs text-gray-400">Lupa kata sandi? Hubungi admin sistem.</p>
     </div>

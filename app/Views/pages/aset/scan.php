@@ -41,9 +41,9 @@
   <div class="card w-full max-w-md p-6 relative z-10">
     
     <!-- Asset Info -->
-    <div class="text-center mb-6 pb-6 border-b border-gray-100">
+    <div class="text-center mb-6 pb-6 border-b border-white/5">
       <h1 class="text-2xl font-bold text-[#566a7f] mb-1"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
-      <span class="inline-block px-3 py-1 rounded-full bg-gray-100 text-[#566a7f] text-xs font-semibold">
+      <span class="inline-block px-3 py-1 rounded-full bg-[#202532] text-[#566a7f] text-xs font-semibold">
         ID: <?= esc($aset['nomor_aset'] ?? '-') ?>
       </span>
     </div>
@@ -85,22 +85,22 @@
         <h4 class="text-green-700 font-bold text-sm">Aset berada di dalam kawasan RSUD.</h4>
       </div>
 
-      <div class="relative rounded-lg overflow-hidden border border-gray-200 h-48 mb-3 z-0">
+      <div class="relative rounded-lg overflow-hidden border border-white/10 h-48 mb-3 z-0">
         <div id="map-container" class="absolute inset-0"></div>
       </div>
 
       <!-- Live Telemetry -->
       <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 space-y-2">
-        <div class="flex justify-between items-start border-b border-gray-200 pb-2">
-          <span class="text-xs text-gray-500 font-semibold w-1/3">Alamat Deteksi</span>
+        <div class="flex justify-between items-start border-b border-white/10 pb-2">
+          <span class="text-xs text-gray-400 font-semibold w-1/3">Alamat Deteksi</span>
           <span class="text-xs text-[#566a7f] font-medium text-right w-2/3" id="tlm-address">Scanning...</span>
         </div>
-        <div class="flex justify-between items-center border-b border-gray-200 pb-2">
-          <span class="text-xs text-gray-500 font-semibold">Jarak dari RS</span>
+        <div class="flex justify-between items-center border-b border-white/10 pb-2">
+          <span class="text-xs text-gray-400 font-semibold">Jarak dari RS</span>
           <span class="text-xs text-[#566a7f] font-medium" id="tlm-distance">Menghitung...</span>
         </div>
         <div class="flex justify-between items-center">
-          <span class="text-xs text-gray-500 font-semibold">Akurasi GPS</span>
+          <span class="text-xs text-gray-400 font-semibold">Akurasi GPS</span>
           <span class="text-xs text-[#566a7f] font-medium" id="tlm-accuracy">0 m</span>
         </div>
       </div>
@@ -260,7 +260,7 @@
 
   <!-- iOS Permission Guide Modal -->
   <div id="ios-permission-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/60 backdrop-blur-sm p-4">
-    <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl relative overflow-hidden animate-[bounce_0.5s_ease-out]">
+    <div class="bg-[#121620]/60 rounded-2xl w-full max-w-sm p-6 shadow-2xl relative overflow-hidden animate-[bounce_0.5s_ease-out]">
       <!-- Top decorative gradient -->
       <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-500 to-orange-400"></div>
       
@@ -271,15 +271,15 @@
           </svg>
         </div>
         <div>
-          <h3 class="text-lg font-bold text-gray-900">Akses Lokasi Ditolak</h3>
+          <h3 class="text-lg font-bold text-white">Akses Lokasi Ditolak</h3>
         </div>
       </div>
       
-      <div class="text-sm text-gray-600 space-y-3 mb-6 leading-relaxed">
+      <div class="text-sm text-gray-300 space-y-3 mb-6 leading-relaxed">
         <p>Browser Anda memblokir fitur GPS. Aplikasi ini <b>wajib</b> mengetahui lokasi Anda untuk memverifikasi posisi aset secara *real-time*.</p>
-        <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-          <p class="font-bold text-gray-800 mb-1">Jika Anda menggunakan iPhone (iOS):</p>
-          <ol class="list-decimal pl-5 space-y-1 text-xs text-gray-600">
+        <div class="bg-[#181C25]/80 p-3 rounded-xl border border-white/5">
+          <p class="font-bold text-gray-100 mb-1">Jika Anda menggunakan iPhone (iOS):</p>
+          <ol class="list-decimal pl-5 space-y-1 text-xs text-gray-300">
             <li>Buka <b>Pengaturan</b> (Settings) HP Anda</li>
             <li>Pilih <b>Privasi & Keamanan</b></li>
             <li>Pilih <b>Layanan Lokasi</b></li>
@@ -288,9 +288,9 @@
             <li><b>Refresh/Muat Ulang</b> halaman ini</li>
           </ol>
         </div>
-        <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-          <p class="font-bold text-gray-800 mb-1">Jika Anda menggunakan Android:</p>
-          <p class="text-xs text-gray-600">Klik icon <b>gembok 🔒</b> di pojok kiri atas baris URL browser, pilih <b>Izin (Permissions)</b>, dan aktifkan <b>Lokasi</b>.</p>
+        <div class="bg-[#181C25]/80 p-3 rounded-xl border border-white/5">
+          <p class="font-bold text-gray-100 mb-1">Jika Anda menggunakan Android:</p>
+          <p class="text-xs text-gray-300">Klik icon <b>gembok 🔒</b> di pojok kiri atas baris URL browser, pilih <b>Izin (Permissions)</b>, dan aktifkan <b>Lokasi</b>.</p>
         </div>
       </div>
       

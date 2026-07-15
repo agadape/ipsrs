@@ -5,10 +5,10 @@ $filterParam = $filter ?? '';
 <!-- Page Header -->
 <div class="flex items-center justify-between mb-6">
   <div>
-    <h1 class="text-xl font-bold text-gray-800">Riwayat Transaksi</h1>
+    <h1 class="text-xl font-bold text-gray-100">Riwayat Transaksi</h1>
     <p class="text-sm text-gray-400 mt-0.5">Histori keluar masuk stok suku cadang</p>
   </div>
-  <a href="/ipsrs/stok" class="text-sm text-indigo-600 hover:underline flex items-center gap-1">
+  <a href="/ipsrs/stok" class="text-sm text-[#CCFF00] hover:underline flex items-center gap-1">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
     </svg>
@@ -25,7 +25,7 @@ $filterParam = $filter ?? '';
   ?>
   <a href="/ipsrs/stok/riwayat<?= $val ? '?jenis='.urlencode($val) : '' ?>"
      class="px-4 py-1.5 rounded-xl text-sm font-medium transition-colors
-       <?= $active ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200' ?>">
+       <?= $active ? 'bg-[#CCFF00] text-black border-none text-white' : 'bg-[#121620]/60 text-gray-300 hover:bg-white/5 border border-white/10' ?>">
     <?= $label ?>
   </a>
   <?php endforeach; ?>
@@ -43,7 +43,7 @@ $filterParam = $filter ?? '';
   <?php else: ?>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
-      <thead class="bg-gray-50 border-b border-gray-100">
+      <thead class="bg-[#181C25]/80 border-b border-white/5">
         <tr>
           <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal</th>
           <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Nama Barang</th>
@@ -61,21 +61,21 @@ $filterParam = $filter ?? '';
           $jBadge = match($jenis) {
             'masuk'  => 'badge bg-emerald-100 text-emerald-700',
             'keluar' => 'badge bg-red-100 text-red-600',
-            default  => 'badge bg-gray-100 text-gray-500',
+            default  => 'badge bg-[#202532] text-gray-400',
           };
           $jLabel = ucfirst($jenis ?: '-');
           $qtyClass = $jenis === 'keluar' ? 'text-red-600 font-semibold' : 'text-emerald-600 font-semibold';
         ?>
         <tr class="hover:bg-gray-50/60 transition-colors">
-          <td class="px-5 py-3.5 text-gray-600"><?= tgl($r['tanggal']) ?></td>
-          <td class="px-5 py-3.5 font-medium text-gray-800"><?= esc($r['nama_barang'] ?? $r['nama'] ?? '-') ?></td>
+          <td class="px-5 py-3.5 text-gray-300"><?= tgl($r['tanggal']) ?></td>
+          <td class="px-5 py-3.5 font-medium text-gray-100"><?= esc($r['nama_barang'] ?? $r['nama'] ?? '-') ?></td>
           <td class="px-5 py-3.5"><span class="<?= $jBadge ?>"><?= $jLabel ?></span></td>
           <td class="px-5 py-3.5 text-right <?= $qtyClass ?>">
             <?= $jenis === 'keluar' ? '-' : '+' ?><?= (int)($r['jumlah'] ?? 0) ?>
           </td>
-          <td class="px-5 py-3.5 text-gray-500 font-mono text-xs"><?= esc($r['no_dokumen'] ?? '-') ?></td>
-          <td class="px-5 py-3.5 text-gray-600"><?= esc($r['petugas'] ?? '-') ?></td>
-          <td class="px-5 py-3.5 text-gray-500 max-w-[180px] truncate"><?= esc($r['keterangan'] ?? '-') ?></td>
+          <td class="px-5 py-3.5 text-gray-400 font-mono text-xs"><?= esc($r['no_dokumen'] ?? '-') ?></td>
+          <td class="px-5 py-3.5 text-gray-300"><?= esc($r['petugas'] ?? '-') ?></td>
+          <td class="px-5 py-3.5 text-gray-400 max-w-[180px] truncate"><?= esc($r['keterangan'] ?? '-') ?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>

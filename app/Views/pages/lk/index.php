@@ -5,7 +5,7 @@ $total = count($lk ?? []);
 <!-- Page Header -->
 <div class="flex items-center justify-between mb-6">
   <div>
-    <h1 class="text-xl font-bold text-gray-800">Laporan Kerusakan</h1>
+    <h1 class="text-xl font-bold text-gray-100">Laporan Kerusakan</h1>
     <p class="text-sm text-gray-400 mt-0.5">Kelola dan pantau laporan kerusakan aset</p>
   </div>
   <a href="/ipsrs/lk/baru"
@@ -21,19 +21,19 @@ $total = count($lk ?? []);
 <div class="card p-4 mb-5">
   <form method="GET" action="/ipsrs/lk" class="flex flex-wrap gap-3 items-end">
     <div class="flex-1 min-w-[200px]">
-      <label class="block text-xs font-medium text-gray-500 mb-1.5">Cari</label>
+      <label class="block text-xs font-medium text-gray-400 mb-1.5">Cari</label>
       <div class="relative">
         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" stroke-linecap="round"/>
         </svg>
         <input type="text" name="q" value="<?= esc($search ?? '') ?>"
                placeholder="No. order, keluhan, pelapor..."
-               class="w-full pl-9 pr-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full pl-9 pr-3 py-2.5 text-sm bg-[#181C25]/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
     </div>
     <div class="min-w-[170px]">
-      <label class="block text-xs font-medium text-gray-500 mb-1.5">Status</label>
-      <select name="status" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+      <label class="block text-xs font-medium text-gray-400 mb-1.5">Status</label>
+      <select name="status" class="w-full px-3 py-2.5 text-sm bg-[#181C25]/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
         <option value="">Semua Status</option>
         <?php foreach (['Laporan Masuk', 'Didisposisi', 'Survei', 'Menunggu Suku Cadang', 'Dalam Perbaikan', 'Selesai'] as $opt): ?>
         <option value="<?= $opt ?>" <?= ($status ?? '') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
@@ -41,8 +41,8 @@ $total = count($lk ?? []);
       </select>
     </div>
     <div class="min-w-[140px]">
-      <label class="block text-xs font-medium text-gray-500 mb-1.5">Kode</label>
-      <select name="kode" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+      <label class="block text-xs font-medium text-gray-400 mb-1.5">Kode</label>
+      <select name="kode" class="w-full px-3 py-2.5 text-sm bg-[#181C25]/80 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
         <option value="">Semua Kode</option>
         <?php foreach (($kodeKerusakan ?? []) as $kk): ?>
         <option value="<?= esc($kk['kode'] ?? '') ?>" <?= ($kode ?? '') === ($kk['kode'] ?? '') ? 'selected' : '' ?>><?= esc($kk['kode'] ?? '') ?></option>
@@ -54,13 +54,13 @@ $total = count($lk ?? []);
       Filter
     </button>
     <?php if (!empty($search) || !empty($status) || !empty($kode)): ?>
-    <a href="/ipsrs/lk" class="px-5 py-2.5 text-sm font-semibold text-gray-500 hover:text-gray-700 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors">Reset</a>
+    <a href="/ipsrs/lk" class="px-5 py-2.5 text-sm font-semibold text-gray-400 hover:text-gray-700 rounded-xl bg-[#202532] hover:bg-white/15 transition-colors">Reset</a>
     <?php endif; ?>
   </form>
 </div>
 
 <!-- Count -->
-<p class="text-sm text-gray-500 mb-3">Menampilkan <span class="font-semibold text-gray-700"><?= $total ?></span> laporan</p>
+<p class="text-sm text-gray-400 mb-3">Menampilkan <span class="font-semibold text-gray-200"><?= $total ?></span> laporan</p>
 
 <!-- Table -->
 <div class="card overflow-hidden">
@@ -91,22 +91,22 @@ $total = count($lk ?? []);
           $s = $item['status'] ?? '';
           $sBadge = status_lk_badge($s);
           $rt = (int)($item['response_time'] ?? 0);
-          $rtClass = $rt > 15 ? 'font-semibold text-red-600' : 'text-gray-600';
+          $rtClass = $rt > 15 ? 'font-semibold text-red-600' : 'text-gray-300';
         ?>
         <tr class="hover:bg-indigo-50/40 transition-colors group cursor-pointer">
           <td class="px-5 py-3.5" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'">
-            <span class="font-mono text-xs text-indigo-600 font-semibold"><?= esc($item['no_order'] ?? '-') ?></span>
+            <span class="font-mono text-xs text-[#CCFF00] font-semibold"><?= esc($item['no_order'] ?? '-') ?></span>
           </td>
           <td class="px-5 py-3.5 max-w-[220px]" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'">
-            <a href="/ipsrs/lk/<?= esc($item['id'] ?? '') ?>" class="text-gray-800 hover:text-indigo-600 font-medium truncate block transition-colors">
+            <a href="/ipsrs/lk/<?= esc($item['id'] ?? '') ?>" class="text-gray-100 hover:text-indigo-600 font-medium truncate block transition-colors">
               <?= esc($item['keluhan'] ?? '-') ?>
             </a>
           </td>
           <td class="px-5 py-3.5" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'">
-            <p class="text-gray-700 font-medium"><?= esc($item['pelapor'] ?? '-') ?></p>
+            <p class="text-gray-200 font-medium"><?= esc($item['pelapor'] ?? '-') ?></p>
             <p class="text-xs text-gray-400"><?= esc($item['unit_pelapor'] ?? '') ?></p>
           </td>
-          <td class="px-5 py-3.5 text-gray-600" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'"><?= esc($item['lokasi'] ?? '-') ?></td>
+          <td class="px-5 py-3.5 text-gray-300" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'"><?= esc($item['lokasi'] ?? '-') ?></td>
           <td class="px-5 py-3.5" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'"><span class="<?= $sBadge ?>"><?= esc($s) ?></span></td>
           <td class="px-5 py-3.5 <?= $rtClass ?>" onclick="window.location='/ipsrs/lk/<?= esc($item['id'] ?? '') ?>'"><?= $rt > 0 ? $rt.' mnt' : '-' ?></td>
           <td class="px-5 py-3.5 text-right">
