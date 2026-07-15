@@ -38,9 +38,23 @@
     .badge { display:inline-flex; align-items:center; gap:.375rem; padding:.25rem .625rem; border-radius:9999px; font-size:.75rem; font-weight:500; white-space:nowrap; }
     
     /* Custom DataTables styling to match theme */
-    .dataTables_wrapper .dataTables_filter input { border-radius: 0.5rem; border: 1px solid #e2e8f0; padding: 0.25rem 0.75rem; margin-left: 0.5rem; outline: none; }
-    .dataTables_wrapper .dataTables_filter input:focus { border-color: #6366f1; ring: 2px solid #c7d2fe; }
-    table.dataTable.no-footer { border-bottom: 1px solid #f1f5f9; }
+    .dataTables_wrapper { padding: 1rem; }
+    .dataTables_wrapper .dataTables_filter { margin-bottom: 1rem; float: right; text-align: right; }
+    .dataTables_wrapper .dataTables_filter input { border-radius: 0.75rem; border: 1px solid #e2e8f0; padding: 0.35rem 0.75rem; margin-left: 0.5rem; outline: none; font-size: 0.875rem; background: #f8fafc; }
+    .dataTables_wrapper .dataTables_filter input:focus { border-color: #6366f1; box-shadow: 0 0 0 2px #e0e7ff; background: #fff; }
+    .dataTables_wrapper .dataTables_length { margin-bottom: 1rem; float: left; font-size: 0.875rem; color: #64748b; }
+    .dataTables_wrapper .dataTables_length select { border-radius: 0.5rem; border: 1px solid #e2e8f0; padding: 0.25rem 2rem 0.25rem 0.5rem; margin: 0 0.5rem; outline: none; background: #f8fafc; font-size: 0.875rem; }
+    .dataTables_wrapper .dataTables_info { padding-top: 1rem; font-size: 0.875rem; color: #64748b; float: left; }
+    .dataTables_wrapper .dataTables_paginate { padding-top: 1rem; float: right; display: flex; gap: 0.25rem; font-size: 0.875rem; }
+    .dataTables_wrapper .dataTables_paginate .paginate_button { padding: 0.25rem 0.75rem !important; margin: 0 !important; border-radius: 0.5rem !important; border: 1px solid #e2e8f0 !important; background: #fff !important; color: #475569 !important; cursor: pointer; transition: all 0.2s; }
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: #f8fafc !important; color: #0f172a !important; border-color: #cbd5e1 !important; }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #4f46e5 !important; color: #fff !important; border-color: #4f46e5 !important; font-weight: 600; }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled { opacity: 0.5; cursor: not-allowed; }
+    table.dataTable { border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important; margin-bottom: 0 !important; border-bottom: none !important; }
+    table.dataTable thead th { border-bottom: 1px solid #f1f5f9 !important; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 700; padding: 1rem 1.25rem !important; }
+    table.dataTable tbody td { border-bottom: 1px solid #f1f5f9 !important; padding: 0.875rem 1.25rem !important; }
+    table.dataTable.no-footer { border-bottom: none !important; }
+    .dataTables_wrapper::after { content: ""; display: table; clear: both; }
     
     #sidebar { transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
   </style>
