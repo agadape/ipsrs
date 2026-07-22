@@ -9,10 +9,10 @@ use App\Models\JadwalModel;
 
 class Dashboard extends BaseController
 {
-    public function index(): string
+    public function index()
     {
         if (session('user_role') === 'pelapor') {
-            return $this->pelaporDashboard();
+            return redirect()->to('/ipsrs/lk');
         }
 
         $lkModel     = new LKModel();
@@ -112,26 +112,5 @@ class Dashboard extends BaseController
             'recentLK', 'upcoming', 'priority',
             'today'
         ));
-    }
-
-    private function pelaporDashboard(): string
-    {
-        $lkModel = new LKModel();
-        $allLK   = $lkModel->getAll();
-        
-        // Filter only LKs belonging to this user
-        $myLK = array_filter($allLK, fn($l) => ($l['id_pengguna_pelapor'] ?? '') === session('user_id'));
-        
-        $activeLK = array_filter($myLK, fn($l) => ($l['status'] ?? '') !== IPSRS::STATUS_LK[6]); // Not selesai
-        $doneLK   = array_filter($myLK, fn($l) => ($l['status'] ?? '') === IPSRS::STATUS_LK[6]);
-        
-        usort($myLK, fn($a, $b) => strcmp($b['tanggal'] ?? '', $a['tanggal'] ?? '') ?: strcmp($b['jam_laporan'] ?? '', $a['jam_laporan'] ?? ''));
-        $recentLK = array_slice($myLK, 0, 5);
-
-        return $this->render('pages/dashboard_pelapor', [
-            'totalActive' => count($activeLK),
-            'totalDone'   => count($doneLK),
-            'recentLK'    => $recentLK,
-        ]);
     }
 }
