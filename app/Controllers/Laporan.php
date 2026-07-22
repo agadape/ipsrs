@@ -157,6 +157,17 @@ class Laporan extends BaseController
             }
         }
 
+        // Signature Block
+        $sigRow = $lastRow + 3;
+        $sheet->setCellValue('J' . $sigRow, 'Yogyakarta, ' . date('d F Y'));
+        $sheet->setCellValue('J' . ($sigRow + 1), 'Kepala IPSRS RSUD Kota YK,');
+        
+        $sheet->setCellValue('J' . ($sigRow + 5), \App\Config\IPSRS::NAMA_KEPALA);
+        $sheet->getStyle('J' . ($sigRow + 5))->getFont()->setUnderline(true)->setBold(true);
+        $sheet->setCellValue('J' . ($sigRow + 6), 'NIP. ' . \App\Config\IPSRS::NIP_KEPALA);
+        
+        $sheet->getStyle('J'.$sigRow.':J'.($sigRow+6))->getAlignment()->setHorizontal('center');
+
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $filename = 'Laporan_Kerusakan_' . date('Y-m-d') . '.xlsx';
         
@@ -334,6 +345,17 @@ class Laporan extends BaseController
         foreach ($cols as $c => $w) {
             $sheet->getColumnDimension($c)->setWidth($w);
         }
+
+        // Signature Block
+        $sigRow = $row + 2;
+        $sheet->setCellValue('I' . $sigRow, 'Yogyakarta, ' . date('d F Y'));
+        $sheet->setCellValue('I' . ($sigRow + 1), 'Kepala IPSRS RSUD Kota YK,');
+        
+        $sheet->setCellValue('I' . ($sigRow + 5), \App\Config\IPSRS::NAMA_KEPALA);
+        $sheet->getStyle('I' . ($sigRow + 5))->getFont()->setUnderline(true)->setBold(true);
+        $sheet->setCellValue('I' . ($sigRow + 6), 'NIP. ' . \App\Config\IPSRS::NIP_KEPALA);
+        
+        $sheet->getStyle('I'.$sigRow.':I'.($sigRow+6))->getAlignment()->setHorizontal('center');
         
         $filename = 'Laporan_Preventif_' . date('Y-m-d') . '.xlsx';
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

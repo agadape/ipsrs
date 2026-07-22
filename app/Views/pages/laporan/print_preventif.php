@@ -135,13 +135,13 @@
   </table>
 
   <!-- Signature Block -->
-  <div class="signature">
-    <p>Yogyakarta, <?= date('d F Y') ?></p>
-    <p>Kepala IPSRS RSUD Kota YK,</p>
-    <br><br><br><br>
-    <p class="name">(........................................................)</p>
-    <p>NIP. ........................................</p>
-  </div>
+    <div class="signature">
+      <p>Yogyakarta, <?= date('d F Y') ?></p>
+      <p>Kepala IPSRS RSUD Kota YK,</p>
+      <br><br><br><br>
+      <p class="name"><?= \App\Config\IPSRS::NAMA_KEPALA ?></p>
+      <p>NIP. <?= \App\Config\IPSRS::NIP_KEPALA ?></p>
+    </div>
   
   <div class="clear"></div>
 

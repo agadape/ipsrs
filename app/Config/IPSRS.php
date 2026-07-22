@@ -13,6 +13,10 @@ class IPSRS
     /** Target response time dalam menit (SPO: ≤ 15 menit). */
     public const SLA_RESPONSE_TIME = 15;
 
+    // Laporan Configuration
+    public const NAMA_KEPALA = 'Nama Kepala IPSRS, ST., MT.';
+    public const NIP_KEPALA  = '19800101 200501 1 001';
+
     // ── ID Prefixes ───────────────────────────────────────────────────────
 
     public const PREFIX_ASET  = 'A-';
