@@ -33,10 +33,10 @@ $period = $period ?? 'bulan';
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
         Cetak PDF
       </a>
-      <a href="/ipsrs/laporan/export-csv?period=<?= urlencode($period) ?>"
+      <a href="/ipsrs/laporan/export-excel?period=<?= urlencode($period) ?>"
          class="flex items-center gap-1.5 px-3 py-1.5 hover:bg-emerald-50 text-emerald-600 text-xs font-bold rounded-lg transition-colors">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        CSV
+        Excel
       </a>
     </div>
 

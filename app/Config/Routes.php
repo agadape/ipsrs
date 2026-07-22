@@ -83,7 +83,7 @@ $routes->group('ipsrs', function ($routes) {
 
     // Laporan
     $routes->get('laporan',              'Laporan::index');
-    $routes->get('laporan/export-csv',   'Laporan::exportCsv');
+    $routes->get('laporan/export-excel', 'Laporan::exportExcelLK');
     $routes->get('laporan/export-print', 'Laporan::exportPrint');
     $routes->get('laporan/export-excel-preventif', 'Laporan::exportExcelPreventif');
     $routes->get('laporan/export-print-preventif', 'Laporan::exportPrintPreventif');

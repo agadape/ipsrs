@@ -74,44 +74,100 @@ class Laporan extends BaseController
         return $this->render('pages/laporan/index', array_merge($data, ['period' => $period]));
     }
 
-    public function exportCsv()
+    public function exportExcelLK()
     {
         $period     = $this->request->getGet('period') ?? 'bulan';
         $data       = $this->getData($period);
         $filteredLK = $data['filteredLK'];
+        $periodLabels = ['minggu' => 'Minggu Ini', 'bulan' => 'Bulan Ini', 'tahun' => 'Tahun Ini'];
+        $periodStr = $periodLabels[$period] ?? 'Bulan Ini';
 
-        $rows = [['No. Order','Tanggal','Jam','Pelapor','Unit Pelapor','Lokasi','Keluhan','Kode','Status','Teknisi','Tindakan','Resp. Time (mnt)','Down Time (mnt)']];
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        
+        // Header / Title
+        $sheet->setCellValue('A1', 'Laporan Rekapitulasi Kerusakan Aset');
+        $sheet->mergeCells('A1:L1');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        
+        $sheet->setCellValue('A2', 'RSUD Kota Yogyakarta');
+        $sheet->mergeCells('A2:L2');
+        $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(12);
+        $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
+        
+        $sheet->setCellValue('A3', 'Periode: ' . $periodStr);
+        $sheet->mergeCells('A3:L3');
+        $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
+
+        // Table Header
+        $headers = ['No', 'No. Order', 'Tanggal', 'Jam', 'Pelapor (Unit)', 'Lokasi', 'Keluhan', 'Status', 'Teknisi', 'Tindakan', 'Resp. Time (mnt)', 'Down Time (mnt)'];
+        $col = 'A';
+        foreach ($headers as $h) {
+            $sheet->setCellValue($col . '5', $h);
+            $sheet->getStyle($col . '5')->getFont()->setBold(true);
+            $sheet->getStyle($col . '5')->getFill()
+                  ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                  ->getStartColor()->setARGB('FFD9D9D9');
+            $sheet->getStyle($col . '5')->getAlignment()->setHorizontal('center');
+            $col++;
+        }
+
+        // Table Data
+        $row = 6;
+        $no = 1;
         foreach ($filteredLK as $l) {
-            $rows[] = [
-                $l['no_order']     ?? '',
-                $l['tanggal']      ?? '',
-                $l['jam_laporan']  ?? '',
-                $l['pelapor']      ?? '',
-                $l['unit_pelapor'] ?? '',
-                $l['lokasi']       ?? '',
-                $l['keluhan']      ?? '',
-                $l['kode']         ?? '',
-                $l['status']       ?? '',
-                $l['teknisi']      ?? '',
-                $l['tindakan']     ?? '',
-                $l['response_time'] ?? '',
-                $l['down_time']    ?? '',
-            ];
+            $sheet->setCellValue('A' . $row, $no++);
+            $sheet->setCellValue('B' . $row, $l['no_order'] ?? '-');
+            $sheet->setCellValue('C' . $row, $l['tanggal'] ?? '-');
+            $sheet->setCellValue('D' . $row, $l['jam_laporan'] ?? '-');
+            $sheet->setCellValue('E' . $row, ($l['pelapor'] ?? '-') . ' (' . ($l['unit_pelapor'] ?? '-') . ')');
+            $sheet->setCellValue('F' . $row, $l['lokasi'] ?? '-');
+            $sheet->setCellValue('G' . $row, $l['keluhan'] ?? '-');
+            $sheet->setCellValue('H' . $row, $l['status'] ?? '-');
+            $sheet->setCellValue('I' . $row, $l['teknisi'] ?? '-');
+            $sheet->setCellValue('J' . $row, $l['tindakan'] ?? '-');
+            $sheet->setCellValue('K' . $row, $l['response_time'] ?? '-');
+            $sheet->setCellValue('L' . $row, $l['down_time'] ?? '-');
+            
+            $sheet->getStyle('A'.$row.':L'.$row)->getAlignment()->setVertical('top');
+            $sheet->getStyle('G'.$row)->getAlignment()->setWrapText(true);
+            $sheet->getStyle('J'.$row)->getAlignment()->setWrapText(true);
+            $row++;
         }
 
-        $out = fopen('php://temp', 'r+');
-        foreach ($rows as $row) {
-            fputcsv($out, $row);
-        }
-        rewind($out);
-        $csv = stream_get_contents($out);
-        fclose($out);
+        // Borders
+        $lastCol = 'L';
+        $lastRow = $row - 1;
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A5:' . $lastCol . $lastRow)->applyFromArray($styleArray);
 
-        $filename = 'Laporan_LK_' . date('Y-m-d') . '.csv';
+        // Auto size columns (except textarea cols)
+        foreach (range('A', 'L') as $colId) {
+            if (!in_array($colId, ['G', 'J'])) {
+                $sheet->getColumnDimension($colId)->setAutoSize(true);
+            } else {
+                $sheet->getColumnDimension($colId)->setWidth(40);
+            }
+        }
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $filename = 'Laporan_Kerusakan_' . date('Y-m-d') . '.xlsx';
+        
+        ob_start();
+        $writer->save('php://output');
+        $content = ob_get_clean();
+
         return $this->response
-            ->setHeader('Content-Type', 'text/csv; charset=utf-8')
+            ->setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             ->setHeader('Content-Disposition', "attachment; filename=\"{$filename}\"")
-            ->setBody("\xEF\xBB\xBF" . $csv); // UTF-8 BOM for Excel
+            ->setBody($content);
     }
 
     public function exportPrint()
