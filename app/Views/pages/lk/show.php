@@ -470,11 +470,24 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
 <?php endif; ?>
 
 <!-- ── Update Status Form (hidden when Selesai or if user is pelapor) ──────────────────────── -->
-<?php if (!$isSelesai && $authRole !== 'pelapor'): ?>
-<div class="card p-6">
-  <h2 class="text-sm font-semibold text-gray-700 mb-5">Update Status</h2>
+  <?php 
+  $isDataLengkap = !empty($lk['id_aset']) && !empty($lk['kode']);
+  if (!$isSelesai && $authRole !== 'pelapor'): 
+  ?>
+  <div class="card p-6">
+    <h2 class="text-sm font-semibold text-gray-700 mb-5">Update Status</h2>
+    
+    <?php if ($status === 'Laporan Masuk' && !$isDataLengkap): ?>
+    <div class="bg-amber-50 border border-amber-200 text-amber-700 px-4 py-3 rounded-xl flex items-start gap-3">
+      <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      <div>
+        <p class="text-sm font-bold">Data Belum Lengkap!</p>
+        <p class="text-xs mt-1">Anda tidak dapat mendisposisikan atau memproses laporan ini sebelum menentukan <strong>Kode Pekerjaan</strong> dan menghubungkannya dengan <strong>Aset</strong> di database. Silakan klik tombol <span class="font-bold">"Lengkapi Data"</span> di bagian atas.</p>
+      </div>
+    </div>
+    <?php else: ?>
 
-  <?php if ($canAssign): ?>
+    <?php if ($canAssign): ?>
   <!-- Assign teknisi / disposisi -->
   <form method="POST" action="/ipsrs/lk/<?= esc($id) ?>/status">
     <?= csrf_field() ?>
@@ -601,6 +614,7 @@ $showVendor   = ($lk['proses'] ?? '') === 'III' || in_array($status, ['Menunggu 
     </div>
   </form>
   <?php endif; ?>
+  <?php endif; // end of !$isDataLengkap ?>
 </div>
 <?php endif; ?>
 
