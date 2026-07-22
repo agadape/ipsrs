@@ -1,4 +1,5 @@
 <?php
+$authRole = session('user_role') ?? '';
 $id     = $lk['id'] ?? '';
 $status = $lk['status'] ?? '';
 
