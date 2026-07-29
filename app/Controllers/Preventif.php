@@ -103,13 +103,13 @@ class Preventif extends BaseController
         $v = $this->validateOrFail([
             'kategori'          => 'required',
             'hasil_pemeriksaan' => 'required|in_list[' . implode(',', IPSRS::HASIL_PEMERIKSAAN) . ']',
-            'nama_user_ttd'     => 'required',
+            
         ], 'Lengkapi kategori alat, hasil pemeriksaan, dan nama pengguna.');
         if ($v !== true) return $v;
 
         try {
             $post     = $this->whitelist([
-                'kategori', 'hasil_pemeriksaan', 'nama_user_ttd', 'catatan', 'items',
+                'kategori', 'hasil_pemeriksaan', 'catatan', 'items',
             ]);
             $lkpModel = new \App\Models\LkpModel();
 
@@ -190,3 +190,5 @@ class Preventif extends BaseController
         return $this->render('pages/preventif/lkp_hasil', compact('jadwal', 'lkp', 'detail'));
     }
 }
+
+

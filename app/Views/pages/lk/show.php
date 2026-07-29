@@ -567,7 +567,7 @@ $vendorList   = $vendorList ?? [];
       <div class="md:col-span-2">
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tindakan yang Dilakukan</label>
         <textarea name="tindakan" rows="3"
-                  placeholder="Deskripsikan tindakan perbaikan..."
+                  placeholder="Deskripsikan tindakan perbaikan..." required
                   class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 resize-none"><?= esc($lk['tindakan'] ?? '') ?></textarea>
       </div>
 
@@ -728,3 +728,4 @@ $vendorList   = $vendorList ?? [];
     return true;
   }
 </script>
+

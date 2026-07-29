@@ -51,30 +51,34 @@ $filterParam = $filter ?? '';
       <!-- Lokasi -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi</label>
-        <input type="text" name="lokasi"
-               placeholder="Lokasi aset"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+        <input type="text" name="lokasi" readonly
+               placeholder="Pilih aset terlebih dahulu..."
+               class="w-full px-3 py-2.5 text-sm bg-gray-100 text-gray-500 border-0 rounded-xl focus:outline-none cursor-not-allowed">
       </div>
 
       <!-- Teknisi -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Teknisi <span class="text-red-500">*</span></label>
-        <input type="text" name="teknisi" required
-               placeholder="Nama teknisi"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+        <select name="teknisi" required
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+          <option value="">-- Pilih Teknisi --</option>
+          <?php foreach ($users ?? [] as $u): ?>
+          <option value="<?= esc($u['nama_lengkap']) ?>"><?= esc($u['nama_lengkap']) ?> (<?= esc($u['role']) ?>)</option>
+          <?php endforeach; ?>
+        </select>
       </div>
 
       <!-- Tanggal -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal <span class="text-red-500">*</span></label>
-        <input type="date" name="tanggal" value="<?= esc($today ?? date('Y-m-d')) ?>" required
+        <input type="date" name="tanggal" required min="<?= date('Y-m-d') ?>" id="preventif_tanggal" onchange="validateTime()"
                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
       <!-- Jam -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Jam <span class="text-red-500">*</span></label>
-        <input type="time" name="jam" required
+        <input type="time" name="jam" required id="preventif_jam" onchange="validateTime()"
                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
@@ -159,31 +163,25 @@ $filterParam = $filter ?? '';
           <td class="px-5 py-3.5">
             <div class="flex items-center gap-2 flex-wrap">
               <?php if (($j['status'] ?? '') !== 'Selesai'): ?>
-              <form method="POST" action="/ipsrs/preventif/<?= esc($jid) ?>/selesai" class="inline">
-                <?= csrf_field() ?>
-                <button type="submit"
-                        class="text-xs font-medium px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors">
-                  Selesai
-                </button>
-              </form>
-              <?php endif; ?>
-              <a href="/ipsrs/preventif/lkp/<?= esc($jid) ?>"
-                 class="text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors">
+              <a href="/ipsrs/preventif/lkp/<?= esc($jid) ?>" title="Isi LKP"
+                 class="text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors flex items-center gap-1">
+                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                 LKP
               </a>
-              <?php if (($j['status'] ?? '') === 'Selesai'): ?>
-              <a href="/ipsrs/preventif/lkp-hasil/<?= esc($jid) ?>"
-                 class="text-xs font-medium px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors">
+              <?php else: ?>
+              <a href="/ipsrs/preventif/lkp-hasil/<?= esc($jid) ?>" title="Lihat Hasil LKP"
+                 class="text-xs font-medium px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors flex items-center gap-1">
+                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                 Hasil
               </a>
-              <?php endif; ?>
               <form method="POST" action="/ipsrs/preventif/<?= esc($jid) ?>/hapus" class="inline" onsubmit="confirmFormSubmit(event, this, 'Hapus jadwal preventif ini?');">
                 <?= csrf_field() ?>
-                <button type="submit"
-                        class="text-xs font-medium px-3 py-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
-                  Hapus
+                <button type="submit" title="Hapus Jadwal"
+                        class="p-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                 </button>
               </form>
+              <?php endif; ?>
             </div>
           </td>
         </tr>
@@ -199,11 +197,31 @@ $filterParam = $filter ?? '';
   var selAset = document.querySelector('select[name="id_aset"]');
   var inpLokasi = document.querySelector('input[name="lokasi"]');
   var inpNama = document.querySelector('input[name="aset"]');
-  if (!selAset) return;
-  selAset.addEventListener('change', function() {
-    var opt = this.options[this.selectedIndex];
-    if (inpLokasi && opt.dataset.lokasi) inpLokasi.value = opt.dataset.lokasi;
-    if (inpNama && opt.text && opt.value) inpNama.value = opt.text.split(' — ').slice(1).join(' — ');
-  });
+  if (selAset && inpLokasi) {
+    selAset.addEventListener('change', function() {
+      var opt = selAset.options[selAset.selectedIndex];
+      inpLokasi.value = opt ? (opt.getAttribute('data-lokasi') || '-') : '';
+      if (inpNama && opt.text && opt.value) inpNama.value = opt.text.split(' — ').slice(1).join(' — ');
+    });
+  }
 })();
+
+function validateTime() {
+  const d = document.getElementById('preventif_tanggal').value;
+  const t = document.getElementById('preventif_jam');
+  if (!d || !t.value) return;
+
+  const today = new Date().toISOString().split('T')[0];
+  if (d === today) {
+    const now = new Date();
+    const currentHours = now.getHours().toString().padStart(2, '0');
+    const currentMinutes = now.getMinutes().toString().padStart(2, '0');
+    const currentTime = `${currentHours}:${currentMinutes}`;
+    
+    if (t.value < currentTime) {
+      alert("Jam tidak boleh kurang dari waktu sekarang untuk hari ini.");
+      t.value = currentTime;
+    }
+  }
+}
 </script>
