@@ -141,13 +141,7 @@ function old_val(array $a, string $key, string $default = ''): string {
                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl font-mono focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
 
-      <!-- Kapasitas -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kapasitas</label>
-        <input type="text" name="kapasitas" value="<?= old_val($a, 'kapasitas') ?>"
-               placeholder="Contoh: 1 PK, 5000 VA"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
-      </div>
+
 
       <!-- Tahun -->
       <div>

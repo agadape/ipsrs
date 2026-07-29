@@ -146,6 +146,9 @@ class LK extends BaseController
 
     public function delete(string $id)
     {
+        if (strtolower(session('user_role')) === 'pelapor') {
+            return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
+        }
         try {
             $lk = $this->model->getById($id);
             if ($lk) {
@@ -177,6 +180,9 @@ class LK extends BaseController
 
     public function claim(string $id)
     {
+        if (strtolower(session('user_role')) === 'pelapor') {
+            return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
+        }
         $lk = $this->model->getById($id);
         if (!$lk) {
             return redirect()->to('/ipsrs/lk')->with('error', 'LK tidak ditemukan');
@@ -206,7 +212,9 @@ class LK extends BaseController
 
     public function updateDetail(string $id)
     {
-        if (session('user_role') === 'pelapor') return redirect()->to('/ipsrs/lk');
+        if (strtolower(session('user_role') ?? '') === 'pelapor') {
+            return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
+        }
         
         $lk = $this->model->getById($id);
         if (!$lk) return redirect()->to('/ipsrs/lk');
@@ -234,6 +242,9 @@ class LK extends BaseController
 
     public function updateStatus(string $id)
     {
+        if (strtolower(session('user_role')) === 'pelapor') {
+            return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
+        }
         $lk   = $this->model->getById($id);
         $post = $this->whitelist([
             'status_baru', 'teknisi', 'tindakan', 'proses',
@@ -295,6 +306,9 @@ class LK extends BaseController
 
     public function addSukuCadang(string $id)
     {
+        if (strtolower(session('user_role')) === 'pelapor') {
+            return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
+        }
         $lk      = $this->model->getById($id);
         $post    = $this->whitelist(['id_barang', 'jumlah', 'keterangan']);
         $idBarang = $post['id_barang'] ?? null;
@@ -344,43 +358,32 @@ class LK extends BaseController
 
     public function storeVendor(string $id)
     {
+        if (strtolower(session('user_role')) === 'pelapor') {
+            return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
+        }
         $lk = $this->model->getById($id);
         if (!$lk) {
             return redirect()->to('/ipsrs/lk')->with('error', 'LK tidak ditemukan');
         }
 
         $post        = $this->whitelist([
-            'id_vendor', 'nama_vendor_baru', 'kontak',
+            'id_vendor',
             'tanggal_kirim', 'tanggal_kembali', 'estimasi_selesai', 'keterangan',
         ]);
         $vendorModel = new \App\Models\VendorModel();
         $idVendor    = $post['id_vendor'] ?? '';
-        $namaBaru    = trim($post['nama_vendor_baru'] ?? '');
 
-        if ($namaBaru !== '' && !$idVendor) {
-            // Create new vendor + link
-            try {
-                $created   = $vendorModel->create([
-                    'nama_vendor' => $namaBaru,
-                    'kontak'      => $post['kontak'] ?? null,
-                ]);
-                $idVendor  = $created['id'] ?? null;
-                $namaFinal = $namaBaru;
-            } catch (\Throwable $e) {
-                log_message('error', '[LK::storeVendor] create vendor: ' . $e->getMessage());
-                return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal menambah vendor baru: ' . $e->getMessage());
-            }
-        } elseif ($idVendor) {
+        if ($idVendor) {
             $vendor    = $vendorModel->getById($idVendor);
             $namaFinal = $vendor['nama_vendor'] ?? '-';
         } else {
-            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Pilih vendor atau isi nama vendor baru');
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Pilih vendor terlebih dahulu');
         }
 
         try {
             $this->model->addVendor([
                 'id_lk'            => $id,
-                'id_vendor'        => $idVendor ?: null,
+                'id_vendor'        => $idVendor,
                 'nama_vendor'      => $namaFinal,
                 'tanggal_kirim'    => ($post['tanggal_kirim'] ?? '')    ?: null,
                 'tanggal_kembali'  => ($post['tanggal_kembali'] ?? '')  ?: null,

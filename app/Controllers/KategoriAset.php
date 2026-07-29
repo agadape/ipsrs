@@ -34,10 +34,13 @@ class KategoriAset extends BaseController
 
     public function tambah()
     {
-        $data = $this->validateOrFail([
+        $res = $this->validateOrFail([
             'nama_kategori' => 'required|max_length[100]',
             'deskripsi'     => 'max_length[255]',
         ]);
+        if ($res !== true) return $res;
+
+        $data = $this->whitelist(['nama_kategori', 'deskripsi']);
 
         $payload = [
             'nama_kategori' => $data['nama_kategori'],
@@ -57,10 +60,13 @@ class KategoriAset extends BaseController
 
     public function edit(string $id)
     {
-        $data = $this->validateOrFail([
+        $res = $this->validateOrFail([
             'nama_kategori' => 'required|max_length[100]',
             'deskripsi'     => 'max_length[255]',
         ]);
+        if ($res !== true) return $res;
+
+        $data = $this->whitelist(['nama_kategori', 'deskripsi']);
 
         $payload = [
             'nama_kategori' => $data['nama_kategori'],
@@ -75,5 +81,16 @@ class KategoriAset extends BaseController
         }
 
         return redirect()->to('/ipsrs/kategori-aset')->with('success', 'Kategori berhasil diperbarui.');
+    }
+    public function delete(string $id)
+    {
+        try {
+            $this->kategoriModel->delete($id);
+        } catch (\Throwable $e) {
+            log_message('error', '[KategoriAset::delete] ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus kategori. Pastikan kategori tidak digunakan di data aset. Detail: ' . $e->getMessage());
+        }
+
+        return redirect()->to('/ipsrs/kategori-aset')->with('success', 'Kategori berhasil dihapus.');
     }
 }

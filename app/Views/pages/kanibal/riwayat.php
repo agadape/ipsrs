@@ -11,7 +11,53 @@ $riwayatList = $riwayat ?? [];
   <h1 class="text-xl font-bold text-gray-800">Riwayat Kanibal Alat</h1>
 </div>
 
+<!-- Daftar Aset Kanibal Tersedia -->
 <div class="card p-6 mb-6">
+  <div class="flex items-center gap-2 mb-4">
+    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+      <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+    </div>
+    <h2 class="text-sm font-semibold text-gray-700">Daftar Aset Kanibal (Tersedia)</h2>
+  </div>
+  
+  <?php if (!empty($aset_kanibal)): ?>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider rounded-l-xl">No. Aset</th>
+          <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Nama Aset</th>
+          <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Lokasi</th>
+          <th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-400 uppercase tracking-wider rounded-r-xl">Keterangan</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-50">
+        <?php foreach ($aset_kanibal as $ak): ?>
+        <tr>
+          <td class="px-4 py-3 font-mono text-xs text-indigo-600"><?= esc($ak['nomor_aset'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-medium text-gray-800"><?= esc($ak['nama'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-600"><?= esc($ak['lokasi'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-gray-500 whitespace-pre-line"><?= esc($ak['keterangan'] ?? '-') ?></td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+  <?php else: ?>
+  <div class="text-center py-6">
+    <p class="text-sm text-gray-400">Tidak ada aset dengan status Kanibal.</p>
+  </div>
+  <?php endif; ?>
+</div>
+
+<div class="card p-6 mb-6">
+  <div class="flex items-center gap-2 mb-4">
+    <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+      <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    </div>
+    <h2 class="text-sm font-semibold text-gray-700">Riwayat Penggunaan Kanibal</h2>
+  </div>
+  
   <p class="text-sm text-gray-500 mb-4">
     Daftar pencatatan komponen yang diambil dari aset lain (donor) untuk perbaikan aset penerima.
   </p>

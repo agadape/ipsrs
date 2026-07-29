@@ -34,7 +34,7 @@ $filterParam = $filter ?? '';
           <?php foreach (($aset ?? []) as $a): ?>
           <option value="<?= esc($a['id'] ?? '') ?>"
                   data-lokasi="<?= esc($a['lokasi'] ?? '') ?>">
-            <?= esc(($a['id'] ?? '').' — '.($a['nama'] ?? '')) ?>
+            <?= esc(($a['nomor_aset'] ?? $a['nomor_seri'] ?? '').' — '.($a['nama'] ?? '')) ?>
           </option>
           <?php endforeach; ?>
         </select>

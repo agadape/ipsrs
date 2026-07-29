@@ -119,10 +119,16 @@
                  class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
         </div>
       </div>
-      <div class="mt-5 flex items-center justify-end gap-3">
-        <button type="button" onclick="closeEdit()" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700">Batal</button>
-        <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">Simpan</button>
+      <div class="mt-5 flex items-center justify-between">
+        <button type="button" onclick="hapusKode()" class="px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-800 transition-colors">Hapus</button>
+        <div class="flex items-center gap-3">
+          <button type="button" onclick="closeEdit()" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">Simpan</button>
+        </div>
       </div>
+    </form>
+    <form id="delete-form" method="POST" style="display: none;">
+      <?= csrf_field() ?>
     </form>
   </div>
 </div>
@@ -136,5 +142,12 @@
   }
   function closeEdit() {
     document.getElementById('edit-modal').classList.add('hidden');
+  }
+  function hapusKode() {
+    if (confirm('Apakah Anda yakin ingin menghapus kode kerusakan ini?')) {
+      const actionUrl = document.getElementById('edit-form').action.replace('/edit', '/delete');
+      document.getElementById('delete-form').action = actionUrl;
+      document.getElementById('delete-form').submit();
+    }
   }
 </script>

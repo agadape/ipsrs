@@ -41,7 +41,7 @@
 
     <!-- Asset info -->
     <div class="text-center border-t border-gray-100 pt-4 w-full">
-      <p class="text-xs font-mono font-bold text-indigo-600"><?= esc($aset['id'] ?? '') ?></p>
+      <p class="text-xs font-mono font-bold text-indigo-600"><?= esc($aset['nomor_aset'] ?? $aset['nomor_seri'] ?? '-') ?></p>
       <p class="text-sm font-bold text-gray-800 mt-1"><?= esc($aset['nama'] ?? '') ?></p>
       <p class="text-xs text-gray-500 mt-0.5"><?= esc($aset['lokasi'] ?? '') ?></p>
     </div>

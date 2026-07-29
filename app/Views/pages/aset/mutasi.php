@@ -28,55 +28,56 @@ $alasanFilter = $alasan ?? '';
       <!-- ID Aset -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Aset <span class="text-red-500">*</span></label>
-        <select name="id_aset" required
+        <select name="id_aset" id="id_aset" required onchange="updateLokasiSaatIni()"
                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
-          <option value="<?= esc($a['id'] ?? '') ?>">
-            <?= esc(($a['id_aset'] ?? '').' — '.($a['nama'] ?? '')) ?>
+          <option value="<?= esc($a['id'] ?? '') ?>" data-lokasi="<?= esc($a['lokasi'] ?? '-') ?>">
+            <?= esc(($a['nomor_aset'] ?? $a['nomor_seri'] ?? '').' - '.($a['nama'] ?? '')) ?>
           </option>
           <?php endforeach; ?>
         </select>
       </div>
 
-      <!-- Lokasi Tujuan -->
+      <!-- Lokasi Saat Ini (Read-only) -->
       <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi Saat Ini</label>
+        <input type="text" id="lokasi_saat_ini" readonly
+               placeholder="Pilih aset terlebih dahulu..."
+               class="w-full px-3 py-2.5 text-sm bg-gray-100 text-gray-500 border-0 rounded-xl focus:outline-none cursor-not-allowed">
+      </div>
+
+      <!-- Jenis Mutasi -->
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Jenis Mutasi <span class="text-red-500">*</span></label>
+        <select name="jenis_mutasi" id="jenis_mutasi" required onchange="toggleLokasiTujuan()"
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+          <option value="">-- Pilih Jenis Mutasi --</option>
+          <option value="Pindah Ruangan">Pindah Ruangan (Tetap Aktif)</option>
+          <option value="Simpan ke Gudang">Simpan ke Gudang (Non-Aktif)</option>
+          <option value="Jadikan Kanibal">Jadikan Kanibal (Suku Cadang)</option>
+          <option value="Dibuang">Dibuang / Rusak Total</option>
+        </select>
+      </div>
+
+      <!-- Lokasi Tujuan -->
+      <div id="lokasi_tujuan_container" class="hidden">
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi Tujuan <span class="text-red-500">*</span></label>
-        <input type="text" name="lokasi_tujuan" required
+        <input type="text" name="lokasi_tujuan" id="lokasi_tujuan"
                placeholder="Gedung / Ruangan tujuan"
                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
-      </div>
-
-      <!-- Alasan -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Alasan <span class="text-red-500">*</span></label>
-        <select name="alasan" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
-          <option value="">-- Pilih Alasan --</option>
-          <?php foreach (['Pemindahan', 'Perbaikan', 'Pengembalian', 'Lainnya'] as $opt): ?>
-          <option value="<?= $opt ?>"><?= $opt ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
-      <!-- Status Baru -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Update Status Aset</label>
-        <select name="status_baru"
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
-          <option value="">-- Tetap (Tidak Diubah) --</option>
-          <?php foreach (\App\Config\IPSRS::STATUS_ASET as $opt): ?>
-          <option value="<?= $opt ?>"><?= $opt ?></option>
-          <?php endforeach; ?>
-        </select>
       </div>
 
       <!-- Petugas -->
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Petugas <span class="text-red-500">*</span></label>
-        <input type="text" name="petugas" required
-               placeholder="Nama petugas"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+        <select name="petugas" required
+                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+          <option value="">-- Pilih Petugas --</option>
+          <?php foreach ($users ?? [] as $u): ?>
+          <option value="<?= esc($u['nama_lengkap']) ?>"><?= esc($u['nama_lengkap']) ?> (<?= esc($u['role']) ?>)</option>
+          <?php endforeach; ?>
+        </select>
       </div>
 
       <!-- Tanggal -->
@@ -153,3 +154,31 @@ $alasanFilter = $alasan ?? '';
   </div>
   <?php endif; ?>
 </div>
+
+<script>
+function toggleLokasiTujuan() {
+  const jm = document.getElementById('jenis_mutasi').value;
+  const ltc = document.getElementById('lokasi_tujuan_container');
+  const lti = document.getElementById('lokasi_tujuan');
+
+  if (jm === 'Pindah Ruangan') {
+    ltc.classList.remove('hidden');
+    lti.setAttribute('required', 'required');
+  } else {
+    ltc.classList.add('hidden');
+    lti.removeAttribute('required');
+    lti.value = '';
+  }
+}
+
+function updateLokasiSaatIni() {
+  const select = document.getElementById('id_aset');
+  const locationInput = document.getElementById('lokasi_saat_ini');
+  if (select.selectedIndex > 0) {
+    const opt = select.options[select.selectedIndex];
+    locationInput.value = opt.getAttribute('data-lokasi') || '-';
+  } else {
+    locationInput.value = '';
+  }
+}
+</script>

@@ -105,11 +105,11 @@
         <th width="15%">Nama Unit / Aset</th>
         <th width="12%">Lokasi</th>
         <th width="10%">No. Seri</th>
+        <th width="8%">Kategori</th>
         <th width="9%">Tanggal</th>
-        <th width="11%">Hasil Pemeriksaan</th>
-        <th width="17%">Temuan / Deskripsi</th>
-        <th width="13%">Rencana Perbaikan</th>
-        <th width="10%">Keterangan NL</th>
+        <th width="12%">Teknisi</th>
+        <th width="11%">Hasil</th>
+        <th width="20%">Catatan / Temuan</th>
       </tr>
     </thead>
     <tbody>
@@ -119,11 +119,11 @@
           <td><?= esc($lkp['nama_unit'] ?? '-') ?></td>
           <td><?= esc($lkp['lokasi'] ?? '-') ?></td>
           <td class="text-center"><?= esc($lkp['no_seri'] ?? '-') ?></td>
+          <td class="text-center"><?= esc($lkp['kategori'] ?? '-') ?></td>
           <td class="text-center"><?= !empty($lkp['tanggal']) && $lkp['tanggal'] !== '-' ? date('d/m/Y', strtotime($lkp['tanggal'])) : '-' ?></td>
+          <td class="text-center"><?= esc($lkp['teknisi'] ?? '-') ?></td>
           <td class="text-center"><?= esc($lkp['hasil'] ?? '-') ?></td>
-          <td><?= esc($lkp['temuan'] ?? '-') ?></td>
-          <td><?= esc($lkp['rencana_perbaikan'] ?? '-') ?></td>
-          <td class="text-center"><?= esc($lkp['keterangan'] ?? '-') ?></td>
+          <td><?= esc($lkp['catatan'] ?? '-') ?></td>
         </tr>
       <?php endforeach; ?>
       <?php if (empty($dataLKP)): ?>

@@ -84,7 +84,7 @@ class Aset extends BaseController
             $data = $this->whitelist([
                 'nomor_aset', 'nama', 'jenis', 'kategori', 'lokasi', 'gedung', 'lantai', 'ruangan',
                 'unit', 'kondisi', 'merk', 'model', 'no_seri', 'tahun',
-                'kapasitas', 'keterangan', 'status',
+                'keterangan', 'status',
             ]);
 
             $data['id'] = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -140,7 +140,7 @@ class Aset extends BaseController
             $data = $this->whitelist([
                 'nomor_aset', 'nama', 'jenis', 'kategori', 'lokasi', 'gedung', 'lantai', 'ruangan',
                 'unit', 'kondisi', 'merk', 'model', 'no_seri', 'tahun',
-                'kapasitas', 'keterangan', 'status',
+                'keterangan', 'status',
             ]);
             $this->model->update($id, $data);
             return redirect()->to('/ipsrs/aset/' . $id)->with('success', 'Aset berhasil diperbarui');
@@ -155,6 +155,8 @@ class Aset extends BaseController
         $mutasiModel = new \App\Models\MutasiModel();
         $aset    = $this->model->getAll();
         $riwayat = $mutasiModel->getAll();
+        $users   = (new \App\Models\PenggunaModel())->getAll();
+        
         $alasan  = $this->request->getGet('alasan') ?? '';
         if ($alasan) {
             $riwayat = array_filter($riwayat, fn($r) => $r['alasan'] === $alasan);
@@ -163,6 +165,7 @@ class Aset extends BaseController
             'aset'   => $aset,
             'riwayat'=> array_values($riwayat),
             'alasan' => $alasan,
+            'users'  => array_filter($users, fn($u) => in_array($u['role'], ['Admin', 'Teknisi']))
         ]);
     }
 
@@ -170,24 +173,46 @@ class Aset extends BaseController
     {
         $v = $this->validateOrFail([
             'id_aset'       => 'required',
-            'lokasi_tujuan' => 'required',
-            'alasan'        => 'required',
+            'jenis_mutasi'  => 'required',
             'petugas'       => 'required',
             'tanggal'       => 'required',
         ], 'Mohon lengkapi data mutasi yang wajib diisi.');
         if ($v !== true) return $v;
 
         try {
+            $post = $this->request->getPost();
+            $jenisMutasi = $post['jenis_mutasi'];
+            $lokasiTujuan = $post['lokasi_tujuan'] ?? '';
+            
+            $statusBaru = '';
+            if ($jenisMutasi === 'Simpan ke Gudang') {
+                $statusBaru = 'Di Gudang';
+                $lokasiTujuan = 'Gudang IPSRS';
+            } elseif ($jenisMutasi === 'Jadikan Kanibal') {
+                $statusBaru = 'Kanibal';
+                $lokasiTujuan = 'Gudang Kanibal';
+            } elseif ($jenisMutasi === 'Dibuang') {
+                $statusBaru = 'Dibuang';
+                $lokasiTujuan = 'Dibuang';
+            } elseif ($jenisMutasi === 'Pindah Ruangan') {
+                $statusBaru = 'Aktif';
+            }
+
             $mutasiModel = new \App\Models\MutasiModel();
-            $data = $this->whitelist(['id_aset', 'lokasi_tujuan', 'alasan', 'petugas', 'tanggal']);
+            $data = $this->whitelist(['id_aset', 'petugas', 'tanggal', 'catatan']);
             $aset = $this->model->getById($data['id_aset']);
             $data['nama_aset']   = $aset['nama'] ?? '';
             $data['lokasi_asal'] = $aset['lokasi'] ?? null;
+            $data['alasan'] = $jenisMutasi;
+            $data['lokasi_tujuan'] = $lokasiTujuan;
+            
             $mutasiModel->create($data);
 
-            $post = $this->request->getPost();
-            if (!empty($post['status_baru'])) {
-                $this->model->update($data['id_aset'], ['status' => $post['status_baru']]);
+            if ($statusBaru) {
+                $this->model->update($data['id_aset'], [
+                    'status' => $statusBaru,
+                    'lokasi' => $lokasiTujuan
+                ]);
             }
 
             return redirect()->to('/ipsrs/aset/mutasi')->with('success', 'Mutasi aset berhasil dicatat');

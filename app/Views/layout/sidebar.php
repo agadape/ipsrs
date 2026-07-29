@@ -133,3 +133,16 @@ function ico(string $d, string $size = '18'): string {
     </div>
   </div>
 </aside>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('aside .overflow-y-auto');
+    if (sidebar) {
+      const scrollPos = localStorage.getItem('sidebarScroll');
+      if (scrollPos) sidebar.scrollTop = parseInt(scrollPos, 10);
+      sidebar.addEventListener('scroll', function() {
+        localStorage.setItem('sidebarScroll', sidebar.scrollTop);
+      });
+    }
+  });
+</script>

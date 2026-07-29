@@ -235,10 +235,11 @@ class Laporan extends BaseController
                 'nama_unit' => $aset['nama'] ?? $jadwal['aset'] ?? '-',
                 'lokasi'    => $jadwal['lokasi'] ?? $aset['lokasi'] ?? '-',
                 'no_seri'   => $aset['nomor_seri'] ?? '-',
+                'kategori'  => $lkp['kategori'] ?? '-',
                 'tanggal'   => $lkp['tanggal_pemeriksaan'] ?? '-',
+                'teknisi'   => $lkp['teknisi'] ?? '-',
                 'hasil'     => $lkp['hasil_pemeriksaan'] ?? '-',
-                'temuan'    => $lkp['catatan'] ?? '-',
-                'keterangan'=> '-', // Kosong untuk keterangan nl
+                'catatan'   => $lkp['catatan'] ?? '-',
             ];
         }
 
@@ -297,21 +298,18 @@ class Laporan extends BaseController
         $sheet->setCellValue('C5', $periodLabels[$period] ?? 'Bulan Ini');
         
         // Headers (Rows 6-7)
-        $headers = ['No', 'Unit', 'No. ID / Seri', 'Lokasi', 'Rencana Pelaksanaan', 'Pelaksanaan', 'Hasil Pemeriksaan', 'Temuan / Rekomendasi Awal', 'Rencana Perbaikan', 'Keterangan', 'Kesesuaian Rencana dengan Pelaksanaan'];
-        foreach (range('A', 'K') as $i => $col) {
+        $headers = ['No', 'Nama Unit / Aset', 'Lokasi', 'No. Seri', 'Kategori', 'Tanggal', 'Teknisi', 'Hasil', 'Catatan / Temuan'];
+        foreach (range('A', 'I') as $i => $col) {
             $sheet->setCellValue($col . '6', $headers[$i]);
-            if ($col !== 'K') {
-                $sheet->mergeCells($col . '6:' . $col . '7');
-            }
+            $sheet->mergeCells($col . '6:' . $col . '7');
         }
-        $sheet->setCellValue('K7', 'Ya / Tidak');
         
         $headerStyle = [
             'font' => ['bold' => true],
             'alignment' => ['horizontal' => 'center', 'vertical' => 'center', 'wrapText' => true],
             'borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]]
         ];
-        $sheet->getStyle('A6:K7')->applyFromArray($headerStyle);
+        $sheet->getStyle('A6:I7')->applyFromArray($headerStyle);
         
         // Data
         $row = 8;
@@ -322,26 +320,24 @@ class Laporan extends BaseController
             
             $sheet->setCellValue('A' . $row, $no++);
             $sheet->setCellValue('B' . $row, $aset['nama'] ?? $jadwal['aset'] ?? '-');
-            $sheet->setCellValue('C' . $row, $aset['nomor_seri'] ?? '-');
-            $sheet->setCellValue('D' . $row, $jadwal['lokasi'] ?? $aset['lokasi'] ?? '-');
-            $sheet->setCellValue('E' . $row, ''); // Rencana
+            $sheet->setCellValue('C' . $row, $jadwal['lokasi'] ?? $aset['lokasi'] ?? '-');
+            $sheet->setCellValue('D' . $row, $aset['nomor_seri'] ?? '-');
+            $sheet->setCellValue('E' . $row, $lkp['kategori'] ?? '-');
             $sheet->setCellValue('F' . $row, $lkp['tanggal_pemeriksaan'] ?? '-');
-            $sheet->setCellValue('G' . $row, $lkp['hasil_pemeriksaan'] ?? '-');
-            $sheet->setCellValue('H' . $row, $lkp['catatan'] ?? '-');
-            $sheet->setCellValue('I' . $row, '-');
-            $sheet->setCellValue('J' . $row, '-');
-            $sheet->setCellValue('K' . $row, '');
+            $sheet->setCellValue('G' . $row, $lkp['teknisi'] ?? '-');
+            $sheet->setCellValue('H' . $row, $lkp['hasil_pemeriksaan'] ?? '-');
+            $sheet->setCellValue('I' . $row, $lkp['catatan'] ?? '-');
             $row++;
         }
         
         if ($row > 8) {
-            $sheet->getStyle('A8:K' . ($row - 1))->applyFromArray([
+            $sheet->getStyle('A8:I' . ($row - 1))->applyFromArray([
                 'borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]],
                 'alignment' => ['vertical' => 'top', 'wrapText' => true]
             ]);
         }
         
-        $cols = ['A'=>5, 'B'=>20, 'C'=>15, 'D'=>15, 'E'=>15, 'F'=>15, 'G'=>15, 'H'=>30, 'I'=>20, 'J'=>15, 'K'=>15];
+        $cols = ['A'=>5, 'B'=>20, 'C'=>15, 'D'=>15, 'E'=>15, 'F'=>15, 'G'=>15, 'H'=>20, 'I'=>30];
         foreach ($cols as $c => $w) {
             $sheet->getColumnDimension($c)->setWidth($w);
         }

@@ -66,16 +66,19 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('pengguna',                  'Pengguna::index');
     $routes->post('pengguna/tambah',          'Pengguna::tambah');
     $routes->post('pengguna/(:segment)/edit', 'Pengguna::edit/$1');
+    $routes->post('pengguna/(:segment)/delete', 'Pengguna::delete/$1');
 
     // Kategori Aset (master data)
     $routes->get('kategori-aset',                  'KategoriAset::index');
     $routes->post('kategori-aset/tambah',          'KategoriAset::tambah');
     $routes->post('kategori-aset/(:segment)/edit', 'KategoriAset::edit/$1');
+    $routes->post('kategori-aset/(:segment)/delete', 'KategoriAset::delete/$1');
 
     // Kode Kerusakan (master data)
     $routes->get('kode-kerusakan',                  'KodeKerusakan::index');
     $routes->post('kode-kerusakan/tambah',          'KodeKerusakan::tambah');
     $routes->post('kode-kerusakan/(:segment)/edit', 'KodeKerusakan::edit/$1');
+    $routes->post('kode-kerusakan/(:segment)/delete', 'KodeKerusakan::delete/$1');
 
     // Kanibal Alat
     $routes->get('kanibal',         'Kanibal::riwayat');

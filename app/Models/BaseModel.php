@@ -56,7 +56,7 @@ abstract class BaseModel
     /** Insert baris baru. Returns the inserted row. Throws on error. */
     public function create(array $data): array
     {
-        if (!isset($data['id'])) {
+        if (empty($data['id'])) {
             $data['id'] = $this->generateUUID();
         }
         $this->qb($this->table)->insert($data);
@@ -75,7 +75,7 @@ abstract class BaseModel
         for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
             try {
                 $data[$idKey] = $genId();
-                if (!isset($data['id']) && $idKey !== 'id') {
+                if (empty($data['id']) && $idKey !== 'id') {
                     $data['id'] = $this->generateUUID();
                 }
                 $this->qb($this->table)->insert($data);

@@ -34,10 +34,13 @@ class KodeKerusakan extends BaseController
 
     public function tambah()
     {
-        $data = $this->validateOrFail([
+        $res = $this->validateOrFail([
             'kode' => 'required|max_length[10]',
             'nama' => 'required|max_length[100]',
         ]);
+        if ($res !== true) return $res;
+
+        $data = $this->whitelist(['kode', 'nama']);
 
         $payload = [
             'kode'       => strtoupper(trim($data['kode'])),
@@ -57,10 +60,13 @@ class KodeKerusakan extends BaseController
 
     public function edit(string $id)
     {
-        $data = $this->validateOrFail([
+        $res = $this->validateOrFail([
             'kode' => 'required|max_length[10]',
             'nama' => 'required|max_length[100]',
         ]);
+        if ($res !== true) return $res;
+
+        $data = $this->whitelist(['kode', 'nama']);
 
         $payload = [
             'kode' => strtoupper(trim($data['kode'])),
@@ -75,5 +81,16 @@ class KodeKerusakan extends BaseController
         }
 
         return redirect()->to('/ipsrs/kode-kerusakan')->with('success', 'Kode kerusakan berhasil diperbarui.');
+    }
+    public function delete(string $id)
+    {
+        try {
+            $this->kodeModel->delete($id);
+        } catch (\Throwable $e) {
+            log_message('error', '[KodeKerusakan::delete] ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus kode kerusakan. Pastikan data tidak digunakan di laporan kerusakan. Detail: ' . $e->getMessage());
+        }
+
+        return redirect()->to('/ipsrs/kode-kerusakan')->with('success', 'Kode kerusakan berhasil dihapus.');
     }
 }

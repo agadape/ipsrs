@@ -38,16 +38,18 @@ class Pengguna extends BaseController
         $v = $this->validateOrFail([
             'email'        => 'required|valid_email',
             'nama_lengkap' => 'required|max_length[100]',
+            'password'     => 'required|min_length[6]',
             'role'         => 'required',
             'unit'         => 'required|max_length[100]',
         ]);
         if ($v !== true) return $v;
         
-        $data = $this->whitelist(['email', 'nama_lengkap', 'role', 'unit']);
+        $data = $this->whitelist(['email', 'nama_lengkap', 'password', 'role', 'unit']);
 
         $payload = [
             'email'        => $data['email'],
             'nama_lengkap' => $data['nama_lengkap'],
+            'password'     => password_hash($data['password'], PASSWORD_DEFAULT),
             'role'         => $data['role'],
             'unit'         => $data['unit'],
             'aktif'        => true,
@@ -91,5 +93,16 @@ class Pengguna extends BaseController
         }
 
         return redirect()->to('/ipsrs/pengguna')->with('success', 'Data pengguna berhasil diperbarui.');
+    }
+    public function delete(string $id)
+    {
+        try {
+            $this->penggunaModel->delete($id);
+        } catch (\Throwable $e) {
+            log_message('error', '[Pengguna::delete] ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus pengguna. Pastikan data tidak sedang digunakan. Detail: ' . $e->getMessage());
+        }
+
+        return redirect()->to('/ipsrs/pengguna')->with('success', 'Pengguna berhasil dihapus.');
     }
 }

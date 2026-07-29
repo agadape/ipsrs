@@ -19,7 +19,7 @@
   </div>
   <form method="POST" action="/ipsrs/pengguna/tambah">
     <?= csrf_field() ?>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Email <span class="text-red-500">*</span></label>
         <input type="email" name="email" value="<?= esc(old('email') ?? '') ?>" required
@@ -30,6 +30,12 @@
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
         <input type="text" name="nama_lengkap" value="<?= esc(old('nama_lengkap') ?? '') ?>" required
                placeholder="Nama lengkap"
+               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Password <span class="text-red-500">*</span></label>
+        <input type="password" name="password" required
+               placeholder="Minimal 6 karakter"
                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
       </div>
       <div>
@@ -179,10 +185,16 @@
           </select>
         </div>
       </div>
-      <div class="mt-5 flex items-center justify-end gap-3">
-        <button type="button" onclick="closeEdit()" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700">Batal</button>
-        <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">Simpan</button>
+      <div class="mt-5 flex items-center justify-between">
+        <button type="button" onclick="hapusPengguna()" class="px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-800 transition-colors">Hapus</button>
+        <div class="flex items-center gap-3">
+          <button type="button" onclick="closeEdit()" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700">Batal</button>
+          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors">Simpan</button>
+        </div>
       </div>
+    </form>
+    <form id="delete-form" method="POST" style="display: none;">
+      <?= csrf_field() ?>
     </form>
   </div>
 </div>
@@ -198,5 +210,12 @@
   }
   function closeEdit() {
     document.getElementById('edit-modal').classList.add('hidden');
+  }
+  function hapusPengguna() {
+    if (confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+      const actionUrl = document.getElementById('edit-form').action.replace('/edit', '/delete');
+      document.getElementById('delete-form').action = actionUrl;
+      document.getElementById('delete-form').submit();
+    }
   }
 </script>
