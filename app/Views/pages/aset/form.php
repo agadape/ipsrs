@@ -78,44 +78,19 @@ function old_val(array $a, string $key, string $default = ''): string {
       </div>
 
       <!-- Lokasi -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi <span class="text-red-500">*</span></label>
-        <input type="text" name="lokasi" value="<?= old_val($a, 'lokasi') ?>" required
-               placeholder="Contoh: Gedung A - Lantai 2"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
-      </div>
+      
 
       <!-- Gedung -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Gedung <span class="text-red-500">*</span></label>
-        <input type="text" name="gedung" value="<?= old_val($a, 'gedung') ?>" required
-               placeholder="Contoh: Gedung A"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
-      </div>
+      
 
       <!-- Lantai -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lantai</label>
-        <input type="text" name="lantai" value="<?= old_val($a, 'lantai') ?>"
-               placeholder="Contoh: 2"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
-      </div>
+      
 
       <!-- Ruangan -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Ruangan <span class="text-red-500">*</span></label>
-        <input type="text" name="ruangan" value="<?= old_val($a, 'ruangan') ?>" required
-               placeholder="Contoh: Ruang Operasi"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
-      </div>
+      
 
       <!-- Unit -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Unit <span class="text-red-500">*</span></label>
-        <input type="text" name="unit" value="<?= old_val($a, 'unit') ?>" required
-               placeholder="Contoh: IGD, ICU, Radiologi"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
-      </div>
+      
 
       <!-- Merk -->
       <div>
@@ -144,24 +119,10 @@ function old_val(array $a, string $key, string $default = ''): string {
 
 
       <!-- Tahun -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tahun Pengadaan</label>
-        <input type="number" name="tahun" value="<?= old_val($a, 'tahun') ?>"
-               min="1990" max="<?= date('Y') + 1 ?>" placeholder="<?= date('Y') ?>"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
-      </div>
+      
 
       <!-- Kondisi -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Kondisi <span class="text-red-500">*</span></label>
-        <select name="kondisi" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
-          <option value="">-- Pilih Kondisi --</option>
-          <?php foreach (['Baik', 'Kurang Baik', 'Rusak Ringan', 'Rusak Berat'] as $opt): ?>
-          <option value="<?= $opt ?>" <?= old_val($a, 'kondisi') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
+      
 
       <!-- Keterangan -->
       <div class="md:col-span-2">
@@ -185,3 +146,4 @@ function old_val(array $a, string $key, string $default = ''): string {
     </a>
   </div>
 </form>
+
