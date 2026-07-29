@@ -18,8 +18,8 @@ class RiwayatKanibalModel extends BaseModel
     {
         return $this->qb($this->table)
             ->groupStart()
-                ->where('id_aset_donor', $idAset)
-                ->orWhere('id_aset_penerima', $idAset)
+                ->where('id_series_donor', $idAset)
+                ->orWhere('id_series_penerima', $idAset)
             ->groupEnd()
             ->orderBy('created_at', 'DESC')
             ->get()
@@ -43,3 +43,4 @@ class RiwayatKanibalModel extends BaseModel
             ->getResultArray();
     }
 }
+

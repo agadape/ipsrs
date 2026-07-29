@@ -25,6 +25,11 @@ $routes->group('ipsrs', function ($routes) {
     $routes->post('aset/mutasi',   'Aset::storeMutasi');
     $routes->post('aset/(:segment)/ping',     'Aset::ping/$1');
     $routes->get('aset/(:segment)/qr',        'Aset::qr/$1');
+    $routes->get('aset/series/(:segment)',          'Aset::showSeries/$1');
+    $routes->get('aset/series/(:segment)/edit',     'Aset::editSeries/$1');
+    $routes->post('aset/series/(:segment)/edit',    'Aset::updateSeries/$1');
+    $routes->get('aset/tambah-series/(:segment)',   'Aset::createSeries/$1');
+    $routes->post('aset/tambah-series/(:segment)',  'Aset::storeSeries/$1');
     $routes->get('aset/(:segment)',          'Aset::show/$1');
     $routes->get('aset/(:segment)/edit',     'Aset::edit/$1');
     $routes->post('aset/(:segment)/edit',    'Aset::update/$1');
@@ -91,3 +96,5 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('laporan/export-excel-preventif', 'Laporan::exportExcelPreventif');
     $routes->get('laporan/export-print-preventif', 'Laporan::exportPrintPreventif');
 });
+
+

@@ -39,3 +39,4 @@ class LkpModel extends BaseModel
         return parent::nextNoOrder($column, $prefix ?: IPSRS::PREFIX_LKP . date('Ym') . '-', $padLen);
     }
 }
+

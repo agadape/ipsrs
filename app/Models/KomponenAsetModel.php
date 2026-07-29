@@ -14,19 +14,20 @@ class KomponenAsetModel extends BaseModel
             ->getResultArray();
     }
 
-    public function getByAset(string $idAset): array
+    public function getByAset(string $idAsetSeries): array
     {
         return $this->qb($this->table)
-            ->where('id_aset', $idAset)
+            ->where('id_aset_series', $idAsetSeries)
             ->orderBy('nama_komponen', 'ASC')
             ->get()
             ->getResultArray();
     }
 
-    public function deleteByAset(string $idAset): void
+    public function deleteByAset(string $idAsetSeries): void
     {
         $this->qb($this->table)
-            ->where('id_aset', $idAset)
+            ->where('id_aset_series', $idAsetSeries)
             ->delete();
     }
 }
+

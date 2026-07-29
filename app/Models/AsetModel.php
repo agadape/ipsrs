@@ -13,25 +13,11 @@ class AsetModel extends BaseModel
         return parent::getAll($orderBy);
     }
 
-    public function getRiwayatLokasi(string $idAset): array
-    {
-        return $this->qb('riwayat_lokasi_aset')
-            ->where('id_aset', $idAset)
-            ->orderBy('tanggal', 'DESC')
-            ->get()
-            ->getResultArray();
-    }
 
-    public function insertRiwayatLokasi(array $data): void
-    {
-        if (!isset($data['id'])) {
-            $data['id'] = $this->generateUUID();
-        }
-        $this->qb('riwayat_lokasi_aset')->insert($data);
-    }
 
     public function nextId(string $prefix = IPSRS::PREFIX_ASET, int $padLen = IPSRS::PAD_ASET): string
     {
         return parent::nextId($prefix, $padLen);
     }
 }
+

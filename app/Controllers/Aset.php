@@ -298,3 +298,5 @@ class Aset extends BaseController
         return view('pages/aset/qr', compact('aset'));
     }
 }
+
+

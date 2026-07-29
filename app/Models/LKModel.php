@@ -21,7 +21,7 @@ class LKModel extends BaseModel
     public function getByAset(string $idAset): array
     {
         return $this->qb($this->table)
-            ->where('id_aset', $idAset)
+            ->where('id_aset_series', $idAset)
             ->orderBy('tanggal', 'DESC')
             ->get()
             ->getResultArray();
@@ -70,3 +70,4 @@ class LKModel extends BaseModel
         return parent::nextNoOrder($column, $prefix ?: IPSRS::PREFIX_LK . date('Ym') . '-', $padLen);
     }
 }
+

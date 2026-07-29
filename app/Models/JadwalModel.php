@@ -27,3 +27,4 @@ class JadwalModel extends BaseModel
             ->getResultArray();
     }
 }
+

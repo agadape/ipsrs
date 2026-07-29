@@ -17,7 +17,7 @@ class MutasiModel extends BaseModel
     public function getByAset(string $idAset): array
     {
         return $this->qb($this->table)
-            ->where('id_aset', $idAset)
+            ->where('id_aset_series', $idAset)
             ->orderBy('tanggal', 'DESC')
             ->get()
             ->getResultArray();
@@ -29,9 +29,10 @@ class MutasiModel extends BaseModel
 
         // Update lokasi aset
         $this->qb('aset')
-            ->where('id', $data['id_aset'])
+            ->where('id', $data['id_aset_series'])
             ->update(['lokasi' => $data['lokasi_tujuan']]);
 
         return $row;
     }
 }
+
