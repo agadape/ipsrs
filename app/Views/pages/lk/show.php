@@ -82,12 +82,12 @@ $prosesLabels = ['I' => 'Proses I — Perbaikan Langsung', 'II' => 'Proses II �
       <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Keluhan</p>
       <p class="text-sm text-gray-800 leading-relaxed"><?= esc($lk['keluhan'] ?? '-') ?></p>
     </div>
-    <?php if (!empty($lk['id_aset']) || !empty($lk['nama_aset'])): ?>
+    <?php if (!empty($lk['id_aset_series']) || !empty($lk['nama_aset'])): ?>
     <div>
       <p class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Aset Terkait</p>
-      <?php if (!empty($lk['id_aset'])): ?>
-      <a href="/ipsrs/aset/<?= esc($lk['id_aset']) ?>" class="text-sm font-medium text-indigo-600 hover:underline">
-        <?= esc($lk['nama_aset'] ?? $lk['id_aset']) ?>
+      <?php if (!empty($lk['id_aset_series'])): ?>
+      <a href="/ipsrs/aset/series/<?= esc($lk['id_aset_series']) ?>" class="text-sm font-medium text-indigo-600 hover:underline">
+        <?= esc($lk['nama_aset'] ?? $lk['id_aset_series']) ?>
       </a>
       <?php else: ?>
       <p class="text-sm font-medium text-gray-800"><?= esc($lk['nama_aset']) ?></p>
@@ -284,7 +284,7 @@ $prosesLabels = ['I' => 'Proses I — Perbaikan Langsung', 'II' => 'Proses II �
       <?= csrf_field() ?>
       <input type="hidden" name="id_lk" value="<?= esc($id) ?>">
       <input type="hidden" name="no_order_lk" value="<?= esc($lk['no_order'] ?? '') ?>">
-      <input type="hidden" name="id_aset_penerima" value="<?= esc($lk['id_aset'] ?? '') ?>">
+      <input type="hidden" name="id_aset_penerima" value="<?= esc($lk['id_aset_series'] ?? '') ?>">
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
@@ -464,7 +464,7 @@ $vendorList   = $vendorList ?? [];
 
 <!-- ── Update Status Form (hidden when Selesai or if user is pelapor) ──────────────────────── -->
   <?php 
-  $isDataLengkap = !empty($lk['id_aset']) && !empty($lk['kode']);
+  $isDataLengkap = !empty($lk['id_aset_series']) && !empty($lk['kode']);
   if (!$isSelesai && $authRole !== 'pelapor'): 
   ?>
   <div class="card p-6">
@@ -641,7 +641,7 @@ $vendorList   = $vendorList ?? [];
             <select name="id_aset" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
               <option value="">-- Pilih Aset dari Database --</option>
               <?php foreach (($aset ?? []) as $a): ?>
-              <option value="<?= esc($a['id'] ?? '') ?>" <?= ($lk['id_aset'] ?? '') == ($a['id'] ?? '') ? 'selected' : '' ?>>
+              <option value="<?= esc($a['id'] ?? '') ?>" <?= ($lk['id_aset_series'] ?? '') == ($a['id'] ?? '') ? 'selected' : '' ?>>
                 <?= esc(($a['nomor_aset'] ?? $a['nomor_seri'] ?? '').' — '.($a['nama'] ?? '')) ?>
               </option>
               <?php endforeach; ?>
@@ -728,4 +728,6 @@ $vendorList   = $vendorList ?? [];
     return true;
   }
 </script>
+
+
 

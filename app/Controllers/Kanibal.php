@@ -43,12 +43,17 @@ class Kanibal extends BaseController
         }
 
         try {
-            $asetModel = new AsetModel();
-            $donorData = $asetModel->getById($donor);
+            $seriesModel = new \App\Models\AsetSeriesModel();
+            $donorData = $seriesModel->getById($donor);
 
             if (!$donorData) {
-                return redirect()->back()->with('error', 'Aset donor tidak ditemukan');
+                return redirect()->back()->with('error', 'Aset (Series) donor tidak ditemukan');
             }
+
+            // Dapatkan informasi induk aset untuk keterangan
+            $asetModel = new \App\Models\AsetModel();
+            $asetInduk = $asetModel->getById($donorData['id_aset']);
+            $namaDonor = $asetInduk ? $asetInduk['nama'] : ($donorData['nomor_aset'] ?? $donor);
 
             // 1. Create riwayat kanibal
             $kanibalModel = new RiwayatKanibalModel();
@@ -75,13 +80,11 @@ class Kanibal extends BaseController
                 'nama_barang'   => $post['nama_komponen'],
                 'jumlah'        => 1,
                 'satuan'        => 'pcs',
-                'keterangan'    => 'Dari aset: ' . ($donorData['nama'] ?? $donorData['nomor_aset'] ?? $donor),
+                'keterangan'    => 'Dari aset: ' . $namaDonor,
             ]);
 
-            // 3. Update donor keterangan to show kanibal source
-            $currentKet = $donorData['keterangan'] ?? '';
-            $newKet     = trim($currentKet . "\n[Kanibal] Komponen \"{$post['nama_komponen']}\" dipindahkan ke penerima pada " . date('d M Y'));
-            $asetModel->update($donor, ['keterangan' => $newKet]);
+            // 3. (Optional) Note: keterangan pada aset parent tidak perlu diupdate karena kanibal hanya berlaku untuk unit spesifik.
+
 
             // 4. Update komponen_aset donor — set kondisi to 'Tidak Ada'
             $komponenModel = new KomponenAsetModel();
