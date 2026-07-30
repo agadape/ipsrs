@@ -5,44 +5,43 @@ $authName    = session('user_name')    ?? 'User';
 $authInitial = session('user_initial') ?? strtoupper(substr($authName, 0, 1));
 $authRole    = session('user_role')    ?? 'Pengguna';
 
-if (!function_exists('navLink')) { function navLink(string $href, string $label, string $icon, string $current, ?int $badge = null): string {
-    // Exact match is always active
-    if ($current === $href) {
-        $active = true;
-    } else {
-        // If not exact match, check if it's a sub-page (e.g., /ipsrs/aset/edit/1)
-        // We must prevent sibling sidebar items from highlighting their parent.
-        // E.g., /ipsrs/aset/tambah should NOT highlight /ipsrs/aset
-        $isSubPage = ($href !== '/ipsrs' && str_starts_with($current, $href . '/'));
+if (!function_exists('navLink')) {
+    function navLink(string $href, string $label, string $icon, string $current, ?int $badge = null): string {
+        if ($current === $href) {
+            $active = true;
+        } else {
+            $isSubPage = ($href !== '/ipsrs' && str_starts_with($current, $href . '/'));
+            if ($href === '/ipsrs/aset' && (str_starts_with($current, '/ipsrs/aset/tambah') || str_starts_with($current, '/ipsrs/aset/mutasi'))) {
+                $isSubPage = false;
+            }
+            if ($href === '/ipsrs/stok' && str_starts_with($current, '/ipsrs/stok/riwayat')) {
+                $isSubPage = false;
+            }
+            $active = $isSubPage;
+        }
+
+        $cls = $active
+            ? 'text-indigo-700 font-bold bg-indigo-50 shadow-sm shadow-indigo-100 ring-1 ring-indigo-500/10'
+            : 'text-gray-500 hover:text-indigo-600 hover:bg-indigo-50/50 font-medium';
         
-        // Exclude specific known sibling paths from triggering the parent's active state
-        if ($href === '/ipsrs/aset' && (str_starts_with($current, '/ipsrs/aset/tambah') || str_starts_with($current, '/ipsrs/aset/mutasi'))) {
-            $isSubPage = false;
-        }
-        if ($href === '/ipsrs/stok' && str_starts_with($current, '/ipsrs/stok/riwayat')) {
-            $isSubPage = false;
-        }
-
-        $active = $isSubPage;
+        $badgeHtml = ($badge !== null && $badge > 0)
+            ? "<span class='text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600'>{$badge}</span>"
+            : '';
+            
+        return <<<HTML
+        <a href="{$href}" onclick="closeSidebar()" class="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[14px] transition-all duration-300 {$cls}">
+          <span class="flex items-center gap-3">{$icon} {$label}</span>
+          {$badgeHtml}
+        </a>
+HTML;
     }
+}
 
-    $cls = $active
-        ? 'text-indigo-700 font-bold bg-indigo-50 shadow-sm shadow-indigo-100 ring-1 ring-indigo-500/10'
-        : 'text-gray-500 hover:text-indigo-600 hover:bg-indigo-50/50 font-medium';
-    $badgeHtml = ($badge !== null && $badge > 0)
-        ? "<span class='text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-600'>{$badge}</span>"
-        : '';
-    return <<<HTML
-    <a href="{$href}" onclick="closeSidebar()" class="flex items-center justify-between gap-3 px-4 py-3 rounded-2xl text-[14px] transition-all duration-300 {$cls}">
-      <span class="flex items-center gap-3">{$icon} {$label}</span>
-      {$badgeHtml}
-    </a>
-    HTML;
-} }
-
-if (!function_exists('ico')) { function ico(string $d, string $size = '18'): string {
-    return "<svg xmlns='http://www.w3.org/2000/svg' width='{$size}' height='{$size}' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>{$d}</svg>";
-} }
+if (!function_exists('ico')) {
+    function ico(string $d, string $size = '18'): string {
+        return "<svg xmlns='http://www.w3.org/2000/svg' width='{$size}' height='{$size}' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>{$d}</svg>";
+    }
+}
 ?>
 <aside id="sidebar" class="fixed left-0 top-0 h-screen w-64 flex flex-col z-30 -translate-x-full md:translate-x-0 bg-white/70 backdrop-blur-2xl border-r border-white/80 shadow-[4px_0_24px_rgba(0,0,0,0.03)] transition-transform duration-300">
 
@@ -280,4 +279,5 @@ if (!function_exists('ico')) { function ico(string $d, string $size = '18'): str
       }
     });
 </script>
+
 
