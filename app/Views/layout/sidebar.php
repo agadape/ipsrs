@@ -11,9 +11,6 @@ if (!function_exists('navLink')) {
             $active = true;
         } else {
             $isSubPage = ($href !== '/ipsrs' && str_starts_with($current, $href . '/'));
-            if ($href === '/ipsrs/aset' && (str_starts_with($current, '/ipsrs/aset/tambah') || str_starts_with($current, '/ipsrs/aset/mutasi'))) {
-                $isSubPage = false;
-            }
             if ($href === '/ipsrs/stok' && str_starts_with($current, '/ipsrs/stok/riwayat')) {
                 $isSubPage = false;
             }
@@ -74,9 +71,6 @@ if (!function_exists('ico')) {
       <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-4 mb-2">Inventaris & Lokasi</p>
       <div class="space-y-1">
         <?= navLink('/ipsrs/aset',        'Daftar Aset', ico('<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>'), $path) ?>
-        <?= navLink('/ipsrs/lokasi',      'Data Lokasi', ico('<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'), $path) ?>
-        <?= navLink('/ipsrs/aset/tambah', 'Tambah Aset', ico('<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>'), $path) ?>
-        <?= navLink('/ipsrs/aset/mutasi', 'Mutasi Aset', ico('<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>'), $path) ?>
       </div>
     </div>
     <?php endif; ?>
