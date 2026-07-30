@@ -5,7 +5,7 @@ $authName    = session('user_name')    ?? 'User';
 $authInitial = session('user_initial') ?? strtoupper(substr($authName, 0, 1));
 $authRole    = session('user_role')    ?? 'Pengguna';
 
-function navLink(string $href, string $label, string $icon, string $current, ?int $badge = null): string {
+if (!function_exists('navLink')) { function navLink(string $href, string $label, string $icon, string $current, ?int $badge = null): string {
     // Exact match is always active
     if ($current === $href) {
         $active = true;
@@ -38,11 +38,11 @@ function navLink(string $href, string $label, string $icon, string $current, ?in
       {$badgeHtml}
     </a>
     HTML;
-}
+} }
 
-function ico(string $d, string $size = '18'): string {
+if (!function_exists('ico')) { function ico(string $d, string $size = '18'): string {
     return "<svg xmlns='http://www.w3.org/2000/svg' width='{$size}' height='{$size}' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>{$d}</svg>";
-}
+} }
 ?>
 <aside id="sidebar" class="fixed left-0 top-0 h-screen w-64 flex flex-col z-30 -translate-x-full md:translate-x-0 bg-white/70 backdrop-blur-2xl border-r border-white/80 shadow-[4px_0_24px_rgba(0,0,0,0.03)] transition-transform duration-300">
 
@@ -136,7 +136,7 @@ $authName    = session('user_name')    ?? 'User';
 $authInitial = session('user_initial') ?? strtoupper(substr($authName, 0, 1));
 $authRole    = session('user_role')    ?? 'Pengguna';
 
-function navLink(string $href, string $label, string $icon, string $current, ?int $badge = null): string {
+if (!function_exists('navLink')) { function navLink(string $href, string $label, string $icon, string $current, ?int $badge = null): string {
     // Exact match is always active
     if ($current === $href) {
         $active = true;
@@ -171,7 +171,7 @@ function navLink(string $href, string $label, string $icon, string $current, ?in
     HTML;
 }
 
-function ico(string $d, string $size = '18'): string {
+if (!function_exists('ico')) { function ico(string $d, string $size = '18'): string {
     return "<svg xmlns='http://www.w3.org/2000/svg' width='{$size}' height='{$size}' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>{$d}</svg>";
 }
 ?>
@@ -280,3 +280,4 @@ function ico(string $d, string $size = '18'): string {
       }
     });
 </script>
+
