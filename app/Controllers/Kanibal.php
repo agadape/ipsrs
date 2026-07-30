@@ -12,7 +12,7 @@ class Kanibal extends BaseController
     public function riwayat(): string
     {
         $model = new RiwayatKanibalModel();
-        $asetAll = (new AsetModel())->getAll();
+        $asetAll = (new \App\Models\AsetSeriesModel())->getAllWithParent();
         
         $asetKanibal = array_filter($asetAll, fn($a) => ($a['status'] ?? '') === 'Kanibal');
 
@@ -111,5 +111,6 @@ class Kanibal extends BaseController
         );
     }
 }
+
 
 
