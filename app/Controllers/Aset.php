@@ -97,7 +97,7 @@ class Aset extends BaseController
             return view('pages/aset/scan', compact('aset', 'series'));
         }
 
-        $riwayat   = (new \App\Models\RiwayatLokasiModel())->getByAset($idSeries);
+        $riwayat   = (new \App\Models\MutasiModel())->getByAset($idSeries);
         $riwayatLK = (new \App\Models\LKModel())->getByAset($idSeries);
         $komponen  = (new \App\Models\KomponenAsetModel())->getByAset($idSeries);
         $riwayatKanibal = (new \App\Models\RiwayatKanibalModel())->getByAset($idSeries);
@@ -362,3 +362,5 @@ class Aset extends BaseController
         return view('pages/aset/qr', compact('aset'));
     }
 }
+
+
