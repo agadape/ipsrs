@@ -97,10 +97,10 @@ class Aset extends BaseController
             return view('pages/aset/scan', compact('aset', 'series'));
         }
 
-        $riwayat   = (new \App\Models\RiwayatLokasiModel())->getBySeries($idSeries);
-        $riwayatLK = (new \App\Models\LKModel())->getBySeries($idSeries);
-        $komponen  = (new \App\Models\KomponenAsetModel())->getBySeries($idSeries);
-        $riwayatKanibal = (new \App\Models\RiwayatKanibalModel())->getBySeries($idSeries);
+        $riwayat   = (new \App\Models\RiwayatLokasiModel())->getByAset($idSeries);
+        $riwayatLK = (new \App\Models\LKModel())->getByAset($idSeries);
+        $komponen  = (new \App\Models\KomponenAsetModel())->getByAset($idSeries);
+        $riwayatKanibal = (new \App\Models\RiwayatKanibalModel())->getByAset($idSeries);
 
         return $this->render('pages/aset/show_series', compact('aset', 'series', 'riwayat', 'riwayatLK', 'komponen', 'riwayatKanibal'));
     }
@@ -420,9 +420,9 @@ class Aset extends BaseController
         }
 
         $riwayat   = clone $series; // Temporary mock to avoid crash, will fix riwayat in models
-        $riwayatLK = (new \App\Models\LKModel())->getBySeries($idSeries);
-        $komponen  = (new \App\Models\KomponenAsetModel())->getBySeries($idSeries);
-        $riwayatKanibal = (new \App\Models\RiwayatKanibalModel())->getBySeries($idSeries);
+        $riwayatLK = (new \App\Models\LKModel())->getByAset($idSeries);
+        $komponen  = (new \App\Models\KomponenAsetModel())->getByAset($idSeries);
+        $riwayatKanibal = (new \App\Models\RiwayatKanibalModel())->getByAset($idSeries);
 
         return $this->render('pages/aset/show_series', compact('aset', 'series', 'riwayat', 'riwayatLK', 'komponen', 'riwayatKanibal'));
     }
@@ -462,3 +462,4 @@ class Aset extends BaseController
         }
     }
 }
+
