@@ -51,8 +51,8 @@
                  class="w-full px-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:bg-white transition-all">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-2">Unit <span class="text-red-500">*</span></label>
-          <input type="text" name="unit" value="<?= esc(old('unit') ?? $series['unit'] ?? '') ?>" required
+          <label class="block text-xs font-semibold text-gray-600 mb-2">Unit / Instalasi <span class="text-red-500">*</span></label>
+          <input type="text" name="unit" placeholder="Contoh: IGD, Radiologi, Farmasi..." value="<?= esc(old('unit') ?? $series['unit'] ?? '') ?>" required
                  class="w-full px-4 py-2.5 text-sm bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:bg-white transition-all">
         </div>
       </div>
@@ -97,5 +97,6 @@
     </div>
   </form>
 </div>
+
 
 
