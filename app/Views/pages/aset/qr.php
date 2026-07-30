@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Aset — <?= esc($aset['nama'] ?? '') ?></title>
+  <title>QR Aset - <?= esc($series['nomor_aset'] ?? '') ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -22,7 +22,7 @@
             class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
       🖨️ Cetak / Simpan PDF
     </button>
-    <a href="/ipsrs/aset/<?= esc($aset['id'] ?? '') ?>"
+    <a href="/ipsrs/aset/series/<?= esc($series['id'] ?? '') ?>"
        class="px-5 py-2.5 bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl border border-gray-200 transition-colors">
       ← Kembali
     </a>
@@ -39,11 +39,10 @@
     <!-- QR -->
     <div id="qrcode" class="p-2 border border-gray-200 rounded-xl"></div>
 
-    <!-- Asset info -->
     <div class="text-center border-t border-gray-100 pt-4 w-full">
-      <p class="text-xs font-mono font-bold text-indigo-600"><?= esc($aset['nomor_aset'] ?? $aset['nomor_seri'] ?? '-') ?></p>
+      <p class="text-xs font-mono font-bold text-indigo-600"><?= esc($series['nomor_aset'] ?? '-') ?></p>
       <p class="text-sm font-bold text-gray-800 mt-1"><?= esc($aset['nama'] ?? '') ?></p>
-      <p class="text-xs text-gray-500 mt-0.5"><?= esc($aset['lokasi'] ?? '') ?></p>
+      <p class="text-xs text-gray-500 mt-0.5"><?= esc($series['ruangan'] ?? '') ?> - <?= esc($series['gedung'] ?? '') ?></p>
     </div>
 
     <!-- Footer info -->
@@ -54,7 +53,7 @@
       </div>
       <div class="bg-gray-50 rounded-lg p-2">
         <p class="text-xs text-gray-400">Status</p>
-        <p class="text-xs font-semibold text-emerald-600"><?= esc($aset['status'] ?? '-') ?></p>
+        <p class="text-xs font-semibold text-emerald-600"><?= esc($series['status'] ?? '-') ?></p>
       </div>
     </div>
 
@@ -63,7 +62,7 @@
 
   <script>
     <?php
-      $qrUrl = base_url('/ipsrs/aset/' . ($aset['id'] ?? '')) . '?via=qr';
+      $qrUrl = base_url('/ipsrs/aset/series/' . ($series['id'] ?? '')) . '?via=qr';
     ?>
     var url = '<?= esc($qrUrl) ?>';
     new QRCode(document.getElementById('qrcode'), {

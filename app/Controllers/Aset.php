@@ -357,9 +357,14 @@ class Aset extends BaseController
 
     public function qr(string $id)
     {
-        $aset = $this->model->getById($id);
+        $seriesModel = new \App\Models\AsetSeriesModel();
+        $series = $seriesModel->getById($id);
+        if (!$series) { return redirect()->to('/ipsrs/aset'); }
+
+        $aset = $this->model->getById($series['id_aset']);
         if (!$aset) { return redirect()->to('/ipsrs/aset'); }
-        return view('pages/aset/qr', compact('aset'));
+
+        return view('pages/aset/qr', compact('aset', 'series'));
     }
 }
 
