@@ -115,7 +115,7 @@ class Preventif extends BaseController
 
             $header = $lkpModel->createWithRetry([
                 'id_jadwal'           => $id,
-                'id_aset'             => $jadwal['id_aset'] ?? null,
+                'id_aset_series'      => $jadwal['id_aset'] ?? null,
                 'kategori'            => $post['kategori'],
                 'tanggal_pemeriksaan' => date('Y-m-d'),
                 'teknisi'             => $jadwal['teknisi'] ?? session('user_name') ?? 'Teknisi',
@@ -157,7 +157,7 @@ class Preventif extends BaseController
                     'pelapor'     => $jadwal['teknisi'] ?? session('user_name') ?? 'Teknisi',
                     'unit_pelapor'=> 'IPSRS',
                     'lokasi'      => $jadwal['lokasi'] ?? '',
-                    'id_aset'     => $jadwal['id_aset'] ?? null,
+                    'id_aset_series'     => $jadwal['id_aset'] ?? null,
                     'nama_aset'   => $jadwal['aset'] ?? null,
                     'teknisi'     => $jadwal['teknisi'] ?? null,
                     'status'      => IPSRS::STATUS_LK[0],
@@ -190,5 +190,6 @@ class Preventif extends BaseController
         return $this->render('pages/preventif/lkp_hasil', compact('jadwal', 'lkp', 'detail'));
     }
 }
+
 
 
