@@ -81,7 +81,7 @@ $riwayatList = $riwayat ?? [];
         <?php
           $donorNama = '-';
           foreach ($asetList as $a) {
-            if (($a['id'] ?? '') === ($r['id_aset_donor'] ?? '')) {
+            if (($a['id'] ?? '') === ($r['id_series_donor'] ?? '')) {
               $donorNama = ($a['nomor_aset'] ?? '') . ' — ' . ($a['nama'] ?? '');
               break;
             }
@@ -124,3 +124,4 @@ $riwayatList = $riwayat ?? [];
   </div>
   <?php endif; ?>
 </div>
+
