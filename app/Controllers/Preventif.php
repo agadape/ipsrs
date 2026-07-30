@@ -19,7 +19,7 @@ class Preventif extends BaseController
     public function index(): string
     {
         $jadwal  = $this->model->getAll();
-        $aset    = (new AsetModel())->getAll();
+        $aset    = (new \App\Models\AsetSeriesModel())->getAllWithParent();
         $filter  = $this->request->getGet('status') ?? '';
         $today   = date('Y-m-d');
 
@@ -190,6 +190,7 @@ class Preventif extends BaseController
         return $this->render('pages/preventif/lkp_hasil', compact('jadwal', 'lkp', 'detail'));
     }
 }
+
 
 
 

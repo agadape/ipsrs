@@ -26,7 +26,7 @@ class Kanibal extends BaseController
     public function store()
     {
         $post = $this->whitelist([
-            'id_lk', 'no_order_lk', 'id_aset_donor', 'id_aset_penerima',
+            'id_lk', 'no_order_lk', 
             'nama_komponen', 'kondisi_komponen', 'disetujui_oleh', 'keterangan',
         ]);
 
@@ -55,8 +55,8 @@ class Kanibal extends BaseController
             $kanibalModel->create([
                 'id'                => $this->generateUUID(),
                 'no_order_lk'       => $post['no_order_lk'] ?? '',
-                'id_aset_donor'     => $donor,
-                'id_aset_penerima'  => $penerima,
+                'id_series_donor'     => $donor,
+                'id_series_penerima'  => $penerima,
                 'nama_komponen'     => $post['nama_komponen'],
                 'kondisi_komponen'  => $post['kondisi_komponen'] ?? 'Baik',
                 'tanggal'           => date('Y-m-d'),
@@ -111,3 +111,5 @@ class Kanibal extends BaseController
         );
     }
 }
+
+

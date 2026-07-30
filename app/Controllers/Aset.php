@@ -217,7 +217,7 @@ class Aset extends BaseController
     public function mutasi(): string
     {
         $mutasiModel = new \App\Models\MutasiModel();
-        $aset    = $this->model->getAll();
+        $aset    = (new \App\Models\AsetSeriesModel())->getAllWithParent();
         $riwayat = $mutasiModel->getAll();
         $users   = (new \App\Models\PenggunaModel())->getAll();
         
@@ -362,5 +362,6 @@ class Aset extends BaseController
         return view('pages/aset/qr', compact('aset'));
     }
 }
+
 
 

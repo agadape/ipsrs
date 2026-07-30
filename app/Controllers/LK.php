@@ -91,7 +91,7 @@ class LK extends BaseController
         try {
             $data = $this->whitelist([
                 'tanggal', 'jam_laporan', 'pelapor', 'unit_pelapor',
-                'keluhan', 'kode', 'lokasi', 'id_aset', 'nama_aset',
+                'keluhan', 'kode', 'lokasi', 'nama_aset',
                 'update_lokasi_aset',
             ]);
             $data['status'] = IPSRS::STATUS_LK[0]; // Laporan Masuk
@@ -104,8 +104,8 @@ class LK extends BaseController
                 $data['id_pengguna_pelapor'] = session('user_id');
             }
 
-            if (empty($data['id_aset'])) {
-                $data['id_aset'] = null;
+            if (empty($post['id_aset'])) {
+                $data['id_aset_series'] = null;
             }
 
             $lk = $this->model->createWithRetry(
@@ -114,12 +114,12 @@ class LK extends BaseController
                 'no_order'
             );
 
-            if (!empty($data['id_aset'])) {
+            if (!empty($data['id_aset_series'])) {
                 $asetUpdate = ['status' => IPSRS::LK_TO_ASET_STATUS['Survei']];
                 if ($updateLokasi && !empty($data['lokasi'])) {
                     $asetUpdate['lokasi'] = $data['lokasi'];
                 }
-                (new AsetModel())->update($data['id_aset'], $asetUpdate);
+                (new \App\Models\AsetSeriesModel())->update($data['id_aset_series'], $asetUpdate);
             }
 
             // Trigger WhatsApp Broadcast Mock/Placeholder
@@ -223,7 +223,7 @@ class LK extends BaseController
         
         $data = [];
         if (!empty($post['kode'])) $data['kode'] = $post['kode'];
-        if (!empty($post['id_aset'])) $data['id_aset'] = $post['id_aset'];
+        if (!empty($post['id_aset'])) $data['id_aset_series'] = $post['id_aset'];
         if (!empty($post['lokasi'])) $data['lokasi'] = $post['lokasi'];
         if (!empty($post['keluhan'])) $data['keluhan'] = $post['keluhan'];
         if (!empty($post['nama_aset'])) $data['nama_aset'] = $post['nama_aset'];
@@ -233,7 +233,7 @@ class LK extends BaseController
             
             // If aset is changed, maybe update aset location
             if (!empty($post['id_aset']) && !empty($post['update_lokasi_aset']) && !empty($post['lokasi'])) {
-                (new AsetModel())->update($post['id_aset'], ['lokasi' => $post['lokasi']]);
+                (new \App\Models\AsetSeriesModel())->update($post['id_aset'], ['lokasi' => $post['lokasi']]);
             }
         }
         
@@ -440,11 +440,13 @@ class LK extends BaseController
     /** Sinkronkan status aset mengikuti status LK. */
     private function syncAsetStatus(array $lk, string $next): void
     {
-        if (empty($lk['id_aset'])) return;
+        if (empty($lk['id_aset_series'])) return;
 
         $asetStatus = IPSRS::LK_TO_ASET_STATUS[$next] ?? null;
         if ($asetStatus !== null) {
-            (new AsetModel())->update($lk['id_aset'], ['status' => $asetStatus]);
+            (new \App\Models\AsetSeriesModel())->update($lk['id_aset_series'], ['status' => $asetStatus]);
         }
     }
 }
+
+
