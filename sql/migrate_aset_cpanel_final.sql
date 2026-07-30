@@ -71,11 +71,11 @@ ALTER TABLE `riwayat_lokasi_aset` DROP COLUMN `id_aset`;
 ALTER TABLE `riwayat_lokasi_aset` ADD CONSTRAINT `fk_rla_aset_series` FOREIGN KEY (`id_aset_series`) REFERENCES `aset_series` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- 6. Update relasi pada lembar_kerja
-ALTER TABLE `lembar_kerja` ADD COLUMN `id_aset_series` CHAR(36) DEFAULT NULL AFTER `id_aset`;
-UPDATE `lembar_kerja` lk JOIN `aset_series` aser ON lk.id_aset = aser.id_aset SET lk.id_aset_series = aser.id;
-ALTER TABLE `lembar_kerja` DROP FOREIGN KEY `fk_lk_aset`;
-ALTER TABLE `lembar_kerja` DROP COLUMN `id_aset`;
-ALTER TABLE `lembar_kerja` ADD CONSTRAINT `fk_lk_aset_series` FOREIGN KEY (`id_aset_series`) REFERENCES `aset_series` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `laporan_kerusakan` ADD COLUMN `id_aset_series` CHAR(36) DEFAULT NULL AFTER `id_aset`;
+UPDATE `laporan_kerusakan` lk JOIN `aset_series` aser ON lk.id_aset = aser.id_aset SET lk.id_aset_series = aser.id;
+ALTER TABLE `laporan_kerusakan` DROP FOREIGN KEY `fk_lk_aset`;
+ALTER TABLE `laporan_kerusakan` DROP COLUMN `id_aset`;
+ALTER TABLE `laporan_kerusakan` ADD CONSTRAINT `fk_lk_aset_series` FOREIGN KEY (`id_aset_series`) REFERENCES `aset_series` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- 7. Update relasi pada lembar_kerja_preventif
 ALTER TABLE `lembar_kerja_preventif` ADD COLUMN `id_aset_series` CHAR(36) DEFAULT NULL AFTER `id_aset`;
@@ -101,3 +101,4 @@ ALTER TABLE `riwayat_kanibal` ADD CONSTRAINT `fk_rk_series_penerima` FOREIGN KEY
 UPDATE `jadwal_preventif` jp JOIN `aset_series` aser ON jp.aset = aser.id_aset SET jp.aset = aser.id;
 
 COMMIT;
+
