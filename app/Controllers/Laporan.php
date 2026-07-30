@@ -87,21 +87,24 @@ class Laporan extends BaseController
         
         // Header / Title
         $sheet->setCellValue('A1', 'Laporan Rekapitulasi Kerusakan Aset');
-        $sheet->mergeCells('A1:L1');
+        $sheet->mergeCells('A1:M1');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         
         $sheet->setCellValue('A2', 'RSUD Kota Yogyakarta');
-        $sheet->mergeCells('A2:L2');
+        $sheet->mergeCells('A2:M2');
         $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         
         $sheet->setCellValue('A3', 'Periode: ' . $periodStr);
-        $sheet->mergeCells('A3:L3');
+        $sheet->mergeCells('A3:M3');
         $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
 
+        $seriesModel = new \App\Models\AsetSeriesModel();
+        $asetModel = new \App\Models\AsetModel();
+
         // Table Header
-        $headers = ['No', 'No. Order', 'Tanggal', 'Jam', 'Pelapor (Unit)', 'Lokasi', 'Keluhan', 'Status', 'Teknisi', 'Tindakan', 'Resp. Time (mnt)', 'Down Time (mnt)'];
+        $headers = ['No', 'No. Order', 'Tanggal', 'Jam', 'Pelapor (Unit)', 'Aset / Unit', 'Lokasi', 'Keluhan', 'Status', 'Teknisi', 'Tindakan', 'Resp. Time', 'Down Time'];
         $col = 'A';
         foreach ($headers as $h) {
             $sheet->setCellValue($col . '5', $h);
@@ -117,27 +120,34 @@ class Laporan extends BaseController
         $row = 6;
         $no = 1;
         foreach ($filteredLK as $l) {
+            $series = !empty($l['id_aset_series']) ? $seriesModel->getById($l['id_aset_series']) : null;
+            $aset = $series ? $asetModel->getById($series['id_aset']) : null;
+            $namaAset = $aset['nama'] ?? $l['nama_aset'] ?? '-';
+            $nomorAset = $series['nomor_aset'] ?? '';
+            $asetStr = $nomorAset ? "{$nomorAset} - {$namaAset}" : $namaAset;
+
             $sheet->setCellValue('A' . $row, $no++);
             $sheet->setCellValue('B' . $row, $l['no_order'] ?? '-');
             $sheet->setCellValue('C' . $row, $l['tanggal'] ?? '-');
             $sheet->setCellValue('D' . $row, $l['jam_laporan'] ?? '-');
             $sheet->setCellValue('E' . $row, ($l['pelapor'] ?? '-') . ' (' . ($l['unit_pelapor'] ?? '-') . ')');
-            $sheet->setCellValue('F' . $row, $l['lokasi'] ?? '-');
-            $sheet->setCellValue('G' . $row, $l['keluhan'] ?? '-');
-            $sheet->setCellValue('H' . $row, $l['status'] ?? '-');
-            $sheet->setCellValue('I' . $row, $l['teknisi'] ?? '-');
-            $sheet->setCellValue('J' . $row, $l['tindakan'] ?? '-');
-            $sheet->setCellValue('K' . $row, $l['response_time'] ?? '-');
-            $sheet->setCellValue('L' . $row, $l['down_time'] ?? '-');
+            $sheet->setCellValue('F' . $row, $asetStr);
+            $sheet->setCellValue('G' . $row, $l['lokasi'] ?? $series['ruangan'] ?? '-');
+            $sheet->setCellValue('H' . $row, $l['keluhan'] ?? '-');
+            $sheet->setCellValue('I' . $row, $l['status'] ?? '-');
+            $sheet->setCellValue('J' . $row, $l['teknisi'] ?? '-');
+            $sheet->setCellValue('K' . $row, $l['tindakan'] ?? '-');
+            $sheet->setCellValue('L' . $row, $l['response_time'] ?? '-');
+            $sheet->setCellValue('M' . $row, $l['down_time'] ?? '-');
             
-            $sheet->getStyle('A'.$row.':L'.$row)->getAlignment()->setVertical('top');
-            $sheet->getStyle('G'.$row)->getAlignment()->setWrapText(true);
-            $sheet->getStyle('J'.$row)->getAlignment()->setWrapText(true);
+            $sheet->getStyle('A'.$row.':M'.$row)->getAlignment()->setVertical('top');
+            $sheet->getStyle('H'.$row)->getAlignment()->setWrapText(true);
+            $sheet->getStyle('K'.$row)->getAlignment()->setWrapText(true);
             $row++;
         }
 
         // Borders
-        $lastCol = 'L';
+        $lastCol = 'M';
         $lastRow = $row - 1;
         $styleArray = [
             'borders' => [
@@ -149,8 +159,8 @@ class Laporan extends BaseController
         $sheet->getStyle('A5:' . $lastCol . $lastRow)->applyFromArray($styleArray);
 
         // Auto size columns (except textarea cols)
-        foreach (range('A', 'L') as $colId) {
-            if (!in_array($colId, ['G', 'J'])) {
+        foreach (range('A', 'M') as $colId) {
+            if (!in_array($colId, ['H', 'K'])) {
                 $sheet->getColumnDimension($colId)->setAutoSize(true);
             } else {
                 $sheet->getColumnDimension($colId)->setWidth(40);
@@ -159,14 +169,14 @@ class Laporan extends BaseController
 
         // Signature Block
         $sigRow = $lastRow + 3;
-        $sheet->setCellValue('J' . $sigRow, 'Yogyakarta, ' . date('d F Y'));
-        $sheet->setCellValue('J' . ($sigRow + 1), 'Kepala IPSRS RSUD Kota YK,');
+        $sheet->setCellValue('K' . $sigRow, 'Yogyakarta, ' . date('d F Y'));
+        $sheet->setCellValue('K' . ($sigRow + 1), 'Kepala IPSRS RSUD Kota YK,');
         
-        $sheet->setCellValue('J' . ($sigRow + 5), \App\Config\IPSRS::NAMA_KEPALA);
-        $sheet->getStyle('J' . ($sigRow + 5))->getFont()->setUnderline(true)->setBold(true);
-        $sheet->setCellValue('J' . ($sigRow + 6), 'NIP. ' . \App\Config\IPSRS::NIP_KEPALA);
+        $sheet->setCellValue('K' . ($sigRow + 5), \App\Config\IPSRS::NAMA_KEPALA);
+        $sheet->getStyle('K' . ($sigRow + 5))->getFont()->setUnderline(true)->setBold(true);
+        $sheet->setCellValue('K' . ($sigRow + 6), 'NIP. ' . \App\Config\IPSRS::NIP_KEPALA);
         
-        $sheet->getStyle('J'.$sigRow.':J'.($sigRow+6))->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('K'.$sigRow.':K'.($sigRow+6))->getAlignment()->setHorizontal('center');
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $filename = 'Laporan_Kerusakan_' . date('Y-m-d') . '.xlsx';
@@ -196,7 +206,10 @@ class Laporan extends BaseController
         foreach ($data['filteredLK'] as &$lk) {
             $series = !empty($lk['id_aset_series']) ? $seriesModel->getById($lk['id_aset_series']) : null;
             $aset = $series ? $asetModel->getById($series['id_aset']) : null;
-            $lk['nama_aset'] = $aset['nama'] ?? '-';
+            
+            $nama = $aset['nama'] ?? $lk['nama_aset'] ?? '-';
+            $nomor = $series['nomor_aset'] ?? '';
+            $lk['nama_aset'] = $nomor ? "{$nomor} - {$nama}" : $nama;
             
             $scList = $lkModel->getSukuCadang($lk['id']);
             if (empty($scList)) {
@@ -237,8 +250,8 @@ class Laporan extends BaseController
             
             $dataLKP[] = [
                 'nama_unit' => $aset['nama'] ?? $jadwal['aset'] ?? '-',
-                'lokasi'    => $jadwal['lokasi'] ?? $aset['lokasi'] ?? '-',
-                'no_seri'   => $aset['nomor_seri'] ?? '-',
+                'lokasi'    => $series['ruangan'] ?? $jadwal['lokasi'] ?? '-',
+                'no_seri'   => $series['nomor_aset'] ?? $series['no_seri'] ?? '-',
                 'kategori'  => $lkp['kategori'] ?? '-',
                 'tanggal'   => $lkp['tanggal_pemeriksaan'] ?? '-',
                 'teknisi'   => $lkp['teknisi'] ?? '-',
@@ -326,8 +339,8 @@ class Laporan extends BaseController
             
             $sheet->setCellValue('A' . $row, $no++);
             $sheet->setCellValue('B' . $row, $aset['nama'] ?? $jadwal['aset'] ?? '-');
-            $sheet->setCellValue('C' . $row, $jadwal['lokasi'] ?? $aset['lokasi'] ?? '-');
-            $sheet->setCellValue('D' . $row, $aset['nomor_seri'] ?? '-');
+            $sheet->setCellValue('C' . $row, $series['ruangan'] ?? $jadwal['lokasi'] ?? '-');
+            $sheet->setCellValue('D' . $row, $series['nomor_aset'] ?? $series['no_seri'] ?? '-');
             $sheet->setCellValue('E' . $row, $lkp['kategori'] ?? '-');
             $sheet->setCellValue('F' . $row, $lkp['tanggal_pemeriksaan'] ?? '-');
             $sheet->setCellValue('G' . $row, $lkp['teknisi'] ?? '-');
