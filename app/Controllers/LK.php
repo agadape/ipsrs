@@ -55,7 +55,7 @@ class LK extends BaseController
             'stokTersedia' => (new StokModel())->getAll(),
             'vendorDetail' => $this->model->getVendor($id),
             'vendorList'   => (new \App\Models\VendorModel())->getAll(),
-            'aset'         => (new AsetModel())->getAll(),
+            'aset' => (new \App\Models\AsetSeriesModel())->getAllWithParent(),
             'kodeKerusakan'=> (new \App\Models\KodeKerusakanModel())->getAll(),
             'teknisiList'  => (new \App\Models\PenggunaModel())->getByRole('Teknisi'),
         ]);
@@ -65,7 +65,7 @@ class LK extends BaseController
     {
         $view = session('user_role') === 'pelapor' ? 'pages/lk/form_pelapor' : 'pages/lk/form';
         return $this->render($view, [
-            'aset'           => (new AsetModel())->getAll(),
+            'aset' => (new \App\Models\AsetSeriesModel())->getAllWithParent(),
             'kodeKerusakan'  => (new \App\Models\KodeKerusakanModel())->getAll(),
         ]);
     }
@@ -448,5 +448,6 @@ class LK extends BaseController
         }
     }
 }
+
 
 
