@@ -32,9 +32,9 @@ $alasanFilter = $alasan ?? '';
                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
-          <option value="<?= esc($a['id'] ?? '') ?>" data-lokasi="<?= esc($a['lokasi'] ?? '-') ?>">
-            <?= esc(($a['nomor_aset'] ?? $a['nomor_seri'] ?? '').' - '.($a['nama'] ?? '')) ?>
-          </option>
+            <option value="<?= esc($a['id'] ?? '') ?>" data-lokasi="<?= esc($a['lokasi'] ?? '-') ?>">
+              <?= esc(($a['nomor_aset'] ?? '') . ' - ' . ($a['nama'] ?? '')) ?> (<?= esc(($a['ruangan'] ?? '') . ' / ' . ($a['gedung'] ?? '')) ?>)
+            </option>
           <?php endforeach; ?>
         </select>
       </div>
@@ -182,5 +182,6 @@ function updateLokasiSaatIni() {
   }
 }
 </script>
+
 
 

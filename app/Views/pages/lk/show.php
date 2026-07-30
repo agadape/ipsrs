@@ -295,9 +295,9 @@ $prosesLabels = ['I' => 'Proses I — Perbaikan Langsung', 'II' => 'Proses II �
             <option value="">-- Pilih Aset Donor --</option>
             <?php foreach (($aset ?? []) as $a): ?>
             <?php if (($a['status'] ?? '') === 'Kanibal'): ?>
-            <option value="<?= esc($a['id'] ?? '') ?>" data-nama="<?= esc($a['nama'] ?? '') ?>">
-              <?= esc($a['nomor_aset'] ?? '') ?> — <?= esc($a['nama'] ?? '') ?>
-            </option>
+              <option value="<?= esc($a['id'] ?? '') ?>" data-nama="<?= esc($a['nama'] ?? '') ?>">
+                <?= esc(($a['nomor_aset'] ?? '') . ' - ' . ($a['nama'] ?? '')) ?> (<?= esc(($a['ruangan'] ?? '') . ' / ' . ($a['gedung'] ?? '')) ?>)
+              </option>
             <?php endif; ?>
             <?php endforeach; ?>
           </select>
@@ -642,7 +642,7 @@ $vendorList   = $vendorList ?? [];
               <option value="">-- Pilih Aset dari Database --</option>
               <?php foreach (($aset ?? []) as $a): ?>
               <option value="<?= esc($a['id'] ?? '') ?>" <?= ($lk['id_aset_series'] ?? '') == ($a['id'] ?? '') ? 'selected' : '' ?>>
-                <?= esc(($a['nomor_aset'] ?? $a['nomor_seri'] ?? '').' — '.($a['nama'] ?? '')) ?>
+                <?= esc(($a['nomor_aset'] ?? '') . ' - ' . ($a['nama'] ?? '')) ?> (<?= esc(($a['ruangan'] ?? '') . ' / ' . ($a['gedung'] ?? '')) ?>)
               </option>
               <?php endforeach; ?>
             </select>
