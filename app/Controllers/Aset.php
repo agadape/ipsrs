@@ -68,7 +68,7 @@ class Aset extends BaseController
     public function store()
     {
         $v = $this->validateOrFail([
-            'nomor_aset' => 'required|is_unique[aset.nomor_aset]',
+            
             'nama'     => 'required',
             'jenis'    => 'required|in_list[' . implode(',', IPSRS::JENIS_ASET) . ']',
             'kategori' => 'required',
@@ -82,9 +82,7 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'nama', 'jenis', 'kategori', 'lokasi', 'gedung', 'lantai', 'ruangan',
-                'unit', 'kondisi', 'merk', 'model', 'no_seri', 'tahun',
-                'keterangan', 'status',
+                'nama', 'jenis', 'kategori', 'merk', 'model', 'keterangan',
             ]);
 
             $data['id'] = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -138,9 +136,7 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'nama', 'jenis', 'kategori', 'lokasi', 'gedung', 'lantai', 'ruangan',
-                'unit', 'kondisi', 'merk', 'model', 'no_seri', 'tahun',
-                'keterangan', 'status',
+                'nama', 'jenis', 'kategori', 'merk', 'model', 'keterangan',
             ]);
             $this->model->update($id, $data);
             return redirect()->to('/ipsrs/aset/' . $id)->with('success', 'Aset berhasil diperbarui');
@@ -298,6 +294,8 @@ class Aset extends BaseController
         return view('pages/aset/qr', compact('aset'));
     }
 }
+
+
 
 
 
