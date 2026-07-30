@@ -72,11 +72,7 @@ class Aset extends BaseController
             'nama'     => 'required',
             'jenis'    => 'required|in_list[' . implode(',', IPSRS::JENIS_ASET) . ']',
             'kategori' => 'required',
-            'lokasi'   => 'required',
-            'gedung'   => 'required',
-            'ruangan'  => 'required',
-            'unit'     => 'required',
-            'kondisi'  => 'required|in_list[' . implode(',', IPSRS::KONDISI_ASET) . ']',
+            
         ], 'Mohon lengkapi seluruh data aset yang wajib diisi.');
         if ($v !== true) return $v;
 
@@ -129,8 +125,7 @@ class Aset extends BaseController
             'nama'     => 'required',
             'jenis'    => 'required|in_list[' . implode(',', IPSRS::JENIS_ASET) . ']',
             'kategori' => 'required',
-            'lokasi'   => 'required',
-            'kondisi'  => 'required|in_list[' . implode(',', IPSRS::KONDISI_ASET) . ']',
+            
         ], 'Mohon lengkapi data aset yang wajib diisi.');
         if ($v !== true) return $v;
 
@@ -294,6 +289,9 @@ class Aset extends BaseController
         return view('pages/aset/qr', compact('aset'));
     }
 }
+
+
+
 
 
 
