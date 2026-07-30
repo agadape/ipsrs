@@ -173,18 +173,7 @@ class Aset extends BaseController
 
             $aset = $this->model->create($data);
 
-            $this->model->insertRiwayatLokasi([
-                'id_aset'       => $aset['id'],
-                'nama_aset'     => $data['nama'],
-                'lokasi_asal'   => null,
-                'lokasi_tujuan' => $data['lokasi'],
-                'tanggal'       => date('Y-m-d'),
-                'alasan'        => 'Input awal aset',
-                'petugas'       => session('user_name') ?? 'Admin',
-                'catatan'       => null,
-            ]);
-
-            return redirect()->to('/ipsrs/aset')->with('success', 'Aset berhasil ditambahkan');
+            return redirect()->to('/ipsrs/aset')->with('success', 'Katalog Aset berhasil ditambahkan');
         } catch (\Throwable $e) {
             log_message('error', '[Aset::store] ' . $e->getMessage());
             return redirect()->to('/ipsrs/aset')->with('error', 'Gagal menyimpan aset: ' . $e->getMessage());
