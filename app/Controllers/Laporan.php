@@ -190,10 +190,12 @@ class Laporan extends BaseController
         $data['periodLabel'] = $periodLabels[$period] ?? 'Bulan Ini';
         
         $lkModel   = new \App\Models\LKModel();
+        $seriesModel = new \App\Models\AsetSeriesModel();
         $asetModel = new \App\Models\AsetModel();
         
         foreach ($data['filteredLK'] as &$lk) {
-            $aset = $asetModel->find($lk['id_aset']);
+            $series = !empty($lk['id_aset_series']) ? $seriesModel->getById($lk['id_aset_series']) : null;
+            $aset = $series ? $asetModel->getById($series['id_aset']) : null;
             $lk['nama_aset'] = $aset['nama'] ?? '-';
             
             $scList = $lkModel->getSukuCadang($lk['id']);
@@ -223,12 +225,14 @@ class Laporan extends BaseController
             default  => array_filter($allLKP, fn($l) => str_starts_with($l['tanggal_pemeriksaan'], $thisMonth)),
         };
         
-        $asetModel   = new \App\Models\AsetModel();
+        $seriesModel = new \App\Models\AsetSeriesModel();
+        $asetModel = new \App\Models\AsetModel();
         $jadwalModel = new \App\Models\JadwalModel();
         
         $dataLKP = [];
         foreach ($filtered as $lkp) {
-            $aset   = !empty($lkp['id_aset']) ? $asetModel->getById($lkp['id_aset']) : null;
+            $series = !empty($lkp['id_aset_series']) ? $seriesModel->getById($lkp['id_aset_series']) : null;
+            $aset = $series ? $asetModel->getById($series['id_aset']) : null;
             $jadwal = !empty($lkp['id_jadwal']) ? $jadwalModel->getById($lkp['id_jadwal']) : null;
             
             $dataLKP[] = [
@@ -267,7 +271,8 @@ class Laporan extends BaseController
             default  => array_filter($allLKP, fn($l) => str_starts_with($l['tanggal_pemeriksaan'], $thisMonth)),
         };
         
-        $asetModel   = new \App\Models\AsetModel();
+        $seriesModel = new \App\Models\AsetSeriesModel();
+        $asetModel = new \App\Models\AsetModel();
         $jadwalModel = new \App\Models\JadwalModel();
         
         $periodLabels = ['minggu' => 'Minggu Ini', 'bulan' => 'Bulan Ini', 'tahun' => 'Tahun Ini'];
@@ -315,7 +320,8 @@ class Laporan extends BaseController
         $row = 8;
         $no = 1;
         foreach ($filtered as $lkp) {
-            $aset   = !empty($lkp['id_aset']) ? $asetModel->getById($lkp['id_aset']) : null;
+            $series = !empty($lkp['id_aset_series']) ? $seriesModel->getById($lkp['id_aset_series']) : null;
+            $aset = $series ? $asetModel->getById($series['id_aset']) : null;
             $jadwal = !empty($lkp['id_jadwal']) ? $jadwalModel->getById($lkp['id_jadwal']) : null;
             
             $sheet->setCellValue('A' . $row, $no++);
@@ -361,3 +367,4 @@ class Laporan extends BaseController
         exit();
     }
 }
+
