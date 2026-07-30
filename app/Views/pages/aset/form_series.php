@@ -1,5 +1,3 @@
-<?= $this->extend('layout/main') ?>
-<?= $this->section('content') ?>
 
 <div class="flex items-center gap-3 mb-6">
   <a href="/ipsrs/aset/<?= esc($aset['id']) ?>"
@@ -99,5 +97,5 @@
     </div>
   </form>
 </div>
-<?= $this->endSection() ?>
+
 

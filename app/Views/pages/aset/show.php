@@ -1,5 +1,3 @@
-<?= $this->extend('layout/main') ?>
-<?= $this->section('content') ?>
 <div class="flex items-center gap-3 mb-6">
   <a href="/ipsrs/aset"
      class="w-9 h-9 flex items-center justify-center rounded-xl bg-white shadow-sm border border-gray-100 hover:border-gray-200 transition-colors text-gray-500 hover:text-gray-700">
@@ -77,5 +75,5 @@
     </table>
   </div>
 </div>
-<?= $this->endSection() ?>
+
 

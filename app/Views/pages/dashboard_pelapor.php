@@ -1,6 +1,4 @@
-<?= $this->extend('layout/main') ?>
 
-<?= $this->section('content') ?>
 <div class="space-y-6 max-w-5xl mx-auto">
   <!-- Header / Greeting -->
   <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden">
@@ -116,5 +114,5 @@
     <?php endif; ?>
   </div>
 </div>
-<?= $this->endSection() ?>
+
 

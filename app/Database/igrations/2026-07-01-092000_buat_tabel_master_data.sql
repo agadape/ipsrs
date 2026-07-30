@@ -66,7 +66,7 @@ CREATE POLICY "kode_kerusakan_update" ON kode_kerusakan FOR UPDATE USING (true);
 
 -- Kategori Aset (data awal sesuai yang sebelumnya hardcode di form)
 INSERT INTO kategori_aset (nama_kategori, deskripsi) VALUES
-    ('HVAC',       'Heating, Ventilation, Air Conditioning'),
+    ('HVAC',       'Heating, Ventilation, Air Conditio ning'),
     ('Listrik',    'Instalasi dan peralatan kelistrikan'),
     ('Mekanikal',  'Peralatan mekanikal'),
     ('Elektronik', 'Peralatan elektronik medis dan non-medis'),
