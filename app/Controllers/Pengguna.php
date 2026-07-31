@@ -49,7 +49,7 @@ class Pengguna extends BaseController
         $payload = [
             'email'        => $data['email'],
             'nama_lengkap' => $data['nama_lengkap'],
-            'password'     => password_hash($data['password'], PASSWORD_DEFAULT),
+            'password_hash'=> password_hash($data['password'], PASSWORD_DEFAULT),
             'role'         => $data['role'],
             'unit'         => $data['unit'],
             'aktif'        => true,
