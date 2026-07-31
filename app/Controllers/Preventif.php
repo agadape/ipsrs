@@ -47,6 +47,11 @@ class Preventif extends BaseController
             'jam'     => 'required',
         ], 'Mohon lengkapi teknisi, tanggal, dan jam jadwal.');
         if ($v !== true) return $v;
+        
+        $tanggalJam = $this->request->getPost('tanggal') . ' ' . $this->request->getPost('jam');
+        if (strtotime($tanggalJam) < time()) {
+            return redirect()->to('/ipsrs/preventif')->with('error', 'Tanggal dan jam jadwal tidak boleh di masa lalu.');
+        }
 
         try {
             $data = $this->whitelist([
@@ -104,7 +109,7 @@ class Preventif extends BaseController
             'kategori'          => 'required',
             'hasil_pemeriksaan' => 'required|in_list[' . implode(',', IPSRS::HASIL_PEMERIKSAAN) . ']',
             
-        ], 'Lengkapi kategori alat, hasil pemeriksaan, dan nama pengguna.');
+        ], 'Lengkapi kategori alat dan hasil pemeriksaan.');
         if ($v !== true) return $v;
 
         try {
@@ -119,9 +124,8 @@ class Preventif extends BaseController
                 'kategori'            => $post['kategori'],
                 'tanggal_pemeriksaan' => date('Y-m-d'),
                 'teknisi'             => $jadwal['teknisi'] ?? session('user_name') ?? 'Teknisi',
-                'nama_user_ttd'       => $post['nama_user_ttd'],
                 'hasil_pemeriksaan'   => $post['hasil_pemeriksaan'],
-                'catatan'             => $post['catatan'] ?? null,
+                'catatan'             => $post['catatan'] ?? '',
             ], fn() => $lkpModel->nextNoOrder(), 'no_order');
 
             $idLkp = $header['id'] ?? null;
