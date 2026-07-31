@@ -545,16 +545,7 @@ $vendorList   = $vendorList ?? [];
         </select>
       </div>
 
-      <!-- Proses I/II/III -->
-      <div class="md:col-span-2">
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Jenis Proses</label>
-        <select name="proses" class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
-          <option value="">-- Pilih Jenis Proses --</option>
-          <?php foreach ($prosesLabels as $val => $label): ?>
-          <option value="<?= $val ?>" <?= ($lk['proses'] ?? '') === $val ? 'selected' : '' ?>><?= $label ?></option>
-          <?php endforeach; ?>
-        </select>
-      </div>
+
 
       <!-- Tindakan -->
       <div class="md:col-span-2">

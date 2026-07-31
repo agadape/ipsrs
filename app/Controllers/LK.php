@@ -247,7 +247,7 @@ class LK extends BaseController
         }
         $lk   = $this->model->getById($id);
         $post = $this->whitelist([
-            'status_baru', 'teknisi', 'tindakan', 'proses',
+            'status_baru', 'teknisi', 'tindakan',
             'tanggal_cek', 'jam_cek', 'tanggal_selesai', 'jam_selesai', 'ttd_pelapor'
         ]);
         $next = $post['status_baru'] ?? null;
@@ -256,12 +256,22 @@ class LK extends BaseController
             return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Status tidak valid');
         }
 
+        $sc = $this->model->getSukuCadang($id);
+        $vd = $this->model->getVendor($id);
+        
+        $computedProses = 'I';
+        if ($next === 'Menunggu Vendor' || !empty($vd)) {
+            $computedProses = 'III';
+        } elseif ($next === 'Menunggu Suku Cadang' || !empty($sc)) {
+            $computedProses = 'II';
+        }
+
         try {
             $data = array_filter([
                 'status'          => $next,
                 'teknisi'         => $post['teknisi']         ?? null,
                 'tindakan'        => $post['tindakan']        ?? null,
-                'proses'          => $post['proses']          ?? null,
+                'proses'          => $computedProses,
                 'tanggal_cek'     => $post['tanggal_cek']     ?? null,
                 'jam_cek'         => $post['jam_cek']         ?? null,
                 'tanggal_selesai' => $post['tanggal_selesai'] ?? null,
