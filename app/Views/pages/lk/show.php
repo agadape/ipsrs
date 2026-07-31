@@ -10,8 +10,8 @@ if ($currentStep === false) $currentStep = 0;
 
 $sBadge = status_lk_badge($status);
 
-$canAssign   = in_array($status, ['Laporan Masuk', 'Didisposisi']);
-$canProgress = in_array($status, ['Survei', 'Dalam Perbaikan', 'Menunggu Suku Cadang', 'Menunggu Vendor']);
+$canAssign   = $status === 'Laporan Masuk';
+$canProgress = in_array($status, ['Didisposisi', 'Survei', 'Dalam Perbaikan', 'Menunggu Suku Cadang', 'Menunggu Vendor']);
 $isSelesai   = $status === 'Selesai';
 
 $sukuCadang = $sukuCadang ?? [];
@@ -495,15 +495,7 @@ $vendorList   = $vendorList ?? [];
           <?php endforeach; ?>
         </select>
       </div>
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Status Baru <span class="text-red-500">*</span></label>
-        <select name="status_baru" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
-          <option value="">-- Pilih Status --</option>
-          <option value="Didisposisi">Didisposisi</option>
-          <option value="Survei">Survei</option>
-        </select>
-      </div>
+      <input type="hidden" name="status_baru" value="Didisposisi">
       <div>
         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal Cek</label>
         <input type="date" name="tanggal_cek" value="<?= esc($lk['tanggal_cek'] ?? date('Y-m-d')) ?>"
@@ -517,7 +509,7 @@ $vendorList   = $vendorList ?? [];
     </div>
     <div class="mt-4">
       <button type="submit" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
-        Simpan
+        Tetapkan Teknisi
       </button>
     </div>
   </form>
@@ -545,9 +537,10 @@ $vendorList   = $vendorList ?? [];
         <select name="status_baru" id="status_baru" required onchange="toggleSignature()"
                 class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
           <option value="">-- Pilih Status --</option>
-          <option value="Dalam Perbaikan">Dalam Perbaikan</option>
-          <option value="Menunggu Suku Cadang">Menunggu Suku Cadang</option>
-          <option value="Menunggu Vendor">Menunggu Vendor</option>
+          <option value="Survei" <?= $status === 'Survei' ? 'selected' : '' ?>>Sedang Pengecekan (Survei)</option>
+          <option value="Dalam Perbaikan" <?= $status === 'Dalam Perbaikan' ? 'selected' : '' ?>>Dalam Perbaikan</option>
+          <option value="Menunggu Suku Cadang" <?= $status === 'Menunggu Suku Cadang' ? 'selected' : '' ?>>Menunggu Suku Cadang</option>
+          <option value="Menunggu Vendor" <?= $status === 'Menunggu Vendor' ? 'selected' : '' ?>>Menunggu Vendor</option>
           <option value="Selesai">Selesai</option>
         </select>
       </div>
