@@ -40,13 +40,8 @@ $filterParam = $filter ?? '';
         </select>
       </div>
 
-      <!-- Nama Aset -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nama Aset</label>
-        <input type="text" name="aset"
-               placeholder="Nama aset (jika tidak ada di list)"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
-      </div>
+      <!-- Nama Aset (Hidden, populated by JS) -->
+      <input type="hidden" name="aset">
 
       <!-- Lokasi -->
       <div>

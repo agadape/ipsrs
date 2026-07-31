@@ -20,6 +20,7 @@ class Preventif extends BaseController
     {
         $jadwal  = $this->model->getAll();
         $aset    = (new \App\Models\AsetSeriesModel())->getAllWithParent();
+        $users   = (new \App\Models\PenggunaModel())->getByRole('teknisi');
         $filter  = $this->request->getGet('status') ?? '';
         $today   = date('Y-m-d');
 
@@ -34,6 +35,7 @@ class Preventif extends BaseController
         return $this->render('pages/preventif/index', [
             'jadwal' => array_values($jadwal),
             'aset'   => $aset,
+            'users'  => $users,
             'filter' => $filter,
             'today'  => $today,
         ]);
