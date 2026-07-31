@@ -158,6 +158,22 @@ class Preventif extends BaseController
                     ];
                 }
                 $lkpModel->addDetail($rows);
+
+                // Auto-save kategori baru sebagai template
+                $templateModel = new \App\Models\TemplateChecklistModel();
+                $existingTemplates = $templateModel->getByKategori($post['kategori']);
+                if (empty($existingTemplates)) {
+                    foreach ($items as $it) {
+                        $jenis = $it['jenis'] ?? '';
+                        $templateModel->create([
+                            'kategori'      => $post['kategori'],
+                            'no_item'       => (int) ($it['no_item'] ?? 0),
+                            'jenis_item'    => $jenis,
+                            'nama_komponen' => $it['komponen'] ?? '',
+                            'satuan'        => $jenis === 'Pengukuran' ? ($it['satuan'] ?? null) : null,
+                        ]);
+                    }
+                }
             }
 
             $this->model->markSelesai($id);
