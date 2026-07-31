@@ -3,10 +3,18 @@ $authRole = session('user_role') ?? '';
 $id     = $lk['id'] ?? '';
 $status = $lk['status'] ?? '';
 
-$statusSteps = ['Laporan Masuk', 'Didisposisi', 'Survei', 'Dalam Perbaikan', 'Selesai'];
-$currentStep = array_search($status, $statusSteps);
+$statusSteps = [
+    ['label' => 'Laporan Masuk', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>'],
+    ['label' => 'Didisposisi', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>'],
+    ['label' => 'Survei', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>'],
+    ['label' => 'Dalam Perbaikan', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>'],
+    ['label' => 'Selesai', 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>'],
+];
+$currentStep = 0;
+foreach ($statusSteps as $i => $step) {
+    if ($step['label'] === $status) $currentStep = $i;
+}
 if (in_array($status, ['Menunggu Suku Cadang', 'Menunggu Vendor'])) $currentStep = 3;
-if ($currentStep === false) $currentStep = 0;
 
 $sBadge = status_lk_badge($status);
 
@@ -100,28 +108,26 @@ $prosesLabels = ['I' => 'Proses I — Perbaikan Langsung', 'II' => 'Proses II �
 <!-- Status Timeline -->
 <div class="card p-6 mb-6">
   <h2 class="text-sm font-semibold text-gray-700 mb-5">Alur Status</h2>
-  <div class="flex items-center gap-0 overflow-x-auto pb-1">
-    <?php foreach ($statusSteps as $i => $step): ?>
-    <?php $done = $i < $currentStep; $current = $i === $currentStep; ?>
-    <div class="flex items-center gap-0 shrink-0">
-      <div class="flex flex-col items-center">
-        <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all
-          <?= $done ? 'bg-indigo-600 border-indigo-600 text-white' : ($current ? 'bg-white border-indigo-600 text-indigo-600 animate-pulse shadow-[0_0_10px_rgba(79,70,229,0.5)]' : 'bg-white border-gray-200 text-gray-400') ?>">
-          <?php if ($done): ?>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-          <?php else: ?><?= $i + 1 ?><?php endif; ?>
+    <div class="flex items-center justify-between overflow-x-auto pb-4 pt-2 px-2 w-full">
+      <?php foreach ($statusSteps as $i => $step): ?>
+      <?php $done = $i < $currentStep; $current = $i === $currentStep; ?>
+      <div class="flex flex-col items-center relative z-10 group cursor-default">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all duration-300 transform group-hover:scale-110
+          <?= $done ? 'bg-indigo-600 border-indigo-600 text-white shadow-md' : ($current ? 'bg-indigo-50 border-indigo-600 text-indigo-600 ring-4 ring-indigo-50 shadow-lg' : 'bg-white border-gray-200 text-gray-400') ?>">
+          <svg class="w-5 h-5 <?= $current ? 'animate-pulse' : '' ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <?= $done ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>' : $step['icon'] ?>
+          </svg>
         </div>
-        <span class="mt-1.5 text-[10px] font-medium text-center leading-tight max-w-[70px]
-          <?= $current ? 'text-indigo-600' : ($done ? 'text-gray-500' : 'text-gray-300') ?>">
-          <?= esc($step) ?>
+        <span class="mt-2.5 text-[10px] sm:text-xs font-semibold text-center leading-tight max-w-[80px] transition-colors
+          <?= $current ? 'text-indigo-700' : ($done ? 'text-gray-600' : 'text-gray-400') ?>">
+          <?= esc($step['label']) ?>
         </span>
       </div>
       <?php if ($i < count($statusSteps) - 1): ?>
-      <div class="w-12 h-0.5 -mt-4 <?= $done ? 'bg-indigo-400' : 'bg-gray-200' ?>"></div>
+      <div class="flex-1 h-1 -mt-7 mx-2 sm:mx-3 rounded-full <?= $done ? 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]' : 'bg-gray-100' ?> transition-colors duration-500"></div>
       <?php endif; ?>
+      <?php endforeach; ?>
     </div>
-    <?php endforeach; ?>
-  </div>
 </div>
 
 <!-- ── Completion Details (only when Selesai) ────────────────────────── -->
