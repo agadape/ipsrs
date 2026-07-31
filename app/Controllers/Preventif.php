@@ -122,7 +122,7 @@ class Preventif extends BaseController
 
             $header = $lkpModel->createWithRetry([
                 'id_jadwal'           => $id,
-                'id_aset_series'      => $jadwal['id_aset'] ?? null,
+                'id_aset_series'      => !empty($jadwal['id_aset']) ? $jadwal['id_aset'] : null,
                 'kategori'            => $post['kategori'],
                 'tanggal_pemeriksaan' => date('Y-m-d'),
                 'teknisi'             => $jadwal['teknisi'] ?? session('user_name') ?? 'Teknisi',
