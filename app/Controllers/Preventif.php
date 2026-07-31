@@ -120,9 +120,18 @@ class Preventif extends BaseController
             ]);
             $lkpModel = new \App\Models\LkpModel();
 
+            $idAsetSeries = !empty($jadwal['id_aset']) ? $jadwal['id_aset'] : null;
+            if ($idAsetSeries) {
+                // Pastikan id ini benar-benar ada di tabel aset_series (bukan sisa data lama dari tabel aset parent)
+                $asetSeriesModel = new \App\Models\AsetSeriesModel();
+                if (!$asetSeriesModel->getById($idAsetSeries)) {
+                    $idAsetSeries = null;
+                }
+            }
+
             $header = $lkpModel->createWithRetry([
                 'id_jadwal'           => $id,
-                'id_aset_series'      => !empty($jadwal['id_aset']) ? $jadwal['id_aset'] : null,
+                'id_aset_series'      => $idAsetSeries,
                 'kategori'            => $post['kategori'],
                 'tanggal_pemeriksaan' => date('Y-m-d'),
                 'teknisi'             => $jadwal['teknisi'] ?? session('user_name') ?? 'Teknisi',
