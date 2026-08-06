@@ -103,10 +103,15 @@ $total = count($aset ?? []);
           <td class="px-4 py-3">
             <span class="font-mono text-xs text-slate-900 font-medium"><?= esc($a['nomor_aset'] ?? $a['id'] ?? '-') ?></span>
           </td>
-          <td class="px-4 py-3">
-            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="font-medium text-indigo-600 hover:text-indigo-700 hover:underline transition-colors">
+          <td class="px-4 py-3 align-top">
+            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline transition-colors">
               <?= esc($a['nama'] ?? '-') ?>
             </a>
+            <?php if (!empty($a['merk']) || !empty($a['model'])): ?>
+            <div class="text-xs text-slate-500 mt-1">
+              <?= esc(implode(' / ', array_filter([$a['merk'] ?? '', $a['model'] ?? '']))) ?>
+            </div>
+            <?php endif; ?>
           </td>
           <td class="px-4 py-3 text-slate-600"><?= esc($a['kategori'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="<?= $jnBadge ?>"><?= esc($jn ?: '-') ?></span></td>
