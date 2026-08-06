@@ -53,9 +53,13 @@
             </div>
             <div class="md:col-span-2">
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Lokasi Spesifik <span class="text-red-500">*</span></label>
-              <input type="text" name="lokasi" value="<?= esc(old('lokasi') ?? '') ?>" required
-                     placeholder="Cth: Ruang Tindakan Bedah 1, Pojok Kanan"
-                     class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+              <select name="lokasi" required
+                      class="select2 w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                <option value="">-- Pilih Unit / Lokasi --</option>
+                <?php foreach (getStandardUnits() as $u): ?>
+                  <option value="<?= esc($u) ?>" <?= old('lokasi') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
+                <?php endforeach; ?>
+              </select>
             </div>
           </div>
         </div>

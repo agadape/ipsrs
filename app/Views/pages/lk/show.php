@@ -694,7 +694,13 @@ $vendorList   = $vendorList ?? [];
           <!-- Lokasi -->
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi</label>
-            <input type="text" name="lokasi" value="<?= esc($lk['lokasi'] ?? '') ?>" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+          <select name="lokasi" required
+                  class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+            <option value="">-- Pilih Unit / Lokasi --</option>
+            <?php foreach (getStandardUnits() as $u): ?>
+              <option value="<?= esc($u) ?>" <?= ($lk['lokasi'] ?? '') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
+            <?php endforeach; ?>
+          </select>
           </div>
           
           <!-- Update Aset Checkbox -->

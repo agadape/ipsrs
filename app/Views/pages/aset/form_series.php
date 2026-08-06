@@ -32,8 +32,13 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="md:col-span-2">
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi Utama <span class="text-red-500">*</span></label>
-          <input type="text" name="lokasi" value="<?= esc(old('lokasi') ?? $series['lokasi'] ?? '') ?>" required
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+          <select name="lokasi" required
+                 class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+            <option value="">-- Pilih Lokasi --</option>
+            <?php foreach (getStandardUnits() as $u): ?>
+              <option value="<?= esc($u) ?>" <?= (old('lokasi') ?? $series['lokasi'] ?? '') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Gedung <span class="text-red-500">*</span></label>
@@ -52,8 +57,13 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Unit / Instalasi <span class="text-red-500">*</span></label>
-          <input type="text" name="unit" placeholder="Contoh: IGD, Radiologi, Farmasi..." value="<?= esc(old('unit') ?? $series['unit'] ?? '') ?>" required
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+          <select name="unit" required
+                 class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+            <option value="">-- Pilih Unit / Instalasi --</option>
+            <?php foreach (getStandardUnits() as $u): ?>
+              <option value="<?= esc($u) ?>" <?= (old('unit') ?? $series['unit'] ?? '') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
       </div>
     </div>

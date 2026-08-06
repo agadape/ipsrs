@@ -83,9 +83,13 @@
       <!-- Lokasi -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi <span class="text-red-500">*</span></label>
-        <input type="text" name="lokasi" value="<?= esc(old('lokasi') ?? '') ?>" required
-               placeholder="Gedung / Ruangan / Area"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+        <select name="lokasi" required
+                class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+          <option value="">-- Pilih Unit / Lokasi --</option>
+          <?php foreach (getStandardUnits() as $u): ?>
+            <option value="<?= esc($u) ?>" <?= old('lokasi') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
+          <?php endforeach; ?>
+        </select>
       </div>
 
       <!-- Aset (optional) -->
@@ -139,15 +143,26 @@
 <script>
 (function() {
   var selAset   = document.querySelector('select[name="id_aset"]');
-  var inpLokasi = document.querySelector('input[name="lokasi"]');
+  var selLokasi = $('select[name="lokasi"]');
   var warning   = document.getElementById('lokasi-warning');
   var spanLok   = document.getElementById('lokasi-terdaftar');
 
+  function updateAsetInfo() {
+    var sel = document.getElementById('id_aset');
+    var opt = sel.options[sel.selectedIndex];
+    if (opt && opt.value !== "") {
+      var asetUnit = opt.getAttribute('data-lokasi'); 
+      if(asetUnit) {
+          selLokasi.val(asetUnit).trigger('change');
+      }
+    }
+  }
+
   function check() {
-    if (!selAset || !inpLokasi || !warning) return;
+    if (!selAset || !selLokasi || !warning) return;
     var opt = selAset.options[selAset.selectedIndex];
     var lokasiAset = opt ? (opt.dataset.lokasi || '') : '';
-    var lokasiLaporan = inpLokasi.value.trim();
+    var lokasiLaporan = selLokasi.val();
 
     if (lokasiAset && lokasiLaporan && lokasiLaporan !== lokasiAset) {
       spanLok.textContent = lokasiAset;

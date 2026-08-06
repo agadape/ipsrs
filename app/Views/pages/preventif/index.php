@@ -41,9 +41,14 @@ $filterParam = $filter ?? '';
       <!-- Lokasi -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi</label>
-        <input type="text" name="lokasi" readonly
-               placeholder="Pilih aset terlebih dahulu..."
-               class="w-full px-3 py-2 text-sm bg-slate-50 text-slate-500 border border-slate-200 rounded-md focus:outline-none cursor-not-allowed">
+        <select name="lokasi" readonly disabled
+                class="w-full px-3 py-2 text-sm bg-slate-50 text-slate-500 border border-slate-200 rounded-md focus:outline-none cursor-not-allowed">
+          <option value="">-- Lokasi Otomatis Terisi --</option>
+          <?php foreach (getStandardUnits() as $u): ?>
+            <option value="<?= esc($u) ?>"><?= esc($u) ?></option>
+          <?php endforeach; ?>
+        </select>
+        <input type="hidden" name="lokasi" id="hidden_lokasi">
       </div>
 
       <!-- Teknisi -->
@@ -180,13 +185,27 @@ $filterParam = $filter ?? '';
 <script>
 (function() {
   var selAset = document.querySelector('select[name="id_aset"]');
-  var inpLokasi = document.querySelector('input[name="lokasi"]');
   var inpNama = document.querySelector('input[name="aset"]');
-  if (selAset && inpLokasi) {
+  var selLokasi = document.querySelector('select[name="lokasi"]');
+  var hidLokasi = document.getElementById('hidden_lokasi');
+
+  function updateLokasi() {
+    var sel = document.getElementById('id_aset');
+    var opt = sel.options[sel.selectedIndex];
+    if (opt && opt.value !== "") {
+      var asetUnit = opt.getAttribute('data-lokasi');
+      if (selLokasi && asetUnit) {
+         selLokasi.value = asetUnit;
+         hidLokasi.value = asetUnit;
+      }
+    }
+  }
+
+  if (selAset) {
     selAset.addEventListener('change', function() {
       var opt = selAset.options[selAset.selectedIndex];
-      inpLokasi.value = opt ? (opt.getAttribute('data-lokasi') || '-') : '';
       if (inpNama && opt.text && opt.value) inpNama.value = opt.text.split(' — ').slice(1).join(' — ');
+      updateLokasi();
     });
   }
 })();

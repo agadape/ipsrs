@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
  */
 abstract class BaseController extends Controller
 {
-    protected $helpers = ['url', 'form', 'text', 'ui'];
+    protected $helpers = ['url', 'form', 'text', 'ui', 'rs'];
 
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
