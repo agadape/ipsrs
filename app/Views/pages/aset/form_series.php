@@ -24,6 +24,20 @@
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nomor Seri (S/N)</label>
         <input type="text" name="no_seri" value="<?= esc(old('no_seri') ?? $series['no_seri'] ?? '') ?>"
                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Merk</label>
+        <input type="text" name="merk" value="<?= esc(old('merk') ?? $series['merk'] ?? '') ?>"
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Model / Tipe</label>
+        <input type="text" name="model" value="<?= esc(old('model') ?? $series['model'] ?? '') ?>"
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kapasitas</label>
+        <input type="text" name="kapasitas" value="<?= esc(old('kapasitas') ?? $series['kapasitas'] ?? '') ?>"
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
       </div>
     </div>
 
@@ -89,7 +103,7 @@
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tahun Pengadaan</label>
-          <input type="text" name="tahun" value="<?= esc(old('tahun') ?? $series['tahun'] ?? '') ?>"
+          <input type="number" name="tahun_perolehan" value="<?= esc(old('tahun_perolehan') ?? $series['tahun_perolehan'] ?? '') ?>"
                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
         </div>
       </div>

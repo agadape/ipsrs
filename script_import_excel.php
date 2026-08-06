@@ -9,7 +9,10 @@ $spreadsheet = IOFactory::load($file);
 $pdo = new PDO("mysql:host=localhost;dbname=ipsrs", "root", "");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Basic mappings for sheets that follow a tabular structure
+// Wipe existing data for a clean fresh seed
+$pdo->exec("SET FOREIGN_KEY_CHECKS = 0; TRUNCATE aset_series; TRUNCATE aset; SET FOREIGN_KEY_CHECKS = 1;");
+echo "DB Wiped.\n";
+
 $mappings = [
     "Genset" => ["nama" => "Genset", "kategori" => "Kelistrikan", "cols" => ["merk"=>1, "no_seri"=>2, "lokasi"=>3, "keterangan"=>4]],
     "UPS" => ["nama" => "UPS", "kategori" => "Kelistrikan", "cols" => ["merk"=>1, "kapasitas"=>2, "lokasi"=>3]],
@@ -27,18 +30,13 @@ $mappings = [
 
 $totalAset = 0;
 $totalSeries = 0;
-
-$cacheAset = []; // key: nama_merk_model => id_aset
+$cacheAset = []; // key: nama_kategori => id_aset
 
 foreach ($mappings as $sheetName => $map) {
     $sheet = $spreadsheet->getSheetByName($sheetName);
-    if (!$sheet) {
-        echo "Sheet not found: $sheetName\n";
-        continue;
-    }
+    if (!$sheet) { echo "Sheet not found: $sheetName\n"; continue; }
     $rows = $sheet->toArray();
     
-    // Find where data starts (skip empty rows and headers)
     $startRow = 0;
     foreach ($rows as $i => $row) {
         if (!empty($row[0]) && is_numeric($row[0])) { $startRow = $i; break; }
@@ -49,53 +47,43 @@ foreach ($mappings as $sheetName => $map) {
     
     for ($i = $startRow; $i < count($rows); $i++) {
         $row = $rows[$i];
-        if (empty($row[0]) && empty($row[1])) continue; // empty row
+        if (empty($row[0]) && empty($row[1])) continue;
         
-        $merk = isset($map["cols"]["merk"]) ? trim($row[$map["cols"]["merk"]] ?? "") : "";
-        $model = isset($map["cols"]["model"]) ? trim($row[$map["cols"]["model"]] ?? "") : "";
-        $kapasitas = isset($map["cols"]["kapasitas"]) ? trim($row[$map["cols"]["kapasitas"]] ?? "") : "";
-        
-        // Truncate to match schema length
-        $merk = substr($merk, 0, 100);
-        $model = substr($model, 0, 100);
-        $kapasitas = substr($kapasitas, 0, 50);
-
-        $cacheKey = strtolower($map["nama"] . "_" . $merk . "_" . $model . "_" . $kapasitas);
+        $cacheKey = strtolower($map["nama"] . "_" . $map["kategori"]);
         if (!isset($cacheAset[$cacheKey])) {
-            // Find in DB first to avoid duplicate Aset parents
-            $stmt = $pdo->prepare("SELECT id FROM aset WHERE nama = ? AND merk = ? AND model = ?");
-            $stmt->execute([$map["nama"], $merk, $model]);
+            $stmt = $pdo->prepare("SELECT id FROM aset WHERE nama = ? AND kategori = ?");
+            $stmt->execute([$map["nama"], $map["kategori"]]);
             $existing = $stmt->fetchColumn();
             if ($existing) {
                 $cacheAset[$cacheKey] = $existing;
             } else {
                 $idAset = $pdo->query("SELECT UUID()")->fetchColumn();
-                $stmt = $pdo->prepare("INSERT INTO aset (id, nama, jenis, kategori, merk, model, kapasitas) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$idAset, $map["nama"], "Sarana", $map["kategori"], $merk, $model, $kapasitas]);
+                $stmt = $pdo->prepare("INSERT INTO aset (id, nama, jenis, kategori) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$idAset, $map["nama"], "Sarana", $map["kategori"]]);
                 $cacheAset[$cacheKey] = $idAset;
                 $totalAset++;
             }
         }
         $idAset = $cacheAset[$cacheKey];
         
-        // Insert Series
+        $merk = isset($map["cols"]["merk"]) ? trim(substr($row[$map["cols"]["merk"]] ?? "", 0, 100)) : null;
+        $model = isset($map["cols"]["model"]) ? trim(substr($row[$map["cols"]["model"]] ?? "", 0, 100)) : null;
+        $kapasitas = isset($map["cols"]["kapasitas"]) ? trim(substr($row[$map["cols"]["kapasitas"]] ?? "", 0, 50)) : null;
+        
         $no_seri = isset($map["cols"]["no_seri"]) ? trim((string)($row[$map["cols"]["no_seri"]] ?? "")) : "";
         $unit = isset($map["cols"]["unit"]) ? trim((string)($row[$map["cols"]["unit"]] ?? "")) : "";
         $ruangan = isset($map["cols"]["ruangan"]) ? trim((string)($row[$map["cols"]["ruangan"]] ?? "")) : "";
         $lokasi = isset($map["cols"]["lokasi"]) ? trim((string)($row[$map["cols"]["lokasi"]] ?? "")) : "";
-        $keterangan = isset($map["cols"]["keterangan"]) ? trim((string)($row[$map["cols"]["keterangan"]] ?? "")) : "";
         
         if (empty($lokasi)) $lokasi = trim("$unit $ruangan");
-        
-        // Default locations to something safe if empty
-        if (empty($unit)) $unit = "Poliklinik / Rawat Jalan"; // fallback
+        if (empty($unit)) $unit = "Poliklinik / Rawat Jalan";
         if (empty($lokasi)) $lokasi = "Belum Ditentukan";
-        $gedung = "Utama"; // fallback for gedung
+        $gedung = "Utama";
         
         $nomor_aset = "INV-" . date("Y") . "-" . str_pad($totalSeries + 1, 4, "0", STR_PAD_LEFT);
         
         $idSeries = $pdo->query("SELECT UUID()")->fetchColumn();
-        $stmt = $pdo->prepare("INSERT INTO aset_series (id, id_aset, nomor_aset, no_seri, lokasi, gedung, ruangan, unit, kondisi, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO aset_series (id, id_aset, nomor_aset, no_seri, lokasi, gedung, ruangan, unit, kondisi, status, merk, model, kapasitas, sumber_import) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $idSeries, 
             $idAset, 
@@ -106,7 +94,11 @@ foreach ($mappings as $sheetName => $map) {
             substr($ruangan, 0, 100), 
             substr($unit, 0, 100), 
             "Baik", 
-            "Aktif"
+            "Aktif",
+            $merk ?: null,
+            $model ?: null,
+            $kapasitas ?: null,
+            "Excel_$sheetName"
         ]);
         $totalSeries++;
         $count++;

@@ -72,7 +72,8 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'no_seri', 'lokasi', 'gedung', 'lantai', 'ruangan', 'unit', 'kondisi', 'status'
+                'nomor_aset', 'no_seri', 'lokasi', 'gedung', 'lantai', 'ruangan', 'unit', 'kondisi', 'status',
+                'merk', 'model', 'kapasitas', 'tahun_perolehan'
             ]);
             $data['id_aset'] = $idParent;
             $data['id'] = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
@@ -131,7 +132,8 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'no_seri', 'lokasi', 'gedung', 'lantai', 'ruangan', 'unit', 'kondisi', 'status'
+                'nomor_aset', 'no_seri', 'lokasi', 'gedung', 'lantai', 'ruangan', 'unit', 'kondisi', 'status',
+                'merk', 'model', 'kapasitas', 'tahun_perolehan'
             ]);
             (new \App\Models\AsetSeriesModel())->update($idSeries, $data);
             return redirect()->to('/ipsrs/aset/series/' . $idSeries)->with('success', 'Unit berhasil diperbarui');
@@ -162,7 +164,7 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nama', 'jenis', 'kategori', 'merk', 'model', 'keterangan',
+                'nama', 'jenis', 'kategori', 'keterangan',
             ]);
 
             $data['id'] = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -204,7 +206,7 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nama', 'jenis', 'kategori', 'merk', 'model', 'keterangan',
+                'nama', 'jenis', 'kategori', 'keterangan',
             ]);
             $this->model->update($id, $data);
             return redirect()->to('/ipsrs/aset/' . $id)->with('success', 'Aset berhasil diperbarui');
