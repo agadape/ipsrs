@@ -58,6 +58,47 @@
       .dataTables_wrapper .dataTables_length select { border-radius: 0.375rem; border: 1px solid #cbd5e1; padding: 0.25rem 1.75rem 0.25rem 0.5rem; margin: 0 0.375rem; outline: none; background: #fff; font-size: 0.8125rem; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); }
       .dataTables_wrapper .dataTables_info { padding-top: 1rem; font-size: 0.8125rem; color: #475569; float: left; }
       .dataTables_wrapper .dataTables_paginate { padding-top: 1rem; float: right; display: flex; gap: 0.25rem; font-size: 0.8125rem; }
+
+      /* Select2 Tailwind Integration */
+      .select2-container .select2-selection--single {
+          height: 2.375rem !important; /* Matches py-2 */
+          padding: 0.25rem 0.75rem !important; /* Matches px-3 */
+          background-color: #fff !important;
+          border: 1px solid #e2e8f0 !important; /* border-slate-200 */
+          border-radius: 0.375rem !important; /* rounded-md */
+          font-size: 0.875rem !important; /* text-sm */
+          display: flex !important;
+          align-items: center !important;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+      }
+      .select2-container--default .select2-selection--single .select2-selection__arrow {
+          height: 2.375rem !important;
+          right: 0.5rem !important;
+      }
+      .select2-container--default .select2-selection--single .select2-selection__rendered {
+          color: #334155 !important; /* text-slate-700 */
+          padding-left: 0 !important;
+          line-height: normal !important;
+      }
+      .select2-container--default.select2-container--focus .select2-selection--single {
+          border-color: #6366f1 !important; /* focus:ring-indigo-500 */
+          box-shadow: 0 0 0 1px #6366f1 !important;
+          outline: none !important;
+      }
+      .select2-dropdown {
+          border: 1px solid #e2e8f0 !important;
+          border-radius: 0.375rem !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+          font-size: 0.875rem !important;
+      }
+      .select2-results__option {
+          padding: 0.5rem 0.75rem !important;
+          color: #334155 !important;
+      }
+      .select2-container--default .select2-results__option--highlighted[aria-selected] {
+          background-color: #6366f1 !important; /* bg-indigo-500 */
+          color: white !important;
+      }
       .dataTables_wrapper .dataTables_paginate .paginate_button { padding: 0.25rem 0.5rem !important; margin: 0 !important; border-radius: 0.375rem !important; border: 1px solid transparent !important; background: transparent !important; color: #475569 !important; cursor: pointer; transition: all 0.2s; }
       .dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: #f1f5f9 !important; color: #0f172a !important; border-color: transparent !important; }
       .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #fff !important; color: #0f172a !important; border-color: #cbd5e1 !important; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05) !important; font-weight: 500; }
