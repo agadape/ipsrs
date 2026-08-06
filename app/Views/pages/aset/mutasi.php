@@ -5,20 +5,20 @@ $alasanFilter = $alasan ?? '';
 <!-- Page Header -->
 <div class="flex items-center justify-between mb-6">
   <div>
-    <h1 class="text-xl font-bold text-gray-800">Mutasi Aset</h1>
-    <p class="text-sm text-gray-400 mt-0.5">Riwayat dan pencatatan perpindahan aset</p>
+    <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Mutasi Aset</h1>
+    <p class="text-sm text-slate-500 mt-1">Riwayat dan pencatatan perpindahan aset fisik</p>
   </div>
 </div>
 
 <!-- Inline Form: Catat Perpindahan -->
 <div class="card p-6 mb-6">
-  <div class="flex items-center gap-2 mb-5">
-    <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+  <div class="flex items-center gap-2 mb-5 pb-3 border-b border-slate-100">
+    <div class="w-8 h-8 rounded-md bg-indigo-50 border border-indigo-100 flex items-center justify-center">
       <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
       </svg>
     </div>
-    <h2 class="text-sm font-semibold text-gray-700">Catat Perpindahan Aset</h2>
+    <h2 class="text-sm font-bold text-slate-800">Catat Perpindahan Aset</h2>
   </div>
 
   <form method="POST" action="/ipsrs/aset/mutasi">
@@ -27,10 +27,10 @@ $alasanFilter = $alasan ?? '';
 
       <!-- ID Aset -->
       <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Aset <span class="text-red-500">*</span></label>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Aset <span class="text-red-500">*</span></label>
         <select name="id_aset" id="id_aset" required onchange="updateLokasiSaatIni()"
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
-          <option value="">-- Pilih Aset --</option>
+                class="select2 w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+          <option value="">-- Pilih Aset Fisik --</option>
           <?php foreach (($aset ?? []) as $a): ?>
             <option value="<?= esc($a['id'] ?? '') ?>" data-lokasi="<?= esc($a['lokasi'] ?? '-') ?>">
               <?= esc(($a['nomor_aset'] ?? '') . ' - ' . ($a['nama'] ?? '')) ?> (<?= esc(($a['ruangan'] ?? '') . ' / ' . ($a['gedung'] ?? '')) ?>)
@@ -41,17 +41,17 @@ $alasanFilter = $alasan ?? '';
 
       <!-- Lokasi Saat Ini (Read-only) -->
       <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi Saat Ini</label>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi Saat Ini</label>
         <input type="text" id="lokasi_saat_ini" readonly
                placeholder="Pilih aset terlebih dahulu..."
-               class="w-full px-3 py-2.5 text-sm bg-gray-100 text-gray-500 border-0 rounded-xl focus:outline-none cursor-not-allowed">
+               class="w-full px-3 py-2 text-sm bg-slate-50 text-slate-500 border border-slate-200 rounded-md focus:outline-none cursor-not-allowed">
       </div>
 
       <!-- Jenis Mutasi -->
       <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Jenis Mutasi <span class="text-red-500">*</span></label>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jenis Mutasi <span class="text-red-500">*</span></label>
         <select name="jenis_mutasi" id="jenis_mutasi" required onchange="toggleLokasiTujuan()"
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
           <option value="">-- Pilih Jenis Mutasi --</option>
           <option value="Pindah Ruangan">Pindah Ruangan (Tetap Aktif)</option>
           <option value="Simpan ke Gudang">Simpan ke Gudang (Non-Aktif)</option>
@@ -62,17 +62,17 @@ $alasanFilter = $alasan ?? '';
 
       <!-- Lokasi Tujuan -->
       <div id="lokasi_tujuan_container" class="hidden">
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Lokasi Tujuan <span class="text-red-500">*</span></label>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi Tujuan <span class="text-red-500">*</span></label>
         <input type="text" name="lokasi_tujuan" id="lokasi_tujuan"
                placeholder="Gedung / Ruangan tujuan"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
       </div>
 
       <!-- Petugas -->
       <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Petugas <span class="text-red-500">*</span></label>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Petugas <span class="text-red-500">*</span></label>
         <select name="petugas" required
-                class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50 appearance-none">
+                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
           <option value="">-- Pilih Petugas --</option>
           <?php foreach ($users ?? [] as $u): ?>
           <option value="<?= esc($u['nama_lengkap']) ?>"><?= esc($u['nama_lengkap']) ?> (<?= esc($u['role']) ?>)</option>
@@ -82,23 +82,23 @@ $alasanFilter = $alasan ?? '';
 
       <!-- Tanggal -->
       <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Tanggal <span class="text-red-500">*</span></label>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal <span class="text-red-500">*</span></label>
         <input type="date" name="tanggal" value="<?= date('Y-m-d') ?>" required
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
       </div>
 
       <!-- Catatan -->
-      <div>
-        <label class="block text-xs font-semibold text-gray-600 mb-1.5">Catatan</label>
+      <div class="lg:col-span-3">
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Catatan</label>
         <input type="text" name="catatan"
                placeholder="Catatan tambahan (opsional)"
-               class="w-full px-3 py-2.5 text-sm bg-gray-50 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400/50">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
       </div>
 
     </div>
-    <div class="mt-4 flex justify-end">
+    <div class="mt-5 flex justify-end">
       <button type="submit"
-              class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm">
+              class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
         Simpan Mutasi
       </button>
     </div>
@@ -111,7 +111,7 @@ $alasanFilter = $alasan ?? '';
   <?php foreach ($alasanOpts as $val => $label): ?>
   <?php $active = $alasanFilter === $val; ?>
   <a href="/ipsrs/aset/mutasi<?= $val ? '?alasan='.urlencode($val) : '' ?>"
-     class="px-4 py-1.5 rounded-xl text-sm font-medium transition-colors <?= $active ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200' ?>">
+     class="px-4 py-1.5 rounded-md text-sm font-medium transition-colors border <?= $active ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900' ?>">
     <?= $label ?>
   </a>
   <?php endforeach; ?>
@@ -121,32 +121,32 @@ $alasanFilter = $alasan ?? '';
 <div class="card overflow-hidden">
   <?php if (empty($riwayat)): ?>
   <div class="text-center py-16">
-    <p class="text-sm text-gray-400">Belum ada riwayat mutasi.</p>
+    <p class="text-sm text-slate-500">Belum ada riwayat mutasi.</p>
   </div>
   <?php else: ?>
-  <div class="overflow-x-auto">
-    <table class="w-full text-sm">
-      <thead class="bg-gray-50 border-b border-gray-100">
+  <div class="overflow-x-auto p-0">
+    <table class="w-full text-left border-collapse text-sm">
+      <thead class="bg-slate-50 border-b border-slate-200">
         <tr>
-          <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Tanggal</th>
-          <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Nama Aset</th>
-          <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Dari</th>
-          <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Ke</th>
-          <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Alasan</th>
-          <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Petugas</th>
-          <th class="text-left px-5 py-3.5 text-xs font-semibold text-gray-400 uppercase tracking-wider">Catatan</th>
+          <th class="py-3 px-4 text-xs font-medium text-slate-500 uppercase tracking-wider">Tanggal</th>
+          <th class="py-3 px-4 text-xs font-medium text-slate-500 uppercase tracking-wider">Nama Aset</th>
+          <th class="py-3 px-4 text-xs font-medium text-slate-500 uppercase tracking-wider">Dari</th>
+          <th class="py-3 px-4 text-xs font-medium text-slate-500 uppercase tracking-wider">Ke</th>
+          <th class="py-3 px-4 text-xs font-medium text-slate-500 uppercase tracking-wider">Alasan</th>
+          <th class="py-3 px-4 text-xs font-medium text-slate-500 uppercase tracking-wider">Petugas</th>
+          <th class="py-3 px-4 text-xs font-medium text-slate-500 uppercase tracking-wider">Catatan</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-gray-50">
+      <tbody class="divide-y divide-slate-100">
         <?php foreach ($riwayat as $r): ?>
-        <tr class="hover:bg-gray-50/60 transition-colors">
-          <td class="px-5 py-3.5 text-gray-600"><?= tgl($r['tanggal']) ?></td>
-          <td class="px-5 py-3.5 font-medium text-gray-800"><?= esc($r['nama_aset'] ?? $r['nama'] ?? '-') ?></td>
-          <td class="px-5 py-3.5 text-gray-600"><?= esc($r['dari'] ?? $r['lokasi_asal'] ?? '-') ?></td>
-          <td class="px-5 py-3.5 text-gray-600"><?= esc($r['ke'] ?? $r['lokasi_tujuan'] ?? '-') ?></td>
-          <td class="px-5 py-3.5 text-gray-600"><?= esc($r['alasan'] ?? '-') ?></td>
-          <td class="px-5 py-3.5 text-gray-600"><?= esc($r['petugas'] ?? '-') ?></td>
-          <td class="px-5 py-3.5 text-gray-500 max-w-[180px] truncate"><?= esc($r['catatan'] ?? '-') ?></td>
+        <tr class="hover:bg-slate-50 transition-colors group">
+          <td class="px-4 py-3 text-slate-600 whitespace-nowrap"><?= tgl($r['tanggal']) ?></td>
+          <td class="px-4 py-3 font-medium text-slate-900 group-hover:text-indigo-600 transition-colors"><?= esc($r['nama_aset'] ?? $r['nama'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-slate-600"><?= esc($r['dari'] ?? $r['lokasi_asal'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-slate-600"><?= esc($r['ke'] ?? $r['lokasi_tujuan'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-slate-600"><?= esc($r['alasan'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-slate-600"><?= esc($r['petugas'] ?? '-') ?></td>
+          <td class="px-4 py-3 text-slate-500 max-w-[180px] truncate"><?= esc($r['catatan'] ?? '-') ?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>

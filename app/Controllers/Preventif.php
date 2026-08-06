@@ -159,19 +159,30 @@ class Preventif extends BaseController
                 }
                 $lkpModel->addDetail($rows);
 
-                // Auto-save kategori baru sebagai template
+                // Auto-save kategori baru atau item baru ke template
                 $templateModel = new \App\Models\TemplateChecklistModel();
                 $existingTemplates = $templateModel->getByKategori($post['kategori']);
-                if (empty($existingTemplates)) {
-                    foreach ($items as $it) {
-                        $jenis = $it['jenis'] ?? '';
+                
+                // Buat index existing items untuk perbandingan (nama_komponen + jenis_item)
+                $existingItems = array_map(function($t) {
+                    return strtolower(trim($t['nama_komponen'] ?? '') . '|' . ($t['jenis_item'] ?? ''));
+                }, $existingTemplates);
+
+                foreach ($items as $it) {
+                    $jenis = $it['jenis'] ?? '';
+                    $komp  = $it['komponen'] ?? '';
+                    $key   = strtolower(trim($komp) . '|' . $jenis);
+
+                    if (!empty($komp) && !in_array($key, $existingItems)) {
                         $templateModel->create([
                             'kategori'      => $post['kategori'],
                             'no_item'       => (int) ($it['no_item'] ?? 0),
                             'jenis_item'    => $jenis,
-                            'nama_komponen' => $it['komponen'] ?? '',
+                            'nama_komponen' => $komp,
                             'satuan'        => $jenis === 'Pengukuran' ? ($it['satuan'] ?? null) : null,
                         ]);
+                        // Tambahkan ke array agar tidak duplikat jika user mengirim 2 item sama
+                        $existingItems[] = $key;
                     }
                 }
             }

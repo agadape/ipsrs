@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Masuk — IPSRS RSUD Kota Yogyakarta</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { font-family: 'Inter', sans-serif; }
     @keyframes blob { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(30px,-20px) scale(1.05)} 66%{transform:translate(-15px,25px) scale(.95)} }
     .blob { animation: blob 8s infinite ease-in-out; }
     .blob2 { animation: blob 10s infinite ease-in-out reverse; }
@@ -125,11 +125,11 @@
         </div>
       </div>
 
-      <h2 class="text-2xl font-bold text-gray-900">Daftar Akun Pelapor</h2>
-      <p class="mt-1 text-sm text-gray-500">Buat akun untuk melaporkan kerusakan aset RS.</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Daftar Akun Pelapor</h2>
+      <p class="mt-1 text-sm text-slate-500">Buat akun untuk melaporkan kerusakan aset RS.</p>
 
       <?php if (!empty(session()->getFlashdata('error'))): ?>
-      <div class="mt-5 flex items-start gap-2.5 px-4 py-3 rounded-xl bg-red-50 border border-red-100">
+      <div class="mt-5 flex items-start gap-2.5 px-4 py-3 rounded-md bg-red-50 border border-red-200">
         <svg class="w-4 h-4 text-red-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
@@ -137,42 +137,42 @@
       </div>
       <?php endif; ?>
 
-      <form method="POST" action="/register" class="mt-8 flex flex-col gap-4">
+      <form method="POST" action="/register" class="mt-8 flex flex-col gap-5">
         <?= csrf_field() ?>
 
         <!-- Nama Lengkap -->
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Lengkap</label>
           <input type="text" name="nama_lengkap" required value="<?= old('nama_lengkap') ?>"
                  placeholder="Nama Lengkap Anda"
-                 class="w-full px-4 py-3.5 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+                 class="w-full px-4 py-2.5 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-indigo-500 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
         </div>
 
         <!-- Unit Kerja -->
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1.5">Unit Kerja / Ruangan</label>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Unit Kerja / Ruangan</label>
           <input type="text" name="unit_kerja" required value="<?= old('unit_kerja') ?>"
                  placeholder="Contoh: IGD, Rawat Inap Melati"
-                 class="w-full px-4 py-3.5 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+                 class="w-full px-4 py-2.5 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-indigo-500 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
         </div>
 
         <!-- Email -->
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1.5">Alamat Email</label>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Alamat Email</label>
           <input type="email" name="email" required autocomplete="email" value="<?= old('email') ?>"
                  placeholder="nama@rsud.go.id"
-                 class="w-full px-4 py-3.5 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+                 class="w-full px-4 py-2.5 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-indigo-500 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
         </div>
 
         <!-- Password -->
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1.5">Kata Sandi</label>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kata Sandi</label>
           <div class="relative">
             <input type="password" name="password" id="pw" required autocomplete="new-password"
                    placeholder="••••••••"
-                   class="w-full px-4 py-3.5 pr-11 rounded-2xl bg-gray-50 border-0 focus:ring-2 focus:ring-indigo-500/50 text-[14px] text-gray-900 placeholder:text-gray-400 outline-none transition-all shadow-inner">
+                   class="w-full px-4 py-2.5 pr-11 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-indigo-500 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
             <button type="button" onclick="togglePw()" tabindex="-1"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 transition-colors">
+                    class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors">
               <svg id="ico-eye" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
               </svg>
@@ -185,7 +185,7 @@
 
         <!-- Submit -->
         <button type="submit" id="btn-submit"
-                class="mt-4 w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-0.5 text-white text-[15px] font-bold flex items-center justify-center gap-2 transition-all duration-300">
+                class="mt-2 w-full py-2.5 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium flex items-center justify-center gap-2 transition-colors shadow-sm">
           <svg id="btn-loader" class="hidden w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>

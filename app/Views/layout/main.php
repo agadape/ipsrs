@@ -9,8 +9,8 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
-          colors: { brand: { DEFAULT: '#4F46E5', hover: '#4338CA' } }
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: { brand: { DEFAULT: '#0f172a', hover: '#1e293b' } }
         }
       }
     }
@@ -21,6 +21,10 @@
   <!-- DataTables -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+  <!-- Select2 -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -28,38 +32,48 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
-  <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); background-attachment: fixed; }
-    .scrollbar-dark::-webkit-scrollbar { width: 3px; }
-    .scrollbar-dark::-webkit-scrollbar-track { background: transparent; }
-    .scrollbar-dark::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
-    .sidebar-active { background: linear-gradient(90deg, rgba(79,70,229,0.15) 0%, transparent 100%); border-left: 3px solid #6366f1; }
-    .card { background: rgba(255,255,255,0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 1.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.03); border: 1px solid rgba(255,255,255,0.7); }
-    .badge { display:inline-flex; align-items:center; gap:.375rem; padding:.25rem .625rem; border-radius:9999px; font-size:.75rem; font-weight:500; white-space:nowrap; }
-    
-    /* Custom DataTables styling to match theme */
-    .dataTables_wrapper { padding: 1rem; }
-    .dataTables_wrapper .dataTables_filter { margin-bottom: 1rem; float: right; text-align: right; }
-    .dataTables_wrapper .dataTables_filter input { border-radius: 0.75rem; border: 1px solid #e2e8f0; padding: 0.35rem 0.75rem; margin-left: 0.5rem; outline: none; font-size: 0.875rem; background: #f8fafc; }
-    .dataTables_wrapper .dataTables_filter input:focus { border-color: #6366f1; box-shadow: 0 0 0 2px #e0e7ff; background: #fff; }
-    .dataTables_wrapper .dataTables_length { margin-bottom: 1rem; float: left; font-size: 0.875rem; color: #64748b; }
-    .dataTables_wrapper .dataTables_length select { border-radius: 0.5rem; border: 1px solid #e2e8f0; padding: 0.25rem 2rem 0.25rem 0.5rem; margin: 0 0.5rem; outline: none; background: #f8fafc; font-size: 0.875rem; }
-    .dataTables_wrapper .dataTables_info { padding-top: 1rem; font-size: 0.875rem; color: #64748b; float: left; }
-    .dataTables_wrapper .dataTables_paginate { padding-top: 1rem; float: right; display: flex; gap: 0.25rem; font-size: 0.875rem; }
-    .dataTables_wrapper .dataTables_paginate .paginate_button { padding: 0.25rem 0.75rem !important; margin: 0 !important; border-radius: 0.5rem !important; border: 1px solid #e2e8f0 !important; background: #fff !important; color: #475569 !important; cursor: pointer; transition: all 0.2s; }
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: #f8fafc !important; color: #0f172a !important; border-color: #cbd5e1 !important; }
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #4f46e5 !important; color: #fff !important; border-color: #4f46e5 !important; font-weight: 600; }
-    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled { opacity: 0.5; cursor: not-allowed; }
-    table.dataTable { border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important; margin-bottom: 0 !important; border-bottom: none !important; }
-    table.dataTable thead th { border-bottom: 1px solid #f1f5f9 !important; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; font-weight: 700; padding: 1rem 1.25rem !important; }
-    table.dataTable tbody td { border-bottom: 1px solid #f1f5f9 !important; padding: 0.875rem 1.25rem !important; }
-    table.dataTable.no-footer { border-bottom: none !important; }
-    .dataTables_wrapper::after { content: ""; display: table; clear: both; }
-    
-    #sidebar { transition: transform 0.25s cubic-bezier(0.4,0,0.2,1); }
-  </style>
-</head>
-<body class="min-h-screen">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <style>
+      :root { font-family: 'Inter', sans-serif; }
+      @supports (font-variation-settings: normal) {
+        :root { font-family: 'Inter var', sans-serif; }
+      }
+      body { background-color: #f8fafc; color: #0f172a; -webkit-font-smoothing: antialiased; }
+      .scrollbar-dark::-webkit-scrollbar { width: 4px; height: 4px; }
+      .scrollbar-dark::-webkit-scrollbar-track { background: transparent; }
+      .scrollbar-dark::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+      .sidebar-active { background-color: #f1f5f9; color: #0f172a; font-weight: 500; }
+      .sidebar-active::before { content: ''; position: absolute; left: 0; top: 0.5rem; bottom: 0.5rem; width: 3px; background-color: #0f172a; border-radius: 0 4px 4px 0; }
+      
+      .card { background: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
+      .badge { display:inline-flex; align-items:center; gap:0.25rem; padding:0.125rem 0.5rem; border-radius:0.375rem; font-size:0.75rem; font-weight:500; white-space:nowrap; border: 1px solid transparent; }
+      
+      /* Crisp Enterprise DataTables styling */
+      .dataTables_wrapper { padding: 1rem 1.25rem; }
+      .dataTables_wrapper .dataTables_filter { margin-bottom: 1rem; float: right; text-align: right; }
+      .dataTables_wrapper .dataTables_filter input { border-radius: 0.375rem; border: 1px solid #cbd5e1; padding: 0.25rem 0.625rem; margin-left: 0.5rem; outline: none; font-size: 0.8125rem; background: #fff; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: all 0.2s; }
+      .dataTables_wrapper .dataTables_filter input:focus { border-color: #94a3b8; box-shadow: 0 0 0 1px #94a3b8; }
+      .dataTables_wrapper .dataTables_length { margin-bottom: 1rem; float: left; font-size: 0.8125rem; color: #475569; }
+      .dataTables_wrapper .dataTables_length select { border-radius: 0.375rem; border: 1px solid #cbd5e1; padding: 0.25rem 1.75rem 0.25rem 0.5rem; margin: 0 0.375rem; outline: none; background: #fff; font-size: 0.8125rem; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); }
+      .dataTables_wrapper .dataTables_info { padding-top: 1rem; font-size: 0.8125rem; color: #475569; float: left; }
+      .dataTables_wrapper .dataTables_paginate { padding-top: 1rem; float: right; display: flex; gap: 0.25rem; font-size: 0.8125rem; }
+      .dataTables_wrapper .dataTables_paginate .paginate_button { padding: 0.25rem 0.5rem !important; margin: 0 !important; border-radius: 0.375rem !important; border: 1px solid transparent !important; background: transparent !important; color: #475569 !important; cursor: pointer; transition: all 0.2s; }
+      .dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: #f1f5f9 !important; color: #0f172a !important; border-color: transparent !important; }
+      .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #fff !important; color: #0f172a !important; border-color: #cbd5e1 !important; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05) !important; font-weight: 500; }
+      .dataTables_wrapper .dataTables_paginate .paginate_button.disabled { opacity: 0.4; cursor: not-allowed; }
+      
+      table.dataTable { border-collapse: collapse !important; border-spacing: 0 !important; width: 100% !important; margin-bottom: 0 !important; border-bottom: none !important; }
+      table.dataTable thead th { border-bottom: 1px solid #e2e8f0 !important; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.025em; color: #64748b; font-weight: 500; padding: 0.75rem 1rem !important; background-color: #f8fafc; }
+      table.dataTable tbody td { border-bottom: 1px solid #f1f5f9 !important; padding: 0.75rem 1rem !important; font-size: 0.875rem; color: #334155; }
+      table.dataTable tbody tr:hover td { background-color: #f8fafc !important; }
+      table.dataTable.no-footer { border-bottom: 1px solid #e2e8f0 !important; }
+      .dataTables_wrapper::after { content: ""; display: table; clear: both; }
+      
+      #sidebar { transition: transform 0.2s ease-in-out; }
+    </style>
+  </head>
+  <body class="min-h-screen bg-slate-50 text-slate-900">
 
 <?php $isLoggedIn = session()->has('user_id'); ?>
 
@@ -72,21 +86,23 @@
      class="fixed inset-0 bg-black/50 z-20 hidden md:hidden"></div>
 <?php endif; ?>
 
-<main id="main-content" class="<?= $isLoggedIn ? 'md:ml-60 pt-14' : 'pt-6' ?> min-h-screen flex justify-center">
-  <div class="p-4 md:p-6 w-full <?= $isLoggedIn ? 'max-w-[1400px]' : 'max-w-[800px]' ?>">
+<main id="main-content" class="<?= $isLoggedIn ? 'md:ml-64 pt-14' : 'pt-6' ?> min-h-screen flex justify-center bg-slate-50">
+  <div class="p-6 md:p-8 w-full max-w-7xl">
 
     <?= view($content_view, get_defined_vars()) ?>
   </div>
 </main>
 
 <script>
-// SweetAlert Toast Configuration
 const Toast = Swal.mixin({
   toast: true,
-  position: 'top-end',
+  position: 'bottom-right',
   showConfirmButton: false,
   timer: 3000,
-  timerProgressBar: true,
+  timerProgressBar: false,
+  customClass: {
+    popup: 'rounded-md shadow-lg border border-slate-200 text-sm font-medium',
+  },
   didOpen: (toast) => {
     toast.addEventListener('mouseenter', Swal.stopTimer)
     toast.addEventListener('mouseleave', Swal.resumeTimer)
@@ -160,6 +176,17 @@ function closeSidebar() {
   document.getElementById('sidebar').classList.add('-translate-x-full');
   document.getElementById('sidebar-overlay').classList.add('hidden');
 }
+
+// Global Select2 Init
+$(document).ready(function() {
+  if ($.fn.select2) {
+    $('.select2').select2({
+      width: '100%',
+      // styling adjustments for Tailwind
+      selectionCssClass: 'border-slate-200 shadow-sm focus:ring-1 focus:ring-indigo-500 rounded-md py-1.5',
+    });
+  }
+});
 </script>
 </body>
 </html>

@@ -52,7 +52,14 @@ class KategoriAset extends BaseController
             $this->kategoriModel->create($payload);
         } catch (\Throwable $e) {
             log_message('error', '[KategoriAset::tambah] ' . $e->getMessage());
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON(['success' => false, 'message' => $e->getMessage()]);
+            }
             return redirect()->back()->withInput()->with('error', 'Gagal menyimpan kategori: ' . $e->getMessage());
+        }
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON(['success' => true, 'kategori' => $data['nama_kategori']]);
         }
 
         return redirect()->to('/ipsrs/kategori-aset')->with('success', "Kategori \"{$data['nama_kategori']}\" berhasil ditambahkan.");

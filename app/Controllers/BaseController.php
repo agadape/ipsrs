@@ -44,6 +44,11 @@ abstract class BaseController extends Controller
             return true;
         }
         $msg = $errorMsg ?: 'Mohon lengkapi seluruh data yang wajib diisi.';
+        
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON(['success' => false, 'message' => $msg]);
+        }
+        
         return redirect()->back()->withInput()->with('error', $msg);
     }
 
