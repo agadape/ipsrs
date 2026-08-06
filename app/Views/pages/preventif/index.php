@@ -41,13 +41,9 @@ $filterParam = $filter ?? '';
       <!-- Lokasi -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi</label>
-        <select name="lokasi" readonly disabled
-                class="w-full px-3 py-2 text-sm bg-slate-50 text-slate-500 border border-slate-200 rounded-md focus:outline-none cursor-not-allowed">
-          <option value="">-- Lokasi Otomatis Terisi --</option>
-          <?php foreach (getStandardUnits() as $u): ?>
-            <option value="<?= esc($u) ?>"><?= esc($u) ?></option>
-          <?php endforeach; ?>
-        </select>
+        <input type="text" name="lokasi" id="sel_lokasi" readonly disabled
+               placeholder="-- Lokasi Otomatis Terisi --"
+               class="w-full px-3 py-2 text-sm bg-slate-50 text-slate-500 border border-slate-200 rounded-md focus:outline-none cursor-not-allowed">
         <input type="hidden" name="lokasi" id="hidden_lokasi">
       </div>
 
@@ -186,7 +182,7 @@ $filterParam = $filter ?? '';
 (function() {
   var selAset = document.querySelector('select[name="id_aset"]');
   var inpNama = document.querySelector('input[name="aset"]');
-  var selLokasi = document.querySelector('select[name="lokasi"]');
+  var selLokasi = document.getElementById('sel_lokasi');
   var hidLokasi = document.getElementById('hidden_lokasi');
 
   function updateLokasi() {

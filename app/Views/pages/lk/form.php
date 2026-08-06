@@ -44,9 +44,13 @@
       <!-- Unit Pelapor -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Unit Pelapor <span class="text-red-500">*</span></label>
-        <input type="text" name="unit_pelapor" value="<?= esc(old('unit_pelapor') ?? '') ?>" required
-               placeholder="Contoh: IGD, ICU, Poli Umum"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+        <select name="unit_pelapor" required
+                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+          <option value="">-- Pilih Unit --</option>
+          <?php foreach (getStandardUnits() as $u): ?>
+            <option value="<?= esc($u) ?>" <?= old('unit_pelapor') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
+          <?php endforeach; ?>
+        </select>
       </div>
 
     </div>

@@ -9,7 +9,7 @@ class AsetSeriesModel extends BaseModel
     public function getAllWithParent(): array
     {
         return $this->qb($this->table)
-            ->select('aset_series.*, aset.nama, aset.jenis, aset.kategori, aset.merk, aset.model')
+            ->select('aset_series.*, aset.nama, aset.jenis, aset.kategori')
             ->join('aset', 'aset.id = aset_series.id_aset')
             ->orderBy('aset.nama', 'ASC')
             ->orderBy('aset_series.nomor_aset', 'ASC')
