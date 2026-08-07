@@ -10,7 +10,13 @@ class AsetModel extends BaseModel
 
     public function getAll(string $orderBy = 'nama'): array
     {
-        return parent::getAll($orderBy);
+        return $this->qb($this->table)
+            ->select('aset.*, COUNT(aset_series.id) as total_series')
+            ->join('aset_series', 'aset_series.id_aset = aset.id', 'left')
+            ->groupBy('aset.id')
+            ->orderBy('aset.' . $orderBy, 'ASC')
+            ->get()
+            ->getResultArray();
     }
 
 

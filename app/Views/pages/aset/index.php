@@ -81,16 +81,13 @@ $total = count($aset ?? []);
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Nama Aset</th>
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Kategori</th>
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Jenis</th>
-          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Lokasi</th>
-          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-          <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider"></th>
+          <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Jumlah Unit</th>
+          <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100">
         <?php foreach ($aset as $a): ?>
         <?php
-          $st = $a['status'] ?? '';
-          $stBadge = status_aset_badge($st);
           $jn = $a['jenis'] ?? '';
           $jnBadge = match($jn) {
             'Sarana'         => 'badge bg-slate-100 text-slate-700',
@@ -98,6 +95,7 @@ $total = count($aset ?? []);
             'Alat Non Medis' => 'badge bg-slate-50 border border-slate-200 text-slate-500',
             default          => 'badge bg-slate-50 text-slate-500',
           };
+          $unitCount = (int)($a['total_series'] ?? 0);
         ?>
         <tr class="hover:bg-slate-50 transition-colors group">
           <td class="px-4 py-3">
@@ -107,19 +105,26 @@ $total = count($aset ?? []);
             <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline transition-colors">
               <?= esc($a['nama'] ?? '-') ?>
             </a>
-            <?php if (!empty($a['merk']) || !empty($a['model'])): ?>
-            <div class="text-xs text-slate-500 mt-1">
-              <?= esc(implode(' / ', array_filter([$a['merk'] ?? '', $a['model'] ?? '']))) ?>
+            <?php if (!empty($a['keterangan'])): ?>
+            <div class="text-xs text-slate-500 mt-0.5 line-clamp-1">
+              <?= esc($a['keterangan']) ?>
             </div>
             <?php endif; ?>
           </td>
           <td class="px-4 py-3 text-slate-600"><?= esc($a['kategori'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="<?= $jnBadge ?>"><?= esc($jn ?: '-') ?></span></td>
-          <td class="px-4 py-3 text-slate-600"><?= esc($a['lokasi'] ?? '-') ?></td>
-          <td class="px-4 py-3"><span class="<?= $stBadge ?>"><?= esc($st ?: '-') ?></span></td>
-          <td class="px-4 py-3 text-right">
+          <td class="px-4 py-3 text-center">
+            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/60 transition-colors">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              <?= $unitCount ?> Unit
+            </a>
+          </td>
+          <td class="px-4 py-3 text-right space-x-2">
+            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>"
+               class="text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors">Detail Unit</a>
+            <span class="text-slate-300">|</span>
             <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>/edit"
-               class="text-xs font-medium text-slate-500 hover:text-indigo-600 transition-colors">Edit</a>
+               class="text-xs font-medium text-slate-500 hover:text-slate-700 transition-colors">Edit</a>
           </td>
         </tr>
         <?php endforeach; ?>
