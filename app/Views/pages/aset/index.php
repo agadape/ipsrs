@@ -78,10 +78,10 @@ $total = count($aset ?? []);
       <thead class="bg-slate-50 border-b border-slate-200">
         <tr>
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">ID Aset</th>
-          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Nama Aset</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Nama Master Aset</th>
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Kategori</th>
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Jenis</th>
-          <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Jumlah Unit</th>
+          <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Unit</th>
           <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
         </tr>
       </thead>
@@ -90,41 +90,45 @@ $total = count($aset ?? []);
         <?php
           $jn = $a['jenis'] ?? '';
           $jnBadge = match($jn) {
-            'Sarana'         => 'badge bg-slate-100 text-slate-700',
-            'Prasarana'      => 'badge border border-slate-200 text-slate-600',
-            'Alat Non Medis' => 'badge bg-slate-50 border border-slate-200 text-slate-500',
-            default          => 'badge bg-slate-50 text-slate-500',
+            'Sarana'         => 'px-2.5 py-1 text-xs font-medium bg-slate-100 text-slate-700 rounded-md border border-slate-200/60',
+            'Prasarana'      => 'px-2.5 py-1 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-md border border-indigo-200/60',
+            'Alat Non Medis' => 'px-2.5 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-md border border-amber-200/60',
+            default          => 'px-2.5 py-1 text-xs font-medium bg-slate-50 text-slate-600 rounded-md border border-slate-200',
           };
           $unitCount = (int)($a['total_series'] ?? 0);
         ?>
-        <tr class="hover:bg-slate-50 transition-colors group">
-          <td class="px-4 py-3">
-            <span class="font-mono text-xs text-slate-900 font-medium"><?= esc($a['nomor_aset'] ?? $a['id'] ?? '-') ?></span>
+        <tr class="hover:bg-slate-50/80 transition-colors">
+          <td class="px-4 py-3.5">
+            <span class="font-mono text-xs text-slate-500 font-medium"><?= esc($a['nomor_aset'] ?? substr($a['id'] ?? '', 0, 8)) ?></span>
           </td>
-          <td class="px-4 py-3 align-top">
-            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline transition-colors">
+          <td class="px-4 py-3.5 align-middle">
+            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="font-semibold text-slate-900 hover:text-indigo-600 transition-colors text-sm">
               <?= esc($a['nama'] ?? '-') ?>
             </a>
             <?php if (!empty($a['keterangan'])): ?>
-            <div class="text-xs text-slate-500 mt-0.5 line-clamp-1">
+            <p class="text-xs text-slate-400 mt-0.5 line-clamp-1 max-w-xs">
               <?= esc($a['keterangan']) ?>
-            </div>
+            </p>
             <?php endif; ?>
           </td>
-          <td class="px-4 py-3 text-slate-600"><?= esc($a['kategori'] ?? '-') ?></td>
-          <td class="px-4 py-3"><span class="<?= $jnBadge ?>"><?= esc($jn ?: '-') ?></span></td>
-          <td class="px-4 py-3 text-center">
-            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/60 transition-colors">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-              <?= $unitCount ?> Unit
-            </a>
+          <td class="px-4 py-3.5 text-slate-600 font-medium text-xs"><?= esc($a['kategori'] ?? '-') ?></td>
+          <td class="px-4 py-3.5"><span class="<?= $jnBadge ?>"><?= esc($jn ?: '-') ?></span></td>
+          <td class="px-4 py-3.5 text-center">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200/70">
+              <?= $unitCount ?> unit
+            </span>
           </td>
-          <td class="px-4 py-3 text-right space-x-2">
-            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>"
-               class="text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors">Detail Unit</a>
-            <span class="text-slate-300">|</span>
-            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>/edit"
-               class="text-xs font-medium text-slate-500 hover:text-slate-700 transition-colors">Edit</a>
+          <td class="px-4 py-3.5 text-right whitespace-nowrap">
+            <div class="inline-flex items-center gap-2">
+              <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>"
+                 class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50/70 hover:bg-indigo-100 rounded-md border border-indigo-200/50 transition-colors">
+                Lihat Unit
+              </a>
+              <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>/edit"
+                 class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 rounded-md border border-slate-200 shadow-sm transition-colors">
+                Edit
+              </a>
+            </div>
           </td>
         </tr>
         <?php endforeach; ?>
