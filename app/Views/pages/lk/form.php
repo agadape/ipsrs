@@ -106,7 +106,7 @@
             <option value="<?= esc($a['id'] ?? '') ?>"
                     data-lokasi="<?= esc($a['lokasi'] ?? '') ?>"
                     <?= old('id_aset') == ($a['id'] ?? '') ? 'selected' : '' ?>>
-              <?= esc(($a['nomor_aset'] ?? '') . ' - ' . ($a['nama'] ?? '')) ?> (<?= esc(($a['ruangan'] ?? '') . ' / ' . ($a['gedung'] ?? '')) ?>)
+              <?= esc(format_aset_label($a)) ?>
             </option>
           <?php endforeach; ?>
         </select>

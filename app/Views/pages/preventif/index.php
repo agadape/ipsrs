@@ -29,7 +29,7 @@ $filterParam = $filter ?? '';
           <?php foreach (($aset ?? []) as $a): ?>
           <option value="<?= esc($a['id'] ?? '') ?>"
                   data-lokasi="<?= esc($a['lokasi'] ?? '') ?>">
-            <?= esc(($a['nomor_aset'] ?? '') . ' - ' . ($a['nama'] ?? '')) ?> (<?= esc(($a['ruangan'] ?? '') . ' / ' . ($a['gedung'] ?? '')) ?>)
+            <?= esc(format_aset_label($a)) ?>
           </option>
           <?php endforeach; ?>
         </select>

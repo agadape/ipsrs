@@ -29,3 +29,20 @@ function getStandardUnits() {
         "Lainnya"
     ];
 }
+
+function format_aset_label(array $a): string {
+    $code  = $a['nomor_aset'] ?? '';
+    $nama  = $a['nama'] ?? '';
+    $specs = array_filter([$a['merk'] ?? '', $a['model'] ?? '']);
+    $specStr = !empty($specs) ? ' ' . implode(' ', $specs) : '';
+    
+    $locs = array_unique(array_filter([
+        $a['unit'] ?? '',
+        $a['ruangan'] ?? '',
+        $a['gedung'] ?? '',
+        $a['lokasi'] ?? ''
+    ]));
+    $locStr = !empty($locs) ? ' (' . implode(' • ', $locs) . ')' : '';
+
+    return trim(($code ? $code . ' - ' : '') . $nama . $specStr . $locStr);
+}
