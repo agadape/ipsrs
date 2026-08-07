@@ -47,9 +47,13 @@
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Unit / Instalasi <span class="text-red-500">*</span></label>
-              <input type="text" name="unit_pelapor" value="<?= esc(old('unit_pelapor') ?? '') ?>" required
-                     placeholder="Cth: IGD, Poli Gigi"
-                     class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+              <select name="unit_pelapor" required
+                      class="select2 w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                <option value="">-- Pilih Unit / Instalasi --</option>
+                <?php foreach (getStandardUnits() as $u): ?>
+                  <option value="<?= esc($u) ?>" <?= old('unit_pelapor') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
+                <?php endforeach; ?>
+              </select>
             </div>
             <div class="md:col-span-2">
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Lokasi Spesifik <span class="text-red-500">*</span></label>

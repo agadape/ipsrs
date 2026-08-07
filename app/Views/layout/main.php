@@ -218,12 +218,27 @@ function closeSidebar() {
   document.getElementById('sidebar-overlay').classList.add('hidden');
 }
 
-// Global Select2 Init
+// Global Select2 Init with Fuzzy Word Matching
+function fuzzySelect2Matcher(params, data) {
+  if (!params.term || $.trim(params.term) === '') {
+    return data;
+  }
+  if (typeof data.text === 'undefined') {
+    return null;
+  }
+  var terms = params.term.toLowerCase().split(/\s+/).filter(Boolean);
+  var text = data.text.toLowerCase();
+  var match = terms.every(function(term) {
+    return text.indexOf(term) > -1;
+  });
+  return match ? data : null;
+}
+
 $(document).ready(function() {
   if ($.fn.select2) {
     $('.select2').select2({
       width: '100%',
-      // styling adjustments for Tailwind
+      matcher: fuzzySelect2Matcher,
       selectionCssClass: 'border-slate-200 shadow-sm focus:ring-1 focus:ring-indigo-500 rounded-md py-1.5',
     });
   }

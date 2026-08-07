@@ -23,8 +23,8 @@ $filterParam = $filter ?? '';
       <!-- Aset -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Aset <span class="text-red-500">*</span></label>
-        <select name="id_aset"
-                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <select name="id_aset" id="id_aset"
+                class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
           <option value="<?= esc($a['id'] ?? '') ?>"
@@ -198,9 +198,9 @@ $filterParam = $filter ?? '';
   }
 
   if (selAset) {
-    selAset.addEventListener('change', function() {
-      var opt = selAset.options[selAset.selectedIndex];
-      if (inpNama && opt.text && opt.value) inpNama.value = opt.text.split(' — ').slice(1).join(' — ');
+    $(selAset).on('change', function() {
+      var opt = this.options[this.selectedIndex];
+      if (inpNama && opt && opt.text && opt.value) inpNama.value = opt.text.split(' — ').slice(1).join(' — ');
       updateLokasi();
     });
   }
