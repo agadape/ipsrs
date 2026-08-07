@@ -16,20 +16,20 @@
     .animate-gradient-x { animation: gradient-x 3s ease infinite; background-size: 200% auto; }
   </style>
 </head>
-<body class="h-screen flex overflow-hidden" style="background:#0A0F1E">
+<body class="h-screen flex overflow-hidden" style="background:#0f172a">
 
   <!-- ── Left panel ─────────────────────────────────────────────────── -->
-  <div class="relative hidden lg:flex flex-col w-[56%] px-14 py-12 overflow-hidden" style="background:#0A0F1E">
+  <div class="relative hidden lg:flex flex-col w-[56%] px-14 py-12 overflow-hidden" style="background:#0f172a">
 
     <!-- Blobs -->
-    <div class="blob pointer-events-none absolute -top-32 -left-32 w-[480px] h-[480px] rounded-full opacity-20 blur-[120px]" style="background:#4F46E5"></div>
-    <div class="blob2 pointer-events-none absolute top-1/2 -right-20 w-[320px] h-[320px] rounded-full opacity-20 blur-[100px]" style="background:#7C3AED"></div>
-    <div class="blob3 pointer-events-none absolute bottom-0 left-1/3 w-[260px] h-[260px] rounded-full opacity-10 blur-[80px]" style="background:#818CF8"></div>
+    <div class="blob pointer-events-none absolute -top-32 -left-32 w-[480px] h-[480px] rounded-full opacity-20 blur-[120px]" style="background:#c62828"></div>
+    <div class="blob2 pointer-events-none absolute top-1/2 -right-20 w-[320px] h-[320px] rounded-full opacity-20 blur-[100px]" style="background:#b71c1c"></div>
+    <div class="blob3 pointer-events-none absolute bottom-0 left-1/3 w-[260px] h-[260px] rounded-full opacity-10 blur-[80px]" style="background:#ef4444"></div>
 
     <!-- Logo -->
     <div class="relative flex items-center gap-3">
       <div class="flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold"
-           style="background:linear-gradient(135deg,#4F6EF7,#7C3AED)">
+           style="background:linear-gradient(135deg,#c62828,#8e0000)">
         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
         </svg>

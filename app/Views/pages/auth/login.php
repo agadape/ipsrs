@@ -17,15 +17,15 @@
   <div class="w-full max-w-[1000px] bg-white rounded-[24px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col md:flex-row overflow-hidden border border-slate-200/60 relative z-10">
 
     <!-- ── Left Brand Panel ────────────────────────────────────────────── -->
-    <div class="hidden md:flex flex-col justify-between w-5/12 bg-slate-900 p-10 relative overflow-hidden">
+    <div class="hidden md:flex flex-col justify-between w-5/12 bg-gradient-to-br from-red-700 via-red-800 to-red-950 p-10 relative overflow-hidden text-white">
       <!-- Subtle Grid Pattern -->
-      <div class="absolute inset-0 opacity-[0.03]" 
+      <div class="absolute inset-0 opacity-[0.05]" 
            style="background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 24px 24px;">
       </div>
       
       <!-- Top: Logo -->
       <div class="relative z-10 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-red-700 flex items-center justify-center text-white shadow-sm">
+        <div class="w-10 h-10 rounded-lg bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-sm">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
@@ -38,22 +38,22 @@
         <h1 class="text-3xl font-bold text-white leading-[1.2] tracking-tight mb-4">
           Manajemen<br>
           Pemeliharaan<br>
-          <span class="text-red-400">Aset & Sarana.</span>
+          <span class="text-amber-300">Aset & Sarana.</span>
         </h1>
-        <p class="text-slate-400 text-sm leading-relaxed max-w-[240px]">
+        <p class="text-red-100/80 text-sm leading-relaxed max-w-[240px]">
           Platform terpadu untuk monitoring kerusakan, penjadwalan preventif, dan kontrol suku cadang.
         </p>
       </div>
 
       <!-- Bottom: Footer Info -->
-      <div class="relative z-10 border-t border-slate-800 pt-6">
+      <div class="relative z-10 border-t border-white/15 pt-6">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
-            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <div class="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
           </div>
           <div>
             <p class="text-white text-xs font-bold tracking-wide">RSUD Kota Yogyakarta</p>
-            <p class="text-slate-400 text-[11px] font-medium mt-0.5">Sistem Internal Enterprise</p>
+            <p class="text-red-200/70 text-[11px] font-medium mt-0.5">Sistem Internal Enterprise</p>
           </div>
         </div>
       </div>
@@ -122,7 +122,13 @@
           </div>
 
           <button type="submit" id="btn-submit"
-                  class="mt-4 w-full py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[13px] font-semibold flex items-center justify-center gap-2 transition-all shadow-sm">
+                  class="mt-4 w-full py-2.5 rounded-lg bg-red-700 hover:bg-red-800 text-white text-[13px] font-semibold flex items-center justify-center gap-2 transition-all shadow-md shadow-red-700/20">
+            <svg id="btn-loader" class="hidden w-4 h-4 animate-spin text-white/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+            </svg>
+            <span id="btn-text">Masuk Sekarang</span>
+          </button>
             <svg id="btn-loader" class="hidden w-4 h-4 animate-spin text-white/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
