@@ -45,11 +45,11 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
   <div class="flex flex-wrap items-start justify-between gap-4 mb-5 pb-4 border-b border-slate-100">
     <div>
       <div class="flex items-center gap-3 flex-wrap mb-2">
-        <span class="font-mono text-lg font-bold text-indigo-600 tracking-tight"><?= esc($lk['no_order'] ?? '-') ?></span>
+        <span class="font-mono text-lg font-bold text-red-700 tracking-tight"><?= esc($lk['no_order'] ?? '-') ?></span>
         <span class="<?= $sBadge ?> border border-transparent"><?= esc($status) ?></span>
         <span class="<?= kode_badge($lk['kode'] ?? '') ?>"><?= esc($lk['kode'] ?? '-') ?></span>
         <?php if (!empty($lk['proses'])): ?>
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200">Proses <?= esc($lk['proses']) ?></span>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-800 border border-red-200">Proses <?= esc($lk['proses']) ?></span>
         <?php endif; ?>
       </div>
       <p class="text-slate-500 text-sm font-medium"><?= tgl($lk['tanggal'], 'd F Y') ?>
@@ -94,7 +94,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
     <div>
       <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Aset Terkait</p>
       <?php if (!empty($lk['id_aset_series'])): ?>
-      <a href="/ipsrs/aset/series/<?= esc($lk['id_aset_series']) ?>" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 hover:underline">
+      <a href="/ipsrs/aset/series/<?= esc($lk['id_aset_series']) ?>" class="text-sm font-semibold text-red-700 hover:text-red-800 hover:underline">
         <?= esc($lk['nama_aset'] ?? $lk['id_aset_series']) ?>
       </a>
       <?php else: ?>
@@ -117,14 +117,14 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
     ?>
     <div class="flex flex-col items-center relative z-10 group cursor-default min-w-[80px]">
       <div class="w-12 h-12 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all duration-300 transform group-hover:scale-110 shadow-sm
-        <?= $done ? 'bg-indigo-600 border-indigo-600 text-white' : ($current ? 'bg-white border-indigo-600 text-indigo-600 ring-4 ring-indigo-50' : 'bg-slate-50 border-slate-200 text-slate-400') ?>">
+        <?= $done ? 'bg-red-700 border-red-700 text-white' : ($current ? 'bg-white border-red-700 text-red-700 ring-4 ring-red-50' : 'bg-slate-50 border-slate-200 text-slate-400') ?>">
         <svg class="w-6 h-6 <?= $current && !$isSubStatus ? 'animate-pulse' : '' ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <?= $done ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>' : $step['icon'] ?>
         </svg>
       </div>
       <div class="mt-3 text-center">
         <span class="block text-xs font-bold leading-tight transition-colors
-          <?= $current ? 'text-indigo-700' : ($done ? 'text-slate-700' : 'text-slate-400') ?>">
+          <?= $current ? 'text-red-800' : ($done ? 'text-slate-700' : 'text-slate-400') ?>">
           <?= esc($step['label']) ?>
         </span>
         <?php if ($isSubStatus && $step['label'] === 'Dalam Perbaikan'): ?>
@@ -135,7 +135,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
       </div>
     </div>
     <?php if ($i < count($statusSteps) - 1): ?>
-    <div class="flex-1 h-1 -mt-8 mx-2 sm:mx-4 rounded-full <?= $done ? 'bg-indigo-600' : 'bg-slate-200' ?> transition-colors duration-500"></div>
+    <div class="flex-1 h-1 -mt-8 mx-2 sm:mx-4 rounded-full <?= $done ? 'bg-red-700' : 'bg-slate-200' ?> transition-colors duration-500"></div>
     <?php endif; ?>
     <?php endforeach; ?>
   </div>
@@ -271,7 +271,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         <div class="md:col-span-2">
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Barang <span class="text-red-500">*</span></label>
           <select name="id_barang" required
-                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
             <option value="">-- Pilih Barang --</option>
             <?php foreach (($stokTersedia ?? []) as $s): ?>
             <?php if ((int)($s['stok_tersedia'] ?? 0) > 0): ?>
@@ -285,11 +285,11 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jumlah <span class="text-red-500">*</span></label>
           <input type="number" name="jumlah" min="1" required
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
         </div>
         <div>
           <button type="submit"
-                  class="w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+                  class="w-full px-4 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
             Pakai Barang
           </button>
         </div>
@@ -307,7 +307,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Aset Donor <span class="text-red-500">*</span></label>
           <select name="id_aset_donor" required id="kanibal-donor"
-                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none"
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none"
                   onchange="loadKomponenDonor(this.value)">
             <option value="">-- Pilih Aset Donor --</option>
             <?php foreach (($aset ?? []) as $a): ?>
@@ -323,13 +323,13 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Komponen <span class="text-red-500">*</span></label>
           <input type="text" name="nama_komponen" required placeholder="Contoh: Kompresor, Motor Fan, PCB"
                  list="komponen-donor-list"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
           <datalist id="komponen-donor-list"></datalist>
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kondisi Komponen</label>
           <select name="kondisi_komponen"
-                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
             <option value="Baik">Baik</option>
             <option value="Kurang Baik">Kurang Baik</option>
             <option value="Rusak">Rusak</option>
@@ -338,17 +338,17 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Disetujui Oleh</label>
           <input type="text" name="disetujui_oleh" placeholder="Admin / Ka IPSRS"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
         </div>
         <div class="md:col-span-2">
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Keterangan</label>
           <input type="text" name="keterangan" placeholder="Catatan kanibal"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
         </div>
       </div>
       <div class="mt-4">
         <button type="submit"
-                class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+                class="px-5 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
           Catat Kanibal
         </button>
       </div>
@@ -439,7 +439,7 @@ $vendorList   = $vendorList ?? [];
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Pilih Vendor <span class="text-red-500">*</span></label>
           <select name="id_vendor" required
-                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
             <option value="">-- Pilih Vendor Terdaftar --</option>
             <?php foreach ($vendorList as $vd): ?>
             <option value="<?= esc($vd['id'] ?? '') ?>"><?= esc($vd['nama_vendor'] ?? '') ?></option>
@@ -449,27 +449,27 @@ $vendorList   = $vendorList ?? [];
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal Kirim</label>
           <input type="date" name="tanggal_kirim"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Estimasi Selesai</label>
           <input type="date" name="estimasi_selesai"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal Kembali</label>
           <input type="date" name="tanggal_kembali"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
         </div>
         <div class="md:col-span-2">
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Keterangan / Ringkasan RAB</label>
           <input type="text" name="keterangan" placeholder="Catatan, biaya, atau ringkasan RAB"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
         </div>
       </div>
       <div class="mt-4">
         <button type="submit"
-                class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+                class="px-5 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
           Simpan Vendor
         </button>
       </div>
@@ -505,7 +505,7 @@ $vendorList   = $vendorList ?? [];
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Teknisi <span class="text-red-500">*</span></label>
         <select name="teknisi" required
-                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
+                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
           <option value="">-- Pilih Teknisi --</option>
           <?php foreach (($teknisiList ?? []) as $t): ?>
           <option value="<?= esc($t['nama_lengkap']) ?>" <?= ($lk['teknisi'] ?? '') === $t['nama_lengkap'] ? 'selected' : '' ?>><?= esc($t['nama_lengkap']) ?></option>
@@ -516,16 +516,16 @@ $vendorList   = $vendorList ?? [];
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal Cek</label>
         <input type="date" name="tanggal_cek" value="<?= esc($lk['tanggal_cek'] ?? date('Y-m-d')) ?>"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jam Cek</label>
         <input type="time" name="jam_cek" value="<?= esc(substr($lk['jam_cek'] ?? date('H:i'), 0, 5)) ?>"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
       </div>
     </div>
     <div class="mt-5">
-      <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+      <button type="submit" class="px-6 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
         Tetapkan Teknisi
       </button>
     </div>
@@ -540,7 +540,7 @@ $vendorList   = $vendorList ?? [];
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Teknisi</label>
         <select name="teknisi"
-                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
+                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
           <option value="">-- Pilih --</option>
           <?php foreach (($teknisiList ?? []) as $t): ?>
           <option value="<?= esc($t['nama_lengkap']) ?>" <?= ($lk['teknisi'] ?? '') === $t['nama_lengkap'] ? 'selected' : '' ?>><?= esc($t['nama_lengkap']) ?></option>
@@ -555,12 +555,12 @@ $vendorList   = $vendorList ?? [];
         <input type="hidden" name="status_baru" id="status_baru" required value="">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-3" id="status-cards">
           
-          <button type="button" onclick="selectStatus('Survei')" class="status-btn flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50 transition-all text-slate-600" data-value="Survei">
+          <button type="button" onclick="selectStatus('Survei')" class="status-btn flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 border-slate-200 bg-white hover:border-red-300 hover:bg-red-50 transition-all text-slate-600" data-value="Survei">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             <span class="text-xs font-bold text-center leading-tight">Survei<br><span class="font-medium text-[10px] opacity-80">(Pengecekan)</span></span>
           </button>
 
-          <button type="button" onclick="selectStatus('Dalam Perbaikan')" class="status-btn flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50 transition-all text-slate-600" data-value="Dalam Perbaikan">
+          <button type="button" onclick="selectStatus('Dalam Perbaikan')" class="status-btn flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 border-slate-200 bg-white hover:border-red-300 hover:bg-red-50 transition-all text-slate-600" data-value="Dalam Perbaikan">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             <span class="text-xs font-bold text-center leading-tight">Dalam<br>Perbaikan</span>
           </button>
@@ -586,10 +586,10 @@ $vendorList   = $vendorList ?? [];
             document.getElementById('status_baru').value = val;
             document.querySelectorAll('.status-btn').forEach(btn => {
               if(btn.dataset.value === val) {
-                btn.classList.add('border-indigo-600', 'bg-indigo-50', 'text-indigo-700');
+                btn.classList.add('border-red-700', 'bg-red-50', 'text-red-800');
                 btn.classList.remove('border-slate-200', 'bg-white', 'text-slate-600');
               } else {
-                btn.classList.remove('border-indigo-600', 'bg-indigo-50', 'text-indigo-700');
+                btn.classList.remove('border-red-700', 'bg-red-50', 'text-red-800');
                 btn.classList.add('border-slate-200', 'bg-white', 'text-slate-600');
               }
             });
@@ -605,19 +605,19 @@ $vendorList   = $vendorList ?? [];
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tindakan yang Dilakukan</label>
         <textarea name="tindakan" rows="3"
                   placeholder="Deskripsikan tindakan perbaikan..." required
-                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm resize-none"><?= esc($lk['tindakan'] ?? '') ?></textarea>
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm resize-none"><?= esc($lk['tindakan'] ?? '') ?></textarea>
       </div>
 
       <!-- Tanggal & Jam Selesai -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal Selesai</label>
         <input type="date" name="tanggal_selesai" value="<?= esc($lk['tanggal_selesai'] ?? date('Y-m-d')) ?>"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jam Selesai</label>
         <input type="time" name="jam_selesai" value="<?= esc(substr($lk['jam_selesai'] ?? date('H:i'), 0, 5)) ?>"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
       </div>
 
       <!-- Tanda Tangan Pelapor (Hidden by default, shown when Selesai) -->
@@ -633,7 +633,7 @@ $vendorList   = $vendorList ?? [];
     </div>
 
     <div class="mt-6 flex items-center gap-4 pt-4 border-t border-slate-100">
-      <button type="submit" onclick="return saveSignature()" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+      <button type="submit" onclick="return saveSignature()" class="px-6 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
         Simpan Status
       </button>
       <p class="text-xs text-slate-400 font-medium">Jam selesai diisi otomatis saat status â†’ Selesai</p>
@@ -662,7 +662,7 @@ $vendorList   = $vendorList ?? [];
           <!-- Kode -->
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kode Pekerjaan <span class="text-red-500">*</span></label>
-            <select name="kode" required class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
+            <select name="kode" required class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
               <option value="">-- Pilih Kode --</option>
               <?php foreach (($kodeKerusakan ?? []) as $kk): ?>
               <option value="<?= esc($kk['kode'] ?? '') ?>" <?= ($lk['kode'] ?? '') === ($kk['kode'] ?? '') ? 'selected' : '' ?>>
@@ -675,7 +675,7 @@ $vendorList   = $vendorList ?? [];
           <!-- Aset -->
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Hubungkan ke Aset</label>
-            <select name="id_aset" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
+            <select name="id_aset" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
               <option value="">-- Pilih Aset dari Database --</option>
               <?php foreach (($aset ?? []) as $a): ?>
               <option value="<?= esc($a['id'] ?? '') ?>" <?= ($lk['id_aset_series'] ?? '') == ($a['id'] ?? '') ? 'selected' : '' ?>>
@@ -688,14 +688,14 @@ $vendorList   = $vendorList ?? [];
           <!-- Nama Aset Manual -->
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Aset (Manual)</label>
-            <input type="text" name="nama_aset" value="<?= esc($lk['nama_aset'] ?? '') ?>" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+            <input type="text" name="nama_aset" value="<?= esc($lk['nama_aset'] ?? '') ?>" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
           </div>
           
           <!-- Lokasi -->
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi</label>
           <select name="lokasi" required
-                  class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                  class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
             <option value="">-- Pilih Unit / Lokasi --</option>
             <?php foreach (getStandardUnits() as $u): ?>
               <option value="<?= esc($u) ?>" <?= ($lk['lokasi'] ?? '') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
@@ -706,7 +706,7 @@ $vendorList   = $vendorList ?? [];
           <!-- Update Aset Checkbox -->
           <div class="p-3 bg-slate-50 border border-slate-200 rounded-md">
             <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-700">
-              <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+              <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded text-red-700 focus:ring-red-600 border-slate-300">
               Perbarui lokasi master aset sesuai lokasi ini
             </label>
           </div>
@@ -714,7 +714,7 @@ $vendorList   = $vendorList ?? [];
 
         <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
           <button type="button" onclick="document.getElementById('modal-edit-detail').classList.add('hidden')" class="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 rounded-md transition-colors shadow-sm">Batal</button>
-          <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors shadow-sm">Simpan Data</button>
+          <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-700 hover:bg-red-800 rounded-md transition-colors shadow-sm">Simpan Data</button>
         </div>
       </form>
     </div>

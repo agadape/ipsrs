@@ -17,8 +17,8 @@ $filterParam = $filter ?? '';
   <!-- Trigger: Tambah Barang -->
   <button type="button" onclick="toggleStokForm('form-tambah')"
           class="card p-5 flex flex-col items-center justify-center text-center hover:bg-slate-50 transition-colors border border-slate-200">
-    <div class="w-10 h-10 rounded-md bg-indigo-50 flex items-center justify-center mb-3">
-      <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
+    <div class="w-10 h-10 rounded-md bg-red-50 flex items-center justify-center mb-3">
+      <svg class="w-5 h-5 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
     </div>
     <h2 class="text-sm font-semibold text-slate-800">Barang Baru</h2>
     <p class="text-xs text-slate-500 mt-1">Daftarkan item ke master data</p>
@@ -58,11 +58,11 @@ $filterParam = $filter ?? '';
       <?= csrf_field() ?>
       <div class="md:col-span-2">
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Barang <span class="text-red-500">*</span></label>
-        <input type="text" name="nama" required placeholder="Contoh: Lampu LED Philips 12W" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="text" name="nama" required placeholder="Contoh: Lampu LED Philips 12W" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kategori</label>
-        <select name="kategori" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <select name="kategori" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Kategori --</option>
           <?php foreach (['Suku Cadang AC', 'Material Listrik', 'Perpipaan', 'Alat Ukur', 'Consumable', 'Lainnya'] as $opt): ?>
           <option value="<?= $opt ?>"><?= $opt ?></option>
@@ -71,17 +71,17 @@ $filterParam = $filter ?? '';
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Satuan</label>
-        <select name="satuan" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <select name="satuan" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="pcs">pcs</option><option value="unit">unit</option><option value="meter">meter</option>
           <option value="liter">liter</option><option value="kg">kg</option><option value="set">set</option><option value="roll">roll</option>
         </select>
       </div>
       <div class="md:col-span-2">
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Stok Minimum (Peringatan)</label>
-        <input type="number" name="minimum_stok" min="0" value="5" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="number" name="minimum_stok" min="0" value="5" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div class="md:col-span-2 pt-2 flex justify-end">
-        <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
+        <button type="submit" class="px-6 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
           Simpan Barang
         </button>
       </div>
@@ -98,7 +98,7 @@ $filterParam = $filter ?? '';
       <?= csrf_field() ?>
       <div class="md:col-span-2">
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Pilih Barang <span class="text-red-500">*</span></label>
-        <select name="id_barang" required class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <select name="id_barang" required class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Barang dari Master Data --</option>
           <?php foreach (($stok ?? []) as $s): ?>
           <option value="<?= esc($s['id'] ?? '') ?>"><?= esc($s['nama'] ?? '') ?></option>
@@ -107,19 +107,19 @@ $filterParam = $filter ?? '';
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jumlah <span class="text-red-500">*</span></label>
-        <input type="number" name="jumlah" min="1" required placeholder="0" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="number" name="jumlah" min="1" required placeholder="0" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal Masuk</label>
-        <input type="date" name="tanggal" value="<?= date('Y-m-d') ?>" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="date" name="tanggal" value="<?= date('Y-m-d') ?>" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">No. Dokumen / PO</label>
-        <input type="text" name="no_dokumen" placeholder="Contoh: INV-2023/001" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="text" name="no_dokumen" placeholder="Contoh: INV-2023/001" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Keterangan Tambahan</label>
-        <input type="text" name="keterangan" placeholder="Opsional" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="text" name="keterangan" placeholder="Opsional" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div class="md:col-span-2 pt-2 flex justify-end">
         <button type="submit" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
@@ -139,7 +139,7 @@ $filterParam = $filter ?? '';
       <?= csrf_field() ?>
       <div class="md:col-span-2">
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Pilih Barang <span class="text-red-500">*</span></label>
-        <select name="id_barang" required class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <select name="id_barang" required class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Barang dari Gudang --</option>
           <?php foreach (($stok ?? []) as $s): ?>
           <option value="<?= esc($s['id'] ?? '') ?>"><?= esc($s['nama'] ?? '') ?> (Tersedia: <?= (int)($s['stok_tersedia']??0) ?>)</option>
@@ -148,19 +148,19 @@ $filterParam = $filter ?? '';
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jumlah Dipakai <span class="text-red-500">*</span></label>
-        <input type="number" name="jumlah" min="1" required placeholder="0" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="number" name="jumlah" min="1" required placeholder="0" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal Keluar</label>
-        <input type="date" name="tanggal" value="<?= date('Y-m-d') ?>" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="date" name="tanggal" value="<?= date('Y-m-d') ?>" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Keperluan / Laporan LK</label>
-        <input type="text" name="no_dokumen" placeholder="Contoh: LK-230501" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="text" name="no_dokumen" placeholder="Contoh: LK-230501" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Keterangan Teknisi</label>
-        <input type="text" name="keterangan" placeholder="Opsional" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+        <input type="text" name="keterangan" placeholder="Opsional" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div class="md:col-span-2 pt-2 flex justify-end">
         <button type="submit" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
@@ -244,7 +244,7 @@ function toggleStokForm(formId) {
           $numClass = $tersedia <= 0 ? 'font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded' : ($tersedia <= $minimum ? 'font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded' : 'font-medium text-slate-900');
         ?>
         <tr class="hover:bg-slate-50 transition-colors group cursor-pointer" onclick="window.location.href='/ipsrs/stok/riwayat?id=<?= esc($s['id']) ?>'">
-          <td class="px-4 py-3 font-medium text-slate-900 group-hover:text-indigo-600 transition-colors"><?= esc($s['nama'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-medium text-slate-900 group-hover:text-red-700 transition-colors"><?= esc($s['nama'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-600"><?= esc($s['kategori'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-500"><?= esc($s['satuan'] ?? '-') ?></td>
           <td class="px-4 py-3 text-right"><span class="<?= $numClass ?> inline-block min-w-[2.5rem] text-center"><?= $tersedia ?></span></td>

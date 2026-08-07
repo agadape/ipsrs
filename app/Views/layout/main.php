@@ -81,7 +81,7 @@
           line-height: normal !important;
       }
       .select2-container--default.select2-container--focus .select2-selection--single {
-          border-color: #6366f1 !important; /* focus:ring-indigo-500 */
+          border-color: #6366f1 !important; /* focus:ring-red-600 */
           box-shadow: 0 0 0 1px #6366f1 !important;
           outline: none !important;
       }
@@ -96,7 +96,7 @@
           color: #334155 !important;
       }
       .select2-container--default .select2-results__option--highlighted[aria-selected] {
-          background-color: #6366f1 !important; /* bg-indigo-500 */
+          background-color: #6366f1 !important; /* bg-red-600 */
           color: white !important;
       }
       .dataTables_wrapper .dataTables_paginate .paginate_button { padding: 0.25rem 0.5rem !important; margin: 0 !important; border-radius: 0.375rem !important; border: 1px solid transparent !important; background: transparent !important; color: #475569 !important; cursor: pointer; transition: all 0.2s; }
@@ -239,7 +239,7 @@ $(document).ready(function() {
     $('.select2').select2({
       width: '100%',
       matcher: fuzzySelect2Matcher,
-      selectionCssClass: 'border-slate-200 shadow-sm focus:ring-1 focus:ring-indigo-500 rounded-md py-1.5',
+      selectionCssClass: 'border-slate-200 shadow-sm focus:ring-1 focus:ring-red-600 rounded-md py-1.5',
     });
   }
 });

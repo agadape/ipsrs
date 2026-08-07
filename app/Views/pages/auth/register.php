@@ -40,14 +40,14 @@
 
     <!-- Headline -->
     <div class="relative mt-16 flex-1 z-10">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-indigo-300 text-[11px] font-bold uppercase tracking-wider mb-6 backdrop-blur-md">
-        <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.8)]"></span>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-red-300 text-[11px] font-bold uppercase tracking-wider mb-6 backdrop-blur-md">
+        <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse shadow-[0_0_8px_rgba(129,140,248,0.8)]"></span>
         Platform IPSRS v2.0
       </div>
       
       <h1 class="text-5xl lg:text-[54px] font-black text-white leading-[1.15] tracking-tight">
         Sistem Informasi<br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-gradient-x">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-purple-400 to-red-400 animate-gradient-x">
           Pemeliharaan
         </span><br>
         Sarana &amp; Prasarana
@@ -61,7 +61,7 @@
       <ul class="mt-10 space-y-5">
         <!-- Feature 1 -->
         <li class="flex items-center gap-4 group">
-          <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-indigo-400 shrink-0 group-hover:bg-indigo-500/20 group-hover:text-indigo-300 transition-all duration-300 shadow-inner">
+          <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-red-400 shrink-0 group-hover:bg-red-600/20 group-hover:text-red-300 transition-all duration-300 shadow-inner">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
             </svg>
@@ -145,7 +145,7 @@
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Lengkap</label>
           <input type="text" name="nama_lengkap" required value="<?= old('nama_lengkap') ?>"
                  placeholder="Nama Lengkap Anda"
-                 class="w-full px-4 py-2.5 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-indigo-500 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
+                 class="w-full px-4 py-2.5 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-red-600 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
         </div>
 
         <!-- Unit Kerja -->
@@ -153,7 +153,7 @@
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Unit Kerja / Ruangan</label>
           <input type="text" name="unit_kerja" required value="<?= old('unit_kerja') ?>"
                  placeholder="Contoh: IGD, Rawat Inap Melati"
-                 class="w-full px-4 py-2.5 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-indigo-500 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
+                 class="w-full px-4 py-2.5 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-red-600 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
         </div>
 
         <!-- Email -->
@@ -161,7 +161,7 @@
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Alamat Email</label>
           <input type="email" name="email" required autocomplete="email" value="<?= old('email') ?>"
                  placeholder="nama@rsud.go.id"
-                 class="w-full px-4 py-2.5 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-indigo-500 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
+                 class="w-full px-4 py-2.5 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-red-600 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
         </div>
 
         <!-- Password -->
@@ -170,7 +170,7 @@
           <div class="relative">
             <input type="password" name="password" id="pw" required autocomplete="new-password"
                    placeholder="••••••••"
-                   class="w-full px-4 py-2.5 pr-11 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-indigo-500 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
+                   class="w-full px-4 py-2.5 pr-11 rounded-md bg-white border border-slate-200 focus:ring-1 focus:ring-red-600 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-colors shadow-sm">
             <button type="button" onclick="togglePw()" tabindex="-1"
                     class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors">
               <svg id="ico-eye" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -185,7 +185,7 @@
 
         <!-- Submit -->
         <button type="submit" id="btn-submit"
-                class="mt-2 w-full py-2.5 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium flex items-center justify-center gap-2 transition-colors shadow-sm">
+                class="mt-2 w-full py-2.5 rounded-md bg-red-700 hover:bg-red-800 text-white text-sm font-medium flex items-center justify-center gap-2 transition-colors shadow-sm">
           <svg id="btn-loader" class="hidden w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
@@ -196,7 +196,7 @@
 
       <p class="mt-8 text-center text-xs text-gray-500">
         Sudah punya akun? 
-        <a href="/login" class="text-indigo-600 font-semibold hover:underline">Masuk di sini</a>
+        <a href="/login" class="text-red-700 font-semibold hover:underline">Masuk di sini</a>
       </p>
     </div>
   </div>

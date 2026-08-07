@@ -35,7 +35,7 @@
         
         <!-- Section 1: Who & Where -->
         <div>
-          <h3 class="text-xs font-bold tracking-widest text-indigo-600 uppercase mb-5 flex items-center gap-2">
+          <h3 class="text-xs font-bold tracking-widest text-red-700 uppercase mb-5 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
             Data Pelapor
           </h3>
@@ -43,12 +43,12 @@
             <div>
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Nama Pelapor <span class="text-red-500">*</span></label>
               <input type="text" name="pelapor" value="<?= esc(old('pelapor') ?? session('user_name') ?? '') ?>" required
-                     class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                     class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Unit / Instalasi <span class="text-red-500">*</span></label>
               <select name="unit_pelapor" required
-                      class="select2 w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                      class="select2 w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
                 <option value="">-- Pilih Unit / Instalasi --</option>
                 <?php foreach (getStandardUnits() as $u): ?>
                   <option value="<?= esc($u) ?>" <?= old('unit_pelapor') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
@@ -58,7 +58,7 @@
             <div class="md:col-span-2">
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Lokasi Spesifik <span class="text-red-500">*</span></label>
               <select name="lokasi" required
-                      class="select2 w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                      class="select2 w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
                 <option value="">-- Pilih Unit / Lokasi --</option>
                 <?php foreach (getStandardUnits() as $u): ?>
                   <option value="<?= esc($u) ?>" <?= old('lokasi') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
@@ -72,7 +72,7 @@
 
         <!-- Section 2: What's wrong -->
         <div>
-          <h3 class="text-xs font-bold tracking-widest text-indigo-600 uppercase mb-5 flex items-center gap-2">
+          <h3 class="text-xs font-bold tracking-widest text-red-700 uppercase mb-5 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             Detail Masalah
           </h3>
@@ -81,13 +81,13 @@
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Nama Aset / Alat <span class="text-slate-400 font-normal normal-case">(Opsional)</span></label>
               <input type="text" name="nama_aset" value="<?= esc(old('nama_aset') ?? '') ?>"
                      placeholder="Cth: AC Daikin, Bed Pasien, Lampu"
-                     class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                     class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Deskripsi Kerusakan <span class="text-red-500">*</span></label>
               <textarea name="keluhan" rows="4" required
                         placeholder="Jelaskan masalah secara detail. Contoh: AC meneteskan air lumayan deras di atas kasur pasien..."
-                        class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors resize-none"></textarea>
+                        class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors resize-none"></textarea>
             </div>
           </div>
         </div>
@@ -100,7 +100,7 @@
           Batal
         </a>
         <button type="submit"
-                class="px-8 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-md shadow-sm transition-all flex items-center gap-2">
+                class="px-8 py-2.5 bg-red-700 hover:bg-red-800 text-white text-sm font-semibold rounded-md shadow-sm transition-all flex items-center gap-2">
           Kirim Laporan
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
         </button>

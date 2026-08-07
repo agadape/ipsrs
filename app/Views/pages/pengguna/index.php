@@ -19,24 +19,24 @@
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Email <span class="text-red-500">*</span></label>
         <input type="email" name="email" value="<?= esc(old('email') ?? '') ?>" required
                placeholder="user@rsud.go.id"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Lengkap <span class="text-red-500">*</span></label>
         <input type="text" name="nama_lengkap" value="<?= esc(old('nama_lengkap') ?? '') ?>" required
                placeholder="Nama lengkap"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Password <span class="text-red-500">*</span></label>
         <input type="password" name="password" required
                placeholder="Minimal 6 karakter"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Role <span class="text-red-500">*</span></label>
         <select name="role" required
-                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Role --</option>
           <?php foreach (['Admin', 'Teknisi', 'Pelapor', 'Manajemen'] as $r): ?>
           <option value="<?= $r ?>" <?= old('role') === $r ? 'selected' : '' ?>><?= $r ?></option>
@@ -46,7 +46,7 @@
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Unit <span class="text-red-500">*</span></label>
         <select name="unit" required
-                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Unit --</option>
           <?php foreach (getStandardUnits() as $u): ?>
             <option value="<?= esc($u) ?>" <?= old('unit') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
@@ -56,7 +56,7 @@
     </div>
     <div class="mt-4 flex justify-end">
       <button type="submit"
-              class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
+              class="px-6 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
         Simpan Pengguna
       </button>
     </div>
@@ -70,7 +70,7 @@
       <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Cari Pengguna</label>
       <input type="text" name="q" value="<?= esc($search ?? '') ?>"
              placeholder="Nama, email, atau role..."
-             class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+             class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
     </div>
     <button type="submit" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium rounded-md shadow-sm transition-colors">Cari</button>
     <?php if (!empty($search)): ?>
@@ -138,7 +138,7 @@
                     data-role="<?= esc($u['role'] ?? '') ?>"
                     data-unit="<?= esc($u['unit'] ?? '') ?>"
                     data-aktif="<?= !empty($u['aktif']) ? '1' : '0' ?>"
-                    class="text-xs text-indigo-600 hover:text-indigo-800 font-medium px-3 py-1.5 rounded-md border border-slate-200 bg-white hover:bg-slate-50 transition-colors">Edit</button>
+                    class="text-xs text-red-700 hover:text-red-900 font-medium px-3 py-1.5 rounded-md border border-slate-200 bg-white hover:bg-slate-50 transition-colors">Edit</button>
           </td>
         </tr>
         <?php endforeach; ?>
@@ -159,12 +159,12 @@
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Lengkap <span class="text-red-500">*</span></label>
           <input type="text" name="nama_lengkap" id="edit-nama" required
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Role <span class="text-red-500">*</span></label>
           <select name="role" id="edit-role" required
-                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
             <?php foreach (['Admin', 'Teknisi', 'Pelapor', 'Manajemen'] as $r): ?>
             <option value="<?= $r ?>"><?= $r ?></option>
             <?php endforeach; ?>
@@ -173,7 +173,7 @@
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Unit <span class="text-red-500">*</span></label>
           <select name="unit" id="edit-unit" required
-                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
             <option value="">-- Pilih Unit --</option>
             <?php foreach (getStandardUnits() as $u): ?>
               <option value="<?= esc($u) ?>"><?= esc($u) ?></option>
@@ -183,7 +183,7 @@
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Status</label>
           <select name="aktif" id="edit-aktif"
-                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
             <option value="1">Aktif</option>
             <option value="0">Nonaktif</option>
           </select>
@@ -193,7 +193,7 @@
         <button type="button" onclick="hapusPengguna()" class="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors">Hapus</button>
         <div class="flex items-center gap-3">
           <button type="button" onclick="closeEdit()" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 transition-colors">Batal</button>
-          <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">Simpan</button>
+          <button type="submit" class="px-5 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors">Simpan</button>
         </div>
       </div>
     </form>

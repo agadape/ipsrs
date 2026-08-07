@@ -8,7 +8,7 @@ $filterParam = $filter ?? '';
     <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Riwayat Transaksi</h1>
     <p class="text-sm font-medium text-slate-500 mt-1">Histori keluar masuk stok suku cadang</p>
   </div>
-  <a href="/ipsrs/stok" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:underline flex items-center gap-1 transition-colors">
+  <a href="/ipsrs/stok" class="text-sm font-medium text-red-700 hover:text-red-900 hover:underline flex items-center gap-1 transition-colors">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
     </svg>
@@ -68,7 +68,7 @@ $filterParam = $filter ?? '';
         ?>
         <tr class="hover:bg-slate-50 transition-colors group">
           <td class="px-4 py-3 text-slate-600"><?= tgl($r['tanggal']) ?></td>
-          <td class="px-4 py-3 font-medium text-slate-900 group-hover:text-indigo-600 transition-colors"><?= esc($r['nama_barang'] ?? $r['nama'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-medium text-slate-900 group-hover:text-red-700 transition-colors"><?= esc($r['nama_barang'] ?? $r['nama'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="<?= $jBadge ?> shadow-sm"><?= $jLabel ?></span></td>
           <td class="px-4 py-3 text-right <?= $qtyClass ?>">
             <?= $jenis === 'keluar' ? '-' : '+' ?><?= (int)($r['jumlah'] ?? 0) ?>

@@ -26,7 +26,7 @@ $hasilBadge = $hasil === 'Siap Pakai'
     </a>
     <div>
       <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Hasil Lembar Kerja Preventif</h1>
-      <p class="text-sm font-medium text-indigo-600 mt-1"><?= esc($jadwal['aset'] ?? $jadwal['nama_aset'] ?? '-') ?></p>
+      <p class="text-sm font-medium text-red-700 mt-1"><?= esc($jadwal['aset'] ?? $jadwal['nama_aset'] ?? '-') ?></p>
     </div>
   </div>
   <?php if ($lkp): ?>
@@ -40,7 +40,7 @@ $hasilBadge = $hasil === 'Siap Pakai'
 <?php if (!$lkp): ?>
 <div class="card p-6 border-l-4 border-slate-200">
   <p class="text-sm text-slate-500">Belum ada LKP tersimpan untuk jadwal ini.
-    <a href="/ipsrs/preventif/lkp/<?= esc($jid) ?>" class="text-indigo-600 hover:underline font-medium">Isi LKP sekarang →</a>
+    <a href="/ipsrs/preventif/lkp/<?= esc($jid) ?>" class="text-red-700 hover:underline font-medium">Isi LKP sekarang →</a>
   </p>
 </div>
 <?php else: ?>
@@ -49,10 +49,10 @@ $hasilBadge = $hasil === 'Siap Pakai'
 <div class="card p-6 mb-6">
   <div class="flex flex-wrap items-start justify-between gap-4 mb-5 pb-4 border-b border-slate-100">
     <div class="flex items-center gap-3 flex-wrap">
-      <span class="font-mono text-lg font-bold text-indigo-600 tracking-tight"><?= esc($lkp['no_order'] ?? '-') ?></span>
+      <span class="font-mono text-lg font-bold text-red-700 tracking-tight"><?= esc($lkp['no_order'] ?? '-') ?></span>
       <span class="<?= $hasilBadge ?> border border-transparent"><?= esc($hasil ?: '-') ?></span>
       <?php if (!empty($lkp['kategori'])): ?>
-      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-200"><?= esc($lkp['kategori']) ?></span>
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-800 border border-red-200"><?= esc($lkp['kategori']) ?></span>
       <?php endif; ?>
     </div>
   </div>
@@ -86,7 +86,7 @@ $hasilBadge = $hasil === 'Siap Pakai'
     <?php foreach ($grup as $jenis => $items): ?>
     <?php if (empty($items)) continue; ?>
     <?php
-      $badge = $jenis === 'Inspeksi' ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+      $badge = $jenis === 'Inspeksi' ? 'bg-red-50 text-red-800 border-red-200'
              : ($jenis === 'Service' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200');
     ?>
     <div>

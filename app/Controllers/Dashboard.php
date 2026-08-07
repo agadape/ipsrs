@@ -58,8 +58,8 @@ class Dashboard extends BaseController
         $pipeline = [
             ['label' => 'Lap. Masuk',    'status' => [IPSRS::STATUS_LK[0]],                       'color' => 'bg-slate-300'],
             ['label' => 'Disposisi',     'status' => [IPSRS::STATUS_LK[1]],                       'color' => 'bg-slate-400'],
-            ['label' => 'Survei',        'status' => [IPSRS::STATUS_LK[2]],                       'color' => 'bg-indigo-400'],
-            ['label' => 'Perbaikan',     'status' => [IPSRS::STATUS_LK[3]],                       'color' => 'bg-indigo-500'],
+            ['label' => 'Survei',        'status' => [IPSRS::STATUS_LK[2]],                       'color' => 'bg-red-400'],
+            ['label' => 'Perbaikan',     'status' => [IPSRS::STATUS_LK[3]],                       'color' => 'bg-red-600'],
             ['label' => 'Mngg SC/Vendor','status' => [IPSRS::STATUS_LK[4], IPSRS::STATUS_LK[5]], 'color' => 'bg-amber-400'],
             ['label' => 'Selesai',       'status' => [IPSRS::STATUS_LK[6]],                       'color' => 'bg-emerald-400'],
         ];

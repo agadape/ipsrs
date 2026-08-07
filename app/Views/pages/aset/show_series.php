@@ -15,7 +15,7 @@ $id = $series['id'] ?? '';
     <?php endif; ?>
     <div>
       <h1 class="text-2xl font-bold text-slate-900 tracking-tight"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
-      <p class="text-xs font-mono font-medium text-indigo-600 mt-1"><?= esc($series['nomor_aset'] ?? $id) ?></p>
+      <p class="text-xs font-mono font-medium text-red-700 mt-1"><?= esc($series['nomor_aset'] ?? $id) ?></p>
     </div>
   </div>
   <?php if (session('user_id')): ?>
@@ -28,7 +28,7 @@ $id = $series['id'] ?? '';
       QR Code
     </a>
     <a href="/ipsrs/aset/<?= esc($id) ?>/edit"
-       class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">
+       class="inline-flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
       </svg>
@@ -113,7 +113,7 @@ $id = $series['id'] ?? '';
   <?php if (!empty($aset['last_seen_lat']) && !empty($aset['last_seen_lng'])): ?>
   <a href="https://maps.google.com/?q=<?= $aset['last_seen_lat'] ?>,<?= $aset['last_seen_lng'] ?>"
      target="_blank"
-     class="text-xs font-medium text-indigo-600 hover:underline flex-shrink-0">
+     class="text-xs font-medium text-red-700 hover:underline flex-shrink-0">
     Lihat Peta &rarr;
   </a>
   <?php endif; ?>
@@ -158,7 +158,7 @@ $id = $series['id'] ?? '';
           };
           $asalBadge = ($k['asal'] ?? '') === 'Hasil Kanibal'
             ? 'bg-amber-50 text-amber-700 border-amber-200'
-            : 'bg-indigo-50 text-indigo-700 border-indigo-200';
+            : 'bg-red-50 text-red-800 border-red-200';
         ?>
         <tr class="hover:bg-slate-50 transition-colors">
           <td class="px-4 py-3 font-medium text-slate-800"><?= esc($k['nama_komponen'] ?? '-') ?></td>
@@ -178,7 +178,7 @@ $id = $series['id'] ?? '';
 <div class="card p-6 mb-6 border-l-4 border-amber-500">
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-sm font-semibold text-slate-800">Riwayat Kanibal</h2>
-    <a href="/ipsrs/kanibal" class="text-xs font-medium text-indigo-600 hover:underline">Lihat Semua &rarr;</a>
+    <a href="/ipsrs/kanibal" class="text-xs font-medium text-red-700 hover:underline">Lihat Semua &rarr;</a>
   </div>
   <div class="overflow-x-auto p-0">
     <table class="w-full text-left border-collapse text-sm">
@@ -217,7 +217,7 @@ $id = $series['id'] ?? '';
 <div class="card p-6 mb-6">
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-sm font-semibold text-slate-800">Riwayat Laporan Kerusakan</h2>
-    <a href="/ipsrs/lk/baru" class="text-xs font-medium text-indigo-600 hover:underline">+ Buat LK</a>
+    <a href="/ipsrs/lk/baru" class="text-xs font-medium text-red-700 hover:underline">+ Buat LK</a>
   </div>
   <?php if (empty($riwayatLK)): ?>
   <p class="text-sm text-slate-500 text-center py-6 border border-dashed border-slate-200 rounded-md">Belum ada laporan kerusakan untuk aset ini.</p>
@@ -242,7 +242,7 @@ $id = $series['id'] ?? '';
           $rt = (int)($lk['response_time'] ?? 0);
         ?>
         <tr class="hover:bg-slate-50 transition-colors group cursor-pointer" onclick="window.location.href='/ipsrs/lk/<?= esc($lk['id'] ?? '') ?>'">
-          <td class="px-4 py-3 font-mono text-xs text-indigo-600 font-semibold group-hover:text-indigo-700"><?= esc($lk['no_order'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-mono text-xs text-red-700 font-semibold group-hover:text-red-800"><?= esc($lk['no_order'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-600"><?= tgl($lk['tanggal']) ?></td>
           <td class="px-4 py-3 text-slate-800 max-w-[200px] truncate"><?= esc($lk['keluhan'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="<?= $sb ?>"><?= esc($s) ?></span></td>
@@ -250,7 +250,7 @@ $id = $series['id'] ?? '';
             <?= $rt > 0 ? $rt.' mnt' : '-' ?>
           </td>
           <td class="px-4 py-3 text-right">
-            <span class="text-xs font-medium text-slate-400 group-hover:text-indigo-600 transition-colors">Detail &rarr;</span>
+            <span class="text-xs font-medium text-slate-400 group-hover:text-red-700 transition-colors">Detail &rarr;</span>
           </td>
         </tr>
         <?php endforeach; ?>

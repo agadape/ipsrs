@@ -10,7 +10,7 @@
     body { font-family: 'Inter', sans-serif; }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6 bg-slate-100 selection:bg-indigo-100 selection:text-indigo-900 antialiased"
+<body class="min-h-screen flex items-center justify-center p-6 bg-slate-100 selection:bg-red-100 selection:text-red-950 antialiased"
       style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 32px 32px;">
 
   <!-- Main Floating Container -->
@@ -25,7 +25,7 @@
       
       <!-- Top: Logo -->
       <div class="relative z-10 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-sm">
+        <div class="w-10 h-10 rounded-lg bg-red-700 flex items-center justify-center text-white shadow-sm">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
@@ -38,7 +38,7 @@
         <h1 class="text-3xl font-bold text-white leading-[1.2] tracking-tight mb-4">
           Manajemen<br>
           Pemeliharaan<br>
-          <span class="text-indigo-400">Aset & Sarana.</span>
+          <span class="text-red-400">Aset & Sarana.</span>
         </h1>
         <p class="text-slate-400 text-sm leading-relaxed max-w-[240px]">
           Platform terpadu untuk monitoring kerusakan, penjadwalan preventif, dan kontrol suku cadang.
@@ -64,7 +64,7 @@
       
       <!-- Mobile Logo (Visible only on small screens) -->
       <div class="md:hidden flex items-center gap-2 mb-8">
-        <div class="w-8 h-8 rounded-md bg-indigo-600 flex items-center justify-center text-white shadow-sm">
+        <div class="w-8 h-8 rounded-md bg-red-700 flex items-center justify-center text-white shadow-sm">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
@@ -97,18 +97,18 @@
             <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">Alamat Email</label>
             <input type="email" name="email" required autocomplete="email"
                    placeholder="nama@rsud.go.id"
-                   class="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-[13px] text-slate-900 placeholder:text-slate-400 outline-none transition-all">
+                   class="w-full px-3.5 py-2.5 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-red-600/20 focus:border-red-600 text-[13px] text-slate-900 placeholder:text-slate-400 outline-none transition-all">
           </div>
 
           <div>
             <div class="flex items-center justify-between mb-2">
               <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">Kata Sandi</label>
-              <a href="#" class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-700 hover:underline" tabindex="-1">Lupa sandi?</a>
+              <a href="#" class="text-[11px] font-semibold text-red-700 hover:text-red-800 hover:underline" tabindex="-1">Lupa sandi?</a>
             </div>
             <div class="relative">
               <input type="password" name="password" id="pw" required autocomplete="current-password"
                      placeholder="••••••••"
-                     class="w-full px-3.5 py-2.5 pr-10 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-[13px] text-slate-900 placeholder:text-slate-400 outline-none transition-all">
+                     class="w-full px-3.5 py-2.5 pr-10 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-red-600/20 focus:border-red-600 text-[13px] text-slate-900 placeholder:text-slate-400 outline-none transition-all">
               <button type="button" onclick="togglePw()" tabindex="-1"
                       class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
                 <svg id="ico-eye" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -133,7 +133,7 @@
 
         <p class="mt-8 text-center text-[13px] text-slate-500 font-medium">
           Belum memiliki akun? 
-          <a href="/register" class="text-indigo-600 font-semibold hover:text-indigo-700 hover:underline ml-1">Daftar sebagai Pelapor</a>
+          <a href="/register" class="text-red-700 font-semibold hover:text-red-800 hover:underline ml-1">Daftar sebagai Pelapor</a>
         </p>
       </div>
 

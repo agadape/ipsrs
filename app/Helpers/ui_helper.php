@@ -10,7 +10,7 @@ if (! function_exists('status_lk_badge')) {
     {
         return match ($status) {
             'Selesai'              => 'badge bg-emerald-100 text-emerald-700',
-            'Dalam Perbaikan'      => 'badge bg-indigo-100 text-indigo-700',
+            'Dalam Perbaikan'      => 'badge bg-red-100 text-red-700',
             'Survei'               => 'badge bg-sky-100 text-sky-700',
             'Didisposisi'          => 'badge bg-amber-100 text-amber-700',
             'Menunggu Suku Cadang' => 'badge bg-amber-100 text-amber-700',
@@ -27,7 +27,7 @@ if (! function_exists('status_aset_badge')) {
         return match ($status) {
             'Aktif'                => 'badge bg-emerald-100 text-emerald-700',
             'Tidak Aktif'          => 'badge bg-gray-100 text-gray-500',
-            'Dalam Perbaikan'      => 'badge bg-indigo-100 text-indigo-700',
+            'Dalam Perbaikan'      => 'badge bg-red-100 text-red-700',
             'Menunggu Suku Cadang' => 'badge bg-amber-100 text-amber-700',
             'Menunggu Vendor'      => 'badge bg-orange-100 text-orange-700',
             'Di Gudang'            => 'badge bg-blue-100 text-blue-700',
@@ -56,7 +56,7 @@ if (! function_exists('kode_badge')) {
     function kode_badge(?string $kode): string
     {
         return match ($kode) {
-            'AC'    => 'badge bg-indigo-50 text-indigo-700',
+            'AC'    => 'badge bg-red-50 text-red-700',
             'PR'    => 'badge bg-slate-100 text-slate-700',
             'NM'    => 'badge bg-yellow-100 text-yellow-700',
             'AL'    => 'badge bg-orange-100 text-orange-700',

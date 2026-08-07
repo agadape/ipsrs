@@ -21,11 +21,11 @@ if (!function_exists('navLink')) {
         }
 
         $cls = $active
-            ? 'text-indigo-700 font-semibold bg-indigo-50/80 ring-1 ring-indigo-500/20'
+            ? 'text-red-800 font-semibold bg-red-50/80 ring-1 ring-red-600/20'
             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium';
         
         $badgeHtml = ($badge !== null && $badge > 0)
-            ? "<span class='text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700'>{$badge}</span>"
+            ? "<span class='text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-800'>{$badge}</span>"
             : '';
             
         return <<<HTML
@@ -49,7 +49,7 @@ if (!function_exists('ico')) {
   <!-- Logo + close button on mobile -->
   <div class="flex items-center justify-between px-5 py-5">
     <div class="flex items-center gap-2.5">
-      <div class="w-8 h-8 rounded-md bg-indigo-600 flex items-center justify-center shrink-0 text-white shadow-sm">
+      <div class="w-8 h-8 rounded-md bg-red-700 flex items-center justify-center shrink-0 text-white shadow-sm">
         <?= ico('<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>', '18') ?>
       </div>
       <div>

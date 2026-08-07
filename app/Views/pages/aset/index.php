@@ -9,7 +9,7 @@ $total = count($aset ?? []);
     <p class="text-sm text-slate-500 mt-1">Kelola inventaris aset rumah sakit</p>
   </div>
   <a href="/ipsrs/aset/tambah"
-     class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">
+     class="inline-flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/>
     </svg>
@@ -28,12 +28,12 @@ $total = count($aset ?? []);
         </svg>
         <input type="text" name="q" value="<?= esc($search ?? '') ?>"
                placeholder="Nama, ID, kode aset..."
-               class="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm">
+               class="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-colors shadow-sm">
       </div>
     </div>
     <div class="min-w-[160px]">
       <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jenis</label>
-      <select name="jenis" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm">
+      <select name="jenis" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-colors shadow-sm">
         <option value="">Semua Jenis</option>
         <option value="Sarana"      <?= ($jenis ?? '') === 'Sarana'      ? 'selected' : '' ?>>Sarana</option>
         <option value="Prasarana"   <?= ($jenis ?? '') === 'Prasarana'   ? 'selected' : '' ?>>Prasarana</option>
@@ -42,7 +42,7 @@ $total = count($aset ?? []);
     </div>
     <div class="min-w-[160px]">
       <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Status</label>
-      <select name="status" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm">
+      <select name="status" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-colors shadow-sm">
         <option value="">Semua Status</option>
         <option value="Aktif"   <?= ($status ?? '') === 'Aktif'   ? 'selected' : '' ?>>Aktif</option>
         <option value="Tidak Aktif" <?= ($status ?? '') === 'Tidak Aktif' ? 'selected' : '' ?>>Tidak Aktif</option>
@@ -91,7 +91,7 @@ $total = count($aset ?? []);
           $jn = $a['jenis'] ?? '';
           $jnBadge = match($jn) {
             'Sarana'         => 'px-2.5 py-1 text-xs font-medium bg-slate-100 text-slate-700 rounded-md border border-slate-200/60',
-            'Prasarana'      => 'px-2.5 py-1 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-md border border-indigo-200/60',
+            'Prasarana'      => 'px-2.5 py-1 text-xs font-medium bg-red-50 text-red-800 rounded-md border border-red-200/60',
             'Alat Non Medis' => 'px-2.5 py-1 text-xs font-medium bg-amber-50 text-amber-700 rounded-md border border-amber-200/60',
             default          => 'px-2.5 py-1 text-xs font-medium bg-slate-50 text-slate-600 rounded-md border border-slate-200',
           };
@@ -102,7 +102,7 @@ $total = count($aset ?? []);
             <span class="font-mono text-xs text-slate-500 font-medium"><?= esc($a['nomor_aset'] ?? substr($a['id'] ?? '', 0, 8)) ?></span>
           </td>
           <td class="px-4 py-3.5 align-middle">
-            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="font-semibold text-slate-900 hover:text-indigo-600 transition-colors text-sm">
+            <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>" class="font-semibold text-slate-900 hover:text-red-700 transition-colors text-sm">
               <?= esc($a['nama'] ?? '-') ?>
             </a>
             <?php if (!empty($a['keterangan'])): ?>
@@ -121,7 +121,7 @@ $total = count($aset ?? []);
           <td class="px-4 py-3.5 text-right whitespace-nowrap">
             <div class="inline-flex items-center gap-2">
               <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>"
-                 class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50/70 hover:bg-indigo-100 rounded-md border border-indigo-200/50 transition-colors">
+                 class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50/70 hover:bg-red-100 rounded-md border border-red-200/50 transition-colors">
                 Lihat Unit
               </a>
               <a href="/ipsrs/aset/<?= esc($a['id'] ?? '') ?>/edit"

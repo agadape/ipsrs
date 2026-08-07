@@ -35,7 +35,7 @@
 <div class="bg-white border border-slate-200 rounded-md shadow-sm overflow-hidden">
   <div class="p-6 border-b border-slate-100 flex items-center justify-between">
     <h2 class="text-sm font-bold text-slate-800">Daftar Series / Unit Fisik</h2>
-    <a href="/ipsrs/aset/tambah-series/<?= esc($aset['id']) ?>" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
+    <a href="/ipsrs/aset/tambah-series/<?= esc($aset['id']) ?>" class="px-4 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
       Tambah Series
     </a>
   </div>
@@ -54,7 +54,7 @@
       <tbody class="divide-y divide-slate-100">
         <?php foreach (($series ?? []) as $s): ?>
         <tr class="hover:bg-slate-50 transition-colors">
-          <td class="px-6 py-4 font-mono font-medium text-indigo-600"><?= esc($s['nomor_aset']) ?></td>
+          <td class="px-6 py-4 font-mono font-medium text-red-700"><?= esc($s['nomor_aset']) ?></td>
           <td class="px-6 py-4 font-mono text-slate-600"><?= esc($s['no_seri'] ?? '-') ?></td>
           <td class="px-6 py-4 text-slate-600"><?= esc($s['gedung']) ?> <br><span class="text-xs text-slate-500"><?= esc($s['unit']) ?></span></td>
           <td class="px-6 py-4 text-slate-600"><?= esc($s['ruangan']) ?> <br><span class="text-xs text-slate-500">Lt. <?= esc($s['lantai']) ?></span></td>
@@ -64,7 +64,7 @@
              </span>
           </td>
           <td class="px-6 py-4">
-            <a href="/ipsrs/aset/series/<?= esc($s['id']) ?>" class="text-indigo-600 hover:text-indigo-800 font-medium text-xs hover:underline transition-colors">Lihat Detail</a>
+            <a href="/ipsrs/aset/series/<?= esc($s['id']) ?>" class="text-red-700 hover:text-red-900 font-medium text-xs hover:underline transition-colors">Lihat Detail</a>
           </td>
         </tr>
         <?php endforeach; ?>

@@ -1,22 +1,22 @@
 
 <div class="space-y-6 max-w-5xl mx-auto">
   <!-- Header / Greeting -->
-  <div class="bg-indigo-600 rounded-md p-8 text-white shadow-sm relative overflow-hidden">
+  <div class="bg-red-700 rounded-md p-8 text-white shadow-sm relative overflow-hidden">
     <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
       <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13.5h-13L12 6.5z"/></svg>
     </div>
     
     <div class="relative z-10 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
       <div>
-        <p class="text-indigo-100 font-medium mb-1"><?= date('l, d F Y') ?></p>
+        <p class="text-red-100 font-medium mb-1"><?= date('l, d F Y') ?></p>
         <h1 class="text-3xl font-bold tracking-tight">Halo, <?= esc(session('user_name')) ?>!</h1>
-        <p class="mt-2 text-indigo-100 max-w-md text-sm leading-relaxed">
+        <p class="mt-2 text-red-100 max-w-md text-sm leading-relaxed">
           Ini adalah dashboard khusus Pelapor. Anda dapat melihat ringkasan status laporan kerusakan yang telah Anda buat untuk unit/ruangan Anda.
         </p>
       </div>
       
       <div class="shrink-0">
-        <a href="/ipsrs/aset" class="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-indigo-600 hover:bg-slate-50 font-semibold rounded-md transition-all shadow-sm">
+        <a href="/ipsrs/aset" class="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-red-700 hover:bg-slate-50 font-semibold rounded-md transition-all shadow-sm">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           Lapor Kerusakan Baru
         </a>
@@ -61,7 +61,7 @@
   <div class="bg-white rounded-md border border-slate-200 shadow-sm overflow-hidden">
     <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
       <h2 class="text-sm font-bold text-slate-800">5 Laporan Terakhir Anda</h2>
-      <a href="/ipsrs/lk" class="text-xs font-medium text-indigo-600 hover:text-indigo-700 transition-colors">Lihat Semua &rarr;</a>
+      <a href="/ipsrs/lk" class="text-xs font-medium text-red-700 hover:text-red-800 transition-colors">Lihat Semua &rarr;</a>
     </div>
     
     <?php if (empty($recentLK)): ?>
@@ -86,7 +86,7 @@
             ?>
               <tr class="hover:bg-slate-50 transition-colors group cursor-pointer" onclick="window.location.href='/ipsrs/lk/<?= esc($lk['id'] ?? '') ?>'">
                 <td class="px-6 py-4">
-                  <span class="font-mono text-xs font-medium text-slate-900 group-hover:text-indigo-600 transition-colors"><?= esc($lk['no_order'] ?? '') ?></span>
+                  <span class="font-mono text-xs font-medium text-slate-900 group-hover:text-red-700 transition-colors"><?= esc($lk['no_order'] ?? '') ?></span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <p class="text-sm font-medium text-slate-900"><?= esc(date('d M Y', strtotime($lk['tanggal'] ?? date('Y-m-d')))) ?></p>

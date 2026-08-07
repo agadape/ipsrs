@@ -27,7 +27,7 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
     </div>
     <p class="text-2xl font-bold text-slate-900"><?= number_format($slaPct ?? 0, 1) ?><span class="text-sm text-slate-500 font-medium ml-1">%</span></p>
     <div class="mt-2.5 h-1 rounded-full bg-slate-100">
-      <div class="h-1 rounded-full bg-indigo-600" style="width:<?= min(100, (float) ($slaPct ?? 0)) ?>%"></div>
+      <div class="h-1 rounded-full bg-red-700" style="width:<?= min(100, (float) ($slaPct ?? 0)) ?>%"></div>
     </div>
     <p class="text-xs text-slate-500 mt-1.5">Target &lt;15 menit</p>
   </div>
@@ -124,7 +124,7 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
 
       <!-- Menunggu SC -->
       <a href="/ipsrs/lk?status=Dalam+Perbaikan"
-         class="group flex items-start flex-col gap-2 p-4 rounded-lg bg-slate-50 border border-slate-200 hover:border-indigo-300 transition-colors">
+         class="group flex items-start flex-col gap-2 p-4 rounded-lg bg-slate-50 border border-slate-200 hover:border-red-300 transition-colors">
         <p class="text-xs font-medium text-slate-500">Menunggu Suku Cadang</p>
         <p class="text-2xl font-semibold text-slate-900"><?= (int) ($mnggSC ?? 0) ?></p>
       </a>
@@ -185,7 +185,7 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
             
             // Map tailwind color classes to hex for Chart.js (flat enterprise colors)
             $bg = '#cbd5e1';
-            if (str_contains($bar['color'], 'indigo')) $bg = '#4f46e5';
+            if (str_contains($bar['color'], 'indigo') || str_contains($bar['color'], 'red')) $bg = '#c62828';
             if (str_contains($bar['color'], 'amber')) $bg = '#eab308';
             if (str_contains($bar['color'], 'blue')) $bg = '#3b82f6';
             if (str_contains($bar['color'], 'emerald')) $bg = '#10b981';
@@ -287,7 +287,7 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
         ?>
         <tr class="hover:bg-slate-50 transition-colors group cursor-pointer" onclick="window.location.href='/ipsrs/lk/<?= esc($lk['id'] ?? '') ?>'">
           <td class="py-3 px-5">
-            <span class="font-mono text-xs font-medium text-slate-900 group-hover:text-indigo-600 transition-colors"><?= esc($lk['no_order'] ?? '-') ?></span>
+            <span class="font-mono text-xs font-medium text-slate-900 group-hover:text-red-700 transition-colors"><?= esc($lk['no_order'] ?? '-') ?></span>
           </td>
           <td class="py-3 px-5 max-w-[240px]">
             <p class="text-sm text-slate-700 truncate"><?= esc($lk['keluhan'] ?? '-') ?></p>

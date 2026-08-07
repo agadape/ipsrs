@@ -37,14 +37,14 @@ function old_val(array $a, string $key, string $default = ""): string {
         <label class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wider">Nama / Tipe Aset <span class="text-red-500">*</span></label>
         <input type="text" name="nama" value="<?= old_val($a, "nama") ?>" required
                placeholder="Contoh: AC Split, Tempat Tidur Pasien"
-               class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+               class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
 
       <!-- Jenis -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wider">Jenis <span class="text-red-500">*</span></label>
         <select name="jenis" required
-                class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors appearance-none">
+                class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors appearance-none">
           <option value="">-- Pilih Jenis --</option>
           <?php foreach (["Sarana", "Prasarana", "Alat Non Medis"] as $opt): ?>
           <option value="<?= $opt ?>" <?= old_val($a, "jenis") === $opt ? "selected" : "" ?>><?= $opt ?></option>
@@ -56,7 +56,7 @@ function old_val(array $a, string $key, string $default = ""): string {
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wider">Kategori <span class="text-red-500">*</span></label>
         <select name="kategori" required
-                class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors appearance-none">
+                class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors appearance-none">
           <option value="">-- Pilih Kategori --</option>
           <?php foreach (($kategoriAset ?? []) as $k): ?>
           <option value="<?= esc($k["nama_kategori"] ?? "") ?>"
@@ -72,7 +72,7 @@ function old_val(array $a, string $key, string $default = ""): string {
         <label class="block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wider">Keterangan (Opsional)</label>
         <textarea name="keterangan" rows="4"
                   placeholder="Deskripsi umum tentang kategori aset ini"
-                  class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors resize-none"><?= old_val($a, "keterangan") ?></textarea>
+                  class="w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors resize-none"><?= old_val($a, "keterangan") ?></textarea>
       </div>
     </div>
   </div>
@@ -80,7 +80,7 @@ function old_val(array $a, string $key, string $default = ""): string {
   <!-- Actions -->
   <div class="flex items-center gap-4">
     <button type="submit"
-            class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors flex items-center gap-2">
+            class="px-6 py-3 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors flex items-center gap-2">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
       Simpan Master
     </button>

@@ -64,7 +64,7 @@ $period = $period ?? 'bulan';
   $stats = [
     ['label' => 'Total LK',    'value' => $totalLK ?? 0,         'unit' => '',      'color' => 'text-slate-900'],
     ['label' => 'Selesai',     'value' => $selesai ?? 0,          'unit' => '',      'color' => 'text-emerald-600'],
-    ['label' => 'Aktif',       'value' => $aktif ?? 0,            'unit' => '',      'color' => 'text-indigo-600'],
+    ['label' => 'Aktif',       'value' => $aktif ?? 0,            'unit' => '',      'color' => 'text-red-700'],
     ['label' => 'SLA',         'value' => number_format($slaPct ?? 0, 1), 'unit' => '%', 'color' => 'text-slate-900'],
     ['label' => 'Avg. Respon', 'value' => number_format($avgRespon ?? 0, 0), 'unit' => ' mnt', 'color' => 'text-slate-900'],
     ['label' => 'PM Selesai',  'value' => ($jadwalSelesai ?? 0).'/'
@@ -88,7 +88,7 @@ $period = $period ?? 'bulan';
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <?php
       $kodeColors = [
-        'AC' => 'bg-indigo-50 text-indigo-700 border-indigo-200', 
+        'AC' => 'bg-red-50 text-red-800 border-red-200', 
         'PR' => 'bg-slate-50 text-slate-700 border-slate-200', 
         'NM' => 'bg-slate-50 text-slate-700 border-slate-200', 
         'AL' => 'bg-slate-50 text-slate-500 border-slate-200'
@@ -166,7 +166,7 @@ $period = $period ?? 'bulan';
           $rt = (int)($lk['response_time'] ?? 0);
         ?>
         <tr class="hover:bg-slate-50 transition-colors group">
-          <td class="px-4 py-3 font-mono text-xs text-indigo-600 font-semibold"><?= esc($lk['no_order'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-mono text-xs text-red-700 font-semibold"><?= esc($lk['no_order'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-600"><?= tgl($lk['tanggal']) ?></td>
           <td class="px-4 py-3 text-slate-800 max-w-[220px] truncate"><?= esc($lk['keluhan'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="<?= $sBadge ?>"><?= esc($s) ?></span></td>

@@ -31,7 +31,7 @@ $riwayatList = $riwayat ?? [];
       <tbody class="divide-y divide-slate-100">
         <?php foreach ($aset_kanibal as $ak): ?>
         <tr class="hover:bg-slate-50 transition-colors group">
-          <td class="px-4 py-3 font-mono text-xs font-semibold text-indigo-600"><?= esc($ak['nomor_aset'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-mono text-xs font-semibold text-red-700"><?= esc($ak['nomor_aset'] ?? '-') ?></td>
           <td class="px-4 py-3 font-medium text-slate-900"><?= esc($ak['nama'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-600"><?= esc($ak['lokasi'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-500 whitespace-pre-line"><?= esc($ak['keterangan'] ?? '-') ?></td>
@@ -84,7 +84,7 @@ $riwayatList = $riwayat ?? [];
         <tr class="hover:bg-slate-50 transition-colors group">
           <td class="px-4 py-3 text-slate-600"><?= tgl($r['tanggal'] ?? '') ?></td>
           <td class="px-4 py-3">
-            <span class="font-mono text-xs font-semibold text-indigo-600"><?= esc($r['no_order_lk'] ?? '-') ?></span>
+            <span class="font-mono text-xs font-semibold text-red-700"><?= esc($r['no_order_lk'] ?? '-') ?></span>
           </td>
           <td class="px-4 py-3 font-medium text-slate-800"><?= esc($donorNama) ?></td>
           <td class="px-4 py-3 text-slate-800"><?= esc($r['nama_komponen'] ?? '-') ?></td>

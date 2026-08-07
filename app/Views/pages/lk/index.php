@@ -9,7 +9,7 @@ $total = count($lk ?? []);
     <p class="text-sm text-slate-500 mt-1">Kelola dan pantau laporan kerusakan aset</p>
   </div>
   <a href="/ipsrs/lk/baru"
-     class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">
+     class="inline-flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/>
     </svg>
@@ -28,12 +28,12 @@ $total = count($lk ?? []);
         </svg>
         <input type="text" name="q" value="<?= esc($search ?? '') ?>"
                placeholder="No. order, keluhan, pelapor..."
-               class="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm">
+               class="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-colors shadow-sm">
       </div>
     </div>
     <div class="min-w-[170px]">
       <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Status</label>
-      <select name="status" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm">
+      <select name="status" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-colors shadow-sm">
         <option value="">Semua Status</option>
         <?php foreach (['Laporan Masuk', 'Didisposisi', 'Survei', 'Menunggu Suku Cadang', 'Dalam Perbaikan', 'Selesai'] as $opt): ?>
         <option value="<?= $opt ?>" <?= ($status ?? '') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
@@ -42,7 +42,7 @@ $total = count($lk ?? []);
     </div>
     <div class="min-w-[140px]">
       <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kode</label>
-      <select name="kode" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors shadow-sm">
+      <select name="kode" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-colors shadow-sm">
         <option value="">Semua Kode</option>
         <?php foreach (($kodeKerusakan ?? []) as $kk): ?>
         <option value="<?= esc($kk['kode'] ?? '') ?>" <?= ($kode ?? '') === ($kk['kode'] ?? '') ? 'selected' : '' ?>><?= esc($kk['kode'] ?? '') ?></option>
@@ -71,7 +71,7 @@ $total = count($lk ?? []);
     </div>
     <h3 class="text-lg font-bold text-slate-800 mb-1">Belum Ada Laporan</h3>
     <p class="text-sm text-slate-500 max-w-sm mx-auto mb-6">Saat ini tidak ada laporan kerusakan yang tercatat. Silakan buat laporan baru jika ada masalah.</p>
-    <a href="/ipsrs/lk/baru" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md transition-colors shadow-sm inline-flex items-center gap-2">
+    <a href="/ipsrs/lk/baru" class="px-5 py-2.5 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md transition-colors shadow-sm inline-flex items-center gap-2">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
       Buat Laporan
     </a>
@@ -103,7 +103,7 @@ $total = count($lk ?? []);
             <span class="font-mono text-xs text-slate-900 font-medium"><?= esc($item['no_order'] ?? '-') ?></span>
           </td>
           <td class="py-3 px-5 max-w-[220px]">
-            <a href="/ipsrs/lk/<?= esc($item['id'] ?? '') ?>" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium truncate block transition-colors">
+            <a href="/ipsrs/lk/<?= esc($item['id'] ?? '') ?>" class="text-sm text-red-700 hover:text-red-800 font-medium truncate block transition-colors">
               <?= esc($item['keluhan'] ?? '-') ?>
             </a>
           </td>

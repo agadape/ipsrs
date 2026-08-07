@@ -23,14 +23,14 @@
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal <span class="text-red-500">*</span></label>
         <input type="date" name="tanggal" value="<?= old('tanggal') ?? date('Y-m-d') ?>" required
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
       </div>
 
       <!-- Jam Laporan -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jam Laporan <span class="text-red-500">*</span></label>
         <input type="time" name="jam_laporan" value="<?= old('jam_laporan') ?? date('H:i') ?>" required
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
       </div>
 
       <!-- Pelapor -->
@@ -38,14 +38,14 @@
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Pelapor <span class="text-red-500">*</span></label>
         <input type="text" name="pelapor" value="<?= esc(old('pelapor') ?? session('user_name') ?? '') ?>" required
                placeholder="Nama lengkap pelapor"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
       </div>
 
       <!-- Unit Pelapor -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Unit Pelapor <span class="text-red-500">*</span></label>
         <select name="unit_pelapor" required
-                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
           <option value="">-- Pilih Unit --</option>
           <?php foreach (getStandardUnits() as $u): ?>
             <option value="<?= esc($u) ?>" <?= old('unit_pelapor') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
@@ -65,14 +65,14 @@
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Keluhan <span class="text-red-500">*</span></label>
         <textarea name="keluhan" rows="3" required
                   placeholder="Deskripsikan keluhan atau kerusakan yang dilaporkan..."
-                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm resize-none"><?= esc(old('keluhan') ?? '') ?></textarea>
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm resize-none"><?= esc(old('keluhan') ?? '') ?></textarea>
       </div>
 
       <!-- Kode -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kode Pekerjaan <span class="text-red-500">*</span></label>
         <select name="kode" required
-                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm appearance-none">
+                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
           <option value="">-- Pilih Kode --</option>
           <?php foreach (($kodeKerusakan ?? []) as $kk): ?>
           <option value="<?= esc($kk['kode'] ?? '') ?>"
@@ -81,14 +81,14 @@
           </option>
           <?php endforeach; ?>
         </select>
-        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">Kode tidak ada? Tambahkan di <a href="/ipsrs/kode-kerusakan" class="text-indigo-600 hover:underline">Menu Kode Kerusakan</a></p>
+        <p class="text-[11px] text-slate-400 mt-1.5 font-medium">Kode tidak ada? Tambahkan di <a href="/ipsrs/kode-kerusakan" class="text-red-700 hover:underline">Menu Kode Kerusakan</a></p>
       </div>
 
       <!-- Lokasi -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi <span class="text-red-500">*</span></label>
         <select name="lokasi" required
-                class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Unit / Lokasi --</option>
           <?php foreach (getStandardUnits() as $u): ?>
             <option value="<?= esc($u) ?>" <?= old('lokasi') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
@@ -100,7 +100,7 @@
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Aset Terkait <span class="text-slate-400 font-normal lowercase">(opsional)</span></label>
         <select name="id_aset" id="id_aset" onchange="updateAsetInfo()"
-                class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
             <option value="<?= esc($a['id'] ?? '') ?>"
@@ -117,7 +117,7 @@
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Aset <span class="text-slate-400 font-normal lowercase">(jika tidak ada di daftar)</span></label>
         <input type="text" name="nama_aset" value="<?= esc(old('nama_aset') ?? '') ?>"
                placeholder="Nama aset manual"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm">
+               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
       </div>
 
     </div>
@@ -126,7 +126,7 @@
   <!-- Actions -->
   <div class="flex items-center gap-4">
     <button type="submit"
-            class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+            class="px-6 py-2.5 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
       Buat Laporan Kerusakan
     </button>
     <a href="/ipsrs/lk" class="px-5 py-2.5 text-sm font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 hover:bg-slate-50 rounded-md transition-colors shadow-sm">
@@ -138,7 +138,7 @@
     <span class="font-bold">⚠️ Perhatian:</span> Aset ini tercatat di <span id="lokasi-terdaftar" class="font-mono font-semibold"></span>,
     tapi lokasi laporan berbeda. Apakah aset sudah berpindah?
     <label class="flex items-center gap-2 mt-3 cursor-pointer">
-      <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded border-amber-300 text-indigo-600 focus:ring-indigo-500">
+      <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded border-amber-300 text-red-700 focus:ring-red-600">
       <span class="font-medium">Ya, perbarui lokasi aset sesuai lokasi laporan ini</span>
     </label>
   </div>

@@ -14,7 +14,7 @@ $kategoriList = $kategoriList ?? [];
   </a>
   <div>
     <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Lembar Kerja Preventif</h1>
-    <p class="text-sm font-medium text-indigo-600 mt-1"><?= esc($jadwal['aset'] ?? $jadwal['nama_aset'] ?? '-') ?></p>
+    <p class="text-sm font-medium text-red-700 mt-1"><?= esc($jadwal['aset'] ?? $jadwal['nama_aset'] ?? '-') ?></p>
   </div>
 </div>
 
@@ -61,7 +61,7 @@ $kategoriList = $kategoriList ?? [];
       <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kategori Alat <span class="text-red-500">*</span></label>
       <input type="text" name="kategori" id="kategori-select" required
              list="kategori-datalist" placeholder="Pilih atau ketik custom kategori..."
-             class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+             class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       <datalist id="kategori-datalist">
         <?php foreach ($kategoriList as $k): ?>
         <option value="<?= esc($k) ?>"></option>
@@ -76,7 +76,7 @@ $kategoriList = $kategoriList ?? [];
     <div class="card p-6 mb-6">
       <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-200">
         <h2 class="text-sm font-bold text-slate-800">Checklist Pemeriksaan</h2>
-        <button type="button" onclick="addCustomRow()" class="text-xs font-medium text-indigo-700 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-md transition-colors border border-indigo-200">
+        <button type="button" onclick="addCustomRow()" class="text-xs font-medium text-red-800 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md transition-colors border border-red-200">
           + Tambah Baris
         </button>
       </div>
@@ -118,12 +118,12 @@ $kategoriList = $kategoriList ?? [];
           <div class="flex flex-wrap gap-4">
             <label class="flex items-center gap-2 cursor-pointer group">
               <input type="radio" name="lokasi_sesuai" value="Sesuai" required
-                     class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 cursor-pointer border-slate-300">
+                     class="w-4 h-4 text-red-700 focus:ring-red-600 cursor-pointer border-slate-300">
               <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Ya, Sesuai</span>
             </label>
             <label class="flex items-center gap-2 cursor-pointer group">
               <input type="radio" name="lokasi_sesuai" value="Tidak Sesuai" required
-                     class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 cursor-pointer border-slate-300">
+                     class="w-4 h-4 text-red-700 focus:ring-red-600 cursor-pointer border-slate-300">
               <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Tidak, Berpindah</span>
             </label>
           </div>
@@ -134,13 +134,13 @@ $kategoriList = $kategoriList ?? [];
           <div class="flex flex-wrap gap-4">
             <label class="flex items-center gap-2.5 cursor-pointer group">
               <input type="radio" name="hasil_pemeriksaan" value="Siap Pakai" required
-                     class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 cursor-pointer border-slate-300">
+                     class="w-4 h-4 text-red-700 focus:ring-red-600 cursor-pointer border-slate-300">
               <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Siap Pakai</span>
               <span class="inline-flex px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Normal</span>
             </label>
             <label class="flex items-center gap-2.5 cursor-pointer group">
               <input type="radio" name="hasil_pemeriksaan" value="Perlu Perbaikan" required
-                     class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 cursor-pointer border-slate-300">
+                     class="w-4 h-4 text-red-700 focus:ring-red-600 cursor-pointer border-slate-300">
               <span class="text-sm font-medium text-slate-700 group-hover:text-slate-900">Perlu Perbaikan</span>
               <span class="inline-flex px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">Tindak Lanjut</span>
             </label>
@@ -158,7 +158,7 @@ $kategoriList = $kategoriList ?? [];
             <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Pengguna / User <span class="text-red-500">*</span></label>
             <input type="text" name="nama_user_ttd" value="<?= esc(old('nama_user_ttd') ?? '') ?>" required
                    placeholder="Nama perwakilan unit"
-                   class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors">
+                   class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           </div>
         </div>
 
@@ -166,7 +166,7 @@ $kategoriList = $kategoriList ?? [];
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Catatan Tambahan</label>
           <textarea name="catatan" rows="3"
                     placeholder="Catatan khusus, rekomendasi perbaikan, atau kondisi yang perlu diperhatikan..."
-                    class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 shadow-sm transition-colors resize-none"><?= esc(old('catatan') ?? '') ?></textarea>
+                    class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors resize-none"><?= esc(old('catatan') ?? '') ?></textarea>
         </div>
       </div>
     </div>
@@ -176,7 +176,7 @@ $kategoriList = $kategoriList ?? [];
         Batal
       </a>
       <button type="submit"
-              class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
+              class="px-6 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
         Simpan LKP
       </button>
     </div>
@@ -205,7 +205,7 @@ $kategoriList = $kategoriList ?? [];
         <div class="flex items-center bg-slate-100 p-1 rounded-md w-full border border-slate-200">
           <label class="flex-1 text-center cursor-pointer relative group">
             <input type="radio" name="items[${i}][hasil]" value="${val1}" class="peer sr-only" required ${!isOpt2 && prefilledValue ? 'checked' : ''}>
-            <div class="px-2 py-1.5 text-[11px] font-bold tracking-wide uppercase text-slate-500 rounded peer-checked:bg-white peer-checked:text-indigo-600 peer-checked:shadow-sm transition-all">${val1}</div>
+            <div class="px-2 py-1.5 text-[11px] font-bold tracking-wide uppercase text-slate-500 rounded peer-checked:bg-white peer-checked:text-red-700 peer-checked:shadow-sm transition-all">${val1}</div>
           </label>
           <label class="flex-1 text-center cursor-pointer relative group">
             <input type="radio" name="items[${i}][hasil]" value="${val2}" class="peer sr-only" required ${isOpt2 ? 'checked' : ''}>
@@ -214,13 +214,13 @@ $kategoriList = $kategoriList ?? [];
         </div>`;
     } else if (type === 'Pengukuran') {
         html = `
-        <div class="flex items-center bg-white border border-slate-200 rounded-md overflow-hidden focus-within:ring-1 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition-all w-full shadow-sm">
+        <div class="flex items-center bg-white border border-slate-200 rounded-md overflow-hidden focus-within:ring-1 focus-within:ring-red-600 focus-within:border-red-600 transition-all w-full shadow-sm">
            <input type="number" step="any" name="items[${i}][hasil]" value="${prefilledValue}" placeholder="Angka..." class="w-full px-3 py-1.5 bg-transparent text-sm font-medium outline-none text-slate-900" required>
            <input type="text" name="items[${i}][satuan]" value="${prefilledSatuan}" placeholder="Satuan" class="w-16 px-2 py-1.5 bg-slate-50 text-xs font-medium text-slate-600 outline-none border-l border-slate-200">
         </div>`;
     } else {
         html = `
-        <input type="text" name="items[${i}][hasil]" value="${prefilledValue}" placeholder="Teks hasil observasi..." class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md text-sm font-medium outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-slate-900 shadow-sm" required>
+        <input type="text" name="items[${i}][hasil]" value="${prefilledValue}" placeholder="Teks hasil observasi..." class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md text-sm font-medium outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-all text-slate-900 shadow-sm" required>
         `;
     }
     container.innerHTML = html;
@@ -229,11 +229,11 @@ $kategoriList = $kategoriList ?? [];
   function createRow(data = {}) {
     const i = rowIdx++;
     const tr = document.createElement('div');
-    tr.className = 'row-card group flex flex-col md:flex-row items-start md:items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-lg hover:border-indigo-200 transition-colors duration-200';
+    tr.className = 'row-card group flex flex-col md:flex-row items-start md:items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-lg hover:border-red-200 transition-colors duration-200';
     tr.innerHTML = `
       <div class="w-full md:w-36 shrink-0 relative">
         <input type="hidden" name="items[${i}][no_item]" value="${i}">
-        <select name="items[${i}][jenis]" onchange="updateInputUI(this, ${i})" class="w-full px-3 py-2 bg-white border border-slate-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-md text-[11px] font-bold uppercase tracking-wider text-slate-700 appearance-none cursor-pointer transition-colors shadow-sm">
+        <select name="items[${i}][jenis]" onchange="updateInputUI(this, ${i})" class="w-full px-3 py-2 bg-white border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-md text-[11px] font-bold uppercase tracking-wider text-slate-700 appearance-none cursor-pointer transition-colors shadow-sm">
           <option value="Inspeksi" ${data.jenis === 'Inspeksi' ? 'selected' : ''}>Inspeksi</option>
           <option value="Service" ${data.jenis === 'Service' ? 'selected' : ''}>Service</option>
           <option value="Pengukuran" ${data.jenis === 'Pengukuran' ? 'selected' : ''}>Pengukuran</option>
@@ -245,7 +245,7 @@ $kategoriList = $kategoriList ?? [];
       </div>
       
       <div class="w-full md:flex-1 relative">
-        <input type="text" name="items[${i}][komponen]" value="${(data.komponen || '').replace(/"/g,'&quot;')}" required placeholder="Apa yang diperiksa? (Misal: Kabel Power)" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm transition-all outline-none font-medium text-slate-900 placeholder-slate-400 shadow-sm">
+        <input type="text" name="items[${i}][komponen]" value="${(data.komponen || '').replace(/"/g,'&quot;')}" required placeholder="Apa yang diperiksa? (Misal: Kabel Power)" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md focus:border-red-600 focus:ring-1 focus:ring-red-600 text-sm transition-all outline-none font-medium text-slate-900 placeholder-slate-400 shadow-sm">
       </div>
       
       <div class="w-full md:w-48 shrink-0 dynamic-input-container">
@@ -253,7 +253,7 @@ $kategoriList = $kategoriList ?? [];
       </div>
       
       <div class="w-full md:w-48 shrink-0">
-        <input type="text" name="items[${i}][ket]" value="${(data.ket || '').replace(/"/g,'&quot;')}" placeholder="Catatan (Opsional)" class="w-full px-3 py-1.5 bg-white border border-slate-200 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 rounded-md text-xs font-medium text-slate-600 outline-none transition-all placeholder-slate-400 shadow-sm">
+        <input type="text" name="items[${i}][ket]" value="${(data.ket || '').replace(/"/g,'&quot;')}" placeholder="Catatan (Opsional)" class="w-full px-3 py-1.5 bg-white border border-slate-200 focus:ring-1 focus:ring-red-600 focus:border-red-600 rounded-md text-xs font-medium text-slate-600 outline-none transition-all placeholder-slate-400 shadow-sm">
       </div>
       
       <div class="shrink-0 flex justify-end w-full md:w-auto">
