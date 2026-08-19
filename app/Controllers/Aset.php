@@ -196,7 +196,6 @@ class Aset extends BaseController
     public function update(string $id)
     {
         $v = $this->validateOrFail([
-            'nomor_aset' => "required|is_unique[aset.nomor_aset,id,{$id}]",
             'nama'     => 'required',
             'jenis'    => 'required|in_list[' . implode(',', IPSRS::JENIS_ASET) . ']',
             'kategori' => 'required',
@@ -265,9 +264,14 @@ class Aset extends BaseController
             }
 
             $mutasiModel = new \App\Models\MutasiModel();
-            $data = $this->whitelist(['id_aset', 'petugas', 'tanggal', 'catatan']);
-            $aset = $this->model->getById($data['id_aset']);
-            $data['nama_aset']   = $aset['nama'] ?? '';
+            $seriesModel = new \App\Models\AsetSeriesModel();
+            
+            $data = $this->whitelist(['petugas', 'tanggal', 'catatan']);
+            $idSeries = $this->request->getPost('id_aset');
+            $data['id_aset_series'] = $idSeries;
+
+            $aset = $seriesModel->getById($idSeries);
+            $data['nama_aset']   = $aset['nama_aset'] ?? ($aset['nomor_aset'] ?? '');
             $data['lokasi_asal'] = $aset['lokasi'] ?? null;
             $data['alasan'] = $jenisMutasi;
             $data['lokasi_tujuan'] = $lokasiTujuan;
@@ -275,7 +279,7 @@ class Aset extends BaseController
             $mutasiModel->create($data);
 
             if ($statusBaru) {
-                $this->model->update($data['id_aset'], [
+                $seriesModel->update($idSeries, [
                     'status' => $statusBaru,
                     'lokasi' => $lokasiTujuan
                 ]);

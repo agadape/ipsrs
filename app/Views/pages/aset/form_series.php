@@ -24,6 +24,7 @@
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nomor Seri (S/N)</label>
         <input type="text" name="no_seri" value="<?= esc(old('no_seri') ?? $series['no_seri'] ?? '') ?>"
                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
+      </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Merk</label>
         <input type="text" name="merk" value="<?= esc(old('merk') ?? $series['merk'] ?? '') ?>"
@@ -44,7 +45,7 @@
     <div class="mb-6">
       <h3 class="text-sm font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100">Lokasi Penempatan</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="md:col-span-2">
+        <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi Utama <span class="text-red-500">*</span></label>
           <select name="lokasi" required
                  class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
@@ -55,29 +56,9 @@
           </select>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Gedung <span class="text-red-500">*</span></label>
-          <input type="text" name="gedung" value="<?= esc(old('gedung') ?? $series['gedung'] ?? '') ?>" required
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lantai</label>
-          <input type="text" name="lantai" value="<?= esc(old('lantai') ?? $series['lantai'] ?? '') ?>"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Ruangan <span class="text-red-500">*</span></label>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Ruangan / Detail <span class="text-red-500">*</span></label>
           <input type="text" name="ruangan" value="<?= esc(old('ruangan') ?? $series['ruangan'] ?? '') ?>" required
                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Unit / Instalasi <span class="text-red-500">*</span></label>
-          <select name="unit" required
-                 class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
-            <option value="">-- Pilih Unit / Instalasi --</option>
-            <?php foreach (getStandardUnits() as $u): ?>
-              <option value="<?= esc($u) ?>" <?= (old('unit') ?? $series['unit'] ?? '') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
-            <?php endforeach; ?>
-          </select>
         </div>
       </div>
     </div>

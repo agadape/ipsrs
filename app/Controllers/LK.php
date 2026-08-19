@@ -101,7 +101,7 @@ class LK extends BaseController
             unset($data['update_lokasi_aset']);
             
             if (session('user_role') === 'pelapor') {
-                $data['id_pengguna_pelapor'] = session('user_id');
+                // Not recording id_pengguna_pelapor as it doesn't exist in schema
             }
 
             if (empty($post['id_aset'])) {

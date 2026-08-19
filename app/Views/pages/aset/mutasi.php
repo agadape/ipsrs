@@ -63,9 +63,12 @@ $alasanFilter = $alasan ?? '';
       <!-- Lokasi Tujuan -->
       <div id="lokasi_tujuan_container" class="hidden">
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi Tujuan <span class="text-red-500">*</span></label>
-        <input type="text" name="lokasi_tujuan" id="lokasi_tujuan"
-               placeholder="Gedung / Ruangan tujuan"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
+        <select name="lokasi_tujuan" id="lokasi_tujuan" class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
+          <option value="">-- Pilih Lokasi Tujuan --</option>
+          <?php foreach (getStandardUnits() as $u): ?>
+            <option value="<?= esc($u) ?>"><?= esc($u) ?></option>
+          <?php endforeach; ?>
+        </select>
       </div>
 
       <!-- Petugas -->
