@@ -26,7 +26,7 @@ class Kanibal extends BaseController
     public function store()
     {
         $post = $this->whitelist([
-            'id_lk', 'no_order_lk', 
+            'id_lk', 'no_order_lk', 'id_aset_donor', 'id_aset_penerima',
             'nama_komponen', 'kondisi_komponen', 'disetujui_oleh', 'keterangan',
         ]);
 
