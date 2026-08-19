@@ -24,51 +24,12 @@ class Auth extends BaseController
 
     public function register()
     {
-        if (session('user_id')) {
-            return redirect()->to('/ipsrs');
-        }
-
-        return view('pages/auth/register');
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
     }
 
     public function doRegister()
     {
-        if (session('user_id')) {
-            return redirect()->to('/ipsrs');
-        }
-
-        $nama  = $this->request->getPost('nama_lengkap');
-        $email = $this->request->getPost('email');
-        $pass  = $this->request->getPost('password');
-        $unit  = $this->request->getPost('unit_kerja');
-
-        if (!$nama || !$email || !$pass || !$unit) {
-            return redirect()->back()->with('error', 'Semua field (Nama, Email, Password, Unit) wajib diisi.')->withInput();
-        }
-
-        // Cek email eksis
-        $existing = $this->penggunaModel->findByEmail($email, false);
-        if ($existing) {
-            return redirect()->back()->with('error', 'Email sudah terdaftar.')->withInput();
-        }
-
-        $data = [
-            'id'            => $this->penggunaModel->generateUUID(),
-            'nama_lengkap'  => $nama,
-            'email'         => $email,
-            'password_hash' => password_hash($pass, PASSWORD_BCRYPT),
-            'role'          => 'pelapor',
-            'unit'          => $unit,
-            'aktif'         => 1,
-        ];
-
-        try {
-            $this->penggunaModel->create($data);
-            return redirect()->to('/login')->with('success', 'Pendaftaran berhasil. Silakan login.');
-        } catch (\Throwable $e) {
-            log_message('error', '[Auth::doRegister] ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan sistem. Coba lagi.')->withInput();
-        }
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
     }
 
     public function doLogin()

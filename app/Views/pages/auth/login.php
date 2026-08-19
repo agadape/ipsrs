@@ -5,9 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Masuk — IPSRS RSUD Kota Yogyakarta</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    :root { font-family: 'Inter', sans-serif; }
+    @supports (font-variation-settings: normal) {
+      :root { font-family: 'Inter var', sans-serif; }
+    }
   </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-6 bg-slate-100 selection:bg-red-100 selection:text-red-950 antialiased"
@@ -103,7 +107,6 @@
           <div>
             <div class="flex items-center justify-between mb-2">
               <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">Kata Sandi</label>
-              <a href="#" class="text-[11px] font-semibold text-red-700 hover:text-red-800 hover:underline" tabindex="-1">Lupa sandi?</a>
             </div>
             <div class="relative">
               <input type="password" name="password" id="pw" required autocomplete="current-password"
