@@ -33,7 +33,12 @@ class LK extends BaseController
         if ($kode)   { $lk = array_filter($lk, fn($l) => $l['kode'] === $kode); }
 
         if (session('user_role') === 'pelapor') {
-            $lk = array_filter($lk, fn($l) => ($l['id_pengguna_pelapor'] ?? '') === session('user_id'));
+            $uName = session('user_name');
+            $uUnit = session('user_unit');
+            $lk = array_filter($lk, fn($l) => 
+                ($l['pelapor'] === $uName) || 
+                ($l['unit_pelapor'] === $uUnit)
+            );
         }
 
         return $this->render('pages/lk/index', [
