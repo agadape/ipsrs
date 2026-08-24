@@ -23,6 +23,12 @@ $routes->group('ipsrs', function ($routes) {
     $routes->post('aset/tambah',   'Aset::store');
     $routes->get('aset/mutasi',    'Aset::mutasi');
     $routes->post('aset/mutasi',   'Aset::storeMutasi');
+    
+    // Aset Lifecycle Actions
+    $routes->post('aset/pinjam',   'Aset::pinjam');
+    $routes->get('aset/kembali/(:segment)', 'Aset::kembali/$1');
+    $routes->post('aset/hapus',    'Aset::hapus');
+    
     $routes->post('aset/(:segment)/ping',     'Aset::ping/$1');
     $routes->get('aset/(:segment)/qr',        'Aset::qr/$1');
     $routes->get('aset/series/(:segment)',          'Aset::showSeries/$1');

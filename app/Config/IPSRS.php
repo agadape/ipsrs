@@ -46,15 +46,10 @@ class IPSRS
     ];
 
     public const STATUS_ASET = [
-        'Aktif',
+        'Tersedia',
+        'Dipinjam',
         'Dalam Perbaikan',
-        'Menunggu Suku Cadang',
-        'Menunggu Vendor',
-        'Tidak Aktif',
-        'Di Gudang',
-        'Kanibal',
-        'Usulan Penghapusan',
-        'Dibuang',
+        'Rusak Berat',
         'Dihapuskan',
     ];
 

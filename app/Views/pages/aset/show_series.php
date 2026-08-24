@@ -20,20 +20,30 @@ $id = $series['id'] ?? '';
   </div>
   <?php if (session('user_id')): ?>
   <div class="flex items-center gap-2">
-    <a href="/ipsrs/aset/<?= esc($id) ?>/qr"
-       class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-4 py-2 rounded-md transition-colors shadow-sm border border-slate-200">
-      <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5V16M4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"/>
-      </svg>
-      QR Code
-    </a>
-    <a href="/ipsrs/aset/<?= esc($id) ?>/edit"
-       class="inline-flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-      </svg>
-      Edit Aset
-    </a>
+    <?php $s = $series['status'] ?? 'Tersedia'; ?>
+    
+    <?php if ($s === 'Tersedia'): ?>
+      <button type="button" onclick="openPeminjamanModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Pinjamkan</button>
+      <a href="/ipsrs/aset/mutasi?id=<?= esc($id) ?>" class="inline-flex items-center gap-2 bg-slate-600 hover:bg-slate-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Mutasikan</a>
+    <?php elseif ($s === 'Dipinjam'): ?>
+      <button type="button" onclick="openPengembalianModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Kembalikan</button>
+    <?php elseif ($s === 'Dalam Perbaikan'): ?>
+      <a href="/ipsrs/lk" class="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lihat LK</a>
+    <?php elseif ($s === 'Rusak Berat'): ?>
+      <button type="button" onclick="openPenghapusanModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lakukan Penghapusan</button>
+      <a href="/ipsrs/kanibal?id=<?= esc($id) ?>" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Ambil Komponen (Kanibal)</a>
+    <?php elseif ($s === 'Dihapuskan'): ?>
+      <button type="button" onclick="viewBA('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lihat BA</button>
+    <?php endif; ?>
+
+    <?php if ($s !== 'Dihapuskan'): ?>
+      <a href="/ipsrs/aset/<?= esc($id) ?>/qr" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="QR Code">
+        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5V16M4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"/></svg>
+      </a>
+      <a href="/ipsrs/aset/<?= esc($id) ?>/edit" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="Edit Data">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+      </a>
+    <?php endif; ?>
   </div>
   <?php endif; ?>
 </div>
@@ -297,3 +307,98 @@ $id = $series['id'] ?? '';
 
 
 
+
+<!-- Modals for Asset Lifecycle -->
+<script>
+function openPeminjamanModal(id) {
+    Swal.fire({
+        title: 'Pinjamkan Aset',
+        html: `
+            <form id="peminjamanForm" action="/ipsrs/aset/pinjam" method="POST" class="text-left">
+                <input type="hidden" name="id_aset_series" value="${id}">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Nama Peminjam *</label>
+                    <input type="text" name="nama_peminjam" required class="w-full border p-2 rounded">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Unit Peminjam *</label>
+                    <input type="text" name="unit_peminjam" required class="w-full border p-2 rounded">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Rencana Kembali *</label>
+                    <input type="date" name="tgl_kembali_rencana" required class="w-full border p-2 rounded">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Keterangan</label>
+                    <textarea name="keterangan" class="w-full border p-2 rounded"></textarea>
+                </div>
+            </form>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Pinjamkan',
+        preConfirm: () => {
+            document.getElementById('peminjamanForm').submit();
+        }
+    });
+}
+
+function openPengembalianModal(id) {
+    Swal.fire({
+        title: 'Kembalikan Aset',
+        text: 'Aset ini akan dikembalikan dan statusnya menjadi Tersedia.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Kembalikan',
+        preConfirm: () => {
+            window.location.href = '/ipsrs/aset/kembali/' + id;
+        }
+    });
+}
+
+function openPenghapusanModal(id) {
+    Swal.fire({
+        title: 'Lakukan Penghapusan Aset',
+        html: `
+            <form id="penghapusanForm" action="/ipsrs/aset/hapus" method="POST" enctype="multipart/form-data" class="text-left">
+                <input type="hidden" name="id_aset_series" value="${id}">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">No. Berita Acara *</label>
+                    <input type="text" name="no_ba" required class="w-full border p-2 rounded">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Tanggal BA *</label>
+                    <input type="date" name="tgl_ba" required class="w-full border p-2 rounded">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Tindak Lanjut *</label>
+                    <select name="tindak_lanjut" required class="w-full border p-2 rounded">
+                        <option value="Dijual">Dijual / Lelang</option>
+                        <option value="Dihibahkan">Dihibahkan</option>
+                        <option value="Dibuang">Dibuang</option>
+                        <option value="Dimusnahkan">Dimusnahkan</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Upload BA (PDF/Image)</label>
+                    <input type="file" name="file_dokumen_ba" class="w-full border p-2 rounded">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Keterangan</label>
+                    <textarea name="keterangan" class="w-full border p-2 rounded"></textarea>
+                </div>
+                <p class="text-xs text-red-600 mt-2">Peringatan: Setelah dihapuskan, aset tidak akan dapat digunakan lagi di sistem ini.</p>
+            </form>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Selesaikan Penghapusan',
+        confirmButtonColor: '#dc2626',
+        preConfirm: () => {
+            document.getElementById('penghapusanForm').submit();
+        }
+    });
+}
+
+function viewBA(id) {
+    window.location.href = '/ipsrs/aset/ba/' + id;
+}
+</script>

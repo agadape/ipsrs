@@ -372,6 +372,73 @@ class Aset extends BaseController
 
         return view('pages/aset/qr', compact('aset', 'series'));
     }
+
+    public function pinjam()
+    {
+        $id = $this->request->getPost('id_aset_series');
+        $db = \Config\Database::connect();
+        
+        $db->table('peminjaman_aset')->insert([
+            'id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+            'id_aset_series' => $id,
+            'nama_peminjam' => $this->request->getPost('nama_peminjam'),
+            'unit_peminjam' => $this->request->getPost('unit_peminjam'),
+            'tgl_pinjam' => date('Y-m-d'),
+            'tgl_kembali_rencana' => $this->request->getPost('tgl_kembali_rencana'),
+            'status' => 'Dipinjam',
+            'keterangan' => $this->request->getPost('keterangan'),
+            'id_admin' => session('user_id'),
+        ]);
+
+        $db->table('aset_series')->where('id', $id)->update(['status' => 'Dipinjam']);
+
+        return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dipinjamkan.');
+    }
+
+    public function kembali($id)
+    {
+        $db = \Config\Database::connect();
+        
+        $db->table('peminjaman_aset')
+            ->where('id_aset_series', $id)
+            ->where('status', 'Dipinjam')
+            ->update([
+                'tgl_kembali_aktual' => date('Y-m-d'),
+                'status' => 'Selesai'
+            ]);
+
+        $db->table('aset_series')->where('id', $id)->update(['status' => 'Tersedia']);
+
+        return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dikembalikan.');
+    }
+
+    public function hapus()
+    {
+        $id = $this->request->getPost('id_aset_series');
+        $db = \Config\Database::connect();
+        
+        $file = $this->request->getFile('file_dokumen_ba');
+        $fileName = null;
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $fileName = $file->getRandomName();
+            $file->move(FCPATH . 'uploads/ba', $fileName);
+        }
+
+        $db->table('penghapusan_aset')->insert([
+            'id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+            'id_aset_series' => $id,
+            'no_ba' => $this->request->getPost('no_ba'),
+            'tgl_ba' => $this->request->getPost('tgl_ba'),
+            'tindak_lanjut' => $this->request->getPost('tindak_lanjut'),
+            'file_dokumen_ba' => $fileName,
+            'keterangan' => $this->request->getPost('keterangan'),
+            'id_admin' => session('user_id'),
+        ]);
+
+        $db->table('aset_series')->where('id', $id)->update(['status' => 'Dihapuskan']);
+
+        return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dihapuskan beserta Berita Acara.');
+    }
 }
 
 
