@@ -44,19 +44,28 @@ $total = count($aset ?? []);
       <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Status</label>
       <select name="status" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-colors shadow-sm">
         <option value="">Semua Status</option>
-        <option value="Aktif"   <?= ($status ?? '') === 'Aktif'   ? 'selected' : '' ?>>Aktif</option>
-        <option value="Tidak Aktif" <?= ($status ?? '') === 'Tidak Aktif' ? 'selected' : '' ?>>Tidak Aktif</option>
-        <option value="Rusak"   <?= ($status ?? '') === 'Rusak'   ? 'selected' : '' ?>>Rusak</option>
+        <option value="Tersedia" <?= ($status ?? '') === 'Tersedia' ? 'selected' : '' ?>>Tersedia</option>
+        <option value="Dipinjam" <?= ($status ?? '') === 'Dipinjam' ? 'selected' : '' ?>>Dipinjam</option>
+        <option value="Dalam Perbaikan" <?= ($status ?? '') === 'Dalam Perbaikan' ? 'selected' : '' ?>>Dalam Perbaikan</option>
+        <option value="Rusak Berat" <?= ($status ?? '') === 'Rusak Berat' ? 'selected' : '' ?>>Rusak Berat (Siap Kanibal/Afkir)</option>
+        <option value="Dihapuskan" <?= ($status ?? '') === 'Dihapuskan' ? 'selected' : '' ?>>Dihapuskan</option>
       </select>
     </div>
-    <button type="submit"
-            class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
-      Filter
-    </button>
-    <?php if (!empty($search) || !empty($jenis) || !empty($status)): ?>
-    <a href="/ipsrs/aset" class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors">Reset</a>
-    <?php endif; ?>
+    <div>
+      <button type="submit" class="h-[38px] px-4 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
+        Filter
+      </button>
+    </div>
   </form>
+  
+  <!-- Quick Tabs -->
+  <div class="flex gap-2 mt-4 pt-4 border-t border-slate-100 overflow-x-auto">
+    <a href="/ipsrs/aset" class="px-3 py-1.5 text-sm font-medium rounded-md <?= empty($status) ? 'bg-red-50 text-red-700' : 'text-slate-600 hover:bg-slate-50' ?>">Semua Aset</a>
+    <a href="/ipsrs/aset?status=Tersedia" class="px-3 py-1.5 text-sm font-medium rounded-md <?= ($status ?? '') === 'Tersedia' ? 'bg-red-50 text-red-700' : 'text-slate-600 hover:bg-slate-50' ?>">Tersedia</a>
+    <a href="/ipsrs/aset?status=Dipinjam" class="px-3 py-1.5 text-sm font-medium rounded-md <?= ($status ?? '') === 'Dipinjam' ? 'bg-red-50 text-red-700' : 'text-slate-600 hover:bg-slate-50' ?>">Sedang Dipinjam</a>
+    <a href="/ipsrs/aset?status=Rusak+Berat" class="px-3 py-1.5 text-sm font-medium rounded-md <?= ($status ?? '') === 'Rusak Berat' ? 'bg-red-50 text-red-700' : 'text-slate-600 hover:bg-slate-50' ?>">Siap Kanibal / Afkir</a>
+    <a href="/ipsrs/aset?status=Dihapuskan" class="px-3 py-1.5 text-sm font-medium rounded-md <?= ($status ?? '') === 'Dihapuskan' ? 'bg-red-50 text-red-700' : 'text-slate-600 hover:bg-slate-50' ?>">Riwayat Dihapuskan</a>
+  </div>
 </div>
 
 <!-- Count -->
