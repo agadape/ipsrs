@@ -5,7 +5,7 @@ class Panduan extends BaseController
 {
     public function index()
     {
-        return \->render('pages/panduan/index');
+        return $this->render("pages/panduan/index");
     }
 }
 
