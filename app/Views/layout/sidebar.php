@@ -67,7 +67,6 @@ if (!function_exists('ico')) {
   <nav class="flex-1 overflow-y-auto px-3 py-2 space-y-6">
     <div>
       <?= navLink('/ipsrs', 'Dashboard', ico('<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>'), $path) ?>
-      <?= navLink('/ipsrs/panduan', 'Buku Panduan (SOP)', ico('<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>'), $path) ?>
     </div>
 
     <?php if ($authRole !== 'pelapor'): ?>

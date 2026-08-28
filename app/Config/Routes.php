@@ -99,9 +99,6 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('peminjaman',      'Peminjaman::index');
     $routes->get('penghapusan',     'Penghapusan::index');
 
-    // Panduan SOP
-    $routes->get('panduan',         'Panduan::index');
-
     // Laporan
     $routes->get('laporan',              'Laporan::index');
     $routes->get('laporan/export-excel', 'Laporan::exportExcelLK');
