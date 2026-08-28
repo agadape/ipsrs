@@ -27,7 +27,24 @@ class Aset extends BaseController
                 stripos($a['nama'], $search) !== false || stripos($a['id'], $search) !== false);
         }
         if ($jenis)  { $aset = array_filter($aset, fn($a) => $a['jenis'] === $jenis); }
-        if ($status) { $aset = array_filter($aset, fn($a) => $a['status'] === $status); }
+        if ($status) { 
+            $db = \Config\Database::connect();
+            
+            // Map legacy statuses for backward compatibility during filtering
+            $queryStatus = [$status];
+            if ($status === 'Tersedia') $queryStatus[] = 'Aktif';
+            if ($status === 'Dalam Perbaikan' || $status === 'Rusak Berat') $queryStatus[] = 'Rusak';
+            
+            $seriesWithStatus = $db->table('aset_series')
+                                   ->select('id_aset')
+                                   ->whereIn('status', $queryStatus)
+                                   ->groupBy('id_aset')
+                                   ->get()
+                                   ->getResultArray();
+            $allowedAsetIds = array_column($seriesWithStatus, 'id_aset');
+            
+            $aset = array_filter($aset, fn($a) => in_array($a['id'], $allowedAsetIds) || ($a['status'] ?? '') === $status); 
+        }
 
         return $this->render('pages/aset/index', [
             'aset'   => array_values($aset),
