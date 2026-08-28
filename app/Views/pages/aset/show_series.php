@@ -270,6 +270,73 @@ $id = $series['id'] ?? '';
   <?php endif; ?>
 </div>
 
+
+  <?php if (!empty($peminjamanAktif)): ?>
+  <!-- Informasi Peminjaman -->
+  <div class="card p-6 mb-6 border-l-4 border-blue-500 bg-blue-50/30">
+    <div class="flex items-center gap-2 mb-4">
+      <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      <h2 class="text-sm font-semibold text-slate-800">Sedang Dipinjam</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+      <div>
+        <span class="block text-slate-500 text-xs uppercase tracking-wider mb-1">Peminjam</span>
+        <span class="font-medium text-slate-800"><?= esc($peminjamanAktif['nama_peminjam'] ?? '-') ?></span>
+      </div>
+      <div>
+        <span class="block text-slate-500 text-xs uppercase tracking-wider mb-1">Unit Asal</span>
+        <span class="font-medium text-slate-800"><?= esc($peminjamanAktif['unit_peminjam'] ?? '-') ?></span>
+      </div>
+      <div>
+        <span class="block text-slate-500 text-xs uppercase tracking-wider mb-1">Tgl Pinjam</span>
+        <span class="font-medium text-slate-800"><?= tgl($peminjamanAktif['tgl_pinjam'] ?? '') ?></span>
+      </div>
+      <div>
+        <span class="block text-slate-500 text-xs uppercase tracking-wider mb-1">Rencana Kembali</span>
+        <span class="font-medium text-slate-800"><?= tgl($peminjamanAktif['tgl_kembali_rencana'] ?? '') ?></span>
+      </div>
+    </div>
+    <?php if(!empty($peminjamanAktif['keterangan'])): ?>
+    <div class="mt-4 pt-4 border-t border-blue-100 text-sm text-slate-600">
+      <span class="font-semibold block mb-1">Keterangan:</span>
+      <?= esc($peminjamanAktif['keterangan']) ?>
+    </div>
+    <?php endif; ?>
+  </div>
+  <?php endif; ?>
+
+  <?php if (!empty($dataPenghapusan)): ?>
+  <!-- Informasi Penghapusan / EOL -->
+  <div class="card p-6 mb-6 border-l-4 border-slate-800 bg-slate-50">
+    <div class="flex items-center gap-2 mb-4">
+      <svg class="w-5 h-5 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      <h2 class="text-sm font-semibold text-slate-800">Aset Telah Dihapuskan (End of Life)</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm mb-4">
+      <div>
+        <span class="block text-slate-500 text-xs uppercase tracking-wider mb-1">No. Berita Acara</span>
+        <span class="font-medium text-slate-800"><?= esc($dataPenghapusan['no_ba'] ?? '-') ?></span>
+      </div>
+      <div>
+        <span class="block text-slate-500 text-xs uppercase tracking-wider mb-1">Tgl Berita Acara</span>
+        <span class="font-medium text-slate-800"><?= tgl($dataPenghapusan['tgl_ba'] ?? '') ?></span>
+      </div>
+      <div>
+        <span class="block text-slate-500 text-xs uppercase tracking-wider mb-1">Tindak Lanjut</span>
+        <span class="font-medium text-slate-800"><?= esc($dataPenghapusan['tindak_lanjut'] ?? '-') ?></span>
+      </div>
+    </div>
+    <?php if(!empty($dataPenghapusan['file_dokumen_ba'])): ?>
+    <div class="mt-4">
+      <a href="/uploads/ba/<?= esc($dataPenghapusan['file_dokumen_ba']) ?>" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 transition-colors shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Lihat Dokumen BA (PDF)
+      </a>
+    </div>
+    <?php endif; ?>
+  </div>
+  <?php endif; ?>
+
 <!-- Riwayat Lokasi -->
 <div class="card p-6">
   <h2 class="text-sm font-semibold text-slate-800 mb-4">Riwayat Lokasi</h2>

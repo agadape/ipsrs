@@ -47,15 +47,15 @@ Query SQL dijalankan di database production untuk membersihkan dan menormalkan n
 # Revision 2 - ERD Normalization & Integrity Enforcement
 
 **Date:** 2026-08-28  
-**Status:** In Progress (DB Done, Codebase Pending)  
-**Area:** Database Schema (Constraints, Indexes, Normalization)
+**Status:** Completed  
+**Area:** Database Schema & CodeIgniter Controllers (Locations, Constraints)
 
 ## 1. Problem / Interpretation
 Hasil analisis mendalam terhadap struktur ERD menunjukkan beberapa celah arsitektur: ketiadaan Foreign Key di tabel historis (peminjaman, penghapusan, riwayat kanibal), pencatatan relasi menggunakan Natural Key tanpa constraint, pencatatan lokasi yang berulang dan berpotensi typo (free-text), serta ketiadaan Index di kolom yang sering difilter.
 
 ## 2. Our Response
-Membangun ulang struktur relasi menjadi sangat ketat agar tidak ada data yatim piatu (orphan), menormalisasi tabel lokasi menjadi master_lokasi, dan menegakkan ENUM untuk status aset demi integritas proses bisnis.
+Membangun ulang struktur relasi menjadi sangat ketat agar tidak ada data yatim piatu (orphan), menormalisasi tabel lokasi menjadi `master_lokasi`, dan menegakkan ENUM untuk status aset demi integritas proses bisnis.
 
 ## 3. Implementation
-- **Selesai:** Eksekusi script SQL di Production untuk constraint FK, ENUM, penambahan UNIQUE KEY, Index status, dan ekstraksi 777 lokasi dari teks bebas menjadi tabel master_lokasi.
-- **Selanjutnya (Pending):** Refactor codebase CodeIgniter 4 agar form input dan halaman detail membaca/menulis ke kolom id_lokasi menggantikan kolom free-text lama.
+- **Database:** Eksekusi script SQL di Production untuk constraint FK, ENUM, penambahan UNIQUE KEY, Index `status`, dan ekstraksi 777 lokasi dari teks bebas menjadi tabel `master_lokasi`.
+- **Codebase:** Refactor `AsetSeriesModel` dan `Aset` Controller untuk menggunakan `$id_lokasi` saat create/update. Modifikasi form HTML (`form_series.php`) dari input teks bebas menjadi `<select>` dropdown (Data Binding ke `master_lokasi`). View read-only otomatis menampilkan kolom dari hasil JOIN tanpa merusak flow lama.

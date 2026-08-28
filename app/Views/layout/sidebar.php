@@ -75,6 +75,8 @@ if (!function_exists('ico')) {
       <div class="space-y-0.5">
         <?= navLink('/ipsrs/aset',        'Daftar Aset', ico('<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>'), $path) ?>
         <?= navLink('/ipsrs/aset/mutasi', 'Mutasi Aset', ico('<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>'), $path) ?>
+        <?= navLink('/ipsrs/peminjaman', 'Peminjaman Aset', ico('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'), $path) ?>
+        <?= navLink('/ipsrs/penghapusan', 'Penghapusan Aset', ico('<path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>'), $path) ?>
       </div>
     </div>
     <?php endif; ?>
@@ -147,5 +149,6 @@ if (!function_exists('ico')) {
       }
     });
 </script>
+
 
 

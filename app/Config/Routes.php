@@ -95,6 +95,10 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('kanibal',         'Kanibal::riwayat');
     $routes->post('kanibal',        'Kanibal::store');
 
+    // Peminjaman & Penghapusan
+    $routes->get('peminjaman',      'Peminjaman::index');
+    $routes->get('penghapusan',     'Penghapusan::index');
+
     // Laporan
     $routes->get('laporan',              'Laporan::index');
     $routes->get('laporan/export-excel', 'Laporan::exportExcelLK');
@@ -102,5 +106,6 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('laporan/export-excel-preventif', 'Laporan::exportExcelPreventif');
     $routes->get('laporan/export-print-preventif', 'Laporan::exportPrintPreventif');
 });
+
 
 

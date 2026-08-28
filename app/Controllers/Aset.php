@@ -121,8 +121,18 @@ class Aset extends BaseController
         $riwayatLK = (new \App\Models\LKModel())->getByAset($idSeries);
         $komponen  = (new \App\Models\KomponenAsetModel())->getByAset($idSeries);
         $riwayatKanibal = (new \App\Models\RiwayatKanibalModel())->getByAset($idSeries);
+        
+        $peminjamanAktif = null;
+        if ($series['status'] === 'Dipinjam') {
+            $peminjamanAktif = (new \App\Models\PeminjamanAsetModel())->getActiveByAset($idSeries);
+        }
 
-        return $this->render('pages/aset/show_series', compact('aset', 'series', 'riwayat', 'riwayatLK', 'komponen', 'riwayatKanibal'));
+        $dataPenghapusan = null;
+        if ($series['status'] === 'Dihapuskan') {
+            $dataPenghapusan = (new \App\Models\PenghapusanAsetModel())->getByAset($idSeries);
+        }
+
+        return $this->render('pages/aset/show_series', compact('aset', 'series', 'riwayat', 'riwayatLK', 'komponen', 'riwayatKanibal', 'peminjamanAktif', 'dataPenghapusan'));
     }
 
     public function editSeries(string $idSeries)
