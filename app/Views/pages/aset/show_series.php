@@ -19,32 +19,52 @@ $id = $series['id'] ?? '';
     </div>
   </div>
   <?php if (session('user_id')): ?>
-  <div class="flex items-center gap-2">
-    <?php $s = $series['status'] ?? 'Tersedia'; ?>
-    
-    <?php if ($s === 'Tersedia'): ?>
-      <button type="button" onclick="openPeminjamanModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Pinjamkan</button>
-      <a href="/ipsrs/aset/mutasi?id=<?= esc($id) ?>" class="inline-flex items-center gap-2 bg-slate-600 hover:bg-slate-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Mutasikan</a>
-    <?php elseif ($s === 'Dipinjam'): ?>
-      <button type="button" onclick="openPengembalianModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Kembalikan</button>
-    <?php elseif ($s === 'Dalam Perbaikan'): ?>
-      <a href="/ipsrs/lk" class="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lihat LK</a>
-    <?php elseif ($s === 'Rusak Berat'): ?>
-      <button type="button" onclick="openPenghapusanModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lakukan Penghapusan</button>
-      <a href="/ipsrs/kanibal?id=<?= esc($id) ?>" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Ambil Komponen (Kanibal)</a>
-    <?php elseif ($s === 'Dihapuskan'): ?>
-      <button type="button" onclick="viewBA('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lihat BA</button>
-    <?php endif; ?>
+    <div class="flex flex-wrap items-center gap-2">
+      <?php $s = $series['status'] ?? 'Tersedia'; ?>
+      
+      <!-- Primary Action: Peminjaman / Mutasi -->
+      <?php if ($s === 'Tersedia'): ?>
+        <button type="button" onclick="openPeminjamanModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Pinjamkan</button>
+        <a href="/ipsrs/aset/mutasi?id=<?= esc($id) ?>" class="inline-flex items-center gap-2 bg-slate-600 hover:bg-slate-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Mutasikan</a>
+      <?php elseif ($s === 'Dipinjam'): ?>
+        <button type="button" onclick="openPengembalianModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Terima Pengembalian</button>
+      <?php endif; ?>
 
-    <?php if ($s !== 'Dihapuskan'): ?>
-      <a href="/ipsrs/aset/<?= esc($id) ?>/qr" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="QR Code">
-        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5V16M4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"/></svg>
-      </a>
-      <a href="/ipsrs/aset/<?= esc($id) ?>/edit" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="Edit Data">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-      </a>
-    <?php endif; ?>
-  </div>
+      <!-- Primary Action: Perbaikan -->
+      <?php if ($s === 'Dalam Perbaikan'): ?>
+        <a href="/ipsrs/lk" class="inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lihat Progres LK</a>
+      <?php endif; ?>
+
+      <!-- End of Life / Rusak Berat Transitions -->
+      <?php if (in_array($s, ['Tersedia', 'Dalam Perbaikan'])): ?>
+        <form action="/ipsrs/aset/series/<?= esc($id) ?>/tandai-rusak" method="post" class="inline" onsubmit="return confirm('Apakah Anda yakin aset ini tidak dapat diperbaiki lagi? Aset akan ditandai sebagai Rusak Berat dan opsi Kanibalisasi & Penghapusan akan terbuka.')">
+          <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm border border-red-200">Tandai Rusak Berat</button>
+        </form>
+      <?php endif; ?>
+
+      <!-- Kanibal & Penghapusan (Visible but disabled if not Rusak Berat) -->
+      <?php if ($s === 'Rusak Berat'): ?>
+        <button type="button" onclick="openPenghapusanModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lakukan Penghapusan</button>
+        <a href="/ipsrs/kanibal?id=<?= esc($id) ?>" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Ambil Komponen (Kanibal)</a>
+      <?php elseif ($s !== 'Dihapuskan'): ?>
+        <button type="button" disabled title="Hanya dapat dilakukan jika aset berstatus Rusak Berat" class="inline-flex items-center gap-2 bg-slate-100 text-slate-400 text-sm font-medium px-4 py-2 rounded-md shadow-sm border border-slate-200 cursor-not-allowed">Lakukan Penghapusan</button>
+        <button type="button" disabled title="Hanya dapat dilakukan jika aset berstatus Rusak Berat" class="inline-flex items-center gap-2 bg-slate-100 text-slate-400 text-sm font-medium px-4 py-2 rounded-md shadow-sm border border-slate-200 cursor-not-allowed">Kanibalisasi</button>
+      <?php endif; ?>
+
+      <!-- BA View for Dihapuskan -->
+      <?php if ($s === 'Dihapuskan'): ?>
+        <button type="button" onclick="viewBA('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lihat Berita Acara</button>
+      <?php endif; ?>
+  
+      <?php if ($s !== 'Dihapuskan'): ?>
+        <a href="/ipsrs/aset/<?= esc($id) ?>/qr" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="QR Code">
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5V16M4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"/></svg>
+        </a>
+        <a href="/ipsrs/aset/<?= esc($id) ?>/edit" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="Edit Data">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        </a>
+      <?php endif; ?>
+    </div>
   <?php endif; ?>
 </div>
 
@@ -469,3 +489,4 @@ function viewBA(id) {
     window.location.href = '/ipsrs/aset/ba/' + id;
 }
 </script>
+

@@ -63,24 +63,16 @@
     <div class="mb-6">
       <h3 class="text-sm font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100">Status & Fisik</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kondisi</label>
-          <select name="kondisi" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none transition-colors">
-            <option value="Baik" <?= (old('kondisi') ?? $series['kondisi'] ?? '') === 'Baik' ? 'selected' : '' ?>>Baik</option>
-            <option value="Rusak Ringan" <?= (old('kondisi') ?? $series['kondisi'] ?? '') === 'Rusak Ringan' ? 'selected' : '' ?>>Rusak Ringan</option>
-            <option value="Rusak Berat" <?= (old('kondisi') ?? $series['kondisi'] ?? '') === 'Rusak Berat' ? 'selected' : '' ?>>Rusak Berat</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Status</label>
-          <select name="status" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none transition-colors">
-            <option value="Tersedia" <?= (old('status') ?? $series['status'] ?? '') === 'Tersedia' ? 'selected' : '' ?>>Tersedia</option>
-            <option value="Dalam Perbaikan" <?= (old('status') ?? $series['status'] ?? '') === 'Dalam Perbaikan' ? 'selected' : '' ?>>Dalam Perbaikan</option>
-            <option value="Rusak Berat" <?= (old('status') ?? $series['status'] ?? '') === 'Rusak Berat' ? 'selected' : '' ?>>Rusak Berat</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tahun Pengadaan</label>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kondisi</label>
+            <select name="kondisi" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none transition-colors">
+              <option value="Baik" <?= (old('kondisi') ?? $series['kondisi'] ?? '') === 'Baik' ? 'selected' : '' ?>>Baik</option>
+              <option value="Rusak Ringan" <?= (old('kondisi') ?? $series['kondisi'] ?? '') === 'Rusak Ringan' ? 'selected' : '' ?>>Rusak Ringan</option>
+              <option value="Rusak Berat" <?= (old('kondisi') ?? $series['kondisi'] ?? '') === 'Rusak Berat' ? 'selected' : '' ?>>Rusak Berat</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tahun Pengadaan</label>
           <input type="number" name="tahun_perolehan" value="<?= esc(old('tahun_perolehan') ?? $series['tahun_perolehan'] ?? '') ?>"
                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
         </div>

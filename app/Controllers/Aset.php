@@ -87,9 +87,10 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'no_seri', 'id_lokasi', 'kondisi', 'status',
+                'nomor_aset', 'no_seri', 'id_lokasi', 'kondisi',
                 'merk', 'model', 'kapasitas', 'tahun_perolehan'
             ]);
+            $data['status']  = 'Tersedia';
             $data['id_aset'] = $idParent;
             $data['lokasi']  = '-'; // Stub for old column if it's still NOT NULL
             $data['gedung']  = '-'; // Stub
@@ -163,7 +164,7 @@ class Aset extends BaseController
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'no_seri', 'id_lokasi', 'kondisi', 'status',
+                'nomor_aset', 'no_seri', 'id_lokasi', 'kondisi',
                 'merk', 'model', 'kapasitas', 'tahun_perolehan'
             ]);
             (new \App\Models\AsetSeriesModel())->update($idSeries, $data);
@@ -443,6 +444,14 @@ class Aset extends BaseController
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dikembalikan.');
     }
 
+
+    public function tandaiRusakBerat($id)
+    {
+        $db = \Config\Database::connect();
+        $db->table('aset_series')->where('id', $id)->update(['status' => 'Rusak Berat']);
+        return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset telah ditandai sebagai Rusak Berat. Opsi Kanibalisasi & Penghapusan kini tersedia.');
+    }
+
     public function hapus()
     {
         $id = $this->request->getPost('id_aset_series');
@@ -471,6 +480,7 @@ class Aset extends BaseController
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dihapuskan beserta Berita Acara.');
     }
 }
+
 
 
 
