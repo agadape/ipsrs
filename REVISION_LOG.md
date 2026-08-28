@@ -21,29 +21,23 @@ Implementasi yang berbasis CRUD murni tidak mencerminkan business process riil d
 5. Pembuatan tabel peminjaman_aset dan penghapusan_aset untuk menampung data tanpa redundansi dan menjaga audit trail.
 
 ## 4. Changes Made
-*(Lihat log sebelumnya)*
+- Halaman Detail Aset kini bersifat context-aware. Tombol aksi utama (Pinjamkan, Lapor Rusak, Ambil Komponen, Penghapusan) akan muncul atau disembunyikan berdasarkan status terkini aset.
+- Menambahkan tab navigasi untuk filtering cepat di halaman index.
+- Perbaikan logic filter pada backend menggunakan query relasional.
 
 ---
 
-# Revision 1.1 - Legacy Status Compatibility (Hotfix)
+# Revision 1.1 - Database Data Migration (Clean Up)
 
 **Date:** 2026-08-28  
 **Status:** Completed  
-**Area:** Asset List Filter & Asset Details
+**Area:** Database set_series
 
-## 1. Examiner Feedback
-- (Lanjutan) Pengguna mendapati "WHOOPS" error pada halaman filter dan hilangnya tombol pada halaman detail.
+## 1. Problem / Interpretation
+Data lama masih menggunakan nilai status ('Aktif', 'Rusak', 'Tidak Aktif') yang tidak dikenali oleh state machine baru ('Tersedia', 'Dalam Perbaikan', 'Rusak Berat', dll). Hal ini membuat tombol tidak muncul dan query relasional menjadi tidak sinkron.
 
-## 2. Problem / Interpretation
-Error "WHOOPS" terjadi karena fungsi rray_filter di controller mencoba mengakses field status secara langsung pada Master Aset, padahal status menempel pada set_series dan Master Aset lawas tidak memiliki index array status. Selain itu, data *existing* di database masih menggunakan string status lama ('Aktif', 'Rusak'), sehingga logika IF untuk tombol baru (yang mengharapkan 'Tersedia') gagal tertrigger (tombol menghilang).
+## 2. Our Response
+Alih-alih menggunakan logika IF bersarang di code (hardcoded mapping) yang bisa menjadi utang teknis (technical debt) saat sistem dibawa ke Production, kami menormalkan data langsung di database.
 
-## 3. Our Response
-- Memperbaiki controller agar filter status membaca dari relasi set_series ke database langsung alih-alih rray_filter string sederhana.
-- Memasang fungsi "pemetaan mundur" (backward compatibility mapping) di View: Jika sistem menemukan kata 'Aktif', akan diperlakukan sebagai 'Tersedia' di sisi antarmuka pengguna agar tombol tetap muncul tanpa memaksa update seluruh tabel master.
-
-## 4. Implementation
-- pp/Controllers/Aset.php -> Penambahan query builder $db->table('aset_series')->whereIn(...) 
-- pp/Views/pages/aset/show_series.php -> Mapping string PHP strtolower() === 'aktif' -> 'Tersedia'.
-
-## 5. Result
-Filter tabel di index dan tombol Peminjaman di show_series kembali bekerja normal walau dengan data lama.
+## 3. Implementation
+Query SQL dijalankan di database production untuk membersihkan dan menormalkan nama status. Kodingan controller dan view dikembalikan (revert) ke bentuk yang lebih bersih.

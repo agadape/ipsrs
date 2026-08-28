@@ -20,11 +20,7 @@ $id = $series['id'] ?? '';
   </div>
   <?php if (session('user_id')): ?>
   <div class="flex items-center gap-2">
-    <?php 
-      $s = $series['status'] ?? 'Tersedia'; 
-      if (strtolower($s) === 'aktif') $s = 'Tersedia'; // map legacy status
-      if (strtolower($s) === 'rusak') $s = 'Dalam Perbaikan'; // map legacy status
-    ?>
+    <?php $s = $series['status'] ?? 'Tersedia'; ?>
     
     <?php if ($s === 'Tersedia'): ?>
       <button type="button" onclick="openPeminjamanModal('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Pinjamkan</button>
