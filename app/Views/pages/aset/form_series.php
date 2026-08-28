@@ -74,9 +74,9 @@
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Status</label>
           <select name="status" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none transition-colors">
-            <option value="Beroperasi" <?= (old('status') ?? $series['status'] ?? '') === 'Beroperasi' ? 'selected' : '' ?>>Beroperasi</option>
-            <option value="Rusak" <?= (old('status') ?? $series['status'] ?? '') === 'Rusak' ? 'selected' : '' ?>>Rusak</option>
-            <option value="Tidak Aktif" <?= (old('status') ?? $series['status'] ?? '') === 'Tidak Aktif' ? 'selected' : '' ?>>Tidak Aktif</option>
+            <option value="Tersedia" <?= (old('status') ?? $series['status'] ?? '') === 'Tersedia' ? 'selected' : '' ?>>Tersedia</option>
+            <option value="Dalam Perbaikan" <?= (old('status') ?? $series['status'] ?? '') === 'Dalam Perbaikan' ? 'selected' : '' ?>>Dalam Perbaikan</option>
+            <option value="Rusak Berat" <?= (old('status') ?? $series['status'] ?? '') === 'Rusak Berat' ? 'selected' : '' ?>>Rusak Berat</option>
           </select>
         </div>
         <div>

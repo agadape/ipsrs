@@ -410,7 +410,7 @@ class Aset extends BaseController
         $db = \Config\Database::connect();
         
         $db->table('peminjaman_aset')->insert([
-            'id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+            'id' => sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)),
             'id_aset_series' => $id,
             'nama_peminjam' => $this->request->getPost('nama_peminjam'),
             'unit_peminjam' => $this->request->getPost('unit_peminjam'),
@@ -456,7 +456,7 @@ class Aset extends BaseController
         }
 
         $db->table('penghapusan_aset')->insert([
-            'id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+            'id' => sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)),
             'id_aset_series' => $id,
             'no_ba' => $this->request->getPost('no_ba'),
             'tgl_ba' => $this->request->getPost('tgl_ba'),
