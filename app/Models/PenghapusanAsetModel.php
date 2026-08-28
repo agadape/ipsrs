@@ -3,12 +3,12 @@ namespace App\Models;
 
 class PenghapusanAsetModel extends BaseModel
 {
-    protected string \ = 'penghapusan_aset';
+    protected string $table = "penghapusan_aset";
 
-    public function getByAset(string \)
+    public function getByAset(string $idSeries)
     {
-        return \->qb(\->table)
-            ->where('id_aset_series', \)
+        return $this->qb($this->table)
+            ->where("id_aset_series", $idSeries)
             ->get()
             ->getRowArray();
     }
