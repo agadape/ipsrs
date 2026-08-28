@@ -21,44 +21,29 @@ Implementasi yang berbasis CRUD murni tidak mencerminkan business process riil d
 5. Pembuatan tabel peminjaman_aset dan penghapusan_aset untuk menampung data tanpa redundansi dan menjaga audit trail.
 
 ## 4. Changes Made
+*(Lihat log sebelumnya)*
 
-### UI/UX
-- Halaman Detail Aset kini bersifat context-aware. Tombol aksi utama (Pinjamkan, Lapor Rusak, Ambil Komponen, Penghapusan) akan muncul atau disembunyikan berdasarkan status terkini aset.
-- Dibuat modal terintegrasi (SweetAlert) di halaman Detail Aset agar aksi operasional terasa natural (bukan berpindah-pindah ke form terpisah).
+---
 
-### Business Process
-- Status aset disederhanakan menjadi 5 state utama yang mendikte kemungkinan transisi berikutnya.
-- Menambahkan prosedur Berita Acara (BA) yang wajib diisi dan diunggah (upload) sebelum aset resmi dinyatakan 'Dihapuskan'.
+# Revision 1.1 - Legacy Status Compatibility (Hotfix)
 
-### Database
-- Dibuat migration AddPeminjamanPenghapusan untuk menambahkan tabel peminjaman_aset dan penghapusan_aset.
-- Keduanya berelasi dengan master data aset, sehingga master data tidak pernah di-delete, mempertahankan rekam jejak historis.
+**Date:** 2026-08-28  
+**Status:** Completed  
+**Area:** Asset List Filter & Asset Details
 
-### Backend
-- Menambahkan route dan method pinjam, kembali, dan hapus pada Aset Controller.
+## 1. Examiner Feedback
+- (Lanjutan) Pengguna mendapati "WHOOPS" error pada halaman filter dan hilangnya tombol pada halaman detail.
 
-### Documentation
-- Log revisi ini telah dibuat sebagai dokumentasi progress skripsi.
+## 2. Problem / Interpretation
+Error "WHOOPS" terjadi karena fungsi rray_filter di controller mencoba mengakses field status secara langsung pada Master Aset, padahal status menempel pada set_series dan Master Aset lawas tidak memiliki index array status. Selain itu, data *existing* di database masih menggunakan string status lama ('Aktif', 'Rusak'), sehingga logika IF untuk tombol baru (yang mengharapkan 'Tersedia') gagal tertrigger (tombol menghilang).
 
-## 5. User Impact
-User tidak perlu berpindah ke menu lain untuk melakukan aktivitas (pinjam, kanibal, hapus). Aksi akan otomatis menyesuaikan dengan status terkini aset. Proses Penghapusan menjadi jelas alurnya dan legal-compliant.
+## 3. Our Response
+- Memperbaiki controller agar filter status membaca dari relasi set_series ke database langsung alih-alih rray_filter string sederhana.
+- Memasang fungsi "pemetaan mundur" (backward compatibility mapping) di View: Jika sistem menemukan kata 'Aktif', akan diperlakukan sebagai 'Tersedia' di sisi antarmuka pengguna agar tombol tetap muncul tanpa memaksa update seluruh tabel master.
 
-## 6. Implementation
-- pp/Config/IPSRS.php (update list status)
-- pp/Config/Routes.php (penambahan endpoint peminjaman & penghapusan)
-- pp/Controllers/Aset.php (logika bisnis status dan database insertion)
-- pp/Views/pages/aset/show_series.php (UX perombakan hub dan sweetalert modals)
-- pp/Database/Migrations/2026-08-24-094333_AddPeminjamanPenghapusan.php (Schema)
+## 4. Implementation
+- pp/Controllers/Aset.php -> Penambahan query builder $db->table('aset_series')->whereIn(...) 
+- pp/Views/pages/aset/show_series.php -> Mapping string PHP strtolower() === 'aktif' -> 'Tersedia'.
 
-## 7. Verification / Testing
-- [x] Database migration scripting (siap dijalankan dengan php spark migrate)
-- [x] Status adjustment di Config/IPSRS.php
-- [x] Implementasi Peminjaman (Context Action)
-- [x] Implementasi Kanibal button dari Detail Aset
-- [x] Implementasi Penghapusan & Upload BA endpoints
-
-## 8. Result
-Implementasi utama berhasil diterapkan dan kode sudah diintegrasikan ke sistem existing (khususnya module Aset Detail). 
-
-## 9. Related Revisions
-N/A
+## 5. Result
+Filter tabel di index dan tombol Peminjaman di show_series kembali bekerja normal walau dengan data lama.
