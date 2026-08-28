@@ -67,9 +67,12 @@ class Aset extends BaseController
         $aset = $this->model->getById($idParent);
         if (!$aset) return redirect()->to('/ipsrs/aset');
         
+        $masterLokasi = (new \App\Models\MasterLokasiModel())->findAll();
+
         return $this->render('pages/aset/form_series', [
-            'aset'   => $aset,
-            'isEdit' => false
+            'aset'         => $aset,
+            'masterLokasi' => $masterLokasi,
+            'isEdit'       => false
         ]);
     }
 
@@ -77,17 +80,21 @@ class Aset extends BaseController
     {
         $v = $this->validateOrFail([
             'nomor_aset' => 'required|is_unique[aset_series.nomor_aset]',
-            'lokasi'     => 'required',
+            'id_lokasi'  => 'required',
             'kondisi'    => 'required|in_list[' . implode(',', IPSRS::KONDISI_ASET) . ']',
         ]);
         if ($v !== true) return $v;
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'no_seri', 'lokasi', 'gedung', 'lantai', 'ruangan', 'unit', 'kondisi', 'status',
+                'nomor_aset', 'no_seri', 'id_lokasi', 'kondisi', 'status',
                 'merk', 'model', 'kapasitas', 'tahun_perolehan'
             ]);
             $data['id_aset'] = $idParent;
+            $data['lokasi']  = '-'; // Stub for old column if it's still NOT NULL
+            $data['gedung']  = '-'; // Stub
+            $data['ruangan'] = '-'; // Stub
+            $data['unit']    = '-'; // Stub
             $data['id'] = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
             
             (new \App\Models\AsetSeriesModel())->create($data);
@@ -125,11 +132,13 @@ class Aset extends BaseController
         if (!$series) return redirect()->to('/ipsrs/aset');
         
         $aset = $this->model->getById($series['id_aset']);
+        $masterLokasi = (new \App\Models\MasterLokasiModel())->findAll();
 
         return $this->render('pages/aset/form_series', [
-            'aset'   => $aset,
-            'series' => $series,
-            'isEdit' => true
+            'aset'         => $aset,
+            'series'       => $series,
+            'masterLokasi' => $masterLokasi,
+            'isEdit'       => true
         ]);
     }
 
@@ -137,14 +146,14 @@ class Aset extends BaseController
     {
         $v = $this->validateOrFail([
             'nomor_aset' => "required|is_unique[aset_series.nomor_aset,id,{$idSeries}]",
-            'lokasi'     => 'required',
+            'id_lokasi'  => 'required',
             'kondisi'    => 'required|in_list[' . implode(',', IPSRS::KONDISI_ASET) . ']',
         ]);
         if ($v !== true) return $v;
 
         try {
             $data = $this->whitelist([
-                'nomor_aset', 'no_seri', 'lokasi', 'gedung', 'lantai', 'ruangan', 'unit', 'kondisi', 'status',
+                'nomor_aset', 'no_seri', 'id_lokasi', 'kondisi', 'status',
                 'merk', 'model', 'kapasitas', 'tahun_perolehan'
             ]);
             (new \App\Models\AsetSeriesModel())->update($idSeries, $data);

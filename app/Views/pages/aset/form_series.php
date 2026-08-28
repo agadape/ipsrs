@@ -44,21 +44,18 @@
 
     <div class="mb-6">
       <h3 class="text-sm font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100">Lokasi Penempatan</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 gap-6">
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi Utama <span class="text-red-500">*</span></label>
-          <select name="lokasi" required
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Pilih Lokasi Ruangan / Unit <span class="text-red-500">*</span></label>
+          <select name="id_lokasi" required
                  class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
             <option value="">-- Pilih Lokasi --</option>
-            <?php foreach (getStandardUnits() as $u): ?>
-              <option value="<?= esc($u) ?>" <?= (old('lokasi') ?? $series['lokasi'] ?? '') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
+            <?php foreach ($masterLokasi as $ml): ?>
+              <?php $label = $ml['gedung'] . ' - ' . ($ml['lantai'] ? $ml['lantai'] . ' - ' : '') . $ml['nama_ruangan'] . ' (' . $ml['nama_unit'] . ')'; ?>
+              <option value="<?= esc($ml['id']) ?>" <?= (old('id_lokasi') ?? $series['id_lokasi'] ?? '') === $ml['id'] ? 'selected' : '' ?>><?= esc($label) ?></option>
             <?php endforeach; ?>
           </select>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Ruangan / Detail <span class="text-red-500">*</span></label>
-          <input type="text" name="ruangan" value="<?= esc(old('ruangan') ?? $series['ruangan'] ?? '') ?>" required
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
+          <p class="text-xs text-slate-500 mt-1">Gedung - Lantai - Ruangan (Unit)</p>
         </div>
       </div>
     </div>
