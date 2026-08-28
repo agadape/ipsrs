@@ -1,72 +1,87 @@
 <div class="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-  <div class="mb-10 border-b border-slate-200 pb-6">
-    <h1 class="text-2xl font-semibold text-slate-900 tracking-tight">Standard Operating Procedure (SOP)</h1>
-    <p class="text-sm text-slate-500 mt-2">Dokumentasi alur kerja sistem CMMS IPSRS RSUD.</p>
+  <div class="mb-8 border-b border-slate-200 pb-5">
+    <h1 class="text-2xl font-semibold text-slate-900 tracking-tight">SOP & Alur Kerja IPSRS</h1>
+    <p class="text-sm text-slate-500 mt-1">Panduan praktis penggunaan sistem.</p>
   </div>
 
-  <div class="space-y-12">
-    
-    <!-- Section 1 -->
-    <section>
-      <h2 class="text-lg font-medium text-slate-900 mb-4">1. Alur Pelaporan Kerusakan (LK)</h2>
-      <div class="prose prose-sm prose-slate max-w-none text-slate-600">
-        <p>Proses perbaikan aset sarana dan prasarana harus melalui pencatatan Laporan Kerusakan. Alur penyelesaiannya adalah sebagai berikut:</p>
-        <ol class="list-decimal pl-4 mt-3 space-y-2">
-          <li><strong>Pelapor</strong> membuat tiket Laporan Kerusakan (LK) melalui menu <em>Lap. Kerusakan</em>.</li>
-          <li><strong>Kepala IPSRS / Admin</strong> melakukan disposisi laporan kepada teknisi yang bertugas.</li>
-          <li><strong>Teknisi</strong> memeriksa aset di lapangan (Survei) dan melakukan tindak lanjut perbaikan. Selama proses ini, teknisi dapat mendaftarkan pemakaian suku cadang atau pihak ketiga (vendor) ke dalam sistem.</li>
-          <li>Setelah perbaikan selesai, teknisi mengubah status laporan menjadi <strong>Selesai</strong>.</li>
-          <li><strong>Penting:</strong> Pada tahap penyelesaian, Pelapor (pihak ruangan) diwajibkan untuk memberikan tanda tangan digital pada sistem sebagai bukti serah terima bahwa aset telah berfungsi kembali.</li>
+  <div class="space-y-6">
+
+    <!-- Accordion Item 1 -->
+    <div class="border border-slate-200 rounded-md bg-white overflow-hidden">
+      <div class="px-5 py-4 bg-slate-50/50 border-b border-slate-200">
+        <h2 class="text-base font-semibold text-slate-800">1. Alur Laporan Kerusakan (LK)</h2>
+        <p class="text-xs text-slate-500 mt-1">Langkah-langkah penanganan tiket kerusakan dari pelapor hingga selesai.</p>
+      </div>
+      <div class="p-5">
+        <div class="relative border-l border-slate-200 ml-3 space-y-6 pb-2">
+          
+          <div class="relative pl-6">
+            <span class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-300 ring-4 ring-white"></span>
+            <p class="text-sm font-semibold text-slate-800">Tiket Dibuat (Pelapor)</p>
+            <p class="text-sm text-slate-600 mt-1">Pihak ruangan membuat laporan melalui menu <span class="font-medium text-slate-900">Lap. Kerusakan</span>.</p>
+          </div>
+          
+          <div class="relative pl-6">
+            <span class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-300 ring-4 ring-white"></span>
+            <p class="text-sm font-semibold text-slate-800">Disposisi & Tindakan (Teknisi)</p>
+            <p class="text-sm text-slate-600 mt-1">Admin mendisposisikan laporan. Teknisi mengubah status menjadi <span class="font-medium text-slate-900">Survei</span> atau <span class="font-medium text-slate-900">Perbaikan</span>, lalu memasukkan suku cadang (jika ada).</p>
+          </div>
+          
+          <div class="relative pl-6">
+            <span class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-800 ring-4 ring-white"></span>
+            <p class="text-sm font-semibold text-slate-800">Penyelesaian & Tanda Tangan</p>
+            <p class="text-sm text-slate-600 mt-1">Teknisi mengubah status ke <span class="font-medium text-slate-900">Selesai</span>. Sistem akan mewajibkan <strong>Tanda Tangan Digital</strong> dari Pelapor sebagai bukti serah terima.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion Item 2 -->
+    <div class="border border-slate-200 rounded-md bg-white overflow-hidden">
+      <div class="px-5 py-4 bg-slate-50/50 border-b border-slate-200">
+        <h2 class="text-base font-semibold text-slate-800">2. Prosedur Kanibalisasi & Penghapusan</h2>
+        <p class="text-xs text-slate-500 mt-1">Aset tidak bisa dihapus atau dikanibal secara sembarangan.</p>
+      </div>
+      <div class="p-5">
+        <div class="relative border-l border-slate-200 ml-3 space-y-6 pb-2">
+          
+          <div class="relative pl-6">
+            <span class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-300 ring-4 ring-white"></span>
+            <p class="text-sm font-semibold text-slate-800">Ubah Status Fisik</p>
+            <p class="text-sm text-slate-600 mt-1">Buka <span class="font-medium text-slate-900">Daftar Aset</span>, edit aset yang bermasalah, lalu ubah status fisiknya menjadi <strong>Rusak Berat</strong>.</p>
+          </div>
+          
+          <div class="relative pl-6">
+            <span class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-300 ring-4 ring-white"></span>
+            <p class="text-sm font-semibold text-slate-800">Tombol Aksi Muncul</p>
+            <p class="text-sm text-slate-600 mt-1">Setelah berstatus Rusak Berat, tombol <strong>[+ Ambil Komponen]</strong> dan <strong>[Lakukan Penghapusan]</strong> otomatis terbuka di halaman Detail Aset.</p>
+          </div>
+          
+          <div class="relative pl-6">
+            <span class="absolute -left-[5px] top-1 w-2.5 h-2.5 rounded-full bg-slate-800 ring-4 ring-white"></span>
+            <p class="text-sm font-semibold text-slate-800">Penyelesaian Dokumen</p>
+            <p class="text-sm text-slate-600 mt-1">Kanibalisasi wajib melampirkan nomor Laporan Kerusakan. Penghapusan aset (End of Life) wajib melampirkan Berita Acara (BA).</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Accordion Item 3 -->
+    <div class="border border-slate-200 rounded-md bg-white overflow-hidden">
+      <div class="px-5 py-4 bg-slate-50/50 border-b border-slate-200">
+        <h2 class="text-base font-semibold text-slate-800">3. Peminjaman Alat Bantu</h2>
+        <p class="text-xs text-slate-500 mt-1">Proses peminjaman sementara untuk aset portabel (bor, tangga, kipas).</p>
+      </div>
+      <div class="p-5 text-sm text-slate-600">
+        <ol class="list-decimal pl-4 space-y-2">
+          <li>Pastikan aset berstatus <strong>Tersedia</strong> (tidak sedang rusak/dipinjam).</li>
+          <li>Buka Halaman Detail Aset dan klik tombol <strong>[Pinjamkan]</strong>.</li>
+          <li>Setelah aset fisik dikembalikan, buka kembali detail aset dan klik <strong>[Terima Pengembalian]</strong>.</li>
         </ol>
       </div>
-    </section>
-
-    <hr class="border-slate-100">
-
-    <!-- Section 2 -->
-    <section>
-      <h2 class="text-lg font-medium text-slate-900 mb-4">2. Manajemen Aset Rusak & Kanibalisasi</h2>
-      <div class="prose prose-sm prose-slate max-w-none text-slate-600">
-        <p>Sistem ini mengunci integritas data aset. Aset tidak dapat dihapus secara permanen atau dikanibal secara sepihak tanpa merubah status fisiknya terlebih dahulu.</p>
-        <ul class="list-disc pl-4 mt-3 space-y-2">
-          <li>Untuk melakukan aksi <em>Kanibalisasi</em> atau <em>Penghapusan</em>, aset tersebut wajib diubah statusnya menjadi <strong>Rusak Berat</strong>.</li>
-          <li>Pembaruan status dilakukan melalui menu <em>Daftar Aset &rarr; Edit Aset &rarr; Status Fisik &rarr; Rusak Berat</em>.</li>
-          <li>Setelah status tersimpan sebagai Rusak Berat, tombol aksi <strong>[+ Ambil Komponen]</strong> dan <strong>[Lakukan Penghapusan]</strong> akan otomatis muncul pada halaman detail aset terkait.</li>
-          <li>Pencatatan riwayat kanibalisasi mewajibkan penginputan nomor Laporan Kerusakan (LK) yang mendasari pengambilan komponen tersebut.</li>
-        </ul>
-      </div>
-    </section>
-
-    <hr class="border-slate-100">
-
-    <!-- Section 3 -->
-    <section>
-      <h2 class="text-lg font-medium text-slate-900 mb-4">3. Peminjaman Aset Sementara</h2>
-      <div class="prose prose-sm prose-slate max-w-none text-slate-600">
-        <p>Mayoritas aset IPSRS adalah aset tetap (permanen) di dalam ruangan. Namun, sistem mengakomodasi peminjaman sementara untuk alat bantu kerja operasional.</p>
-        <ul class="list-disc pl-4 mt-3 space-y-2">
-          <li>Aset yang dapat dipinjam adalah aset yang sedang berstatus <strong>Tersedia</strong>.</li>
-          <li>Proses peminjaman dilakukan langsung dari Halaman Detail Aset dengan mengeklik tombol <strong>[Pinjamkan]</strong>.</li>
-          <li>Sistem akan mengubah status operasional aset menjadi <strong>Dipinjam</strong> dan mencatatnya pada log peminjaman.</li>
-          <li>Setelah aset fisik dikembalikan, admin wajib mengeklik <strong>[Terima Pengembalian]</strong> pada detail aset untuk memulihkan statusnya kembali menjadi Tersedia.</li>
-        </ul>
-      </div>
-    </section>
-
-    <hr class="border-slate-100">
-
-    <!-- Section 4 -->
-    <section>
-      <h2 class="text-lg font-medium text-slate-900 mb-4">4. End of Life (Penghapusan Aset)</h2>
-      <div class="prose prose-sm prose-slate max-w-none text-slate-600">
-        <p>Aset yang sudah tidak dapat diperbaiki atau nilai ekonomisnya habis harus melalui proses penghapusan (End of Life).</p>
-        <ul class="list-disc pl-4 mt-3 space-y-2">
-          <li>Penghapusan dalam sistem ini bersifat <em>soft-delete</em>; data aset akan diarsipkan dan tidak dihilangkan dari basis data untuk kebutuhan audit.</li>
-          <li>Proses penghapusan <strong>mewajibkan</strong> lampiran Berita Acara (BA) Penghapusan yang sah.</li>
-          <li>Aset yang telah dihapuskan akan dikunci dengan status <strong>Dihapuskan</strong> dan masuk ke dalam arsip logistik.</li>
-        </ul>
-      </div>
-    </section>
+    </div>
 
   </div>
 </div>
