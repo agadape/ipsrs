@@ -9,8 +9,9 @@ class Penghapusan extends BaseController
         $db = \Config\Database::connect();
         
         $penghapusan = $db->table("penghapusan_aset p")
-            ->select("p.*, a.nama as nama_aset, a.nomor_aset")
+            ->select("p.*, parent.nama as nama_aset, a.nomor_aset")
             ->join("aset_series a", "a.id = p.id_aset_series")
+            ->join("aset parent", "parent.id = a.id_aset")
             ->orderBy("p.tgl_ba", "DESC")
             ->get()
             ->getResultArray();
