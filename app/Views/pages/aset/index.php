@@ -86,13 +86,13 @@ $total = count($aset ?? []);
     <table id="tabel-data" class="w-full text-sm">
       <thead class="bg-slate-50 border-b border-slate-200">
         <tr>
-          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">ID Aset</th>
-          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Nama Master Aset</th>
-          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Kategori</th>
-          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Jenis</th>
-          <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Unit</th>
-          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status Unit</th>
-          <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">ID Aset</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[200px]">Nama Master Aset</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Kategori</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Jenis</th>
+          <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Total Unit</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Status Unit</th>
+          <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Aksi</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100">
@@ -110,7 +110,7 @@ $total = count($aset ?? []);
           $statusCounts = array_count_values(array_filter($statusList));
         ?>
         <tr class="hover:bg-slate-50/80 transition-colors">
-          <td class="px-4 py-3.5">
+          <td class="px-4 py-3.5 whitespace-nowrap">
             <span class="font-mono text-xs text-slate-500 font-medium"><?= esc($a['nomor_aset'] ?? substr($a['id'] ?? '', 0, 8)) ?></span>
           </td>
           <td class="px-4 py-3.5 align-middle">
@@ -124,9 +124,9 @@ $total = count($aset ?? []);
             <?php endif; ?>
           </td>
           <td class="px-4 py-3.5 text-slate-600 font-medium text-xs"><?= esc($a['kategori'] ?? '-') ?></td>
-          <td class="px-4 py-3.5"><span class="<?= $jnBadge ?>"><?= esc($jn ?: '-') ?></span></td>
-          <td class="px-4 py-3.5 text-center">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200/70">
+          <td class="px-4 py-3.5 whitespace-nowrap"><span class="<?= $jnBadge ?>"><?= esc($jn ?: '-') ?></span></td>
+          <td class="px-4 py-3.5 text-center whitespace-nowrap">
+            <span class="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200/70">
               <?= $unitCount ?> unit
             </span>
           </td>
@@ -142,7 +142,7 @@ $total = count($aset ?? []);
                   default => "bg-slate-50 text-slate-600 border-slate-200"
                 };
               ?>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border <?= $color ?>">
+                <span class="inline-flex items-center whitespace-nowrap px-1.5 py-0.5 rounded text-[10px] font-medium border <?= $color ?>">
                   <?= $count ?> <?= esc($st) ?>
                 </span>
               <?php endforeach; ?>
