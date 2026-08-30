@@ -65,8 +65,8 @@ $alasanFilter = $alasan ?? '';
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Lokasi Tujuan <span class="text-red-500">*</span></label>
         <select name="lokasi_tujuan" id="lokasi_tujuan" class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
           <option value="">-- Pilih Lokasi Tujuan --</option>
-          <?php foreach (getStandardUnits() as $u): ?>
-            <option value="<?= esc($u) ?>"><?= esc($u) ?></option>
+          <?php foreach (($masterLokasi ?? []) as $ml): ?>
+            <option value="<?= esc($ml['id']) ?>"><?= esc($ml['gedung'] . ' - ' . ($ml['nama_ruangan'] ?? $ml['nama_unit'])) ?></option>
           <?php endforeach; ?>
         </select>
       </div>
@@ -185,6 +185,7 @@ function updateLokasiSaatIni() {
   }
 }
 </script>
+
 
 
 

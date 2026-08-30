@@ -279,18 +279,26 @@ class Aset extends BaseController
         try {
             $post = $this->request->getPost();
             $jenisMutasi = $post['jenis_mutasi'];
-            $lokasiTujuan = $post['lokasi_tujuan'] ?? '';
+            $lokasiTujuan_id = $post['lokasi_tujuan'] ?? null;
+            $lokasiTujuan_str = $lokasiTujuan_id;
+            
+            if ($lokasiTujuan_id && is_numeric($lokasiTujuan_id)) {
+                $ml = (new \App\Models\MasterLokasiModel())->find($lokasiTujuan_id);
+                if ($ml) {
+                    $lokasiTujuan_str = $ml['nama_ruangan'] ?? $ml['nama_unit'];
+                }
+            }
             
             $statusBaru = '';
             if ($jenisMutasi === 'Simpan ke Gudang') {
                 $statusBaru = 'Di Gudang';
-                $lokasiTujuan = 'Gudang IPSRS';
+                $lokasiTujuan_str = 'Gudang IPSRS';
             } elseif ($jenisMutasi === 'Jadikan Kanibal') {
                 $statusBaru = 'Kanibal';
-                $lokasiTujuan = 'Gudang Kanibal';
+                $lokasiTujuan_str = 'Gudang Kanibal';
             } elseif ($jenisMutasi === 'Dibuang') {
                 $statusBaru = 'Dibuang';
-                $lokasiTujuan = 'Dibuang';
+                $lokasiTujuan_str = 'Dibuang';
             } elseif ($jenisMutasi === 'Pindah Ruangan') {
                 $statusBaru = 'Aktif';
             }
@@ -306,14 +314,14 @@ class Aset extends BaseController
             $data['nama_aset']   = $aset['nama_aset'] ?? ($aset['nomor_aset'] ?? '');
             $data['lokasi_asal'] = $aset['lokasi'] ?? null;
             $data['alasan'] = $jenisMutasi;
-            $data['lokasi_tujuan'] = $lokasiTujuan;
+            $data['lokasi_tujuan'] = $lokasiTujuan_str;
             
             $mutasiModel->create($data);
 
             if ($statusBaru) {
                 $seriesModel->update($idSeries, [
                     'status' => $statusBaru,
-                    'lokasi' => $lokasiTujuan
+                    'id_lokasi' => (in_array($jenisMutasi, ['Simpan ke Gudang', 'Jadikan Kanibal', 'Dibuang'])) ? null : $lokasiTujuan_id
                 ]);
             }
 
@@ -480,6 +488,7 @@ class Aset extends BaseController
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dihapuskan beserta Berita Acara.');
     }
 }
+
 
 
 
