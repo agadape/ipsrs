@@ -90,8 +90,7 @@ $total = count($aset ?? []);
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[200px]">Nama Master Aset</th>
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Kategori</th>
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Jenis</th>
-          <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Total Unit</th>
-          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Status Unit</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[150px]">Unit & Status</th>
           <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Aksi</th>
         </tr>
       </thead>
@@ -125,12 +124,12 @@ $total = count($aset ?? []);
           </td>
           <td class="px-4 py-3.5 text-slate-600 font-medium text-xs"><?= esc($a['kategori'] ?? '-') ?></td>
           <td class="px-4 py-3.5 whitespace-nowrap"><span class="<?= $jnBadge ?>"><?= esc($jn ?: '-') ?></span></td>
-          <td class="px-4 py-3.5 text-center whitespace-nowrap">
-            <span class="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200/70">
-              <?= $unitCount ?> unit
-            </span>
-          </td>
           <td class="px-4 py-3.5">
+            <div class="mb-1.5">
+              <span class="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200/70">
+                <?= $unitCount ?> unit
+              </span>
+            </div>
             <div class="flex flex-wrap gap-1">
               <?php foreach($statusCounts as $st => $count): 
                 $color = match($st) {
