@@ -11,7 +11,7 @@ class AsetModel extends BaseModel
     public function getAll(string $orderBy = 'nama'): array
     {
         return $this->qb($this->table)
-            ->select('aset.*, COUNT(aset_series.id) as total_series')
+            ->select('aset.*, COUNT(aset_series.id) as total_series, GROUP_CONCAT(aset_series.status) as all_statuses')
             ->join('aset_series', 'aset_series.id_aset = aset.id', 'left')
             ->groupBy('aset.id')
             ->orderBy('aset.' . $orderBy, 'ASC')
@@ -19,11 +19,8 @@ class AsetModel extends BaseModel
             ->getResultArray();
     }
 
-
-
     public function nextId(string $prefix = IPSRS::PREFIX_ASET, int $padLen = IPSRS::PAD_ASET): string
     {
         return parent::nextId($prefix, $padLen);
     }
 }
-

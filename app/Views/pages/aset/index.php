@@ -91,6 +91,7 @@ $total = count($aset ?? []);
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Kategori</th>
           <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Jenis</th>
           <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Unit</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status Unit</th>
           <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Aksi</th>
         </tr>
       </thead>
@@ -105,6 +106,8 @@ $total = count($aset ?? []);
             default          => 'px-2.5 py-1 text-xs font-medium bg-slate-50 text-slate-600 rounded-md border border-slate-200',
           };
           $unitCount = (int)($a['total_series'] ?? 0);
+          $statusList = explode(',', $a['all_statuses'] ?? '');
+          $statusCounts = array_count_values(array_filter($statusList));
         ?>
         <tr class="hover:bg-slate-50/80 transition-colors">
           <td class="px-4 py-3.5">
@@ -126,6 +129,27 @@ $total = count($aset ?? []);
             <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200/70">
               <?= $unitCount ?> unit
             </span>
+          </td>
+          <td class="px-4 py-3.5">
+            <div class="flex flex-wrap gap-1">
+              <?php foreach($statusCounts as $st => $count): 
+                $color = match($st) {
+                  "Tersedia" => "bg-blue-50 text-blue-700 border-blue-200",
+                  "Dipinjam" => "bg-emerald-50 text-emerald-700 border-emerald-200",
+                  "Dalam Perbaikan" => "bg-yellow-50 text-yellow-700 border-yellow-200",
+                  "Rusak Berat" => "bg-red-50 text-red-700 border-red-200",
+                  "Dihapuskan" => "bg-slate-100 text-slate-600 border-slate-200",
+                  default => "bg-slate-50 text-slate-600 border-slate-200"
+                };
+              ?>
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border <?= $color ?>">
+                  <?= $count ?> <?= esc($st) ?>
+                </span>
+              <?php endforeach; ?>
+              <?php if (empty($statusCounts)): ?>
+                <span class="text-xs text-slate-400 italic">Belum ada unit</span>
+              <?php endif; ?>
+            </div>
           </td>
           <td class="px-4 py-3.5 text-right whitespace-nowrap">
             <div class="inline-flex items-center gap-2">
@@ -158,5 +182,6 @@ $(document).ready(function() {
     }
 });
 </script>
+
 
 
