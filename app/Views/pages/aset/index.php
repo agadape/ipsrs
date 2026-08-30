@@ -124,31 +124,33 @@ $total = count($aset ?? []);
           </td>
           <td class="px-4 py-3.5 text-slate-600 font-medium text-xs"><?= esc($a['kategori'] ?? '-') ?></td>
           <td class="px-4 py-3.5 whitespace-nowrap"><span class="<?= $jnBadge ?>"><?= esc($jn ?: '-') ?></span></td>
-          <td class="px-4 py-3.5">
-            <div class="mb-1.5">
-              <span class="inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-slate-100 text-slate-700 border border-slate-200/70">
-                <?= $unitCount ?> unit
-              </span>
+          <td class="px-4 py-3.5 align-top">
+            <div class="text-sm font-semibold text-slate-800 mb-1.5 flex items-baseline gap-1">
+              <?= $unitCount ?> <span class="text-[11px] font-medium text-slate-500 uppercase tracking-wide">unit</span>
             </div>
-            <div class="flex flex-wrap gap-1">
-              <?php foreach($statusCounts as $st => $count): 
-                $color = match($st) {
-                  "Tersedia" => "bg-blue-50 text-blue-700 border-blue-200",
-                  "Dipinjam" => "bg-emerald-50 text-emerald-700 border-emerald-200",
-                  "Dalam Perbaikan" => "bg-yellow-50 text-yellow-700 border-yellow-200",
-                  "Rusak Berat" => "bg-red-50 text-red-700 border-red-200",
-                  "Dihapuskan" => "bg-slate-100 text-slate-600 border-slate-200",
-                  default => "bg-slate-50 text-slate-600 border-slate-200"
-                };
-              ?>
-                <span class="inline-flex items-center whitespace-nowrap px-1.5 py-0.5 rounded text-[10px] font-medium border <?= $color ?>">
-                  <?= $count ?> <?= esc($st) ?>
-                </span>
-              <?php endforeach; ?>
-              <?php if (empty($statusCounts)): ?>
-                <span class="text-xs text-slate-400 italic">Belum ada unit</span>
-              <?php endif; ?>
-            </div>
+            <?php if (!empty($statusCounts)): ?>
+              <div class="flex flex-col gap-1">
+                <?php foreach($statusCounts as $st => $count): 
+                  $dot = match($st) {
+                    "Tersedia" => "bg-blue-500",
+                    "Dipinjam" => "bg-emerald-500",
+                    "Dalam Perbaikan" => "bg-amber-500",
+                    "Rusak Berat" => "bg-red-500",
+                    "Dihapuskan" => "bg-slate-400",
+                    default => "bg-slate-300"
+                  };
+                ?>
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full <?= $dot ?>"></span>
+                    <span class="text-xs font-medium text-slate-600">
+                      <?= $count === $unitCount ? esc($st) : $count . ' <span class="text-slate-400">' . esc($st) . '</span>' ?>
+                    </span>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            <?php else: ?>
+              <span class="text-xs text-slate-400 italic">Kosong</span>
+            <?php endif; ?>
           </td>
           <td class="px-4 py-3.5 text-right whitespace-nowrap">
             <div class="inline-flex items-center gap-2">
