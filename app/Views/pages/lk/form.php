@@ -112,11 +112,11 @@
         </select>
       </div>
 
-      <!-- Nama Aset -->
+      <!-- Nama Aset Manual -->
       <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Aset <span class="text-slate-400 font-normal lowercase">(jika tidak ada di daftar)</span></label>
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Objek Kerusakan / Fasilitas Lainnya <span class="text-slate-400 font-normal lowercase">(jika tidak ada di daftar)</span></label>
         <input type="text" name="nama_aset" value="<?= esc(old('nama_aset') ?? '') ?>"
-               placeholder="Nama aset manual"
+               placeholder="Contoh: Pintu Kaca Ruang Tunggu, Wastafel, dll"
                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
       </div>
 

@@ -146,6 +146,7 @@ class Preventif extends BaseController
                 foreach ($items as $it) {
                     $jenis = $it['jenis'] ?? '';
                     $rows[] = [
+                        'id'               => $lkpModel->generateUUID(),
                         'id_lkp'           => $idLkp,
                         'no_item'          => (int) ($it['no_item'] ?? 0),
                         'jenis_item'       => $jenis,
@@ -232,6 +233,7 @@ class Preventif extends BaseController
         return $this->render('pages/preventif/lkp_hasil', compact('jadwal', 'lkp', 'detail'));
     }
 }
+
 
 
 
