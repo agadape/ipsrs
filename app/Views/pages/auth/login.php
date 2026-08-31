@@ -140,10 +140,7 @@
           </button>
         </form>
 
-        <p class="mt-8 text-center text-[13px] text-slate-500 font-medium">
-          Belum memiliki akun? 
-          <a href="/register" class="text-red-700 font-semibold hover:text-red-800 hover:underline ml-1">Daftar sebagai Pelapor</a>
-        </p>
+        
       </div>
 
     </div>
@@ -174,3 +171,4 @@
   </script>
 </body>
 </html>
+

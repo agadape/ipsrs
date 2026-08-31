@@ -92,6 +92,10 @@
                     data-kontak="<?= esc($v['kontak'] ?? '') ?>"
                     data-alamat="<?= esc($v['alamat'] ?? '') ?>"
                     class="text-xs text-red-700 hover:text-red-900 font-medium px-3 py-1.5 rounded-md border border-slate-200 bg-white hover:bg-slate-50 transition-colors">Edit</button>
+              <form action="/ipsrs/vendor/<?= esc($v['id'] ?? '') ?>/delete" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus vendor ini?');">
+                <?= csrf_field() ?>
+                <button type="submit" class="text-xs text-slate-500 hover:text-red-700 font-medium px-3 py-1.5 rounded-md border border-slate-200 bg-white hover:bg-slate-50 transition-colors">Hapus</button>
+              </form>
           </td>
         </tr>
         <?php endforeach; ?>
@@ -145,3 +149,4 @@
     document.getElementById('edit-modal').classList.add('hidden');
   }
 </script>
+

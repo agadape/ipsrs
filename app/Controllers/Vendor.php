@@ -56,4 +56,16 @@ class Vendor extends BaseController
             return redirect()->to('/ipsrs/vendor')->with('error', 'Gagal memperbarui vendor: ' . $e->getMessage());
         }
     }
+
+    public function delete(string $id)
+    {
+        try {
+            $this->model->delete($id);
+            return redirect()->to('/ipsrs/vendor')->with('success', 'Vendor berhasil dihapus');
+        } catch (\Throwable $e) {
+            log_message('error', '[Vendor::delete] ' . $e->getMessage());
+            return redirect()->to('/ipsrs/vendor')->with('error', 'Gagal menghapus vendor: ' . $e->getMessage());
+        }
+    }
 }
+
