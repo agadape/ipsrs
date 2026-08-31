@@ -28,7 +28,8 @@ $filterParam = $filter ?? '';
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
           <option value="<?= esc($a['id'] ?? '') ?>"
-                  data-lokasi="<?= esc($a['lokasi'] ?? '') ?>">
+                  data-lokasi="<?= esc($a['lokasi'] ?? '') ?>"
+                  data-nama="<?= esc($a['nama'] ?? $a['nama_aset'] ?? '') ?>">
             <?= esc(format_aset_label($a)) ?>
           </option>
           <?php endforeach; ?>
@@ -199,8 +200,10 @@ $filterParam = $filter ?? '';
 
   if (selAset) {
     $(selAset).on('change', function() {
-      var opt = this.options[this.selectedIndex];
-      if (inpNama && opt && opt.text && opt.value) inpNama.value = opt.text.split(' — ').slice(1).join(' — ');
+      var $opt = $(this).find(':selected');
+      if (inpNama && $opt.val()) {
+          inpNama.value = $opt.attr('data-nama') || '';
+      }
       updateLokasi();
     });
   }
@@ -225,3 +228,5 @@ function validateTime() {
   }
 }
 </script>
+
+
