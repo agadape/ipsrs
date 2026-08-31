@@ -73,12 +73,17 @@ $id = $series['id'] ?? '';
   <h2 class="text-sm font-semibold text-slate-800 mb-5 pb-3 border-b border-slate-100">Informasi Aset</h2>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6">
     <?php
+    $locValue = $series['lokasi'] ?? '-';
+    if ($series['status'] === 'Di Gudang') $locValue = 'Gudang IPSRS';
+    if ($series['status'] === 'Kanibal') $locValue = 'Gudang Kanibal';
+    if ($series['status'] === 'Dihapuskan' || $series['status'] === 'Dibuang') $locValue = 'Tidak Tersedia';
+
     $fields = [
       ['label' => 'Nomor Aset', 'value' => $series['nomor_aset'] ?? '-', 'mono' => true],
       ['label' => 'Nama',       'value' => $aset['nama'] ?? '-'],
       ['label' => 'Jenis',      'value' => $aset['jenis'] ?? '-'],
       ['label' => 'Kategori',   'value' => $aset['kategori'] ?? '-'],
-      ['label' => 'Lokasi',     'value' => $series['lokasi'] ?? '-'],
+      ['label' => 'Lokasi',     'value' => $locValue],
       ['label' => 'Gedung',     'value' => $series['gedung'] ?? '-'],
       ['label' => 'Lantai',     'value' => $series['lantai'] ?? '-'],
       ['label' => 'Ruangan',    'value' => $series['ruangan'] ?? '-'],
@@ -489,4 +494,5 @@ function viewBA(id) {
     window.location.href = '/ipsrs/aset/ba/' + id;
 }
 </script>
+
 

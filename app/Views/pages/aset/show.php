@@ -53,12 +53,20 @@
       </thead>
       <tbody class="divide-y divide-slate-100">
         <?php foreach (($series ?? []) as $s): ?>
-        <tr class="hover:bg-slate-50 transition-colors">
-          <td class="px-6 py-4 font-mono font-medium text-red-700"><?= esc($s['nomor_aset']) ?></td>
-          <td class="px-6 py-4 font-mono text-slate-600"><?= esc($s['no_seri'] ?? '-') ?></td>
-          <td class="px-6 py-4 text-slate-600"><?= esc($s['gedung']) ?> <br><span class="text-xs text-slate-500"><?= esc($s['unit']) ?></span></td>
-          <td class="px-6 py-4 text-slate-600"><?= esc($s['ruangan']) ?> <br><span class="text-xs text-slate-500">Lt. <?= esc($s['lantai']) ?></span></td>
-          <td class="px-6 py-4">
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-6 py-4 font-mono font-medium text-red-700"><?= esc($s['nomor_aset']) ?></td>
+            <td class="px-6 py-4 font-mono text-slate-600"><?= esc($s['no_seri'] ?? '-') ?></td>
+            <?php if ($s['status'] === 'Di Gudang'): ?>
+            <td class="px-6 py-4 text-slate-600" colspan="2"><span class="badge bg-slate-100 text-slate-600 border border-slate-200">Gudang IPSRS</span></td>
+            <?php elseif ($s['status'] === 'Kanibal'): ?>
+            <td class="px-6 py-4 text-slate-600" colspan="2"><span class="badge bg-slate-100 text-slate-600 border border-slate-200">Gudang Kanibal</span></td>
+            <?php elseif ($s['status'] === 'Dihapuskan' || $s['status'] === 'Dibuang'): ?>
+            <td class="px-6 py-4 text-slate-600" colspan="2"><span class="badge bg-slate-100 text-slate-600 border border-slate-200">Tidak Tersedia</span></td>
+            <?php else: ?>
+            <td class="px-6 py-4 text-slate-600"><?= esc($s['gedung'] ?? '-') ?> <br><span class="text-xs text-slate-500"><?= esc($s['unit'] ?? '') ?></span></td>
+            <td class="px-6 py-4 text-slate-600"><?= esc($s['ruangan'] ?? '-') ?> <br><span class="text-xs text-slate-500">Lt. <?= esc($s['lantai'] ?? '') ?></span></td>
+            <?php endif; ?>
+            <td class="px-6 py-4">
              <span class="px-2.5 py-1 rounded border <?= ($s['status'] === 'Beroperasi' || $s['status'] === 'Aktif') ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-700 border-red-200' ?> text-xs font-medium">
                <?= esc($s['status'] ?? '-') ?>
              </span>
