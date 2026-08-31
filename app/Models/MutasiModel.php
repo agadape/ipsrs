@@ -23,16 +23,5 @@ class MutasiModel extends BaseModel
             ->getResultArray();
     }
 
-    public function create(array $data): array
-    {
-        $row = parent::create($data);
-
-        // Update lokasi aset
-        $this->qb('aset')
-            ->where('id', $data['id_aset_series'])
-            ->update(['lokasi' => $data['lokasi_tujuan']]);
-
-        return $row;
-    }
 }
 
