@@ -72,6 +72,7 @@ class Aset extends BaseController
         return $this->render('pages/aset/form_series', [
             'aset'         => $aset,
             'masterLokasi' => $masterLokasi,
+            'series'       => [],
             'isEdit'       => false
         ]);
     }
@@ -178,7 +179,8 @@ class Aset extends BaseController
     {
         return $this->render('pages/aset/form', [
             'aset'        => null,
-            'isEdit'      => false,
+            'series'       => [],
+            'isEdit'       => false,
             'kategoriAset'=> (new \App\Models\KategoriAsetModel())->getAll(),
         ]);
     }
@@ -488,6 +490,7 @@ class Aset extends BaseController
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dihapuskan beserta Berita Acara.');
     }
 }
+
 
 
 
