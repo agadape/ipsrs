@@ -255,16 +255,18 @@ class Aset extends BaseController
         $aset    = (new \App\Models\AsetSeriesModel())->getAllWithParent();
         $riwayat = $mutasiModel->getAll();
         $users   = (new \App\Models\PenggunaModel())->getAll();
+        $masterLokasi = (new \App\Models\MasterLokasiModel())->getAll('nama_ruangan');
         
         $alasan  = $this->request->getGet('alasan') ?? '';
         if ($alasan) {
             $riwayat = array_filter($riwayat, fn($r) => $r['alasan'] === $alasan);
         }
         return $this->render('pages/aset/mutasi', [
-            'aset'   => $aset,
-            'riwayat'=> array_values($riwayat),
-            'alasan' => $alasan,
-            'users'  => array_filter($users, fn($u) => in_array($u['role'], ['Admin', 'Teknisi']))
+            'aset'         => $aset,
+            'masterLokasi' => $masterLokasi,
+            'riwayat'      => array_values($riwayat),
+            'alasan'       => $alasan,
+            'users'        => array_filter($users, fn($u) => in_array($u['role'], ['Admin', 'Teknisi']))
         ]);
     }
 
@@ -490,6 +492,7 @@ class Aset extends BaseController
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dihapuskan beserta Berita Acara.');
     }
 }
+
 
 
 
