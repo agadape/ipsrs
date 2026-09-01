@@ -62,7 +62,7 @@
 
   <script>
     <?php
-      $qrUrl = base_url('/ipsrs/aset/series/' . ($series['id'] ?? '')) . '?via=qr';
+      $qrUrl = base_url('/ipsrs/aset/scan/' . ($series['id'] ?? ''));
     ?>
     var url = '<?= esc($qrUrl) ?>';
     new QRCode(document.getElementById('qrcode'), {

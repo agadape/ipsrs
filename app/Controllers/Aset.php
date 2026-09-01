@@ -107,6 +107,16 @@ class Aset extends BaseController
         }
     }
 
+    public function scan(string $idSeries)
+    {
+        $seriesModel = new \App\Models\AsetSeriesModel();
+        $series = $seriesModel->getById($idSeries);
+        if (!$series) return redirect()->to('/ipsrs/aset')->with('error', 'Series tidak ditemukan');
+        
+        $aset = $this->model->getById($series['id_aset']);
+        return view('pages/aset/scan', compact('aset', 'series'));
+    }
+
     public function showSeries(string $idSeries)
     {
         $seriesModel = new \App\Models\AsetSeriesModel();
@@ -114,10 +124,6 @@ class Aset extends BaseController
         if (!$series) return redirect()->to('/ipsrs/aset')->with('error', 'Series tidak ditemukan');
         
         $aset = $this->model->getById($series['id_aset']);
-
-        if ($this->request->getGet('via') === 'qr') {
-            return view('pages/aset/scan', compact('aset', 'series'));
-        }
 
         $riwayat   = (new \App\Models\MutasiModel())->getByAset($idSeries);
         $riwayatLK = (new \App\Models\LKModel())->getByAset($idSeries);
@@ -492,6 +498,7 @@ class Aset extends BaseController
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dihapuskan beserta Berita Acara.');
     }
 }
+
 
 
 

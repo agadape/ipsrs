@@ -34,6 +34,7 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('aset/series/(:segment)',          'Aset::showSeries/$1');
     $routes->get('aset/series/(:segment)/edit',     'Aset::editSeries/$1');
     $routes->post('aset/series/(:segment)/edit',    'Aset::updateSeries/$1');
+    $routes->get('aset/scan/(:segment)',            'Aset::scan/$1');
     $routes->get('aset/tambah-series/(:segment)',   'Aset::createSeries/$1');
     $routes->post('aset/tambah-series/(:segment)',  'Aset::storeSeries/$1');
     $routes->get('aset/(:segment)',          'Aset::show/$1');
