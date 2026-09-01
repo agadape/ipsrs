@@ -109,13 +109,7 @@ class Filters extends BaseFilters
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [
-        'auth' => [
-            'before' => ['ipsrs', 'ipsrs/*'],
-            'except' => [
-                'ipsrs/aset/scan/*',
-                'ipsrs/aset/*/ping'
-            ]
-        ],
+        
         'csrf' => [
             'before' => ['ipsrs/*', 'login'],
             // AJAX geolocation ping from mobile/PWA sends no CSRF token;
@@ -124,3 +118,4 @@ class Filters extends BaseFilters
         ],
     ];
 }
+

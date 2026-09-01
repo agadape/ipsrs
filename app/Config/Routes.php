@@ -13,7 +13,10 @@ $routes->get('register', 'Auth::register');
 $routes->post('register','Auth::doRegister');
 $routes->get('logout',   'Auth::logout');
 
-$routes->group('ipsrs', function ($routes) {
+$routes->get('ipsrs/aset/scan/(:segment)', 'Aset::scan/$1');
+$routes->post('ipsrs/aset/(:segment)/ping', 'Aset::ping/$1');
+
+$routes->group('ipsrs', ['filter' => 'auth'], function ($routes) {
     // Dashboard
     $routes->get('',          'Dashboard::index');
 
@@ -29,12 +32,10 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('aset/kembali/(:segment)', 'Aset::kembali/$1');
     $routes->post('aset/hapus',    'Aset::hapus');
     
-    $routes->post('aset/(:segment)/ping',     'Aset::ping/$1');
     $routes->get('aset/(:segment)/qr',        'Aset::qr/$1');
     $routes->get('aset/series/(:segment)',          'Aset::showSeries/$1');
     $routes->get('aset/series/(:segment)/edit',     'Aset::editSeries/$1');
     $routes->post('aset/series/(:segment)/edit',    'Aset::updateSeries/$1');
-    $routes->get('aset/scan/(:segment)',            'Aset::scan/$1');
     $routes->get('aset/tambah-series/(:segment)',   'Aset::createSeries/$1');
     $routes->post('aset/tambah-series/(:segment)',  'Aset::storeSeries/$1');
     $routes->get('aset/(:segment)',          'Aset::show/$1');
@@ -107,6 +108,7 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('laporan/export-excel-preventif', 'Laporan::exportExcelPreventif');
     $routes->get('laporan/export-print-preventif', 'Laporan::exportPrintPreventif');
 });
+
 
 
 
