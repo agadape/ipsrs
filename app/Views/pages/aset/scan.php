@@ -5,56 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Verifikasi Lokasi — <?= esc($aset['nama'] ?? 'Detail Aset') ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    body { font-family: 'Public Sans', sans-serif; background-color: #f8f9fa; color: #435971; }
-    .card { background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 0.25rem 1.125rem rgba(75, 70, 92, 0.1); }
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+    .card { background-color: #ffffff; border-radius: 24px; box-shadow: 0 20px 60px -15px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; }
     
-    .btn-primary { background-color: #696cff; color: #fff; border-color: #696cff; box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4); transition: all 0.2s ease-in-out; }
-    .btn-primary:hover { background-color: #5f61e6; border-color: #5f61e6; transform: translateY(-1px); }
-    .btn-primary:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+    .btn-primary { background-color: #b91c1c; color: #ffffff; box-shadow: 0 4px 14px 0 rgba(185, 28, 28, 0.39); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); border-radius: 9999px; }
+    .btn-primary:hover { background-color: #991b1b; transform: translateY(-1px); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
     
-    .btn-success { background-color: #71dd37; color: #fff; border-color: #71dd37; box-shadow: 0 0.125rem 0.25rem 0 rgba(113, 221, 55, 0.4); }
-    .btn-danger { background-color: #ff3e1d; color: #fff; border-color: #ff3e1d; box-shadow: 0 0.125rem 0.25rem 0 rgba(255, 62, 29, 0.4); }
+    .btn-success { background-color: #10b981; color: #ffffff; border-radius: 9999px; }
+    .btn-danger { background-color: #ef4444; color: #ffffff; border-radius: 9999px; }
 
-    .badge-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: #a1acb8; margin-bottom: 0.25rem; }
-    .data-value { font-weight: 600; color: #566a7f; font-size: 0.875rem; }
+    .badge-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; color: #64748b; margin-bottom: 0.25rem; }
+    .data-value { font-weight: 600; color: #0f172a; font-size: 0.875rem; }
 
-    #map-wrapper { transition: all 0.5s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
-    #map-wrapper.show { max-height: 800px; opacity: 1; margin-top: 1rem; }
+    #map-wrapper { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); max-height: 0; opacity: 0; overflow: hidden; }
+    #map-wrapper.show { max-height: 800px; opacity: 1; margin-top: 1.5rem; }
 
-    .custom-map-dot { border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.3); border: 2px solid white; }
+    .custom-map-dot { border-radius: 50%; box-shadow: 0 0 12px rgba(0,0,0,0.2); border: 2.5px solid white; }
   </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-4">
+<body class="flex flex-col items-center justify-center min-h-screen p-4 selection:bg-red-100 selection:text-red-950" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 32px 32px;">
 
   <!-- Logo & Header -->
   <div class="w-full max-w-md flex flex-col items-center mb-6 mt-4">
-    <div class="w-12 h-12 rounded-lg bg-zinc-100/80 flex items-center justify-center mb-3">
-      <svg class="w-7 h-7 text-zinc-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+    <div class="w-12 h-12 rounded-lg bg-red-700 flex items-center justify-center mb-3">
+      <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
     </div>
-    <h2 class="text-xl font-bold text-zinc-900">IPSRS RSUD JOGJA</h2>
-    <p class="text-sm text-zinc-500">Sistem Verifikasi Lokasi Aset</p>
+    <h2 class="text-xl font-bold text-slate-900">IPSRS RSUD JOGJA</h2>
+    <p class="text-sm text-slate-500">Sistem Verifikasi Lokasi Aset</p>
   </div>
 
   <div class="card w-full max-w-md p-8 relative z-10">
     
     <!-- Asset Info -->
     <div class="text-center mb-6 pb-6 border-b border-gray-100">
-      <h1 class="text-2xl font-bold text-zinc-900 mb-1"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
-      <span class="inline-block px-3 py-1 rounded-full bg-gray-100 text-zinc-900 text-xs font-semibold">
+      <h1 class="text-2xl font-bold text-slate-900 mb-1"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
+      <span class="inline-block px-3 py-1 rounded-full bg-gray-100 text-slate-900 text-xs font-semibold">
         ID: <?= esc($aset['nomor_aset'] ?? '-') ?>
       </span>
     </div>
 
     <!-- Data Grid -->
     <div class="grid grid-cols-2 gap-4 text-left mb-6">
-      <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-100">
+      <div class="bg-slate-50 rounded-lg p-3 border border-slate-200/60">
         <p class="badge-label">Kategori</p>
         <p class="data-value"><?= esc($aset['kategori'] ?? '-') ?></p>
       </div>
-      <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-100">
+      <div class="bg-slate-50 rounded-lg p-3 border border-slate-200/60">
         <p class="badge-label">Kondisi</p>
         <div class="flex items-center gap-1.5">
           <?php $isBaik = strtolower($aset['kondisi'] ?? '') === 'baik'; ?>
@@ -62,7 +64,7 @@
           <p class="data-value"><?= esc($aset['kondisi'] ?? '-') ?></p>
         </div>
       </div>
-      <div class="col-span-2 bg-zinc-50 rounded-lg p-3 border border-zinc-100">
+      <div class="col-span-2 bg-slate-50 rounded-lg p-3 border border-slate-200/60">
         <p class="badge-label">Lokasi Saat Ini (Sistem)</p>
         <p class="data-value"><?= esc($aset['lokasi'] ?? '-') ?> <span class="text-gray-400 font-normal">/ <?= esc($aset['ruangan'] ?? '-') ?></span></p>
       </div>
@@ -90,18 +92,18 @@
       </div>
 
       <!-- Live Telemetry -->
-      <div class="bg-zinc-50 p-3 rounded-lg border border-zinc-100 space-y-2">
+      <div class="bg-slate-50 p-3 rounded-lg border border-slate-200/60 space-y-2">
         <div class="flex justify-between items-start border-b border-gray-200 pb-2">
           <span class="text-xs text-gray-500 font-semibold w-1/3">Alamat Deteksi</span>
-          <span class="text-xs text-zinc-900 font-medium text-right w-2/3" id="tlm-address">Scanning...</span>
+          <span class="text-xs text-slate-900 font-medium text-right w-2/3" id="tlm-address">Scanning...</span>
         </div>
         <div class="flex justify-between items-center border-b border-gray-200 pb-2">
           <span class="text-xs text-gray-500 font-semibold">Jarak dari RS</span>
-          <span class="text-xs text-zinc-900 font-medium" id="tlm-distance">Menghitung...</span>
+          <span class="text-xs text-slate-900 font-medium" id="tlm-distance">Menghitung...</span>
         </div>
         <div class="flex justify-between items-center">
           <span class="text-xs text-gray-500 font-semibold">Akurasi GPS</span>
-          <span class="text-xs text-zinc-900 font-medium" id="tlm-accuracy">0 m</span>
+          <span class="text-xs text-slate-900 font-medium" id="tlm-accuracy">0 m</span>
         </div>
       </div>
     </div>
@@ -190,12 +192,12 @@
           if(isBreach) {
             document.getElementById('breach-warning').classList.remove('hidden');
             document.getElementById('safe-warning').classList.add('hidden');
-            btn.className = "btn-danger w-full py-3 rounded-full font-semibold text-sm flex justify-center items-center gap-2";
+            btn.className = "btn-danger w-full py-3 font-semibold text-sm flex justify-center items-center gap-2";
             btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><span>Tersimpan (Luar Zona)</span>`;
           } else {
             document.getElementById('safe-warning').classList.remove('hidden');
             document.getElementById('breach-warning').classList.add('hidden');
-            btn.className = "btn-success w-full py-3 rounded-full font-semibold text-sm flex justify-center items-center gap-2";
+            btn.className = "btn-success w-full py-3 font-semibold text-sm flex justify-center items-center gap-2";
             btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>Lokasi Diverifikasi</span>`;
           }
 
