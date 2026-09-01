@@ -252,7 +252,7 @@ $id = $series['id'] ?? '';
 <div class="card p-6 mb-6">
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-sm font-semibold text-slate-800">Riwayat Laporan Kerusakan</h2>
-    <a href="/ipsrs/lk/baru" class="text-xs font-medium text-red-700 hover:underline">+ Buat LK</a>
+    <a href="/lapor?aset_id=<?= esc($series['id']) ?>" class="text-xs font-medium text-red-700 hover:underline">+ Lapor Kerusakan</a>
   </div>
   <?php if (empty($riwayatLK)): ?>
   <p class="text-sm text-slate-500 text-center py-6 border border-dashed border-slate-200 rounded-md">Belum ada laporan kerusakan untuk aset ini.</p>

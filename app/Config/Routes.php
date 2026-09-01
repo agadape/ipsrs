@@ -6,6 +6,12 @@ use CodeIgniter\Router\RouteCollection;
 
 $routes->get('/', function () { return redirect()->to('/ipsrs'); });
 
+// Public Portal Pelapor
+$routes->get('lapor', 'Portal::lapor');
+$routes->post('lapor', 'Portal::storeLapor');
+$routes->get('lapor/sukses', 'Portal::sukses');
+
+
 // Auth
 $routes->get('login',    'Auth::login');
 $routes->post('login',   'Auth::doLogin');
