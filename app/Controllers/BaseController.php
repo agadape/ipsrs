@@ -44,6 +44,7 @@ abstract class BaseController extends Controller
             return true;
         }
         $msg = $errorMsg ?: 'Mohon lengkapi seluruh data yang wajib diisi.';
+        $msg .= ' Detail: ' . implode(', ', $this->validator->getErrors());
         
         if ($this->request->isAJAX()) {
             return $this->response->setJSON(['success' => false, 'message' => $msg]);
@@ -62,3 +63,4 @@ abstract class BaseController extends Controller
         return array_intersect_key($post, array_flip($allowed));
     }
 }
+
