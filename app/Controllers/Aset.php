@@ -370,7 +370,8 @@ class Aset extends BaseController
 
         try {
             // 3. Validasi Keberadaan Aset di Database
-            $aset = $this->model->getById($id);
+            $seriesModel = new \App\Models\AsetSeriesModel();
+            $aset = $seriesModel->getById($id);
             if (!$aset) {
                 return $this->response->setStatusCode(404)->setJSON([
                     'ok' => false, 
@@ -390,18 +391,17 @@ class Aset extends BaseController
             }
 
             // 5. Eksekusi Update ke Database
-            $this->model->update($id, [
+            $seriesModel->update($id, [
                 'last_seen_at'  => date('Y-m-d H:i:s'), // Format MySQL Timestamp yang presisi
                 'last_seen_lat' => $lat,
                 'last_seen_lng' => $lng,
-                'last_seen_by'  => session('user_name') ?? 'Guest System (QR Scan)',
+                'last_seen_by'  => session('nama') ?? 'Guest (QR Scan)'
             ]);
 
             return $this->response->setJSON([
-                'ok' => true,
-                'msg' => 'Titik lokasi berhasil diamankan'
+                'ok' => true, 
+                'msg' => 'Lokasi aset berhasil diperbarui ke server'
             ]);
-
         } catch (\Throwable $e) {
             log_message('critical', '[Aset::ping] Gagal memperbarui lokasi aset: ' . $e->getMessage());
             return $this->response->setStatusCode(500)->setJSON([
