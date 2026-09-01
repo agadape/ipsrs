@@ -37,16 +37,6 @@ $routes->group('ipsrs', function ($routes) {
     $routes->get('aset/tambah-series/(:segment)',   'Aset::createSeries/$1');
     $routes->post('aset/tambah-series/(:segment)',  'Aset::storeSeries/$1');
     $routes->get('aset/(:segment)',          'Aset::show/$1');
-    $routes->get('fix-mutasi', function() {
-        $db = \Config\Database::connect();
-        $db->query("
-            UPDATE riwayat_lokasi_aset rla
-            JOIN master_lokasi ml ON rla.lokasi_tujuan = ml.id
-            SET rla.lokasi_tujuan = COALESCE(ml.nama_ruangan, ml.nama_unit)
-            WHERE LENGTH(rla.lokasi_tujuan) = 36
-        ");
-        return 'Done fixing DB!';
-    });
     $routes->get('aset/(:segment)/edit',     'Aset::edit/$1');
     $routes->post('aset/(:segment)/edit',    'Aset::update/$1');
 
