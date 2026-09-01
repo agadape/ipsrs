@@ -11,7 +11,7 @@
 </div>
 
 <div class="card p-6">
-  <form method="POST" action="<?= $isEdit ? '/ipsrs/aset/series/' . esc($series['id']) . '/edit' : '/ipsrs/aset/tambah-series/' . esc($aset['id']) ?>">
+  <form method="POST" action="<?= $isEdit ? '/ipsrs/aset/series/' . esc($series['id'] ?? '') . '/edit' : '/ipsrs/aset/tambah-series/' . esc($aset['id'] ?? '') ?>">
     <?= csrf_field() ?>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
