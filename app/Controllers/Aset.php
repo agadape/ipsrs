@@ -64,21 +64,17 @@ class Aset extends BaseController
 
     public function createSeries(string $idParent)
     {
-        try {
-            $aset = $this->model->getById($idParent);
-            if (!$aset) return redirect()->to('/ipsrs/aset');
-            
-            $masterLokasi = (new \App\Models\MasterLokasiModel())->findAll();
+        $aset = $this->model->getById($idParent);
+        if (!$aset) return redirect()->to('/ipsrs/aset');
+        
+        $masterLokasi = (new \App\Models\MasterLokasiModel())->getAll('nama_ruangan');
 
-            return $this->render('pages/aset/form_series', [
-                'aset'         => $aset,
-                'masterLokasi' => $masterLokasi,
-                'series'       => [],
-                'isEdit'       => false
-            ]);
-        } catch (\Throwable $e) {
-            die('DEBUG ERROR: ' . $e->getMessage() . ' di file ' . $e->getFile() . ' baris ' . $e->getLine());
-        }
+        return $this->render('pages/aset/form_series', [
+            'aset'         => $aset,
+            'masterLokasi' => $masterLokasi,
+            'series'       => [],
+            'isEdit'       => false
+        ]);
     }
 
     public function storeSeries(string $idParent)
@@ -148,7 +144,7 @@ class Aset extends BaseController
         if (!$series) return redirect()->to('/ipsrs/aset');
         
         $aset = $this->model->getById($series['id_aset']);
-        $masterLokasi = (new \App\Models\MasterLokasiModel())->findAll();
+        $masterLokasi = (new \App\Models\MasterLokasiModel())->getAll('nama_ruangan');
 
         return $this->render('pages/aset/form_series', [
             'aset'         => $aset,
@@ -494,6 +490,8 @@ class Aset extends BaseController
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dihapuskan beserta Berita Acara.');
     }
 }
+
+
 
 
 
