@@ -286,7 +286,7 @@ class Aset extends BaseController
             $lokasiTujuan_id = $post['lokasi_tujuan'] ?? null;
             $lokasiTujuan_str = $lokasiTujuan_id;
             
-            if ($lokasiTujuan_id && is_numeric($lokasiTujuan_id)) {
+            if ($lokasiTujuan_id) {
                 $ml = (new \App\Models\MasterLokasiModel())->find($lokasiTujuan_id);
                 if ($ml) {
                     $lokasiTujuan_str = $ml['nama_ruangan'] ?? $ml['nama_unit'];
