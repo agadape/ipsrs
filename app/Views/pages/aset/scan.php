@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Verifikasi Lokasi — <?= esc($aset['nama'] ?? 'Detail Aset') ?></title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     body { font-family: 'Public Sans', sans-serif; background-color: #f8f9fa; color: #435971; }
@@ -31,30 +31,30 @@
 
   <!-- Logo & Header -->
   <div class="w-full max-w-md flex flex-col items-center mb-6 mt-4">
-    <div class="w-12 h-12 rounded-lg bg-[#696cff]/10 flex items-center justify-center mb-3">
-      <svg class="w-7 h-7 text-[#696cff]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+    <div class="w-12 h-12 rounded-lg bg-zinc-100/80 flex items-center justify-center mb-3">
+      <svg class="w-7 h-7 text-zinc-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
     </div>
-    <h2 class="text-xl font-bold text-[#566a7f]">IPSRS RSUD JOGJA</h2>
-    <p class="text-sm text-[#a1acb8]">Sistem Verifikasi Lokasi Aset</p>
+    <h2 class="text-xl font-bold text-zinc-900">IPSRS RSUD JOGJA</h2>
+    <p class="text-sm text-zinc-500">Sistem Verifikasi Lokasi Aset</p>
   </div>
 
-  <div class="card w-full max-w-md p-6 relative z-10">
+  <div class="card w-full max-w-md p-8 relative z-10">
     
     <!-- Asset Info -->
     <div class="text-center mb-6 pb-6 border-b border-gray-100">
-      <h1 class="text-2xl font-bold text-[#566a7f] mb-1"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
-      <span class="inline-block px-3 py-1 rounded-full bg-gray-100 text-[#566a7f] text-xs font-semibold">
+      <h1 class="text-2xl font-bold text-zinc-900 mb-1"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
+      <span class="inline-block px-3 py-1 rounded-full bg-gray-100 text-zinc-900 text-xs font-semibold">
         ID: <?= esc($aset['nomor_aset'] ?? '-') ?>
       </span>
     </div>
 
     <!-- Data Grid -->
     <div class="grid grid-cols-2 gap-4 text-left mb-6">
-      <div class="bg-slate-50 rounded-lg p-3 border border-slate-100">
+      <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-100">
         <p class="badge-label">Kategori</p>
         <p class="data-value"><?= esc($aset['kategori'] ?? '-') ?></p>
       </div>
-      <div class="bg-slate-50 rounded-lg p-3 border border-slate-100">
+      <div class="bg-zinc-50 rounded-lg p-3 border border-zinc-100">
         <p class="badge-label">Kondisi</p>
         <div class="flex items-center gap-1.5">
           <?php $isBaik = strtolower($aset['kondisi'] ?? '') === 'baik'; ?>
@@ -62,7 +62,7 @@
           <p class="data-value"><?= esc($aset['kondisi'] ?? '-') ?></p>
         </div>
       </div>
-      <div class="col-span-2 bg-slate-50 rounded-lg p-3 border border-slate-100">
+      <div class="col-span-2 bg-zinc-50 rounded-lg p-3 border border-zinc-100">
         <p class="badge-label">Lokasi Saat Ini (Sistem)</p>
         <p class="data-value"><?= esc($aset['lokasi'] ?? '-') ?> <span class="text-gray-400 font-normal">/ <?= esc($aset['ruangan'] ?? '-') ?></span></p>
       </div>
@@ -90,18 +90,18 @@
       </div>
 
       <!-- Live Telemetry -->
-      <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 space-y-2">
+      <div class="bg-zinc-50 p-3 rounded-lg border border-zinc-100 space-y-2">
         <div class="flex justify-between items-start border-b border-gray-200 pb-2">
           <span class="text-xs text-gray-500 font-semibold w-1/3">Alamat Deteksi</span>
-          <span class="text-xs text-[#566a7f] font-medium text-right w-2/3" id="tlm-address">Scanning...</span>
+          <span class="text-xs text-zinc-900 font-medium text-right w-2/3" id="tlm-address">Scanning...</span>
         </div>
         <div class="flex justify-between items-center border-b border-gray-200 pb-2">
           <span class="text-xs text-gray-500 font-semibold">Jarak dari RS</span>
-          <span class="text-xs text-[#566a7f] font-medium" id="tlm-distance">Menghitung...</span>
+          <span class="text-xs text-zinc-900 font-medium" id="tlm-distance">Menghitung...</span>
         </div>
         <div class="flex justify-between items-center">
           <span class="text-xs text-gray-500 font-semibold">Akurasi GPS</span>
-          <span class="text-xs text-[#566a7f] font-medium" id="tlm-accuracy">0 m</span>
+          <span class="text-xs text-zinc-900 font-medium" id="tlm-accuracy">0 m</span>
         </div>
       </div>
     </div>
@@ -109,7 +109,7 @@
     <!-- Action Button -->
     <div class="mt-2">
       <button id="btn-lokasi" onclick="triggerLocationScan()" 
-              class="btn-primary w-full py-3 rounded-lg font-bold text-sm flex justify-center items-center gap-2">
+              class="btn-primary w-full py-3 rounded-full font-semibold text-sm flex justify-center items-center gap-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -117,11 +117,7 @@
         <span id="btn-text">Verifikasi Posisi Saat Ini</span>
       </button>
 
-      <div class="text-center mt-4">
-        <a href="/ipsrs/aset/<?= esc($aset['id'] ?? '') ?>" class="text-sm text-[#696cff] hover:text-[#5f61e6] font-medium inline-flex items-center gap-1 transition-colors">
-          Kembali ke Detail Aset
-        </a>
-      </div>
+      
     </div>
   </div>
 
@@ -194,12 +190,12 @@
           if(isBreach) {
             document.getElementById('breach-warning').classList.remove('hidden');
             document.getElementById('safe-warning').classList.add('hidden');
-            btn.className = "btn-danger w-full py-3 rounded-lg font-bold text-sm flex justify-center items-center gap-2";
+            btn.className = "btn-danger w-full py-3 rounded-full font-semibold text-sm flex justify-center items-center gap-2";
             btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><span>Tersimpan (Luar Zona)</span>`;
           } else {
             document.getElementById('safe-warning').classList.remove('hidden');
             document.getElementById('breach-warning').classList.add('hidden');
-            btn.className = "btn-success w-full py-3 rounded-lg font-bold text-sm flex justify-center items-center gap-2";
+            btn.className = "btn-success w-full py-3 rounded-full font-semibold text-sm flex justify-center items-center gap-2";
             btn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>Lokasi Diverifikasi</span>`;
           }
 
