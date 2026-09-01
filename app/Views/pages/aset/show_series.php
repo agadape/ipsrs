@@ -142,11 +142,11 @@ $id = $series['id'] ?? '';
     <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Terakhir Terlihat</p>
     <p class="text-sm font-semibold text-slate-900 mt-0.5">
       <?= tgl($series['last_seen_at'], 'd/m/Y H:i') ?>
-      <span class="text-slate-400 font-normal ml-1">&middot; oleh <?= esc($aset['last_seen_by'] ?? 'Anonim') ?></span>
+      <span class="text-slate-400 font-normal ml-1">&middot; oleh <?= esc($series['last_seen_by'] ?? 'Anonim') ?></span>
     </p>
   </div>
-  <?php if (!empty($aset['last_seen_lat']) && !empty($aset['last_seen_lng'])): ?>
-  <a href="https://maps.google.com/?q=<?= $aset['last_seen_lat'] ?>,<?= $aset['last_seen_lng'] ?>"
+  <?php if (!empty($series['last_seen_lat']) && !empty($series['last_seen_lng'])): ?>
+  <a href="https://maps.google.com/?q=<?= $series['last_seen_lat'] ?>,<?= $series['last_seen_lng'] ?>"
      target="_blank"
      class="text-xs font-medium text-red-700 hover:underline flex-shrink-0">
     Lihat Peta &rarr;
@@ -494,5 +494,6 @@ function viewBA(id) {
     window.location.href = '/ipsrs/aset/ba/' + id;
 }
 </script>
+
 
 
