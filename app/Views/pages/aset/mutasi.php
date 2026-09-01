@@ -144,7 +144,12 @@ $alasanFilter = $alasan ?? '';
         <?php foreach ($riwayat as $r): ?>
         <tr class="hover:bg-slate-50 transition-colors group">
           <td class="px-4 py-3 text-slate-600 whitespace-nowrap"><?= tgl($r['tanggal']) ?></td>
-          <td class="px-4 py-3 font-medium text-slate-900 group-hover:text-red-700 transition-colors"><?= esc($r['nama_aset'] ?? $r['nama'] ?? '-') ?></td>
+          <td class="px-4 py-3 font-medium text-slate-900 group-hover:text-red-700 transition-colors">
+            <?= esc($r['nama_aset'] ?? $r['nama'] ?? '-') ?>
+            <?php if (!empty($r['nomor_aset'])): ?>
+              <br><span class="text-xs font-normal text-slate-500 font-mono"><?= esc($r['nomor_aset']) ?></span>
+            <?php endif; ?>
+          </td>
           <td class="px-4 py-3 text-slate-600"><?= esc($r['dari'] ?? $r['lokasi_asal'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-600"><?= esc($r['ke'] ?? $r['lokasi_tujuan'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-600"><?= esc($r['alasan'] ?? '-') ?></td>
