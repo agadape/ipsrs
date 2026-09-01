@@ -64,17 +64,21 @@ class Aset extends BaseController
 
     public function createSeries(string $idParent)
     {
-        $aset = $this->model->getById($idParent);
-        if (!$aset) return redirect()->to('/ipsrs/aset');
-        
-        $masterLokasi = (new \App\Models\MasterLokasiModel())->findAll();
+        try {
+            $aset = $this->model->getById($idParent);
+            if (!$aset) return redirect()->to('/ipsrs/aset');
+            
+            $masterLokasi = (new \App\Models\MasterLokasiModel())->findAll();
 
-        return $this->render('pages/aset/form_series', [
-            'aset'         => $aset,
-            'masterLokasi' => $masterLokasi,
-            'series'       => [],
-            'isEdit'       => false
-        ]);
+            return $this->render('pages/aset/form_series', [
+                'aset'         => $aset,
+                'masterLokasi' => $masterLokasi,
+                'series'       => [],
+                'isEdit'       => false
+            ]);
+        } catch (\Throwable $e) {
+            die('DEBUG ERROR: ' . $e->getMessage() . ' di file ' . $e->getFile() . ' baris ' . $e->getLine());
+        }
     }
 
     public function storeSeries(string $idParent)
@@ -490,6 +494,7 @@ class Aset extends BaseController
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dihapuskan beserta Berita Acara.');
     }
 }
+
 
 
 
