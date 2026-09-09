@@ -10,10 +10,15 @@ class Portal extends BaseController
 {
     public function lapor()
     {
-        return view('pages/portal/lapor', [
-            'aset' => (new AsetSeriesModel())->getAllWithParent(),
-            'aset_id' => $this->request->getGet('aset_id')
-        ]);
+        try {
+            return view('pages/portal/lapor', [
+                'aset' => (new AsetSeriesModel())->getAllWithParent(),
+                'aset_id' => $this->request->getGet('aset_id')
+            ]);
+        } catch (\Throwable $e) {
+            // Memaksa memunculkan raw error di layar meski sedang mode production
+            die("<h1>Terjadi Kesalahan (Raw Error):</h1><p>" . $e->getMessage() . "</p><pre>" . $e->getTraceAsString() . "</pre>");
+        }
     }
 
     public function storeLapor()
