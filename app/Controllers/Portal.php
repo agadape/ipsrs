@@ -31,7 +31,7 @@ class Portal extends BaseController
         }
 
         try {
-            $data = $this->request->getPost();
+            $data = $this->whitelist(['pelapor', 'unit_pelapor', 'keluhan', 'lokasi', 'id_aset_series']);
             $data['tanggal'] = date('Y-m-d');
             $data['jam_laporan'] = date('H:i');
             $data['status'] = IPSRS::STATUS_LK[0];
