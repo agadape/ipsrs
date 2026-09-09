@@ -32,7 +32,8 @@ class AsetSeriesModel extends BaseModel
     public function getById(string $id): ?array
     {
         $res = $this->qb($this->table)
-            ->select('aset_series.*, ml.gedung, ml.lantai, ml.nama_ruangan as ruangan, ml.nama_unit as unit, ml.nama_ruangan as lokasi')
+            ->select('aset_series.*, ml.gedung, ml.lantai, ml.nama_ruangan as ruangan, ml.nama_unit as unit, ml.nama_ruangan as lokasi, aset.nama as nama_aset')
+            ->join('aset', 'aset.id = aset_series.id_aset', 'left')
             ->join('master_lokasi ml', 'ml.id = aset_series.id_lokasi', 'left')
             ->where('aset_series.id', $id)
             ->get()

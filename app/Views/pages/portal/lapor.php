@@ -79,7 +79,7 @@
             <select id="id_aset_series" name="id_aset_series" class="input-field select2-aset" style="width:100%;">
                 <option value="">-- Tidak Tahu / Aset Tidak Terdaftar --</option>
                 <?php foreach($aset as $a): ?>
-                    <option value="<?= esc($a['id']) ?>" <?= (isset($aset_id) && $aset_id == $a['id']) ? 'selected' : '' ?>><?= esc($a['nomor_aset']) ?> - <?= esc($a['nama_aset']) ?></option>
+                    <option value="<?= esc($a['id']) ?>" <?= (isset($aset_id) && $aset_id == $a['id']) ? 'selected' : '' ?>><?= esc($a['nomor_aset']) ?> - <?= esc($a['nama'] ?? '') ?></option>
                 <?php endforeach; ?>
             </select>
             <p class="text-xs text-slate-500 mt-1.5">Pilih jika kerusakan terjadi pada aset spesifik yang memiliki label QR.</p>
