@@ -1,8 +1,5 @@
 <?php
 
-$_SERVER['CI_ENVIRONMENT'] = 'development';
-putenv('CI_ENVIRONMENT=development');
-
 use CodeIgniter\Boot;
 use Config\Paths;
 
