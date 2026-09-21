@@ -130,6 +130,7 @@
     const RSUD_LNG = 110.3780;
     const SAFE_RADIUS_METERS = 500; // 500 meter dari pusat RSUD
     let mapInstance = null;
+    let csrfToken = '<?= csrf_hash() ?>';
 
     // Haversine Formula for precise distance
     function calcDistance(lat1, lon1, lat2, lon2) {
@@ -168,11 +169,18 @@
         try {
           const res = await fetch('<?= site_url("ipsrs/aset/" . esc($series['id'] ?? '')) ?>/ping', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', '<?= csrf_header() ?>': '<?= csrf_hash() ?>' },
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', '<?= csrf_header() ?>': csrfToken },
             body: JSON.stringify({ lat: lat, lng: lng })
           });
-          
+
+          const payload = await res.json();
+          if (payload.csrfHash) csrfToken = payload.csrfHash;
           if (!res.ok) throw new Error("Gagal menyimpan lokasi ke server.");
+          if (payload.updated === false) {
+            btn.className = "w-full py-3 font-semibold text-sm flex justify-center items-center gap-2";
+            btn.innerHTML = `<span>${payload.msg}</span>`;
+            return;
+          }
 
           // Geofencing Logic
           const distance = calcDistance(lat, lng, RSUD_LAT, RSUD_LNG);

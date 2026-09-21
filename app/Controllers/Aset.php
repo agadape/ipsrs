@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Config\IPSRS;
+use App\Libraries\AsetLifecycle;
+use App\Libraries\BaDocumentStorage;
 use App\Models\AsetModel;
 use App\Models\LKModel;
 
@@ -143,11 +145,29 @@ class Aset extends BaseController
         return $this->render('pages/aset/show_series', compact('aset', 'series', 'riwayat', 'riwayatLK', 'komponen', 'riwayatKanibal', 'peminjamanAktif', 'dataPenghapusan'));
     }
 
+    /** Structured component list for the authenticated kanibal form. */
+    public function components(string $idSeries)
+    {
+        $series = (new \App\Models\AsetSeriesModel())->getById($idSeries);
+        if (!$series) {
+            return $this->response->setStatusCode(404)->setJSON(['message' => 'Aset tidak ditemukan.']);
+        }
+
+        $components = (new \App\Models\KomponenAsetModel())->getByAset($idSeries);
+        return $this->response->setJSON(array_map(static fn(array $component): array => [
+            'nama_komponen' => $component['nama_komponen'] ?? '',
+            'kondisi'       => $component['kondisi'] ?? '',
+        ], $components));
+    }
+
     public function editSeries(string $idSeries)
     {
         $seriesModel = new \App\Models\AsetSeriesModel();
         $series = $seriesModel->getById($idSeries);
         if (!$series) return redirect()->to('/ipsrs/aset');
+        if (!AsetLifecycle::canRelocate($series['status'] ?? null)) {
+            return redirect()->to('/ipsrs/aset/series/' . $idSeries)->with('error', 'Unit hanya dapat diedit saat berstatus Tersedia.');
+        }
         
         $aset = $this->model->getById($series['id_aset']);
         $masterLokasi = (new \App\Models\MasterLokasiModel())->getAll('nama_ruangan');
@@ -162,6 +182,10 @@ class Aset extends BaseController
 
     public function updateSeries(string $idSeries)
     {
+        $series = (new \App\Models\AsetSeriesModel())->getById($idSeries);
+        if (!$series || !AsetLifecycle::canRelocate($series['status'] ?? null)) {
+            return redirect()->to('/ipsrs/aset/series/' . $idSeries)->with('error', 'Unit hanya dapat diedit atau dipindahkan saat berstatus Tersedia.');
+        }
         $v = $this->validateOrFail([
             'nomor_aset' => "required|is_unique[aset_series.nomor_aset,id,{$idSeries}]",
             'id_lokasi'  => 'required',
@@ -278,65 +302,54 @@ class Aset extends BaseController
 
     public function storeMutasi()
     {
+        if (!$this->isAdmin()) {
+            return redirect()->to('/ipsrs/aset/mutasi')->with('error', 'Hanya Admin yang dapat memutasi aset.');
+        }
         $v = $this->validateOrFail([
             'id_aset'       => 'required',
-            'jenis_mutasi'  => 'required',
+            'jenis_mutasi'  => 'required|in_list[Pindah Ruangan]',
+            'lokasi_tujuan' => 'required',
             'petugas'       => 'required',
             'tanggal'       => 'required',
         ], 'Mohon lengkapi data mutasi yang wajib diisi.');
         if ($v !== true) return $v;
 
+        $db = \Config\Database::connect();
         try {
             $post = $this->request->getPost();
             $jenisMutasi = $post['jenis_mutasi'];
             $lokasiTujuan_id = $post['lokasi_tujuan'] ?? null;
-            $lokasiTujuan_str = $lokasiTujuan_id;
-            
-            if ($lokasiTujuan_id) {
-                $ml = (new \App\Models\MasterLokasiModel())->find($lokasiTujuan_id);
-                if ($ml) {
-                    $lokasiTujuan_str = $ml['nama_ruangan'] ?? $ml['nama_unit'];
-                }
-            }
-            
-            $statusBaru = '';
-            if ($jenisMutasi === 'Simpan ke Gudang') {
-                $statusBaru = 'Di Gudang';
-                $lokasiTujuan_str = 'Gudang IPSRS';
-            } elseif ($jenisMutasi === 'Jadikan Kanibal') {
-                $statusBaru = 'Kanibal';
-                $lokasiTujuan_str = 'Gudang Kanibal';
-            } elseif ($jenisMutasi === 'Dibuang') {
-                $statusBaru = 'Dibuang';
-                $lokasiTujuan_str = 'Dibuang';
-            } elseif ($jenisMutasi === 'Pindah Ruangan') {
-                $statusBaru = 'Aktif';
-            }
-
             $mutasiModel = new \App\Models\MutasiModel();
             $seriesModel = new \App\Models\AsetSeriesModel();
-            
             $data = $this->whitelist(['petugas', 'tanggal', 'catatan']);
             $idSeries = $this->request->getPost('id_aset');
-            $data['id_aset_series'] = $idSeries;
-
             $aset = $seriesModel->getById($idSeries);
+            if (!$aset || !AsetLifecycle::canRelocate($aset['status'] ?? null)) {
+                return redirect()->to('/ipsrs/aset/mutasi')->with('error', 'Hanya unit berstatus Tersedia yang dapat dipindahkan.');
+            }
+            $lokasi = (new \App\Models\MasterLokasiModel())->find($lokasiTujuan_id);
+            if (!$lokasi) {
+                return redirect()->back()->withInput()->with('error', 'Lokasi tujuan tidak ditemukan.');
+            }
+
+            $lokasiTujuan_str = $lokasi['nama_ruangan'] ?? $lokasi['nama_unit'] ?? '';
+            $data['id_aset_series'] = $idSeries;
             $data['nama_aset']   = $aset['nama_aset'] ?? ($aset['nomor_aset'] ?? '');
             $data['lokasi_asal'] = $aset['lokasi'] ?? null;
             $data['alasan'] = $jenisMutasi;
             $data['lokasi_tujuan'] = $lokasiTujuan_str;
-            
-            $mutasiModel->create($data);
 
-            if ($statusBaru) {
-                $seriesModel->update($idSeries, [
-                    'status' => $statusBaru,
-                    'id_lokasi' => (in_array($jenisMutasi, ['Simpan ke Gudang', 'Jadikan Kanibal', 'Dibuang'])) ? null : $lokasiTujuan_id
-                ]);
+            $db->transBegin();
+            $mutasiModel->create($data);
+            $seriesModel->update($idSeries, ['id_lokasi' => $lokasiTujuan_id]);
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Mutasi aset tidak dapat diselesaikan.');
             }
+            $db->transCommit();
 
             return redirect()->to('/ipsrs/aset/mutasi')->with('success', 'Mutasi aset berhasil dicatat');
         } catch (\Throwable $e) {
+            $db->transRollback();
             log_message('error', '[Aset::storeMutasi] ' . $e->getMessage());
             return redirect()->to('/ipsrs/aset/mutasi')->with('error', 'Gagal mencatat mutasi: ' . $e->getMessage());
         }
@@ -353,7 +366,8 @@ class Aset extends BaseController
         if ($lat === null || $lng === null || !is_numeric($lat) || !is_numeric($lng)) {
             return $this->response->setStatusCode(400)->setJSON([
                 'ok' => false, 
-                'msg' => 'Data koordinat GPS tidak valid atau tidak lengkap'
+                'msg' => 'Data koordinat GPS tidak valid atau tidak lengkap',
+                'csrfHash' => csrf_hash(),
             ]);
         }
 
@@ -364,7 +378,8 @@ class Aset extends BaseController
         if ($lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
             return $this->response->setStatusCode(400)->setJSON([
                 'ok' => false, 
-                'msg' => 'Kordinat GPS di luar jangkauan logika pemetaan bumi'
+                'msg' => 'Kordinat GPS di luar jangkauan logika pemetaan bumi',
+                'csrfHash' => csrf_hash(),
             ]);
         }
 
@@ -375,7 +390,8 @@ class Aset extends BaseController
             if (!$aset) {
                 return $this->response->setStatusCode(404)->setJSON([
                     'ok' => false, 
-                    'msg' => 'Aset tidak ditemukan di sistem, ID mungkin tidak valid'
+                    'msg' => 'Aset tidak ditemukan di sistem, ID mungkin tidak valid',
+                    'csrfHash' => csrf_hash(),
                 ]);
             }
 
@@ -384,8 +400,10 @@ class Aset extends BaseController
                 $lastSeen = strtotime($aset['last_seen_at']);
                 if (time() - $lastSeen < 10) {
                     return $this->response->setJSON([
-                        'ok' => true, 
-                        'msg' => 'Lokasi sudah diperbarui beberapa detik yang lalu (Spam Protection)'
+                        'ok' => true,
+                        'updated' => false,
+                        'msg' => 'Lokasi baru tidak disimpan karena aset baru saja diperbarui.',
+                        'csrfHash' => csrf_hash(),
                     ]);
                 }
             }
@@ -395,18 +413,21 @@ class Aset extends BaseController
                 'last_seen_at'  => date('Y-m-d H:i:s'), // Format MySQL Timestamp yang presisi
                 'last_seen_lat' => $lat,
                 'last_seen_lng' => $lng,
-                'last_seen_by'  => session('nama') ?? 'Guest (QR Scan)'
+                'last_seen_by'  => session('user_name') ?? 'Guest (QR Scan)'
             ]);
 
             return $this->response->setJSON([
-                'ok' => true, 
-                'msg' => 'Lokasi aset berhasil diperbarui ke server'
+                'ok' => true,
+                'updated' => true,
+                'msg' => 'Lokasi aset berhasil diperbarui ke server',
+                'csrfHash' => csrf_hash(),
             ]);
         } catch (\Throwable $e) {
             log_message('critical', '[Aset::ping] Gagal memperbarui lokasi aset: ' . $e->getMessage());
             return $this->response->setStatusCode(500)->setJSON([
                 'ok' => false, 
-                'msg' => 'Terjadi kendala pada server saat menyimpan koordinat'
+                'msg' => 'Terjadi kendala pada server saat menyimpan koordinat',
+                'csrfHash' => csrf_hash(),
             ]);
         }
     }
@@ -425,77 +446,197 @@ class Aset extends BaseController
 
     public function pinjam()
     {
-        $id = $this->request->getPost('id_aset_series');
+        if (!$this->isAdmin()) {
+            return redirect()->to('/ipsrs')->with('error', 'Hanya Admin yang dapat meminjamkan aset.');
+        }
+        $validation = $this->validateOrFail([
+            'id_aset_series'      => 'required',
+            'nama_peminjam'       => 'required|max_length[100]',
+            'unit_peminjam'       => 'required|max_length[100]',
+            'tgl_kembali_rencana' => 'required|valid_date[Y-m-d]',
+        ], 'Lengkapi data peminjaman aset.');
+        if ($validation !== true) {
+            return $validation;
+        }
+        $id = (string) $this->request->getPost('id_aset_series');
+        $series = (new \App\Models\AsetSeriesModel())->getById($id);
+        if (!$series || !AsetLifecycle::canBorrow($series['status'] ?? null)) {
+            return redirect()->to('/ipsrs/aset/series/' . $id)->with('error', 'Hanya aset Tersedia tanpa lifecycle aktif yang dapat dipinjamkan.');
+        }
         $db = \Config\Database::connect();
-        
-        $db->table('peminjaman_aset')->insert([
-            'id' => sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)),
-            'id_aset_series' => $id,
-            'nama_peminjam' => $this->request->getPost('nama_peminjam'),
-            'unit_peminjam' => $this->request->getPost('unit_peminjam'),
-            'tgl_pinjam' => date('Y-m-d'),
-            'tgl_kembali_rencana' => $this->request->getPost('tgl_kembali_rencana'),
-            'status' => 'Dipinjam',
-            'keterangan' => $this->request->getPost('keterangan'),
-            'id_admin' => session('user_id'),
-        ]);
-
-        $db->table('aset_series')->where('id', $id)->update(['status' => 'Dipinjam']);
-
-        return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dipinjamkan.');
+        try {
+            $db->transBegin();
+            $db->table('aset_series')->where('id', $id)->where('status', 'Tersedia')->update(['status' => 'Dipinjam']);
+            if ($db->affectedRows() !== 1) {
+                throw new \RuntimeException('Status aset sudah berubah; peminjaman dibatalkan.');
+            }
+            $db->table('peminjaman_aset')->insert([
+                'id' => sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)),
+                'id_aset_series' => $id,
+                'nama_peminjam' => $this->request->getPost('nama_peminjam'),
+                'unit_peminjam' => $this->request->getPost('unit_peminjam'),
+                'tgl_pinjam' => date('Y-m-d'),
+                'tgl_kembali_rencana' => $this->request->getPost('tgl_kembali_rencana'),
+                'status' => 'Dipinjam',
+                'keterangan' => $this->request->getPost('keterangan'),
+                'id_admin' => session('user_id'),
+            ]);
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Peminjaman aset tidak dapat diselesaikan.');
+            }
+            $db->transCommit();
+            return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dipinjamkan.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            return redirect()->to('/ipsrs/aset/series/' . $id)->with('error', $e->getMessage());
+        }
     }
 
     public function kembali($id)
     {
+        if (!$this->isAdmin()) {
+            return redirect()->to('/ipsrs')->with('error', 'Hanya Admin yang dapat menerima pengembalian aset.');
+        }
+        $series = (new \App\Models\AsetSeriesModel())->getById($id);
+        if (!$series || !AsetLifecycle::canReturn($series['status'] ?? null)) {
+            return redirect()->to('/ipsrs/aset/series/' . $id)->with('error', 'Aset ini tidak memiliki peminjaman aktif yang dapat dikembalikan.');
+        }
         $db = \Config\Database::connect();
-        
-        $db->table('peminjaman_aset')
-            ->where('id_aset_series', $id)
-            ->where('status', 'Dipinjam')
-            ->update([
+        try {
+            $db->transBegin();
+            $db->table('peminjaman_aset')->where('id_aset_series', $id)->where('status', 'Dipinjam')->update([
                 'tgl_kembali_aktual' => date('Y-m-d'),
-                'status' => 'Selesai'
+                'status' => 'Selesai',
             ]);
-
-        $db->table('aset_series')->where('id', $id)->update(['status' => 'Tersedia']);
-
-        return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dikembalikan.');
+            if ($db->affectedRows() !== 1) {
+                throw new \RuntimeException('Peminjaman aktif tidak ditemukan atau data ganda terdeteksi.');
+            }
+            $db->table('aset_series')->where('id', $id)->where('status', 'Dipinjam')->update(['status' => 'Tersedia']);
+            if ($db->affectedRows() !== 1) {
+                throw new \RuntimeException('Status aset sudah berubah; pengembalian dibatalkan.');
+            }
+            $db->transCommit();
+            return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dikembalikan.');
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            return redirect()->to('/ipsrs/aset/series/' . $id)->with('error', $e->getMessage());
+        }
     }
 
 
     public function tandaiRusakBerat($id)
     {
+        if (!$this->isAdmin()) {
+            return redirect()->to('/ipsrs')->with('error', 'Hanya Admin yang dapat mengubah lifecycle aset.');
+        }
         $db = \Config\Database::connect();
-        $db->table('aset_series')->where('id', $id)->update(['status' => 'Rusak Berat']);
+        $db->table('aset_series')->where('id', $id)->whereIn('status', ['Tersedia', 'Dalam Perbaikan'])->update(['status' => 'Rusak Berat']);
+        if ($db->affectedRows() !== 1) {
+            return redirect()->to('/ipsrs/aset/series/' . $id)->with('error', 'Lifecycle aset tidak mengizinkan penandaan Rusak Berat.');
+        }
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset telah ditandai sebagai Rusak Berat. Opsi Kanibalisasi & Penghapusan kini tersedia.');
     }
 
     public function hapus()
     {
-        $id = $this->request->getPost('id_aset_series');
-        $db = \Config\Database::connect();
-        
-        $file = $this->request->getFile('file_dokumen_ba');
-        $fileName = null;
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $fileName = $file->getRandomName();
-            $file->move(FCPATH . 'uploads/ba', $fileName);
+        if (! $this->isAdmin()) {
+            return redirect()->to('/ipsrs')->with('error', 'Hanya Admin yang dapat menghapuskan aset.');
         }
 
-        $db->table('penghapusan_aset')->insert([
-            'id' => sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)),
-            'id_aset_series' => $id,
-            'no_ba' => $this->request->getPost('no_ba'),
-            'tgl_ba' => $this->request->getPost('tgl_ba'),
-            'tindak_lanjut' => $this->request->getPost('tindak_lanjut'),
-            'file_dokumen_ba' => $fileName,
-            'keterangan' => $this->request->getPost('keterangan'),
-            'id_admin' => session('user_id'),
-        ]);
+        $id = $this->request->getPost('id_aset_series');
+        $db = \Config\Database::connect();
+        $series = (new \App\Models\AsetSeriesModel())->getById((string) $id);
+        if (!$series || !AsetLifecycle::canDispose($series['status'] ?? null)) {
+            return redirect()->back()->withInput()->with('error', 'Penghapusan hanya dapat dilakukan untuk aset berstatus Rusak Berat.');
+        }
+        $documentStorage = new BaDocumentStorage();
 
-        $db->table('aset_series')->where('id', $id)->update(['status' => 'Dihapuskan']);
+        $file = $this->request->getFile('file_dokumen_ba');
+        $fileName = null;
+        if ($file && $file->getError() !== UPLOAD_ERR_NO_FILE) {
+            $fileError = $documentStorage->validate($file);
+            if ($fileError !== null) {
+                return redirect()->back()->withInput()->with('error', $fileError);
+            }
+
+            try {
+                $fileName = $documentStorage->store($file);
+            } catch (\RuntimeException $exception) {
+                log_message('error', 'BA upload failed for asset series {series}: {message}', [
+                    'series'  => $id,
+                    'message' => $exception->getMessage(),
+                ]);
+
+                return redirect()->back()->withInput()->with('error', 'Dokumen BA tidak dapat disimpan. Penghapusan aset dibatalkan.');
+            }
+        }
+
+        try {
+            $db->transBegin();
+            $db->table('penghapusan_aset')->insert([
+                'id' => sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x', mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0x0fff) | 0x4000, mt_rand(0, 0x3fff) | 0x8000, mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)),
+                'id_aset_series' => $id,
+                'no_ba' => $this->request->getPost('no_ba'),
+                'tgl_ba' => $this->request->getPost('tgl_ba'),
+                'tindak_lanjut' => $this->request->getPost('tindak_lanjut'),
+                'file_dokumen_ba' => $fileName,
+                'keterangan' => $this->request->getPost('keterangan'),
+                'id_admin' => session('user_id'),
+            ]);
+            $db->table('aset_series')->where('id', $id)->where('status', 'Rusak Berat')->update(['status' => 'Dihapuskan']);
+            if ($db->affectedRows() !== 1 || $db->transStatus() === false) {
+                throw new \RuntimeException('Lifecycle aset sudah berubah atau penghapusan tidak dapat disimpan.');
+            }
+            $db->transCommit();
+        } catch (\Throwable $e) {
+            $db->transRollback();
+            if ($fileName !== null) {
+                $documentStorage->delete($fileName);
+            }
+
+            log_message('error', 'Asset disposal transaction failed for asset series {series}: {message}', ['series' => $id, 'message' => $e->getMessage()]);
+
+            return redirect()->back()->withInput()->with('error', 'Penghapusan aset gagal disimpan. Dokumen BA tidak disimpan.');
+        }
 
         return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dihapuskan beserta Berita Acara.');
+    }
+
+    public function downloadBa(string $id)
+    {
+        if (! $this->isAdmin()) {
+            return redirect()->to('/ipsrs')->with('error', 'Akses dokumen BA ditolak.');
+        }
+
+        $record = \Config\Database::connect()
+            ->table('penghapusan_aset')
+            ->select('id, no_ba, file_dokumen_ba')
+            ->where('id', $id)
+            ->get()
+            ->getRowArray();
+
+        if (! $record || empty($record['file_dokumen_ba'])) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $documentStorage = new BaDocumentStorage();
+        $path = $documentStorage->resolve($record['file_dokumen_ba']);
+        if ($path === null) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $documentNumber = preg_replace('/[^A-Za-z0-9_-]+/', '-', (string) $record['no_ba']) ?: 'dokumen';
+        $downloadName = 'BA-' . trim($documentNumber, '-') . '.' . $documentStorage->downloadExtension($record['file_dokumen_ba']);
+
+        return $this->response
+            ->download($path, null)
+            ->setFileName($downloadName)
+            ->setHeader('X-Content-Type-Options', 'nosniff');
+    }
+
+    private function isAdmin(): bool
+    {
+        return strtolower((string) session('user_role')) === 'admin';
     }
 }
 

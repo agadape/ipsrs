@@ -38,6 +38,7 @@ $id = $series['id'] ?? '';
       <!-- End of Life / Rusak Berat Transitions -->
       <?php if (in_array($s, ['Tersedia', 'Dalam Perbaikan'])): ?>
         <form action="/ipsrs/aset/series/<?= esc($id) ?>/tandai-rusak" method="post" class="inline" onsubmit="return confirm('Apakah Anda yakin aset ini tidak dapat diperbaiki lagi? Aset akan ditandai sebagai Rusak Berat dan opsi Kanibalisasi & Penghapusan akan terbuka.')">
+          <?= csrf_field() ?>
           <button type="submit" class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm border border-red-200">Tandai Rusak Berat</button>
         </form>
       <?php endif; ?>
@@ -52,8 +53,8 @@ $id = $series['id'] ?? '';
       <?php endif; ?>
 
       <!-- BA View for Dihapuskan -->
-      <?php if ($s === 'Dihapuskan'): ?>
-        <button type="button" onclick="viewBA('<?= esc($id) ?>')" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Lihat Berita Acara</button>
+      <?php if ($s === 'Dihapuskan' && !empty($dataPenghapusan['id'])): ?>
+        <a href="/ipsrs/aset/penghapusan/<?= esc($dataPenghapusan['id']) ?>/ba" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Unduh Berita Acara</a>
       <?php endif; ?>
   
       <?php if ($s !== 'Dihapuskan'): ?>
@@ -353,9 +354,9 @@ $id = $series['id'] ?? '';
     </div>
     <?php if(!empty($dataPenghapusan['file_dokumen_ba'])): ?>
     <div class="mt-4">
-      <a href="/uploads/ba/<?= esc($dataPenghapusan['file_dokumen_ba']) ?>" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 transition-colors shadow-sm">
+      <a href="/ipsrs/aset/penghapusan/<?= esc($dataPenghapusan['id']) ?>/ba" class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 transition-colors shadow-sm">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        Lihat Dokumen BA (PDF)
+        Unduh Dokumen BA
       </a>
     </div>
     <?php endif; ?>
@@ -407,6 +408,7 @@ function openPeminjamanModal(id) {
         title: 'Pinjamkan Aset',
         html: `
             <form id="peminjamanForm" action="/ipsrs/aset/pinjam" method="POST" class="text-left">
+                <?= csrf_field() ?>
                 <input type="hidden" name="id_aset_series" value="${id}">
                 <div class="mb-3">
                     <label class="block text-sm font-medium mb-1">Nama Peminjam *</label>
@@ -429,7 +431,9 @@ function openPeminjamanModal(id) {
         showCancelButton: true,
         confirmButtonText: 'Pinjamkan',
         preConfirm: () => {
-            document.getElementById('peminjamanForm').submit();
+            const form = document.getElementById('peminjamanForm');
+            if (!form.reportValidity()) return false;
+            form.requestSubmit();
         }
     });
 }
@@ -437,12 +441,17 @@ function openPeminjamanModal(id) {
 function openPengembalianModal(id) {
     Swal.fire({
         title: 'Kembalikan Aset',
-        text: 'Aset ini akan dikembalikan dan statusnya menjadi Tersedia.',
+        html: `
+            <form id="pengembalianForm" action="/ipsrs/aset/kembali/${id}" method="POST">
+                <?= csrf_field() ?>
+                <p>Aset ini akan dikembalikan dan statusnya menjadi Tersedia.</p>
+            </form>
+        `,
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Ya, Kembalikan',
         preConfirm: () => {
-            window.location.href = '/ipsrs/aset/kembali/' + id;
+            document.getElementById('pengembalianForm').requestSubmit();
         }
     });
 }
@@ -452,6 +461,7 @@ function openPenghapusanModal(id) {
         title: 'Lakukan Penghapusan Aset',
         html: `
             <form id="penghapusanForm" action="/ipsrs/aset/hapus" method="POST" enctype="multipart/form-data" class="text-left">
+                <?= csrf_field() ?>
                 <input type="hidden" name="id_aset_series" value="${id}">
                 <div class="mb-3">
                     <label class="block text-sm font-medium mb-1">No. Berita Acara *</label>
@@ -472,7 +482,8 @@ function openPenghapusanModal(id) {
                 </div>
                 <div class="mb-3">
                     <label class="block text-sm font-medium mb-1">Upload BA (PDF/Image)</label>
-                    <input type="file" name="file_dokumen_ba" class="w-full border p-2 rounded">
+                    <input type="file" name="file_dokumen_ba" accept="application/pdf,image/jpeg,image/png" class="w-full border p-2 rounded">
+                    <p class="mt-1 text-xs text-slate-500">PDF, JPG, atau PNG valid, maksimal 5 MB.</p>
                 </div>
                 <div class="mb-3">
                     <label class="block text-sm font-medium mb-1">Keterangan</label>
@@ -485,14 +496,13 @@ function openPenghapusanModal(id) {
         confirmButtonText: 'Selesaikan Penghapusan',
         confirmButtonColor: '#dc2626',
         preConfirm: () => {
-            document.getElementById('penghapusanForm').submit();
+            const form = document.getElementById('penghapusanForm');
+            if (!form.reportValidity()) return false;
+            form.requestSubmit();
         }
     });
 }
 
-function viewBA(id) {
-    window.location.href = '/ipsrs/aset/ba/' + id;
-}
 </script>
 
 

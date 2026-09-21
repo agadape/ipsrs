@@ -57,6 +57,14 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
       </p>
     </div>
     <div class="flex items-center gap-2">
+      <?php if ($authRole !== 'pelapor' && $status === 'Laporan Masuk'): ?>
+      <form method="POST" action="/ipsrs/lk/claim/<?= esc($id) ?>" class="inline" onsubmit="confirmFormSubmit(event, this, 'Ambil tiket ini sebagai pekerjaan Anda?');">
+        <?= csrf_field() ?>
+        <button type="submit" class="flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-md bg-red-700 text-white hover:bg-red-800 transition-colors shadow-sm">
+          Ambil Tugas
+        </button>
+      </form>
+      <?php endif; ?>
       <?php if (session('user_role') !== 'pelapor' && $status === 'Laporan Masuk'): ?>
       <button onclick="document.getElementById('modal-edit-detail').classList.remove('hidden')" 
          class="flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-md bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors shadow-sm">
@@ -201,10 +209,13 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
 
     <?php if (!empty($lk['ttd_pelapor'])): ?>
     <div class="md:col-span-1 border-t md:border-t-0 md:border-l border-slate-200 pt-4 md:pt-0 md:pl-6">
-      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Tanda Tangan Pelapor</p>
+      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Bukti Serah-Terima Pelapor</p>
       <div class="mt-2 w-32 h-20 border border-slate-200 rounded-md overflow-hidden bg-white flex items-center justify-center shadow-sm">
-        <img src="<?= esc($lk['ttd_pelapor']) ?>" alt="Tanda Tangan" class="max-w-full max-h-full object-contain">
+        <img src="<?= esc($lk['ttd_pelapor']) ?>" alt="Bukti tanda tangan serah-terima pelapor" class="max-w-full max-h-full object-contain">
       </div>
+      <p class="mt-2 text-[11px] text-slate-600">Pelapor: <strong><?= esc($lk['pelapor'] ?? '-') ?></strong> Â· <?= esc($lk['unit_pelapor'] ?? '-') ?></p>
+      <p class="text-[11px] text-slate-500">Diverifikasi selesai: <?= esc(($lk['tanggal_selesai'] ?? '-') . ' ' . ($lk['jam_selesai'] ?? '')) ?></p>
+      <p class="mt-1 text-[10px] leading-relaxed text-slate-400">Bukti gambar serah-terima operasional, bukan tanda tangan digital tersertifikasi.</p>
     </div>
     <?php endif; ?>
   </div>
@@ -255,11 +266,13 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
               class="px-4 py-1.5 text-xs font-semibold rounded-sm transition-colors bg-white border border-slate-200 shadow-sm text-slate-900">
         Dari Gudang
       </button>
+      <?php if ($authRole === 'admin'): ?>
       <button type="button" onclick="setScSource('Kanibal')"
               id="btn-kanibal"
               class="px-4 py-1.5 text-xs font-semibold rounded-sm transition-colors bg-transparent border border-transparent text-slate-500 hover:text-slate-700">
         Kanibal dari Aset Lain
       </button>
+      <?php endif; ?>
     </div>
     <input type="hidden" name="sumber" id="sc-source" value="Gudang">
 
@@ -296,11 +309,11 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
       </div>
     </form>
 
-    <!-- Form Kanibal -->
+    <!-- Form Kanibal: the server independently requires Admin. -->
+    <?php if ($authRole === 'admin'): ?>
     <form method="POST" action="/ipsrs/kanibal" id="form-kanibal" class="hidden">
       <?= csrf_field() ?>
       <input type="hidden" name="id_lk" value="<?= esc($id) ?>">
-      <input type="hidden" name="no_order_lk" value="<?= esc($lk['no_order'] ?? '') ?>">
       <input type="hidden" name="id_aset_penerima" value="<?= esc($lk['id_aset_series'] ?? '') ?>">
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -311,7 +324,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
                   onchange="loadKomponenDonor(this.value)">
             <option value="">-- Pilih Aset Donor --</option>
             <?php foreach (($aset ?? []) as $a): ?>
-            <?php if (($a['status'] ?? '') === 'Kanibal'): ?>
+            <?php if (($a['status'] ?? '') === 'Rusak Berat'): ?>
               <option value="<?= esc($a['id'] ?? '') ?>" data-nama="<?= esc($a['nama'] ?? '') ?>">
                 <?= esc(($a['nomor_aset'] ?? '') . ' - ' . ($a['nama'] ?? '')) ?> (<?= esc(($a['ruangan'] ?? '') . ' / ' . ($a['gedung'] ?? '')) ?>)
               </option>
@@ -321,10 +334,10 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Komponen <span class="text-red-500">*</span></label>
-          <input type="text" name="nama_komponen" required placeholder="Contoh: Kompresor, Motor Fan, PCB"
-                 list="komponen-donor-list"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
-          <datalist id="komponen-donor-list"></datalist>
+          <select name="nama_komponen" required id="kanibal-komponen" disabled
+                  class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
+            <option value="">-- Pilih donor terlebih dahulu --</option>
+          </select>
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Kondisi Komponen</label>
@@ -336,9 +349,8 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
           </select>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Disetujui Oleh</label>
-          <input type="text" name="disetujui_oleh" placeholder="Admin / Ka IPSRS"
-                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Persetujuan</label>
+          <p class="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-md text-slate-600">Dicatat atas akun Admin yang sedang masuk.</p>
         </div>
         <div class="md:col-span-2">
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Keterangan</label>
@@ -353,37 +365,42 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
         </button>
       </div>
     </form>
+    <?php endif; ?>
   </div>
 
   <script>
   function setScSource(sumber) {
     document.getElementById('sc-source').value = sumber;
     document.getElementById('form-gudang').classList.toggle('hidden', sumber !== 'Gudang');
-    document.getElementById('form-kanibal').classList.toggle('hidden', sumber !== 'Kanibal');
+    const kanibalForm = document.getElementById('form-kanibal');
+    if (kanibalForm) kanibalForm.classList.toggle('hidden', sumber !== 'Kanibal');
     document.getElementById('btn-gudang').className = sumber === 'Gudang'
       ? 'px-4 py-1.5 text-xs font-semibold rounded-sm transition-colors bg-white border border-slate-200 shadow-sm text-slate-900'
       : 'px-4 py-1.5 text-xs font-semibold rounded-sm transition-colors bg-transparent border border-transparent text-slate-500 hover:text-slate-700';
-    document.getElementById('btn-kanibal').className = sumber === 'Kanibal'
+    const kanibalButton = document.getElementById('btn-kanibal');
+    if (kanibalButton) kanibalButton.className = sumber === 'Kanibal'
       ? 'px-4 py-1.5 text-xs font-semibold rounded-sm transition-colors bg-white border border-slate-200 shadow-sm text-slate-900'
       : 'px-4 py-1.5 text-xs font-semibold rounded-sm transition-colors bg-transparent border border-transparent text-slate-500 hover:text-slate-700';
   }
 
   function loadKomponenDonor(idAset) {
-    const dl = document.getElementById('komponen-donor-list');
-    dl.innerHTML = '';
+    const select = document.getElementById('kanibal-komponen');
+    select.innerHTML = '<option value="">-- Pilih Komponen --</option>';
+    select.disabled = true;
     if (!idAset) return;
-    fetch('/ipsrs/aset/' + idAset)
-      .then(r => r.text())
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        doc.querySelectorAll('.komponen-nama').forEach(el => {
+    fetch('/ipsrs/aset/series/' + encodeURIComponent(idAset) + '/komponen')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(components => {
+        components.forEach(component => {
+          if (component.kondisi === 'Tidak Ada') return;
           const opt = document.createElement('option');
-          opt.value = el.textContent.trim();
-          dl.appendChild(opt);
+          opt.value = component.nama_komponen;
+          opt.textContent = component.nama_komponen + ' (' + component.kondisi + ')';
+          select.appendChild(opt);
         });
+        select.disabled = false;
       })
-      .catch(() => {});
+      .catch(() => { select.innerHTML = '<option value="">Komponen donor tidak dapat dimuat</option>'; });
   }
   </script>
   <?php endif; ?>
@@ -513,16 +530,6 @@ $vendorList   = $vendorList ?? [];
         </select>
       </div>
       <input type="hidden" name="status_baru" value="Didisposisi">
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal Cek</label>
-        <input type="date" name="tanggal_cek" value="<?= esc($lk['tanggal_cek'] ?? date('Y-m-d')) ?>"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
-      </div>
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jam Cek</label>
-        <input type="time" name="jam_cek" value="<?= esc(substr($lk['jam_cek'] ?? date('H:i'), 0, 5)) ?>"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
-      </div>
     </div>
     <div class="mt-5">
       <button type="submit" class="px-6 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md shadow-sm transition-colors">
@@ -600,6 +607,20 @@ $vendorList   = $vendorList ?? [];
 
 
 
+      <div id="survey-time-container" class="md:col-span-2 hidden grid grid-cols-1 md:grid-cols-2 gap-4 rounded-md border border-blue-200 bg-blue-50 p-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal Survei <span class="text-red-500">*</span></label>
+          <input id="tanggal_cek" type="date" name="tanggal_cek" value="<?= esc($lk['tanggal_cek'] ?? date('Y-m-d')) ?>" disabled
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jam Survei <span class="text-red-500">*</span></label>
+          <input id="jam_cek" type="time" name="jam_cek" value="<?= esc(substr($lk['jam_cek'] ?? date('H:i'), 0, 5)) ?>" disabled
+                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
+        </div>
+        <p class="md:col-span-2 text-xs text-blue-700">Waktu survei dipakai untuk menghitung response time dan tidak dapat diubah oleh status berikutnya.</p>
+      </div>
+
       <!-- Tindakan -->
       <div class="md:col-span-2">
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tindakan yang Dilakukan</label>
@@ -608,26 +629,18 @@ $vendorList   = $vendorList ?? [];
                   class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm resize-none"><?= esc($lk['tindakan'] ?? '') ?></textarea>
       </div>
 
-      <!-- Tanggal & Jam Selesai -->
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tanggal Selesai</label>
-        <input type="date" name="tanggal_selesai" value="<?= esc($lk['tanggal_selesai'] ?? date('Y-m-d')) ?>"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
-      </div>
-      <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Jam Selesai</label>
-        <input type="time" name="jam_selesai" value="<?= esc(substr($lk['jam_selesai'] ?? date('H:i'), 0, 5)) ?>"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
+      <div class="md:col-span-2 rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600">
+        Waktu selesai dicatat otomatis oleh server saat status diubah menjadi <strong>Selesai</strong>.
       </div>
 
       <!-- Tanda Tangan Pelapor (Hidden by default, shown when Selesai) -->
       <div id="signature-container" class="md:col-span-2 hidden mt-3 p-4 bg-slate-50 border border-slate-200 rounded-md">
-        <label class="block text-xs font-bold text-slate-800 mb-1.5 uppercase tracking-wider">Tanda Tangan Pelapor (Wajib)</label>
-        <p class="text-[11px] text-slate-500 mb-3 font-medium">Silakan tanda tangan di dalam kotak di bawah ini sebagai bukti perbaikan telah selesai dan diserahterimakan.</p>
+        <label class="block text-xs font-bold text-slate-800 mb-1.5 uppercase tracking-wider">Bukti Serah-Terima Pelapor (Wajib)</label>
+        <p class="text-[11px] text-slate-500 mb-3 font-medium">Pelapor membubuhkan tanda tangan gambar sebagai bukti serah-terima operasional setelah perbaikan selesai. Ini bukan tanda tangan digital tersertifikasi.</p>
         <div class="border-2 border-dashed border-slate-300 rounded-md bg-white overflow-hidden" style="width: 100%; max-width: 400px;">
           <canvas id="signature-pad" class="w-full h-48 cursor-crosshair touch-none"></canvas>
         </div>
-        <button type="button" onclick="clearSignature()" class="mt-2 text-xs text-red-600 hover:text-red-700 font-semibold px-2 py-1 hover:bg-red-50 rounded transition-colors">Kosongkan Tanda Tangan</button>
+        <button type="button" onclick="clearSignature()" class="mt-2 text-xs text-red-600 hover:text-red-700 font-semibold px-2 py-1 hover:bg-red-50 rounded transition-colors">Kosongkan Bukti Tanda Tangan</button>
         <input type="hidden" name="ttd_pelapor" id="ttd_pelapor">
       </div>
     </div>
@@ -728,6 +741,17 @@ $vendorList   = $vendorList ?? [];
   function toggleSignature() {
     const statusSelect = document.getElementById('status_baru');
     const sigContainer = document.getElementById('signature-container');
+    const surveyTimeContainer = document.getElementById('survey-time-container');
+    const surveyInputs = [document.getElementById('tanggal_cek'), document.getElementById('jam_cek')];
+    const isSurvey = statusSelect && statusSelect.value === 'Survei';
+
+    if (surveyTimeContainer) surveyTimeContainer.classList.toggle('hidden', !isSurvey);
+    surveyInputs.forEach(input => {
+      if (input) {
+        input.disabled = !isSurvey;
+        input.required = isSurvey;
+      }
+    });
     
     if (statusSelect && statusSelect.value === 'Selesai') {
       sigContainer.classList.remove('hidden');
@@ -759,7 +783,7 @@ $vendorList   = $vendorList ?? [];
     
     if (statusSelect && statusSelect.value === 'Selesai') {
       if (signaturePad && signaturePad.isEmpty()) {
-        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Tanda Tangan Pelapor wajib diisi jika status Selesai!' });
+        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Bukti tanda tangan pelapor wajib diisi jika status Selesai!' });
         return false;
       }
       

@@ -155,10 +155,11 @@ $kategoriList = $kategoriList ?? [];
                    class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-md text-slate-500">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Pengguna / User <span class="text-red-500">*</span></label>
+            <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Nama Perwakilan Unit <span class="text-red-500">*</span></label>
             <input type="text" name="nama_user_ttd" value="<?= esc(old('nama_user_ttd') ?? '') ?>" required
                    placeholder="Nama perwakilan unit"
                    class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
+            <p class="mt-1 text-[11px] text-slate-500">Nama ini dicatat sebagai perwakilan unit penerima hasil pemeriksaan; LKP belum memakai tanda tangan digital.</p>
           </div>
         </div>
 
@@ -190,9 +191,21 @@ $kategoriList = $kategoriList ?? [];
   const tbody    = document.getElementById('checklist-rows');
   let rowIdx     = 0;
 
+  function escapeHtmlAttribute(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#039;',
+      '"': '&quot;'
+    })[char]);
+  }
+
   function updateInputUI(selectElem, i, prefilledValue = '', prefilledSatuan = '') {
     const container = selectElem.closest('.row-card').querySelector('.dynamic-input-container');
     const type = selectElem.value;
+    const escapedValue = escapeHtmlAttribute(prefilledValue);
+    const escapedSatuan = escapeHtmlAttribute(prefilledSatuan);
     
     let html = '';
     if (type === 'Inspeksi' || type === 'Service') {
@@ -215,12 +228,12 @@ $kategoriList = $kategoriList ?? [];
     } else if (type === 'Pengukuran') {
         html = `
         <div class="flex items-center bg-white border border-slate-200 rounded-md overflow-hidden focus-within:ring-1 focus-within:ring-red-600 focus-within:border-red-600 transition-all w-full shadow-sm">
-           <input type="number" step="any" name="items[${i}][hasil]" value="${prefilledValue}" placeholder="Angka..." class="w-full px-3 py-1.5 bg-transparent text-sm font-medium outline-none text-slate-900" required>
-           <input type="text" name="items[${i}][satuan]" value="${prefilledSatuan}" placeholder="Satuan" class="w-16 px-2 py-1.5 bg-slate-50 text-xs font-medium text-slate-600 outline-none border-l border-slate-200">
+           <input type="number" step="any" name="items[${i}][hasil]" value="${escapedValue}" placeholder="Angka..." class="w-full px-3 py-1.5 bg-transparent text-sm font-medium outline-none text-slate-900" required>
+           <input type="text" name="items[${i}][satuan]" value="${escapedSatuan}" placeholder="Satuan" class="w-16 px-2 py-1.5 bg-slate-50 text-xs font-medium text-slate-600 outline-none border-l border-slate-200">
         </div>`;
     } else {
         html = `
-        <input type="text" name="items[${i}][hasil]" value="${prefilledValue}" placeholder="Teks hasil observasi..." class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md text-sm font-medium outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-all text-slate-900 shadow-sm" required>
+        <input type="text" name="items[${i}][hasil]" value="${escapedValue}" placeholder="Teks hasil observasi..." class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md text-sm font-medium outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-all text-slate-900 shadow-sm" required>
         `;
     }
     container.innerHTML = html;
@@ -228,6 +241,8 @@ $kategoriList = $kategoriList ?? [];
 
   function createRow(data = {}) {
     const i = rowIdx++;
+    const komponen = escapeHtmlAttribute(data.komponen);
+    const ket = escapeHtmlAttribute(data.ket);
     const tr = document.createElement('div');
     tr.className = 'row-card group flex flex-col md:flex-row items-start md:items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-lg hover:border-red-200 transition-colors duration-200';
     tr.innerHTML = `
@@ -245,7 +260,7 @@ $kategoriList = $kategoriList ?? [];
       </div>
       
       <div class="w-full md:flex-1 relative">
-        <input type="text" name="items[${i}][komponen]" value="${(data.komponen || '').replace(/"/g,'&quot;')}" required placeholder="Apa yang diperiksa? (Misal: Kabel Power)" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md focus:border-red-600 focus:ring-1 focus:ring-red-600 text-sm transition-all outline-none font-medium text-slate-900 placeholder-slate-400 shadow-sm">
+        <input type="text" name="items[${i}][komponen]" value="${komponen}" required placeholder="Apa yang diperiksa? (Misal: Kabel Power)" class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md focus:border-red-600 focus:ring-1 focus:ring-red-600 text-sm transition-all outline-none font-medium text-slate-900 placeholder-slate-400 shadow-sm">
       </div>
       
       <div class="w-full md:w-48 shrink-0 dynamic-input-container">
@@ -253,7 +268,7 @@ $kategoriList = $kategoriList ?? [];
       </div>
       
       <div class="w-full md:w-48 shrink-0">
-        <input type="text" name="items[${i}][ket]" value="${(data.ket || '').replace(/"/g,'&quot;')}" placeholder="Catatan (Opsional)" class="w-full px-3 py-1.5 bg-white border border-slate-200 focus:ring-1 focus:ring-red-600 focus:border-red-600 rounded-md text-xs font-medium text-slate-600 outline-none transition-all placeholder-slate-400 shadow-sm">
+        <input type="text" name="items[${i}][ket]" value="${ket}" placeholder="Catatan (Opsional)" class="w-full px-3 py-1.5 bg-white border border-slate-200 focus:ring-1 focus:ring-red-600 focus:border-red-600 rounded-md text-xs font-medium text-slate-600 outline-none transition-all placeholder-slate-400 shadow-sm">
       </div>
       
       <div class="shrink-0 flex justify-end w-full md:w-auto">

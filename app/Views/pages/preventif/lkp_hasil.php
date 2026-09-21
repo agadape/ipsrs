@@ -70,7 +70,7 @@ $hasilBadge = $hasil === 'Siap Pakai'
       <p class="text-sm font-medium text-slate-800"><?= esc($lkp['teknisi'] ?? '-') ?></p>
     </div>
     <div>
-      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Pengguna / TTD</p>
+      <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Perwakilan Unit</p>
       <p class="text-sm font-medium text-slate-800"><?= esc($lkp['nama_user_ttd'] ?? '-') ?></p>
     </div>
   </div>
@@ -104,7 +104,9 @@ $hasilBadge = $hasil === 'Siap Pakai'
           <tbody class="divide-y divide-slate-100">
             <?php foreach ($items as $d): ?>
             <?php
-              $h = $d['hasil_inspeksi'] ?? $d['hasil_service'] ?? $d['nilai_pengukuran'] ?? '-';
+              $textPayload = $jenis === 'Teks' ? \App\Libraries\LkpChecklist::textPayload($d['keterangan'] ?? null) : null;
+              $h = $textPayload['hasil'] ?? $d['hasil_inspeksi'] ?? $d['hasil_service'] ?? $d['nilai_pengukuran'] ?? '-';
+              $catatanItem = $textPayload['catatan'] ?? ($d['keterangan'] ?? '');
               if ($jenis === 'Pengukuran' && !empty($d['satuan'])) $h = trim($h . ' ' . $d['satuan']);
               $hClass = in_array($d['hasil_inspeksi'] ?? $d['hasil_service'] ?? '', ['Tidak'])
                   ? 'text-red-600 font-semibold' : 'text-slate-800';
@@ -127,7 +129,7 @@ $hasilBadge = $hasil === 'Siap Pakai'
                   <span class="font-mono bg-slate-50 border border-slate-200 px-2 py-1 rounded text-slate-700 text-xs font-semibold"><?= esc($h ?: '-') ?></span>
                 <?php endif; ?>
               </td>
-              <td class="px-4 py-3 text-xs text-slate-500 align-top italic"><?= esc($d['keterangan'] ?? '') ?></td>
+              <td class="px-4 py-3 text-xs text-slate-500 align-top italic"><?= esc($catatanItem) ?></td>
             </tr>
             <?php endforeach; ?>
           </tbody>

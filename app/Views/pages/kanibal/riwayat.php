@@ -14,7 +14,7 @@ $riwayatList = $riwayat ?? [];
 <!-- Daftar Aset Kanibal Tersedia -->
 <div class="card p-6 mb-6">
   <div class="flex items-center gap-2 mb-4">
-    <h2 class="text-sm font-semibold text-slate-800">Daftar Aset Kanibal (Tersedia)</h2>
+<h2 class="text-sm font-semibold text-slate-800">Kandidat Aset Kanibal (Rusak Berat)</h2>
   </div>
   
   <?php if (!empty($aset_kanibal)): ?>
@@ -42,7 +42,7 @@ $riwayatList = $riwayat ?? [];
   </div>
   <?php else: ?>
   <div class="text-center py-6">
-    <p class="text-sm text-slate-500">Tidak ada aset dengan status Kanibal.</p>
+<p class="text-sm text-slate-500">Tidak ada aset berstatus Rusak Berat untuk dipertimbangkan sebagai donor.</p>
   </div>
   <?php endif; ?>
 </div>

@@ -23,8 +23,13 @@
 # app.baseURL = ''
 # If you have trouble with `.`, you could also use `_`.
 # app_baseURL = ''
-# app.forceGlobalSecureRequests = false
+# app.forceGlobalSecureRequests = true
 # app.CSPEnabled = false
+
+# Production cookie baseline (requires HTTPS)
+# cookie.secure = true
+# cookie.httponly = true
+# cookie.samesite = Lax
 
 #--------------------------------------------------------------------
 # DATABASE
@@ -37,6 +42,7 @@
 # database.default.DBDriver = MySQLi
 # database.default.DBPrefix =
 # database.default.port = 3306
+# database.default.DBDebug = false
 
 # If you use MySQLi as tests, first update the values of Config\Database::$tests.
 # database.tests.hostname = localhost

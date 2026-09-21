@@ -126,11 +126,14 @@ if (!function_exists('ico')) {
         <p class="text-slate-900 text-[13px] truncate font-semibold"><?= esc($authName) ?></p>
         <p class="text-slate-500 text-[11px] mt-0.5 truncate font-medium"><?= esc($authRole) ?></p>
       </div>
-      <a href="/logout" class="ml-auto text-slate-400 hover:text-red-600 bg-white hover:bg-red-50 p-1.5 rounded-md transition-colors shrink-0 border border-slate-200" title="Keluar">
+      <form method="POST" action="/logout" class="ml-auto">
+        <?= csrf_field() ?>
+        <button type="submit" class="text-slate-400 hover:text-red-600 bg-white hover:bg-red-50 p-1.5 rounded-md transition-colors shrink-0 border border-slate-200" title="Keluar">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
         </svg>
-      </a>
+        </button>
+      </form>
     </div>
   </div>
 </aside>

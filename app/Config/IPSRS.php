@@ -8,6 +8,11 @@ namespace App\Config;
  */
 class IPSRS
 {
+    /** Brute-force guard for the public login endpoint. */
+    public const LOGIN_MAX_ATTEMPTS = 5;
+    public const LOGIN_IP_MAX_ATTEMPTS = 20;
+    public const LOGIN_WINDOW_SECONDS = 60;
+
     // ── SLA ───────────────────────────────────────────────────────────────
 
     /** Target response time dalam menit (SPO: ≤ 15 menit). */
@@ -68,6 +73,17 @@ class IPSRS
         'Selesai',
     ];
 
+    /** Allowed forward transitions for the corrective-maintenance workflow. */
+    public const LK_STATUS_TRANSITIONS = [
+        'Laporan Masuk'          => ['Didisposisi'],
+        'Didisposisi'            => ['Survei'],
+        'Survei'                 => ['Dalam Perbaikan', 'Menunggu Suku Cadang', 'Menunggu Vendor', 'Selesai'],
+        'Dalam Perbaikan'        => ['Menunggu Suku Cadang', 'Menunggu Vendor', 'Selesai'],
+        'Menunggu Suku Cadang'   => ['Dalam Perbaikan'],
+        'Menunggu Vendor'        => ['Dalam Perbaikan'],
+        'Selesai'                => [],
+    ];
+
     /** Status LK yang menandakan perlu respons teknisi. */
     public const STATUS_LK_BELUM_DISURVEI = ['Laporan Masuk', 'Didisposisi'];
 
@@ -96,8 +112,10 @@ class IPSRS
         'Didisposisi'          => 'Dalam Perbaikan',
         'Survei'               => 'Dalam Perbaikan',
         'Dalam Perbaikan'      => 'Dalam Perbaikan',
-        'Menunggu Suku Cadang' => 'Menunggu Suku Cadang',
-        'Menunggu Vendor'      => 'Tidak Aktif',
-        'Selesai'              => 'Aktif',
+        // The deployed schema only permits five lifecycle values. Waiting
+        // remains a LK workflow state while the unit stays unavailable.
+        'Menunggu Suku Cadang' => 'Dalam Perbaikan',
+        'Menunggu Vendor'      => 'Dalam Perbaikan',
+        'Selesai'              => 'Tersedia',
     ];
 }

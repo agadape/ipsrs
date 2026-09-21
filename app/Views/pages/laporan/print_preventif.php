@@ -104,7 +104,7 @@
         <th width="3%">No</th>
         <th width="15%">Nama Unit / Aset</th>
         <th width="12%">Lokasi</th>
-        <th width="10%">No. Seri</th>
+        <th width="10%">No. Inventaris</th>
         <th width="8%">Kategori</th>
         <th width="9%">Tanggal</th>
         <th width="12%">Teknisi</th>
@@ -118,7 +118,7 @@
           <td class="text-center"><?= $no++ ?></td>
           <td><?= esc($lkp['nama_unit'] ?? '-') ?></td>
           <td><?= esc($lkp['lokasi'] ?? '-') ?></td>
-          <td class="text-center"><?= esc($lkp['no_seri'] ?? '-') ?></td>
+          <td class="text-center"><?= esc($lkp['nomor_inventaris'] ?? '-') ?></td>
           <td class="text-center"><?= esc($lkp['kategori'] ?? '-') ?></td>
           <td class="text-center"><?= !empty($lkp['tanggal']) && $lkp['tanggal'] !== '-' ? date('d/m/Y', strtotime($lkp['tanggal'])) : '-' ?></td>
           <td class="text-center"><?= esc($lkp['teknisi'] ?? '-') ?></td>

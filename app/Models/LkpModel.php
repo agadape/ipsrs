@@ -17,6 +17,17 @@ class LkpModel extends BaseModel
             ->getResultArray();
     }
 
+    public function getLatestByJadwal(string $idJadwal): ?array
+    {
+        $row = $this->qb($this->table)
+            ->where('id_jadwal', $idJadwal)
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->getRowArray();
+
+        return $row ?: null;
+    }
+
     /** Insert banyak baris detail checklist sekaligus (bulk). */
     public function addDetail(array $rows): void
     {

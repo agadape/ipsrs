@@ -88,11 +88,9 @@ class Stok extends BaseController
         if ($qty <= 0) {
             return redirect()->to('/ipsrs/stok')->with('error', 'Jumlah harus lebih dari 0');
         }
-        if ($jenis === 'Keluar' && $qty > (int) ($barang['stok_tersedia'] ?? 0)) {
-            return redirect()->to('/ipsrs/stok')->with('error', 'Stok tidak mencukupi');
-        }
-
+        $db = \Config\Database::connect();
         try {
+            $db->transBegin();
             $this->model->catatTransaksi([
                 'id_barang'   => $barang['id'],
                 'nama_barang' => $barang['nama'],
@@ -103,10 +101,15 @@ class Stok extends BaseController
                 'keterangan'  => $data['keterangan'] ?? null,
                 'petugas'     => session('user_name') ?? 'Admin',
             ]);
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Transaksi stok tidak dapat diselesaikan.');
+            }
+            $db->transCommit();
             return redirect()->to('/ipsrs/stok')->with('success', $successMsg);
         } catch (\Throwable $e) {
+            $db->transRollback();
             log_message('error', '[Stok::catatTransaksi] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/stok')->with('error', 'Gagal mencatat transaksi: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/stok')->with('error', $e->getMessage());
         }
     }
 

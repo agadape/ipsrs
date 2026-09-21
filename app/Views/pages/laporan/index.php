@@ -1,5 +1,6 @@
 <?php
 $period = $period ?? 'bulan';
+$periodInfo = $periodInfo ?? ['label' => 'Bulan berjalan'];
 ?>
 
 <!-- Page Header -->
@@ -8,7 +9,7 @@ $period = $period ?? 'bulan';
   <div class="flex flex-wrap items-start justify-between gap-3">
     <div>
       <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Laporan</h1>
-      <p class="text-sm text-slate-500 mt-1">Ringkasan kinerja sistem IPSRS</p>
+      <p class="text-sm text-slate-500 mt-1">Ringkasan LK berdasarkan tanggal laporan dan jadwal PM berdasarkan tanggal jadwal: <?= esc($periodInfo['label']) ?></p>
     </div>
     <!-- Period Filter -->
     <div class="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-md p-1">
@@ -163,15 +164,16 @@ $period = $period ?? 'bulan';
         <?php
           $s = $lk['status'] ?? '';
           $sBadge = status_lk_badge($s);
-          $rt = (int)($lk['response_time'] ?? 0);
+          $hasRt = array_key_exists('response_time', $lk) && $lk['response_time'] !== null;
+          $rt = $hasRt ? (int) $lk['response_time'] : null;
         ?>
         <tr class="hover:bg-slate-50 transition-colors group">
           <td class="px-4 py-3 font-mono text-xs text-red-700 font-semibold"><?= esc($lk['no_order'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-600"><?= tgl($lk['tanggal']) ?></td>
           <td class="px-4 py-3 text-slate-800 max-w-[220px] truncate"><?= esc($lk['keluhan'] ?? '-') ?></td>
           <td class="px-4 py-3"><span class="<?= $sBadge ?>"><?= esc($s) ?></span></td>
-          <td class="px-4 py-3 <?= $rt > 15 ? 'text-red-600 font-semibold' : 'text-slate-600' ?>">
-            <?= $rt > 0 ? $rt.' mnt' : '-' ?>
+          <td class="px-4 py-3 <?= $hasRt && $rt > 15 ? 'text-red-600 font-semibold' : 'text-slate-600' ?>">
+            <?= $hasRt ? $rt.' mnt' : '-' ?>
           </td>
         </tr>
         <?php endforeach; ?>

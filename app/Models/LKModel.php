@@ -46,6 +46,25 @@ class LKModel extends BaseModel
         return $data;
     }
 
+    public function hasGudangSukuCadang(string $lkId, string $barangId): bool
+    {
+        return $this->qb('detail_suku_cadang_lk')
+            ->where('id_lk', $lkId)
+            ->where('id_barang', $barangId)
+            ->where('sumber', 'Gudang')
+            ->countAllResults() > 0;
+    }
+
+    public function getGudangSukuCadang(string $lkId): array
+    {
+        return $this->qb('detail_suku_cadang_lk')
+            ->where('id_lk', $lkId)
+            ->where('sumber', 'Gudang')
+            ->where('id_barang IS NOT NULL', null, false)
+            ->get()
+            ->getResultArray();
+    }
+
     // Vendor / Proses III linked to this LK
 
     public function getVendor(string $lkId): array
@@ -68,6 +87,30 @@ class LKModel extends BaseModel
     public function nextNoOrder(string $column = 'no_order', string $prefix = '', int $padLen = IPSRS::PAD_LK): string
     {
         return parent::nextNoOrder($column, $prefix ?: IPSRS::PREFIX_LK . date('Ym') . '-', $padLen);
+    }
+
+    /**
+     * Claims an unassigned incoming ticket in one conditional write.
+     *
+     * The condition prevents two technicians from both succeeding after
+     * reading the same unclaimed ticket.
+     */
+    public function claimAvailable(string $id, string $teknisi): bool
+    {
+        $this->qb($this->table)
+            ->where('id', $id)
+            ->where('status', IPSRS::STATUS_LK[0])
+            ->groupStart()
+                ->where('teknisi', null)
+                ->orWhere('teknisi', '')
+            ->groupEnd()
+            ->update([
+                'teknisi' => $teknisi,
+                'status'  => IPSRS::STATUS_LK[1],
+            ]);
+        $this->throwIfError();
+
+        return $this->conn->affectedRows() === 1;
     }
 }
 

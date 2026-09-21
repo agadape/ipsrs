@@ -15,9 +15,7 @@ $routes->get('lapor/sukses', 'Portal::sukses');
 // Auth
 $routes->get('login',    'Auth::login');
 $routes->post('login',   'Auth::doLogin');
-$routes->get('register', 'Auth::register');
-$routes->post('register','Auth::doRegister');
-$routes->get('logout',   'Auth::logout');
+$routes->post('logout',  'Auth::logout');
 
 $routes->get('ipsrs/aset/scan/(:segment)', 'Aset::scan/$1');
 $routes->post('ipsrs/aset/(:segment)/ping', 'Aset::ping/$1');
@@ -35,8 +33,11 @@ $routes->group('ipsrs', ['filter' => 'auth'], function ($routes) {
     
     // Aset Lifecycle Actions
     $routes->post('aset/pinjam',   'Aset::pinjam');
-    $routes->get('aset/kembali/(:segment)', 'Aset::kembali/$1');
+    $routes->post('aset/kembali/(:segment)', 'Aset::kembali/$1');
     $routes->post('aset/hapus',    'Aset::hapus');
+    $routes->post('aset/series/(:segment)/tandai-rusak', 'Aset::tandaiRusakBerat/$1');
+    $routes->get('aset/penghapusan/(:segment)/ba', 'Aset::downloadBa/$1');
+    $routes->get('aset/series/(:segment)/komponen', 'Aset::components/$1');
     
     $routes->get('aset/(:segment)/qr',        'Aset::qr/$1');
     $routes->get('aset/series/(:segment)',          'Aset::showSeries/$1');
@@ -52,7 +53,7 @@ $routes->group('ipsrs', ['filter' => 'auth'], function ($routes) {
     $routes->get('lk',          'LK::index');
     $routes->get('lk/baru',     'LK::create');
     $routes->post('lk/baru',    'LK::store');
-    $routes->get('lk/claim/(:segment)',         'LK::claim/$1');
+    $routes->post('lk/claim/(:segment)',        'LK::claim/$1');
     $routes->post('lk/(:segment)/delete',       'LK::delete/$1');
     $routes->get('lk/(:segment)',               'LK::show/$1');
     $routes->post('lk/(:segment)/detail',       'LK::updateDetail/$1');
@@ -80,6 +81,7 @@ $routes->group('ipsrs', ['filter' => 'auth'], function ($routes) {
     $routes->get('vendor',                  'Vendor::index');
     $routes->post('vendor/tambah',          'Vendor::store');
     $routes->post('vendor/(:segment)/edit', 'Vendor::update/$1');
+    $routes->post('vendor/(:segment)/delete', 'Vendor::delete/$1');
 
     // Pengguna (user management)
     $routes->get('pengguna',                  'Pengguna::index');

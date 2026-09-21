@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Config\IPSRS;
+use App\Libraries\ReportPeriod;
+use App\Libraries\SpreadsheetText;
 use App\Models\LKModel;
 use App\Models\StokModel;
 use App\Models\JadwalModel;
@@ -19,19 +21,9 @@ class Laporan extends BaseController
         $allStok   = $stokModel->getAll();
         $allJadwal = $jadwalModel->getAll();
 
-        $today     = date('Y-m-d');
-        $thisMonth = date('Y-m');
-        $thisYear  = date('Y');
-
-        $filteredLK = match($period) {
-            'minggu' => array_filter($allLK, fn($l) =>
-                $l['tanggal'] >= date('Y-m-d', strtotime('-7 days'))),
-            'tahun'  => array_filter($allLK, fn($l) =>
-                str_starts_with($l['tanggal'], $thisYear)),
-            default  => array_filter($allLK, fn($l) =>
-                str_starts_with($l['tanggal'], $thisMonth)),
-        };
-        $filteredLK = array_values($filteredLK);
+        $periodInfo = ReportPeriod::describe($period);
+        $period = $periodInfo['key'];
+        $filteredLK = ReportPeriod::filterRows($allLK, 'tanggal', $periodInfo);
 
         $totalLK   = count($filteredLK);
         $selesai   = count(array_filter($filteredLK, fn($l) => $l['status'] === IPSRS::STATUS_LK[6]));
@@ -49,9 +41,9 @@ class Laporan extends BaseController
         $stokMenipis = count(array_filter($allStok, fn($s) =>
             $s['stok_tersedia'] > 0 && $s['stok_tersedia'] <= $s['minimum_stok']));
 
-        $jadwalBulan   = array_filter($allJadwal, fn($j) => str_starts_with($j['tanggal'], $thisMonth));
-        $jadwalSelesai = count(array_filter($jadwalBulan, fn($j) => $j['status'] === IPSRS::STATUS_JADWAL[1]));
-        $jadwalTotal   = count($jadwalBulan);
+        $jadwalPeriode = ReportPeriod::filterRows($allJadwal, 'tanggal', $periodInfo);
+        $jadwalSelesai = count(array_filter($jadwalPeriode, fn($j) => $j['status'] === IPSRS::STATUS_JADWAL[1]));
+        $jadwalTotal   = count($jadwalPeriode);
         $pmPct         = $jadwalTotal > 0 ? round($jadwalSelesai / $jadwalTotal * 100) : 0;
 
         $kodeGroups = [];
@@ -60,27 +52,65 @@ class Laporan extends BaseController
         }
 
         return compact(
-            'filteredLK', 'allStok', 'allJadwal',
+            'period', 'periodInfo', 'filteredLK', 'allStok', 'allJadwal',
             'totalLK', 'selesai', 'aktif', 'slaPct', 'avgRespon',
             'stokHabis', 'stokMenipis', 'jadwalSelesai', 'jadwalTotal', 'pmPct',
             'kodeGroups'
         );
     }
 
+    /** @return array{period: string, periodInfo: array<string, string>, filtered: array<int, array<string, mixed>>, dataLKP: array<int, array<string, mixed>>} */
+    private function getPreventiveData(string $period): array
+    {
+        $periodInfo = ReportPeriod::describe($period);
+        $filtered = ReportPeriod::filterRows((new \App\Models\LkpModel())->getAll(), 'tanggal_pemeriksaan', $periodInfo);
+
+        $seriesModel = new \App\Models\AsetSeriesModel();
+        $asetModel = new \App\Models\AsetModel();
+        $jadwalModel = new \App\Models\JadwalModel();
+        $dataLKP = [];
+
+        foreach ($filtered as $lkp) {
+            $jadwal = !empty($lkp['id_jadwal']) ? $jadwalModel->getById($lkp['id_jadwal']) : null;
+            $series = !empty($lkp['id_aset_series']) ? $seriesModel->getById($lkp['id_aset_series']) : null;
+            $aset = $series ? $asetModel->getById($series['id_aset']) : null;
+
+            $dataLKP[] = [
+                // Schedule text is the closest available event snapshot. Current
+                // series/master values are only a fallback for legacy records.
+                'nama_unit' => $jadwal['aset'] ?? $aset['nama'] ?? '-',
+                'lokasi' => $jadwal['lokasi'] ?? $series['ruangan'] ?? '-',
+                'nomor_inventaris' => $series['nomor_aset'] ?? '-',
+                'kategori' => $lkp['kategori'] ?? '-',
+                'tanggal' => $lkp['tanggal_pemeriksaan'] ?? '-',
+                'teknisi' => $lkp['teknisi'] ?? '-',
+                'hasil' => $lkp['hasil_pemeriksaan'] ?? '-',
+                'catatan' => $lkp['catatan'] ?? '-',
+            ];
+        }
+
+        return [
+            'period' => $periodInfo['key'],
+            'periodInfo' => $periodInfo,
+            'filtered' => $filtered,
+            'dataLKP' => $dataLKP,
+        ];
+    }
+
     public function index(): string
     {
         $period = $this->request->getGet('period') ?? 'bulan';
         $data   = $this->getData($period);
-        return $this->render('pages/laporan/index', array_merge($data, ['period' => $period]));
+        return $this->render('pages/laporan/index', $data);
     }
 
     public function exportExcelLK()
     {
         $period     = $this->request->getGet('period') ?? 'bulan';
         $data       = $this->getData($period);
+        $period = $data['period'];
         $filteredLK = $data['filteredLK'];
-        $periodLabels = ['minggu' => 'Minggu Ini', 'bulan' => 'Bulan Ini', 'tahun' => 'Tahun Ini'];
-        $periodStr = $periodLabels[$period] ?? 'Bulan Ini';
+        $periodStr = $data['periodInfo']['label'];
 
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -127,18 +157,18 @@ class Laporan extends BaseController
             $asetStr = $nomorAset ? "{$nomorAset} - {$namaAset}" : $namaAset;
 
             $sheet->setCellValue('A' . $row, $no++);
-            $sheet->setCellValue('B' . $row, $l['no_order'] ?? '-');
-            $sheet->setCellValue('C' . $row, $l['tanggal'] ?? '-');
-            $sheet->setCellValue('D' . $row, $l['jam_laporan'] ?? '-');
-            $sheet->setCellValue('E' . $row, ($l['pelapor'] ?? '-') . ' (' . ($l['unit_pelapor'] ?? '-') . ')');
-            $sheet->setCellValue('F' . $row, $asetStr);
-            $sheet->setCellValue('G' . $row, $l['lokasi'] ?? $series['ruangan'] ?? '-');
-            $sheet->setCellValue('H' . $row, $l['keluhan'] ?? '-');
-            $sheet->setCellValue('I' . $row, $l['status'] ?? '-');
-            $sheet->setCellValue('J' . $row, $l['teknisi'] ?? '-');
-            $sheet->setCellValue('K' . $row, $l['tindakan'] ?? '-');
-            $sheet->setCellValue('L' . $row, $l['response_time'] ?? '-');
-            $sheet->setCellValue('M' . $row, $l['down_time'] ?? '-');
+            SpreadsheetText::set($sheet, 'B' . $row, $l['no_order'] ?? '-');
+            SpreadsheetText::set($sheet, 'C' . $row, $l['tanggal'] ?? '-');
+            SpreadsheetText::set($sheet, 'D' . $row, $l['jam_laporan'] ?? '-');
+            SpreadsheetText::set($sheet, 'E' . $row, ($l['pelapor'] ?? '-') . ' (' . ($l['unit_pelapor'] ?? '-') . ')');
+            SpreadsheetText::set($sheet, 'F' . $row, $asetStr);
+            SpreadsheetText::set($sheet, 'G' . $row, $l['lokasi'] ?? $series['ruangan'] ?? '-');
+            SpreadsheetText::set($sheet, 'H' . $row, $l['keluhan'] ?? '-');
+            SpreadsheetText::set($sheet, 'I' . $row, $l['status'] ?? '-');
+            SpreadsheetText::set($sheet, 'J' . $row, $l['teknisi'] ?? '-');
+            SpreadsheetText::set($sheet, 'K' . $row, $l['tindakan'] ?? '-');
+            SpreadsheetText::set($sheet, 'L' . $row, $l['response_time'] ?? '-');
+            SpreadsheetText::set($sheet, 'M' . $row, $l['down_time'] ?? '-');
             
             $sheet->getStyle('A'.$row.':M'.$row)->getAlignment()->setVertical('top');
             $sheet->getStyle('H'.$row)->getAlignment()->setWrapText(true);
@@ -195,9 +225,7 @@ class Laporan extends BaseController
     {
         $period = $this->request->getGet('period') ?? 'bulan';
         $data   = $this->getData($period);
-        $periodLabels = ['minggu' => 'Minggu Ini', 'bulan' => 'Bulan Ini', 'tahun' => 'Tahun Ini'];
-        $data['period']      = $period;
-        $data['periodLabel'] = $periodLabels[$period] ?? 'Bulan Ini';
+        $data['periodLabel'] = $data['periodInfo']['label'];
         
         $lkModel   = new \App\Models\LKModel();
         $seriesModel = new \App\Models\AsetSeriesModel();
@@ -225,70 +253,19 @@ class Laporan extends BaseController
     public function exportPrintPreventif()
     {
         $period = $this->request->getGet('period') ?? 'bulan';
-        
-        $lkpModel = new \App\Models\LkpModel();
-        $allLKP   = $lkpModel->getAll();
-        
-        $thisMonth = date('Y-m');
-        $thisYear  = date('Y');
+        $data = $this->getPreventiveData($period);
 
-        $filtered = match($period) {
-            'minggu' => array_filter($allLKP, fn($l) => $l['tanggal_pemeriksaan'] >= date('Y-m-d', strtotime('-7 days'))),
-            'tahun'  => array_filter($allLKP, fn($l) => str_starts_with($l['tanggal_pemeriksaan'], $thisYear)),
-            default  => array_filter($allLKP, fn($l) => str_starts_with($l['tanggal_pemeriksaan'], $thisMonth)),
-        };
-        
-        $seriesModel = new \App\Models\AsetSeriesModel();
-        $asetModel = new \App\Models\AsetModel();
-        $jadwalModel = new \App\Models\JadwalModel();
-        
-        $dataLKP = [];
-        foreach ($filtered as $lkp) {
-            $series = !empty($lkp['id_aset_series']) ? $seriesModel->getById($lkp['id_aset_series']) : null;
-            $aset = $series ? $asetModel->getById($series['id_aset']) : null;
-            $jadwal = !empty($lkp['id_jadwal']) ? $jadwalModel->getById($lkp['id_jadwal']) : null;
-            
-            $dataLKP[] = [
-                'nama_unit' => $aset['nama'] ?? $jadwal['aset'] ?? '-',
-                'lokasi'    => $series['ruangan'] ?? $jadwal['lokasi'] ?? '-',
-                'no_seri'   => $series['nomor_aset'] ?? $series['no_seri'] ?? '-',
-                'kategori'  => $lkp['kategori'] ?? '-',
-                'tanggal'   => $lkp['tanggal_pemeriksaan'] ?? '-',
-                'teknisi'   => $lkp['teknisi'] ?? '-',
-                'hasil'     => $lkp['hasil_pemeriksaan'] ?? '-',
-                'catatan'   => $lkp['catatan'] ?? '-',
-            ];
-        }
-
-        $periodLabels = ['minggu' => 'Minggu Ini', 'bulan' => 'Bulan Ini', 'tahun' => 'Tahun Ini'];
-        
         return view('pages/laporan/print_preventif', [
-            'periodLabel' => $periodLabels[$period] ?? 'Bulan Ini',
-            'dataLKP'     => $dataLKP
+            'periodLabel' => $data['periodInfo']['label'],
+            'dataLKP' => $data['dataLKP'],
         ]);
     }
 
     public function exportExcelPreventif()
     {
         $period = $this->request->getGet('period') ?? 'bulan';
-        
-        $lkpModel = new \App\Models\LkpModel();
-        $allLKP   = $lkpModel->getAll();
-        
-        $thisMonth = date('Y-m');
-        $thisYear  = date('Y');
-
-        $filtered = match($period) {
-            'minggu' => array_filter($allLKP, fn($l) => $l['tanggal_pemeriksaan'] >= date('Y-m-d', strtotime('-7 days'))),
-            'tahun'  => array_filter($allLKP, fn($l) => str_starts_with($l['tanggal_pemeriksaan'], $thisYear)),
-            default  => array_filter($allLKP, fn($l) => str_starts_with($l['tanggal_pemeriksaan'], $thisMonth)),
-        };
-        
-        $seriesModel = new \App\Models\AsetSeriesModel();
-        $asetModel = new \App\Models\AsetModel();
-        $jadwalModel = new \App\Models\JadwalModel();
-        
-        $periodLabels = ['minggu' => 'Minggu Ini', 'bulan' => 'Bulan Ini', 'tahun' => 'Tahun Ini'];
+        $data = $this->getPreventiveData($period);
+        $periodInfo = $data['periodInfo'];
         
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -304,19 +281,19 @@ class Laporan extends BaseController
         $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         
-        $sheet->setCellValue('A3', 'Tahun ' . $thisYear);
+        $sheet->setCellValue('A3', 'Periode: ' . $periodInfo['label']);
         $sheet->mergeCells('A3:K3');
         $sheet->getStyle('A3')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         
         // Metadata (Rows 4-5)
-        $sheet->setCellValue('A4', 'Rentang Preventif');
-        $sheet->setCellValue('C4', '1 Bulanan');
-        $sheet->setCellValue('A5', 'Periode');
-        $sheet->setCellValue('C5', $periodLabels[$period] ?? 'Bulan Ini');
+        $sheet->setCellValue('A4', 'Dasar Periode');
+        $sheet->setCellValue('C4', 'Tanggal pemeriksaan LKP');
+        $sheet->setCellValue('A5', 'Rentang Tanggal');
+        $sheet->setCellValue('C5', $periodInfo['start'] . ' s.d. ' . $periodInfo['end']);
         
         // Headers (Rows 6-7)
-        $headers = ['No', 'Nama Unit / Aset', 'Lokasi', 'No. Seri', 'Kategori', 'Tanggal', 'Teknisi', 'Hasil', 'Catatan / Temuan'];
+        $headers = ['No', 'Nama Unit / Aset', 'Lokasi', 'No. Inventaris', 'Kategori', 'Tanggal', 'Teknisi', 'Hasil', 'Catatan / Temuan'];
         foreach (range('A', 'I') as $i => $col) {
             $sheet->setCellValue($col . '6', $headers[$i]);
             $sheet->mergeCells($col . '6:' . $col . '7');
@@ -332,20 +309,16 @@ class Laporan extends BaseController
         // Data
         $row = 8;
         $no = 1;
-        foreach ($filtered as $lkp) {
-            $series = !empty($lkp['id_aset_series']) ? $seriesModel->getById($lkp['id_aset_series']) : null;
-            $aset = $series ? $asetModel->getById($series['id_aset']) : null;
-            $jadwal = !empty($lkp['id_jadwal']) ? $jadwalModel->getById($lkp['id_jadwal']) : null;
-            
+        foreach ($data['dataLKP'] as $lkp) {
             $sheet->setCellValue('A' . $row, $no++);
-            $sheet->setCellValue('B' . $row, $aset['nama'] ?? $jadwal['aset'] ?? '-');
-            $sheet->setCellValue('C' . $row, $series['ruangan'] ?? $jadwal['lokasi'] ?? '-');
-            $sheet->setCellValue('D' . $row, $series['nomor_aset'] ?? $series['no_seri'] ?? '-');
-            $sheet->setCellValue('E' . $row, $lkp['kategori'] ?? '-');
-            $sheet->setCellValue('F' . $row, $lkp['tanggal_pemeriksaan'] ?? '-');
-            $sheet->setCellValue('G' . $row, $lkp['teknisi'] ?? '-');
-            $sheet->setCellValue('H' . $row, $lkp['hasil_pemeriksaan'] ?? '-');
-            $sheet->setCellValue('I' . $row, $lkp['catatan'] ?? '-');
+            SpreadsheetText::set($sheet, 'B' . $row, $lkp['nama_unit']);
+            SpreadsheetText::set($sheet, 'C' . $row, $lkp['lokasi']);
+            SpreadsheetText::set($sheet, 'D' . $row, $lkp['nomor_inventaris']);
+            SpreadsheetText::set($sheet, 'E' . $row, $lkp['kategori']);
+            SpreadsheetText::set($sheet, 'F' . $row, $lkp['tanggal']);
+            SpreadsheetText::set($sheet, 'G' . $row, $lkp['teknisi'] ?? '-');
+            SpreadsheetText::set($sheet, 'H' . $row, $lkp['hasil_pemeriksaan'] ?? '-');
+            SpreadsheetText::set($sheet, 'I' . $row, $lkp['catatan'] ?? '-');
             $row++;
         }
         

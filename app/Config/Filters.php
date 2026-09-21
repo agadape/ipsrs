@@ -79,8 +79,7 @@ class Filters extends BaseFilters
             // 'invalidchars',
         ],
         'after' => [
-            // 'honeypot',
-            // 'secureheaders',
+            'secureheaders',
         ],
     ];
 
@@ -111,10 +110,7 @@ class Filters extends BaseFilters
     public array $filters = [
         
         'csrf' => [
-            'before' => ['ipsrs/*', 'login'],
-            // AJAX geolocation ping from mobile/PWA sends no CSRF token;
-            // the endpoint is protected by auth filter + only accepts POST with valid coords.
-            'except' => ['ipsrs/aset/*/ping'],
+            'before' => ['ipsrs/*', 'login', 'lapor', 'logout'],
         ],
     ];
 }

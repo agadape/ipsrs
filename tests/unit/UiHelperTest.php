@@ -99,7 +99,7 @@ final class UiHelperTest extends CIUnitTestCase
 
     public function testBadgeKodeAC(): void
     {
-        $this->assertStringContainsString('indigo', kode_badge('AC'));
+        $this->assertStringContainsString('red', kode_badge('AC'));
     }
 
     public function testBadgeKodePR(): void

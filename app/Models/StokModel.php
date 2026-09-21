@@ -13,58 +13,45 @@ class StokModel extends BaseModel
         return parent::nextId(IPSRS::PREFIX_BARANG, IPSRS::PAD_BARANG);
     }
 
+    /**
+     * Applies one stock movement. The caller owns the surrounding database
+     * transaction, so balance and ledger either persist together or roll back.
+     */
     public function catatTransaksi(array $txData): array
     {
-        // Insert riwayat transaksi
-        if (!isset($txData['id'])) {
-            $txData['id'] = $this->generateUUID();
+        $idBarang = (string) ($txData['id_barang'] ?? '');
+        $jumlah   = (int) ($txData['jumlah'] ?? 0);
+        $jenis    = (string) ($txData['jenis'] ?? '');
+        if ($idBarang === '' || $jumlah <= 0 || !in_array($jenis, ['Masuk', 'Keluar'], true)) {
+            throw new \InvalidArgumentException('Transaksi stok tidak valid.');
         }
+
+        // The shortage check is part of the conditional write, not a stale
+        // PHP read. Therefore a concurrent debit cannot take the balance below 0.
+        $builder = $this->qb($this->table)->where('id', $idBarang);
+        if ($jenis === 'Keluar') {
+            $builder->where('stok_tersedia >=', $jumlah)
+                ->set('stok_tersedia', 'stok_tersedia - ' . $jumlah, false)
+                ->update();
+        } else {
+            $builder->set('stok_tersedia', 'stok_tersedia + ' . $jumlah, false)
+                ->update();
+        }
+        $this->throwIfError();
+
+        if ($this->conn->affectedRows() !== 1) {
+            throw new \RuntimeException(
+                $jenis === 'Keluar'
+                    ? 'Stok tidak mencukupi atau barang tidak ditemukan.'
+                    : 'Barang tidak ditemukan.'
+            );
+        }
+
+        $txData['id'] ??= $this->generateUUID();
         $this->qb('riwayat_transaksi_stok')->insert($txData);
         $this->throwIfError();
-        $row = $txData;
 
-        // Optimistic locking: read current stock, update with WHERE stok = old
-        $idBarang = $txData['id_barang'];
-        $jumlah   = (int) ($txData['jumlah'] ?? 0);
-        $jenis    = $txData['jenis'] ?? '';
-        $maxRetries = 5;
-
-        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
-            // Baca stok saat ini
-            $barang = $this->qb($this->table)
-                ->select('stok_tersedia')
-                ->where('id', $idBarang)
-                ->get()
-                ->getRowArray();
-
-            if (!$barang) {
-                throw new \RuntimeException('Gagal membaca stok barang');
-            }
-
-            $current = (int) ($barang['stok_tersedia'] ?? 0);
-
-            $newStok = match ($jenis) {
-                'Masuk'  => $current + $jumlah,
-                'Keluar' => max(0, $current - $jumlah),
-                default  => $current,
-            };
-
-            // Conditional update: WHERE id = X AND stok_tersedia = current
-            $builder = $this->qb($this->table);
-            $builder->where('id', $idBarang);
-            $builder->where('stok_tersedia', $current);
-            $builder->update(['stok_tersedia' => $newStok]);
-            $affected = $this->conn->affectedRows();
-
-            if ($affected > 0) {
-                return $row; // Success
-            }
-
-            // 0 rows affected → stock changed by another request → retry
-            usleep(30000); // 30ms
-        }
-
-        throw new \RuntimeException("Gagal update stok setelah {$maxRetries} percobaan (konkurensi tinggi)");
+        return $txData;
     }
 
     public function getRiwayat(string $idBarang = ''): array
@@ -75,12 +62,10 @@ class StokModel extends BaseModel
             $builder->where('id_barang', $idBarang);
         }
 
-        $rows = $builder
+        return $builder
             ->orderBy('tanggal', 'DESC')
             ->orderBy('created_at', 'DESC')
             ->get()
             ->getResultArray();
-
-        return $rows;
     }
 }

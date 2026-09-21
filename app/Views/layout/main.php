@@ -151,11 +151,11 @@ const Toast = Swal.mixin({
 });
 
 // Flash Messages Handled via SweetAlert2
-<?php if (session()->getFlashdata('success')): ?>
-  Toast.fire({ icon: 'success', title: '<?= addslashes(session()->getFlashdata('success')) ?>' });
+<?php if ($success = session()->getFlashdata('success')): ?>
+  Toast.fire({ icon: 'success', text: <?= json_encode((string) $success, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?> });
 <?php endif; ?>
-<?php if (session()->getFlashdata('error')): ?>
-  Toast.fire({ icon: 'error', title: '<?= addslashes(session()->getFlashdata('error')) ?>' });
+<?php if ($error = session()->getFlashdata('error')): ?>
+  Toast.fire({ icon: 'error', text: <?= json_encode((string) $error, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?> });
 <?php endif; ?>
 
 // Global Confirmation for Delete Actions

@@ -3,6 +3,9 @@
 namespace App\Controllers;
 
 use App\Config\IPSRS;
+use App\Libraries\AccessPolicy;
+use App\Libraries\AsetLifecycle;
+use App\Libraries\SignatureEvidence;
 use App\Models\LKModel;
 use App\Models\AsetModel;
 use App\Models\StokModel;
@@ -32,13 +35,9 @@ class LK extends BaseController
         if ($status) { $lk = array_filter($lk, fn($l) => $l['status'] === $status); }
         if ($kode)   { $lk = array_filter($lk, fn($l) => $l['kode'] === $kode); }
 
-        if (session('user_role') === 'pelapor') {
-            $uName = session('user_name');
-            $uUnit = session('user_unit');
-            $lk = array_filter($lk, fn($l) => 
-                ($l['pelapor'] === $uName) || 
-                ($l['unit_pelapor'] === $uUnit)
-            );
+        $role = AccessPolicy::role(session('user_role'));
+        if ($role !== 'admin') {
+            $lk = array_filter($lk, fn($row) => AccessPolicy::canViewLk($row, $role, session('user_name')));
         }
 
         return $this->render('pages/lk/index', [
@@ -54,6 +53,9 @@ class LK extends BaseController
     {
         $lk = $this->model->getById($id);
         if (!$lk) { return redirect()->to('/ipsrs/lk'); }
+        if (!AccessPolicy::canViewLk($lk, session('user_role'), session('user_name'))) {
+            return redirect()->to('/ipsrs/lk')->with('error', 'LK tidak ditemukan.');
+        }
 
         return $this->render('pages/lk/show', compact('lk') + [
             'sukuCadang'   => $this->model->getSukuCadang($id),
@@ -97,20 +99,26 @@ class LK extends BaseController
             $data = $this->whitelist([
                 'tanggal', 'jam_laporan', 'pelapor', 'unit_pelapor',
                 'keluhan', 'kode', 'lokasi', 'nama_aset',
-                'update_lokasi_aset',
+                'id_aset', 'update_lokasi_aset',
             ]);
             $data['status'] = IPSRS::STATUS_LK[0]; // Laporan Masuk
             $data['kode']   = $data['kode'] ?? 'PR';
 
             $updateLokasi = !empty($data['update_lokasi_aset']);
             unset($data['update_lokasi_aset']);
-            
-            if (session('user_role') === 'pelapor') {
-                // Not recording id_pengguna_pelapor as it doesn't exist in schema
+            $idAset = trim((string) ($data['id_aset'] ?? ''));
+            unset($data['id_aset']);
+
+            if ($idAset !== '') {
+                $series = (new \App\Models\AsetSeriesModel())->getById($idAset);
+                if (!$series) {
+                    return redirect()->back()->withInput()->with('error', 'Aset yang dipilih tidak ditemukan.');
+                }
+                $data['id_aset_series'] = $idAset;
             }
 
-            if (empty($post['id_aset'])) {
-                $data['id_aset_series'] = null;
+            if (session('user_role') === 'pelapor') {
+                // Not recording id_pengguna_pelapor as it doesn't exist in schema
             }
 
             $lk = $this->model->createWithRetry(
@@ -120,22 +128,26 @@ class LK extends BaseController
             );
 
             if (!empty($data['id_aset_series'])) {
-                $asetUpdate = ['status' => IPSRS::LK_TO_ASET_STATUS['Survei']];
-                if ($updateLokasi && !empty($data['lokasi'])) {
-                    $asetUpdate['lokasi'] = $data['lokasi'];
+                $seriesModel = new \App\Models\AsetSeriesModel();
+                $linkedSeries = $seriesModel->getById($data['id_aset_series']);
+                if ($linkedSeries && AsetLifecycle::canSyncFromLk($linkedSeries['status'] ?? null)) {
+                    $asetUpdate = ['status' => IPSRS::LK_TO_ASET_STATUS['Survei']];
+                    if ($updateLokasi && !empty($data['lokasi'])) {
+                        $asetUpdate['lokasi'] = $data['lokasi'];
+                    }
+                    $seriesModel->update($data['id_aset_series'], $asetUpdate);
                 }
-                (new \App\Models\AsetSeriesModel())->update($data['id_aset_series'], $asetUpdate);
             }
 
             // Trigger WhatsApp Broadcast Mock/Placeholder
             $lkId = $lk['id'] ?? null;
             if ($lkId) {
-                $claimLink = base_url('/ipsrs/lk/claim/' . $lkId);
+                $claimLink = base_url('/ipsrs/lk/' . $lkId);
                 $waMessage = "🚨 *Laporan Kerusakan Baru!*\n\n"
                            . "Unit: {$data['unit_pelapor']}\n"
                            . "Lokasi: {$data['lokasi']}\n"
                            . "Keluhan: {$data['keluhan']}\n\n"
-                           . "Klik link di bawah untuk otomatis mengambil tiket:\n"
+                           . "Buka detail tiket untuk meninjau dan mengambil pekerjaan:\n"
                            . $claimLink;
                            
                 $wa = new \App\Libraries\WhatsAppAPI();
@@ -151,33 +163,38 @@ class LK extends BaseController
 
     public function delete(string $id)
     {
-        if (strtolower(session('user_role')) === 'pelapor') {
+        if (!AccessPolicy::hasRole(session('user_role'), ['admin'])) {
             return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
         }
+        $db = \Config\Database::connect();
         try {
+            $db->transBegin();
             $lk = $this->model->getById($id);
-            if ($lk) {
-                // Rollback Suku Cadang if any were used
-                $sukuCadang = $this->model->getSukuCadang($id);
-                if (!empty($sukuCadang)) {
-                    $stokModel = new \App\Models\StokModel();
-                    foreach ($sukuCadang as $sc) {
-                        $stokModel->catatTransaksi([
-                            'id_barang'   => $sc['id_barang'],
-                            'nama_barang' => $sc['nama_barang'],
-                            'jenis'       => 'Masuk',
-                            'jumlah'      => (int)$sc['jumlah'],
-                            'tanggal'     => date('Y-m-d'),
-                            'no_dokumen'  => 'Rollback Hapus LK ' . ($lk['no_order'] ?? $id),
-                            'keterangan'  => 'Pengembalian stok dari penghapusan LK',
-                            'petugas'     => session('user_name') ?? 'Sistem',
-                        ]);
-                    }
-                }
+            if (!$lk) {
+                $db->transRollback();
+                return redirect()->to('/ipsrs/lk')->with('error', 'LK tidak ditemukan.');
+            }
+            $stokModel = new StokModel();
+            foreach ($this->model->getGudangSukuCadang($id) as $sc) {
+                $stokModel->catatTransaksi([
+                    'id_barang'   => $sc['id_barang'],
+                    'nama_barang' => $sc['nama_barang'],
+                    'jenis'       => 'Masuk',
+                    'jumlah'      => (int) $sc['jumlah'],
+                    'tanggal'     => date('Y-m-d'),
+                    'no_dokumen'  => 'Rollback Hapus LK ' . ($lk['no_order'] ?? $id),
+                    'keterangan'  => 'Pengembalian stok dari penghapusan LK',
+                    'petugas'     => session('user_name') ?? 'Sistem',
+                ]);
             }
             $this->model->delete($id);
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Penghapusan LK tidak dapat diselesaikan.');
+            }
+            $db->transCommit();
             return redirect()->to('/ipsrs/lk')->with('success', 'Laporan kerusakan berhasil dihapus dan stok terkait dikembalikan');
         } catch (\Throwable $e) {
+            $db->transRollback();
             log_message('error', '[LK::delete] ' . $e->getMessage());
             return redirect()->to('/ipsrs/lk')->with('error', 'Gagal menghapus laporan: ' . $e->getMessage());
         }
@@ -185,7 +202,8 @@ class LK extends BaseController
 
     public function claim(string $id)
     {
-        if (strtolower(session('user_role')) === 'pelapor') {
+        $role = strtolower((string) session('user_role'));
+        if (!in_array($role, ['admin', 'teknisi'], true)) {
             return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
         }
         $lk = $this->model->getById($id);
@@ -193,20 +211,19 @@ class LK extends BaseController
             return redirect()->to('/ipsrs/lk')->with('error', 'LK tidak ditemukan');
         }
 
-        // Check if already claimed
-        if (!empty($lk['teknisi'])) {
-            $msg = ($lk['teknisi'] === session('user_name')) 
-                ? 'Anda sudah ditugaskan pada pekerjaan ini.' 
-                : 'Maaf, pekerjaan ini sudah diambil oleh teknisi: ' . $lk['teknisi'];
-            return redirect()->to('/ipsrs/lk/' . $id)->with('error', $msg);
+        if (($lk['status'] ?? '') !== IPSRS::STATUS_LK[0]) {
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Tiket ini tidak lagi dapat diklaim.');
         }
 
-        // Claim it
         try {
-            $this->model->update($id, [
-                'teknisi' => session('user_name'),
-                'status'  => IPSRS::STATUS_LK[1], // Didisposisi / Survei
-            ]);
+            if (!$this->model->claimAvailable($id, (string) session('user_name'))) {
+                $latest = $this->model->getById($id);
+                $teknisi = $latest['teknisi'] ?? '';
+                $message = $teknisi === (string) session('user_name')
+                    ? 'Anda sudah ditugaskan pada pekerjaan ini.'
+                    : 'Maaf, pekerjaan ini baru saja diambil oleh teknisi lain.';
+                return redirect()->to('/ipsrs/lk/' . $id)->with('error', $message);
+            }
             
             return redirect()->to('/ipsrs/lk/' . $id)->with('success', 'Berhasil! Anda telah mengambil tiket perbaikan ini.');
         } catch (\Throwable $e) {
@@ -217,12 +234,13 @@ class LK extends BaseController
 
     public function updateDetail(string $id)
     {
-        if (strtolower(session('user_role') ?? '') === 'pelapor') {
+        $lk = $this->model->getById($id);
+        if (!$lk || !AccessPolicy::canManageLk($lk, session('user_role'), session('user_name'))) {
             return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
         }
-        
-        $lk = $this->model->getById($id);
-        if (!$lk) return redirect()->to('/ipsrs/lk');
+        if (($lk['status'] ?? '') === IPSRS::STATUS_LK[6]) {
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'LK yang sudah selesai tidak dapat diubah.');
+        }
         
         $post = $this->request->getPost();
         
@@ -238,7 +256,11 @@ class LK extends BaseController
             
             // If aset is changed, maybe update aset location
             if (!empty($post['id_aset']) && !empty($post['update_lokasi_aset']) && !empty($post['lokasi'])) {
-                (new \App\Models\AsetSeriesModel())->update($post['id_aset'], ['lokasi' => $post['lokasi']]);
+                $seriesModel = new \App\Models\AsetSeriesModel();
+                $series = $seriesModel->getById($post['id_aset']);
+                if ($series && AsetLifecycle::canRelocate($series['status'] ?? null)) {
+                    $seriesModel->update($post['id_aset'], ['lokasi' => $post['lokasi']]);
+                }
             }
         }
         
@@ -247,18 +269,40 @@ class LK extends BaseController
 
     public function updateStatus(string $id)
     {
-        if (strtolower(session('user_role')) === 'pelapor') {
+        $role = strtolower((string) session('user_role'));
+        if (!in_array($role, ['admin', 'teknisi'], true)) {
             return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
         }
         $lk   = $this->model->getById($id);
         $post = $this->whitelist([
             'status_baru', 'teknisi', 'tindakan',
-            'tanggal_cek', 'jam_cek', 'tanggal_selesai', 'jam_selesai', 'ttd_pelapor'
+            'tanggal_cek', 'jam_cek', 'ttd_pelapor'
         ]);
         $next = $post['status_baru'] ?? null;
 
-        if (!$next || !$lk) {
+        if (!$next || !$lk || !in_array($next, IPSRS::STATUS_LK, true)) {
             return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Status tidak valid');
+        }
+
+        $current = $lk['status'] ?? '';
+        $allowedTransitions = IPSRS::LK_STATUS_TRANSITIONS[$current] ?? [];
+        if (!in_array($next, $allowedTransitions, true)) {
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Perubahan status tidak diizinkan dari status saat ini.');
+        }
+
+        if (!AccessPolicy::canManageLk($lk, $role, session('user_name'))) {
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Tiket ini bukan penugasan Anda.');
+        }
+
+        if ($next === IPSRS::STATUS_LK[6]) {
+            $post['ttd_pelapor'] = SignatureEvidence::normalize($post['ttd_pelapor'] ?? null);
+            if (empty($post['tindakan']) || $post['ttd_pelapor'] === null) {
+                return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Tindakan dan bukti serah-terima pelapor berupa tanda tangan PNG yang valid wajib untuk menyelesaikan LK.');
+            }
+        }
+
+        if ($timingError = $this->validateTransitionTiming($lk, $next, $post)) {
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', $timingError);
         }
 
         $sc = $this->model->getSukuCadang($id);
@@ -274,13 +318,11 @@ class LK extends BaseController
         try {
             $data = array_filter([
                 'status'          => $next,
-                'teknisi'         => $post['teknisi']         ?? null,
+                'teknisi'         => $role === 'teknisi' ? (string) session('user_name') : ($post['teknisi'] ?? null),
                 'tindakan'        => $post['tindakan']        ?? null,
                 'proses'          => $computedProses,
-                'tanggal_cek'     => $post['tanggal_cek']     ?? null,
-                'jam_cek'         => $post['jam_cek']         ?? null,
-                'tanggal_selesai' => $post['tanggal_selesai'] ?? null,
-                'jam_selesai'     => $post['jam_selesai']     ?? null,
+                'tanggal_cek'     => $next === 'Survei' ? ($post['tanggal_cek'] ?? null) : null,
+                'jam_cek'         => $next === 'Survei' ? ($post['jam_cek'] ?? null) : null,
                 'ttd_pelapor'     => $post['ttd_pelapor']     ?? null,
             ], fn($v) => $v !== null && $v !== '');
 
@@ -321,16 +363,22 @@ class LK extends BaseController
 
     public function addSukuCadang(string $id)
     {
-        if (strtolower(session('user_role')) === 'pelapor') {
+        $lk      = $this->model->getById($id);
+        if (!$lk || !AccessPolicy::canManageLk($lk, session('user_role'), session('user_name'))) {
             return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
         }
-        $lk      = $this->model->getById($id);
         $post    = $this->whitelist(['id_barang', 'jumlah', 'keterangan']);
         $idBarang = $post['id_barang'] ?? null;
         $jumlah   = (int)($post['jumlah'] ?? 0);
 
-        if (!$lk || !$idBarang || $jumlah <= 0) {
+        if (!$idBarang || $jumlah <= 0) {
             return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Data suku cadang tidak valid');
+        }
+        if (($lk['status'] ?? '') === 'Selesai') {
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Suku cadang tidak dapat ditambah pada LK yang sudah selesai.');
+        }
+        if ($this->model->hasGudangSukuCadang($id, $idBarang)) {
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Barang gudang tersebut sudah tercatat pada LK ini.');
         }
 
         $stokModel = new StokModel();
@@ -339,20 +387,9 @@ class LK extends BaseController
         if (!$barang) {
             return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Barang tidak ditemukan');
         }
-        if ((int)$barang['stok_tersedia'] < $jumlah) {
-            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Stok tidak mencukupi (' . $barang['stok_tersedia'] . ' tersedia)');
-        }
-
+        $db = \Config\Database::connect();
         try {
-            $this->model->addSukuCadang([
-                'id_lk'       => $id,
-                'id_barang'   => $idBarang,
-                'nama_barang' => $barang['nama'],
-                'jumlah'      => $jumlah,
-                'satuan'      => $barang['satuan'] ?? 'pcs',
-                'keterangan'  => $post['keterangan'] ?? null,
-            ]);
-
+            $db->transBegin();
             $stokModel->catatTransaksi([
                 'id_barang'   => $idBarang,
                 'nama_barang' => $barang['nama'],
@@ -363,9 +400,23 @@ class LK extends BaseController
                 'keterangan'  => 'Digunakan untuk ' . ($lk['no_order'] ?? $id),
                 'petugas'     => session('user_name') ?? 'Teknisi',
             ]);
+            $this->model->addSukuCadang([
+                'id_lk'       => $id,
+                'id_barang'   => $idBarang,
+                'sumber'      => 'Gudang',
+                'nama_barang' => $barang['nama'],
+                'jumlah'      => $jumlah,
+                'satuan'      => $barang['satuan'] ?? 'pcs',
+                'keterangan'  => $post['keterangan'] ?? null,
+            ]);
+            if ($db->transStatus() === false) {
+                throw new \RuntimeException('Penggunaan suku cadang tidak dapat diselesaikan.');
+            }
+            $db->transCommit();
 
             return redirect()->to('/ipsrs/lk/' . $id)->with('success', 'Suku cadang berhasil dicatat & stok dikurangi');
         } catch (\Throwable $e) {
+            $db->transRollback();
             log_message('error', '[LK::addSukuCadang] ' . $e->getMessage());
             return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal mencatat suku cadang: ' . $e->getMessage());
         }
@@ -373,12 +424,12 @@ class LK extends BaseController
 
     public function storeVendor(string $id)
     {
-        if (strtolower(session('user_role')) === 'pelapor') {
+        $lk = $this->model->getById($id);
+        if (!$lk || !AccessPolicy::canManageLk($lk, session('user_role'), session('user_name'))) {
             return redirect()->to('/ipsrs/lk')->with('error', 'Akses ditolak.');
         }
-        $lk = $this->model->getById($id);
-        if (!$lk) {
-            return redirect()->to('/ipsrs/lk')->with('error', 'LK tidak ditemukan');
+        if (($lk['status'] ?? '') === IPSRS::STATUS_LK[6]) {
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Vendor tidak dapat ditambah pada LK yang sudah selesai.');
         }
 
         $post        = $this->whitelist([
@@ -415,10 +466,45 @@ class LK extends BaseController
 
     // ── Private helpers ───────────────────────────────────────────────────
 
-    /** Hitung response time (laporan → survei/posisi). */
+    /** Pastikan waktu survei/penutupan tidak mendahului laporan. */
+    private function validateTransitionTiming(array $lk, string $next, array $post): ?string
+    {
+        if ($next === 'Survei') {
+            $tanggalCek = (string) ($post['tanggal_cek'] ?? '');
+            $jamCek     = (string) ($post['jam_cek'] ?? '');
+            $responseTime = \App\Libraries\Metrics::selisihMenit(
+                $lk['tanggal'] ?? date('Y-m-d'), $lk['jam_laporan'] ?? '00:00',
+                $tanggalCek, $jamCek
+            );
+
+            if ($tanggalCek === '' || $jamCek === '' || $responseTime === null) {
+                return 'Tanggal dan jam survei wajib valid dan tidak boleh mendahului waktu laporan.';
+            }
+        }
+
+        if ($next === IPSRS::STATUS_LK[array_key_last(IPSRS::STATUS_LK)]) {
+            $downTime = \App\Libraries\Metrics::selisihMenit(
+                $lk['tanggal'] ?? date('Y-m-d'), $lk['jam_laporan'] ?? '00:00',
+                date('Y-m-d'), date('H:i')
+            );
+
+            if ($downTime === null) {
+                return 'Laporan memiliki waktu yang tidak valid atau lebih baru dari waktu server; LK tidak dapat diselesaikan.';
+            }
+        }
+
+        return null;
+    }
+
+    /** Hitung response time dari laporan sampai survei pertama. */
     private function calcResponseTime(array $lk, string $next, array &$data): void
     {
-        if (!in_array($next, ['Didisposisi', 'Survei']) || empty($data['jam_cek']) || !empty($lk['response_time'])) {
+        if (
+            $next !== 'Survei'
+            || empty($data['tanggal_cek'])
+            || empty($data['jam_cek'])
+            || (array_key_exists('response_time', $lk) && $lk['response_time'] !== null)
+        ) {
             return;
         }
         $rt = \App\Libraries\Metrics::selisihMenit(
@@ -435,8 +521,8 @@ class LK extends BaseController
     {
         if ($next !== IPSRS::STATUS_LK[array_key_last(IPSRS::STATUS_LK)]) return;
 
-        $tanggalSelesai = $data['tanggal_selesai'] ?? date('Y-m-d');
-        $jamSelesai     = $data['jam_selesai'] ?? date('H:i');
+        $tanggalSelesai = date('Y-m-d');
+        $jamSelesai     = date('H:i');
         $data['tanggal_selesai'] = $tanggalSelesai;
         $data['jam_selesai']     = $jamSelesai;
 
@@ -447,9 +533,6 @@ class LK extends BaseController
         if ($dt !== null) {
             $data['down_time'] = $dt;
         }
-        if (empty($lk['response_time']) && !empty($data['down_time'])) {
-            $data['response_time'] = $data['down_time'];
-        }
     }
 
     /** Sinkronkan status aset mengikuti status LK. */
@@ -459,7 +542,11 @@ class LK extends BaseController
 
         $asetStatus = IPSRS::LK_TO_ASET_STATUS[$next] ?? null;
         if ($asetStatus !== null) {
-            (new \App\Models\AsetSeriesModel())->update($lk['id_aset_series'], ['status' => $asetStatus]);
+            $seriesModel = new \App\Models\AsetSeriesModel();
+            $series = $seriesModel->getById($lk['id_aset_series']);
+            if ($series && AsetLifecycle::canSyncFromLk($series['status'] ?? null)) {
+                $seriesModel->update($lk['id_aset_series'], ['status' => $asetStatus]);
+            }
         }
     }
 }

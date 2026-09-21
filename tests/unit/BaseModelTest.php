@@ -9,6 +9,15 @@ use App\Models\LkpModel;
  */
 final class BaseModelTest extends CIUnitTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $db = \Config\Database::connect();
+        $db->query('CREATE TABLE IF NOT EXISTS db_lembar_kerja_preventif (no_order VARCHAR(32))');
+        $db->table('lembar_kerja_preventif')->emptyTable();
+    }
+
     // ── extractRow ────────────────────────────────────────────────
 
     public function testExtractRowWithNumericArray(): void

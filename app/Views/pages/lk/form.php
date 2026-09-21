@@ -99,7 +99,7 @@
       <!-- Aset (optional) -->
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Aset Terkait <span class="text-slate-400 font-normal lowercase">(opsional)</span></label>
-        <select name="id_aset" id="id_aset" onchange="updateAsetInfo()"
+        <select name="id_aset" id="id_aset"
                 class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
@@ -160,6 +160,7 @@
           selLokasi.val(asetUnit).trigger('change');
       }
     }
+    check();
   }
 
   function check() {
@@ -175,14 +176,10 @@
       warning.classList.add('hidden');
     }
 
-    // Auto-fill lokasi from aset if lokasi field is empty
-    if (lokasiAset && !lokasiLaporan) {
-      inpLokasi.value = lokasiAset;
-    }
   }
 
-  if (selAset)   selAset.addEventListener('change', check);
-  if (inpLokasi) inpLokasi.addEventListener('input', check);
+  if (selAset) selAset.addEventListener('change', updateAsetInfo);
+  if (selLokasi) selLokasi.on('change', check);
   check();
 })();
 </script>

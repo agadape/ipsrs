@@ -53,10 +53,7 @@ $alasanFilter = $alasan ?? '';
         <select name="jenis_mutasi" id="jenis_mutasi" required onchange="toggleLokasiTujuan()"
                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm appearance-none">
           <option value="">-- Pilih Jenis Mutasi --</option>
-          <option value="Pindah Ruangan">Pindah Ruangan (Tetap Aktif)</option>
-          <option value="Simpan ke Gudang">Simpan ke Gudang (Non-Aktif)</option>
-          <option value="Jadikan Kanibal">Jadikan Kanibal (Suku Cadang)</option>
-          <option value="Dibuang">Dibuang / Rusak Total</option>
+          <option value="Pindah Ruangan">Pindah Ruangan</option>
         </select>
       </div>
 
