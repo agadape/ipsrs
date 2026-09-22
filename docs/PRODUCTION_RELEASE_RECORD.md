@@ -1,6 +1,6 @@
 # Production Release Evidence Record
 
-Dokumen ini merekam deployment aktual build IPSRS ke Rumahweb/cPanel. Nilai `PASS` di bawah hanya berlaku untuk bukti yang benar-benar diperiksa pada 22 September 2026. Item browser terautentikasi dan recovery drill yang belum dijalankan tetap ditandai `PENDING`.
+Dokumen ini merekam deployment aktual build IPSRS ke Rumahweb/cPanel. Nilai `PASS` di bawah hanya berlaku untuk bukti yang benar-benar diperiksa pada 22 September 2026. Item browser terautentikasi yang belum dijalankan tetap ditandai `PENDING`.
 
 ## Identitas release
 
@@ -41,9 +41,9 @@ Dokumen ini merekam deployment aktual build IPSRS ke Rumahweb/cPanel. Nilai `PAS
 - Composer locked advisory audit: **PASS**, tidak ada advisory yang diketahui; Packagist sempat timeout lalu audit diulang dengan unreachable-source handling
 - Route/application source: **PASS**; active commit sama dengan release commit; route compilation menghasilkan 87 baris tanpa error
 - Automated regression suite sebelum deployment: **119 tests / 321 assertions PASS**
-- Migration status: migration lama `AddPeminjamanPenghapusan` belum tercatat pada migration history production. Migration tidak dijalankan karena tidak berubah pada release ini dan schema terkait sudah digunakan oleh aplikasi; perlu rekonsiliasi terpisah sebelum migration otomatis dipakai.
+- Migration status: `AddPeminjamanPenghapusan` telah direkonsiliasi sebagai existing-schema baseline **batch 0**. Sebelum pencatatan production, mekanisme yang sama diuji pada database disposable: schema hash tidak berubah, `migrate` idempotent, dan rollback biasa tidak mengeksekusi `down()` untuk baseline batch 0.
 
-Tiga item `MANUAL` pada preflight tidak berarti kegagalan runtime. Document root dan HTTPS telah dibuktikan terpisah melalui cPanel UAPI dan HTTP smoke. Restore MySQL production-equivalent serta workflow browser terautentikasi tetap belum dijalankan.
+Tiga item `MANUAL` pada preflight tidak berarti kegagalan runtime. Document root dan HTTPS telah dibuktikan terpisah melalui cPanel UAPI dan HTTP smoke. Restore MySQL production-equivalent dan concurrency probe telah dibuktikan terpisah; workflow browser terautentikasi tetap belum dijalankan.
 
 ## Backup dan recovery
 
@@ -55,10 +55,13 @@ Tiga item `MANUAL` pada preflight tidak berarti kegagalan runtime. Document root
 - Production environment dan public front-controller configuration disalin ke backup dengan permission privat
 - Backup integrity verification sebelum switch: **PASS**
 - Permission backup directory: **700**; file backup: **600**
-- Target restore non-production: belum tersedia
-- Restore MySQL pada target non-production: **PENDING**
-- Rekonsiliasi jumlah record setelah restore: **PENDING**
-- Catatan: disposable SQLite backup/restore drill lokal PASS, tetapi itu bukan pengganti restore dump MariaDB ini.
+- Target restore non-production: database disposable `ipsc7141_ipsrs_verify`, dibuat hanya selama drill dan sudah dihapus
+- Restore MySQL pada target non-production: **PASS**
+- Restore parity: **22 tabel aplikasi, 2.160 row, 0 trigger**; table set, exact row count per tabel, dan normalized `SHOW CREATE TABLE` seluruhnya cocok
+- Migration baseline drill: **PASS**; batch 0 tercatat, rerun idempotent, rollback safety PASS, schema hash dua tabel target tetap identik
+- MySQL concurrency — LK claim: **PASS**; dua worker simultan menghasilkan tepat satu sukses dan satu reject, dengan satu assignee final
+- MySQL concurrency — stock debit: **PASS**; dua debit simultan dari saldo 1 menghasilkan satu sukses, satu shortage reject, saldo 0, dan tepat satu ledger row
+- Cleanup drill: **PASS**; checkout, helper, credential file sementara, dan database disposable telah dihapus; cPanel kembali hanya memiliki database production
 
 ## Deployment layout dan rollback
 
@@ -104,7 +107,7 @@ Rollback kode dilakukan dengan mengarahkan `/home/ipsc7141/current` ke release s
 ## Release decision
 
 - Technical deployment decision: **GO** — build aktif, konfigurasi hosting, dependency install, database connectivity, backup, permission, HTTPS, dan public smoke telah diverifikasi.
-- Product acceptance decision: **DEMO ONLY / UAT PENDING** — belum boleh disebut production-ready penuh sebelum UAT browser, user testing, dan recovery/concurrency evidence selesai.
+- Product acceptance decision: **DEMO ONLY / UAT PENDING** — recovery dan concurrency evidence sudah PASS, tetapi project belum boleh disebut production-ready penuh sebelum UAT browser, real user testing, dan bukti perangkat selesai.
 - Accepted limitations: external CDN dependency; GPS adalah telemetry yang dapat dimanipulasi; signature berupa bukti gambar operasional, bukan tanda tangan digital tersertifikasi; beberapa ownership legacy masih berbasis display name; server-side pagination belum diterapkan.
 - Rollback trigger: HTTP 5xx berulang, login semua role gagal, mutation menghasilkan state/data salah, file upload membuka akses publik, atau koneksi database tidak stabil.
 - Rollback result bila dijalankan: **NOT EXECUTED**; tidak ada trigger setelah smoke test.
