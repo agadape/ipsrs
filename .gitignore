@@ -84,7 +84,7 @@ php_errors.log
 #-------------------------
 # Composer
 #-------------------------
-# vendor/
+/vendor/
 
 #-------------------------
 # IDE / Development Files
@@ -128,3 +128,34 @@ _modules/*
 # Local AI audit, memory, evidence, and conversation exports.
 # Keep these files available to local agents without publishing them.
 /AI/
+
+# Local one-off database inspection/refactor utilities and snapshots.
+# Keep canonical schema/migrations under their dedicated project directories.
+/apply_ddl.php
+/apply_ddl2.php
+/backup_before_refactor.sql
+/cpanel_constraints.txt
+/deduplicate_aset.php
+/local_constraints.txt
+/parse_json3.php
+/peek_ac.php
+/peek_excel.php
+/peek_sound.php
+/FIX_TTD_COLUMNS.sql
+/fix_ttd.sql
+/ERD_FIX_REMAINING.sql
+/ERD_FIX_REMAINING_V2.sql
+/ERD_FIX_SCRIPT.sql
+/PROMPT_ERD_ANALYSIS.md
+/script_import_excel.php
+
+# Local agent tooling and session memory.
+/.agents/
+/AGENTS.md
+/RTK.md
+/skills-lock.json
+/codex-session-develop_&_audit.md
+
+# Local deployment access and disposable database files.
+/writable/deploy-access/
+/writable/*.db
