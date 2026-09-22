@@ -41,14 +41,18 @@ Di baris nama alat tersebut, lihat pada ujung paling kanan. Anda akan menemukan 
 
 B. Membuka Formulir Unit Fisik
 Gulir (scroll) layar Anda ke arah bawah secara perlahan hingga Anda menemukan sebuah tabel berjudul "Unit Tersedia".
-Tepat di atas tabel tersebut, klik tombol "+ Tambah Unit (Series)". Sebuah jendela kecil (pop-up) akan muncul di tengah layar.
+Tepat di atas tabel tersebut, klik tombol "Tambah Series". Sistem akan membuka halaman formulir unit fisik.
 
 C. Mengisi Spesifikasi Fisik Unit
 Nomor Aset / Inventaris (Wajib Diisi): Masukkan kode atau nomor unik inventaris resmi dari rumah sakit (Contoh: INV-AC-2026-001). 
 ⚠️ Peringatan Keras: Nomor ini bertindak sebagai KTP dari alat tersebut. Sistem otomatis akan menolak dan menampilkan pesan error warna merah jika Anda mengetikkan Nomor Aset yang sama persis dengan yang sudah dipakai oleh alat lain.
 Serial Number (SN): Masukkan nomor seri mesin bawaan pabrik (biasanya tercetak di pelat bodi alat). Jika tidak ada, biarkan kosong.
+Merk: Isi nama produsen yang tercetak pada unit fisik (Contoh: Daikin). Kolom ini boleh dikosongkan jika identitas pabrik tidak terbaca.
+Model / Tipe: Isi kode model atau tipe unit sesuai pelat spesifikasi (Contoh: FTKC25TVM4). Jangan mengisi nama kategori umum pada kolom ini.
+Kapasitas: Isi kemampuan kerja unit beserta satuannya (Contoh: 1 PK, 500 liter, atau 5 kVA). Kolom ini bersifat opsional.
 Lokasi / Ruangan (Wajib Diisi): Klik kotak ini, lalu pilih nama ruangan dari daftar yang turun (dropdown). Ini menentukan di ruangan mana alat/sarana ini pertama kali dipasang atau didistribusikan (Misal: Pilih "Instalasi Gawat Darurat (IGD)").
-Kondisi Aset (Wajib Diisi): Pilih kondisi fisik sarana saat Anda mendatanya pertama kali (Pilih: Baik / Rusak Ringan / Rusak Berat).
+Kondisi: Pilih kondisi fisik sarana saat didata: Baik, Rusak Ringan, atau Rusak Berat. Form memilih "Baik" secara awal; ubah pilihan jika hasil pemeriksaan fisik berbeda.
+Tahun Pengadaan: Isi empat digit tahun unit diperoleh rumah sakit (Contoh: 2024). Gunakan dokumen pengadaan sebagai acuan dan biarkan kosong jika belum dapat diverifikasi.
 
 D. Menyimpan Unit Fisik
 Setelah kotak-kotak di atas terisi, klik tombol "Simpan" di bagian bawah jendela tersebut. Layar akan memuat sejenak (loading), dan voila! Unit fisik (seperti AC di ruang IGD) ini sekarang sudah sah menjadi inventaris resmi.
@@ -72,32 +76,32 @@ C. Proses Mencetak ke Kertas Stiker
 Untuk mencetaknya, Anda bisa menekan klik kanan pada mouse Anda di area layar yang kosong, lalu pilih menu "Print". Atau cara cepatnya: tekan tahan tombol `Ctrl` lalu huruf `P` pada keyboard komputer Anda.
 Pastikan mesin printer Anda sudah menyala dan terisi kertas stiker label tahan air. Setelah dicetak, tempelkan stiker tersebut ke bagian bodi sarana (misal: penutup depan AC atau bodi Genset) yang rata serta mudah dijangkau oleh kamera HP.
 
-4. Mutasi Aset (Pindah Ruangan & Kanibal Alat)
+4. Mutasi Aset (Pindah Ruangan)
 
 Gambar 1.5. Halaman Formulir Mutasi & Riwayat Perpindahan.
 
-⚠️ Aturan Wajib: Anda DILARANG KERAS memindahkan catatan lokasi sarana prasarana menggunakan tombol "Edit" biasa! Seluruh pergerakan aset—baik yang dibongkar dan dipindahkan ke ruangan lain maupun yang ditarik ke gudang—WAJIB dicatat melalui menu khusus "Mutasi Aset". Hal ini agar jejak rekam pergerakannya (Audit Trail) terekam secara abadi dan jelas pertanggungjawabannya.
+⚠️ Aturan Wajib: Jangan memindahkan lokasi sarana prasarana menggunakan tombol "Edit" biasa. Perpindahan unit ke ruangan lain wajib dicatat melalui menu "Mutasi Aset" agar lokasi terbaru dan riwayat perpindahannya tetap konsisten.
 
 A. Membuka Formulir Mutasi
 Lihat ke navigasi sebelah kiri layar Anda, cari dan klik menu "Mutasi Aset".
-Pada halaman yang terbuka, perhatikan pojok kanan atas, lalu klik tombol biru bertuliskan "+ Mutasi Baru". 
+Formulir "Catat Perpindahan Aset" langsung tersedia pada bagian atas halaman. Menu dan proses mutasi hanya tersedia untuk Admin.
 
 B. Memilih Alat Fisik yang Akan Dipindah
 Pada kotak paling atas (Pilih Aset), klik dan ketikkan nama atau nomor seri alat yang fisiknya ingin Anda pindahkan. Sistem akan mencarikan alat tersebut untuk Anda.
 
 C. Menentukan Tujuan Mutasi (Aksi Pemindahan)
-Di bawahnya, terdapat kotak dropdown berjudul "Jenis Mutasi". Klik kotak tersebut, dan pilihlah salah satu dari 3 kondisi berikut:
-1. Pindah Ruangan: Pilih ini jika alat (misalnya kursi tunggu atau Kipas Angin) akan digeser ke unit lain. Saat opsi ini dipilih, sebuah kotak baru bernama "Ruangan Tujuan" akan muncul. Anda wajib mengekliknya dan memilih nama ruangan penerima sarana tersebut.
-2. Simpan ke Gudang: Pilih ini jika sarana sedang dibongkar/ditarik dari lapangan untuk diistirahatkan atau diamankan ke dalam gudang utama IPSRS.
-3. Jadikan Kanibal (Tindakan Ekstrem): Pilih opsi ini HANYA JIKA sarana tersebut telah hancur atau afkir (tidak bisa diperbaiki lagi), namun pihak teknisi memutuskan untuk mempreteli komponennya (seperti kompresor AC atau motor listriknya) guna disimpan sebagai suku cadang (sparepart) cadangan. Saat Anda memilih ini, sistem akan otomatis "mematikan" status alat tersebut menjadi benda mati (Kanibal) dan tidak lagi dihitung sebagai aset utuh.
+Pada dropdown "Jenis Mutasi", implementasi saat ini menyediakan satu aksi: "Pindah Ruangan". Setelah dipilih, kolom "Lokasi Tujuan" akan muncul dan wajib diisi dengan ruangan penerima.
+
+Pilihan "Dibuang", "Rusak Total", "Simpan ke Gudang", atau "Jadikan Kanibal" tidak berada di dropdown mutasi. Untuk aset yang tidak dapat diperbaiki, buka detail unit fisik lalu gunakan "Tandai Rusak Berat". Setelah status tersebut aktif, Admin dapat melanjutkan proses Kanibalisasi atau Penghapusan melalui alur lifecycle aset yang terpisah. Pemisahan ini mencegah perpindahan lokasi biasa mengubah status akhir aset tanpa proses yang sesuai.
 
 D. Mengisi Petugas & Catatan
-Petugas (Wajib Diisi): Tuliskan nama jelas Anda atau nama teknisi yang bertugas melakukan pembongkaran/pemindahan.
-Catatan/Alasan (Wajib Diisi): Ketikkan alasan singkat mengapa alat ini dipindah (Contoh ketikan: "Dipindah sementara karena AC utama di ruang Rapat sedang rusak").
+Petugas (Wajib Diisi): Pilih Admin atau Teknisi yang melaksanakan perpindahan dari dropdown.
+Tanggal (Wajib Diisi): Isi tanggal perpindahan aktual.
+Catatan (Opsional): Ketikkan alasan singkat mengapa alat dipindah (Contoh: "Dipindah sementara karena AC utama di Ruang Rapat sedang rusak").
 
 E. Menyelesaikan Proses Mutasi
-Klik tombol "Proses Mutasi" di bagian paling bawah. 
-Sistem akan melakukan loading (memproses data). Status lokasi aset akan seketika berubah saat itu juga, dan yang paling penting: riwayat (kapan dipindah, jam berapa, oleh siapa, dan alasannya) akan terkunci secara permanen di dalam tabel riwayat.
+Klik tombol "Simpan Mutasi" di bagian bawah formulir.
+Sistem akan memperbarui lokasi unit dan menambahkan catatan pada tabel riwayat mutasi. Periksa kembali nama aset, lokasi asal, lokasi tujuan, tanggal, dan petugas pada tabel tersebut.
 
 5. Verifikasi Lokasi via HP (QR Scan & Geofencing)
 

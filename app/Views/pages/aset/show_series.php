@@ -1,5 +1,6 @@
 <?php
 $id = $series['id'] ?? '';
+$isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
 ?>
 
 <!-- Page Header -->
@@ -21,6 +22,7 @@ $id = $series['id'] ?? '';
   <?php if (session('user_id')): ?>
     <div class="flex flex-wrap items-center gap-2">
       <?php $s = $series['status'] ?? 'Tersedia'; ?>
+      <?php if ($isAdmin): ?>
       
       <!-- Primary Action: Peminjaman / Mutasi -->
       <?php if ($s === 'Tersedia'): ?>
@@ -56,14 +58,17 @@ $id = $series['id'] ?? '';
       <?php if ($s === 'Dihapuskan' && !empty($dataPenghapusan['id'])): ?>
         <a href="/ipsrs/aset/penghapusan/<?= esc($dataPenghapusan['id']) ?>/ba" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">Unduh Berita Acara</a>
       <?php endif; ?>
+      <?php endif; ?>
   
       <?php if ($s !== 'Dihapuskan'): ?>
         <a href="/ipsrs/aset/<?= esc($id) ?>/qr" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="QR Code">
           <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5V16M4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"/></svg>
         </a>
+        <?php if ($isAdmin): ?>
         <a href="/ipsrs/aset/<?= esc($id) ?>/edit" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="Edit Data">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
         </a>
+        <?php endif; ?>
       <?php endif; ?>
     </div>
   <?php endif; ?>
@@ -89,11 +94,11 @@ $id = $series['id'] ?? '';
       ['label' => 'Lantai',     'value' => $series['lantai'] ?? '-'],
       ['label' => 'Ruangan',    'value' => $series['ruangan'] ?? '-'],
       ['label' => 'Unit',       'value' => $series['unit'] ?? '-'],
-      ['label' => 'Merk',       'value' => $aset['merk'] ?? '-'],
-      ['label' => 'Model',      'value' => $aset['model'] ?? '-'],
+      ['label' => 'Merk',       'value' => $series['merk'] ?? '-'],
+      ['label' => 'Model',      'value' => $series['model'] ?? '-'],
       ['label' => 'No. Seri',   'value' => $series['no_seri'] ?? '-',   'mono' => true],
-      ['label' => 'Kapasitas',  'value' => $aset['kapasitas'] ?? '-'],
-      ['label' => 'Tahun',      'value' => $series['tahun'] ?? '-'],
+      ['label' => 'Kapasitas',  'value' => $series['kapasitas'] ?? '-'],
+      ['label' => 'Tahun',      'value' => $series['tahun_perolehan'] ?? '-'],
       ['label' => 'Kondisi',    'value' => $series['kondisi'] ?? '-',   'badge' => true],
       ['label' => 'Status',     'value' => $series['status'] ?? '-',    'badge' => true],
     ];

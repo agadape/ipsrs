@@ -1,18 +1,20 @@
 <?php
 $filterParam = $filter ?? '';
+$isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
 ?>
 
 <!-- Page Header -->
 <div class="flex items-center justify-between mb-6">
   <div>
     <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Stok &amp; Suku Cadang</h1>
-    <p class="text-sm text-slate-500 mt-1">Kelola persediaan material dan suku cadang</p>
+    <p class="text-sm text-slate-500 mt-1"><?= $isAdmin ? 'Kelola persediaan material dan suku cadang' : 'Lihat ketersediaan material dan suku cadang' ?></p>
   </div>
 </div>
 
 <!-- ════════════════════════════════════════════════════════════════════════
      ACTION HUB — Collapsible Forms for Better UX
      ════════════════════════════════════════════════════════════════════════ -->
+<?php if ($isAdmin): ?>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
   <!-- Trigger: Tambah Barang -->
   <button type="button" onclick="toggleStokForm('form-tambah')"
@@ -114,8 +116,9 @@ $filterParam = $filter ?? '';
         <input type="date" name="tanggal" value="<?= date('Y-m-d') ?>" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
       <div>
-        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">No. Dokumen / PO</label>
-        <input type="text" name="no_dokumen" placeholder="Contoh: INV-2023/001" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
+        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">No. Dokumen / Faktur / PO <span class="text-red-500">*</span></label>
+        <input type="text" name="no_dokumen" value="<?= esc(old('no_dokumen') ?? '') ?>" maxlength="30" required placeholder="Contoh: INV-2026/001" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
+        <p class="mt-1 text-[11px] text-slate-500">Wajib diisi sebagai referensi penerimaan barang.</p>
       </div>
       <div>
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Keterangan Tambahan</label>
@@ -170,6 +173,7 @@ $filterParam = $filter ?? '';
     </form>
   </div>
 </div>
+<?php endif; ?>
 
 <script>
 function toggleStokForm(formId) {
@@ -201,7 +205,7 @@ function toggleStokForm(formId) {
        <?= $active ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900' ?>">
     <?= $label ?>
     <?php if ($val === 'Menipis'): ?>
-    <span class="ml-1 text-xs px-1.5 py-0.5 rounded-full <?= $active ? 'bg-white/20 text-white' : 'bg-amber-50 text-amber-600 border border-amber-200' ?>">
+    <span class="ml-1 text-xs px-1.5 py-0.5 rounded-full <?= $active ? 'bg-white/20 text-white' : 'bg-red-50 text-red-700 border border-red-200' ?>">
       <?= count(array_filter($stok ?? [], fn($s) => ($s['status'] ?? '') === 'Menipis')) ?>
     </span>
     <?php endif; ?>
@@ -236,12 +240,12 @@ function toggleStokForm(formId) {
       <tbody class="divide-y divide-slate-100">
         <?php foreach ($stok as $s): ?>
         <?php
-          $st = $s['status'] ?? 'Aman';
-          $stBadge = status_stok_badge($st);
-          $stLabel = $st;
           $tersedia = (int)($s['stok_tersedia'] ?? 0);
           $minimum  = (int)($s['minimum_stok'] ?? 0);
-          $numClass = $tersedia <= 0 ? 'font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded' : ($tersedia <= $minimum ? 'font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded' : 'font-medium text-slate-900');
+          $st = \App\Libraries\Metrics::statusStok($tersedia, $minimum);
+          $stBadge = status_stok_badge($st);
+          $stLabel = $st;
+          $numClass = $tersedia <= 0 ? 'font-semibold text-red-800 bg-red-100 px-2 py-0.5 rounded' : ($tersedia <= $minimum ? 'font-semibold text-red-700 bg-red-50 px-2 py-0.5 rounded' : 'font-medium text-slate-900');
         ?>
         <tr class="hover:bg-slate-50 transition-colors group cursor-pointer" onclick="window.location.href='/ipsrs/stok/riwayat?id=<?= esc($s['id']) ?>'">
           <td class="px-4 py-3 font-medium text-slate-900 group-hover:text-red-700 transition-colors"><?= esc($s['nama'] ?? '-') ?></td>

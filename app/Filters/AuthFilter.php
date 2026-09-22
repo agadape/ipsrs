@@ -64,7 +64,10 @@ class AuthFilter implements FilterInterface
         if (in_array($resource, ['pengguna', 'vendor', 'kategori-aset', 'kode-kerusakan', 'kanibal', 'penghapusan', 'laporan', 'peminjaman'], true)) {
             return false;
         }
-        if (in_array($resource, ['aset', 'stok'], true)) {
+        if ($resource === 'aset') {
+            return $method === 'GET' && $this->canTechnicianReadAssetRoute($segments);
+        }
+        if ($resource === 'stok') {
             return $method === 'GET';
         }
         if ($resource === 'preventif' && $method !== 'GET') {
@@ -72,5 +75,21 @@ class AuthFilter implements FilterInterface
         }
 
         return in_array($resource, ['lk', 'preventif'], true);
+    }
+
+    private function canTechnicianReadAssetRoute(array $segments): bool
+    {
+        $action = $segments[2] ?? '';
+        if ($action === '') {
+            return true;
+        }
+        if (in_array($action, ['tambah', 'mutasi', 'penghapusan', 'tambah-series'], true)) {
+            return false;
+        }
+        if ($action === 'series') {
+            return ($segments[4] ?? '') === '';
+        }
+
+        return ($segments[3] ?? '') !== 'edit';
     }
 }

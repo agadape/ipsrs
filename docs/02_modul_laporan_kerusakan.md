@@ -41,9 +41,13 @@ Bagian 2: Sisi Teknisi IPSRS (Manajemen Tiket & Perbaikan)
 
 Begitu staf mengirim laporan, tiket tersebut akan masuk ke dalam tabel antrean di akun teknisi. Di sinilah tugas Anda sebagai Teknisi IPSRS dimulai.
 
+Pembatasan hak akses: halaman LK menampilkan konteks akun pada judulnya. Admin melihat seluruh laporan. Teknisi hanya melihat laporan berstatus "Laporan Masuk" yang dapat diklaim serta laporan yang ditugaskan kepada nama teknisi tersebut. Pelapor internal hanya melihat laporan yang dibuat atas nama akunnya. Jika URL laporan milik pengguna lain dibuka secara manual, server menolak akses tersebut.
+
 1. Menerima dan Mengklaim Tiket Laporan Masuk
 
-Gambar 2.3. Halaman Daftar Laporan Kerusakan di Akun Teknisi.
+Gambar 2.3. Halaman "Antrean & Pekerjaan Teknisi" di Akun Teknisi (badge Teknisi).
+
+Catatan penyuntingan gambar: tangkapan layar untuk Gambar 2.3 wajib diambil setelah login memakai akun ber-role Teknisi. Jangan menggunakan tangkapan layar Admin karena daftar data dan kewenangannya berbeda.
 
 Melihat Laporan Masuk:
 Di sebelah kiri layar komputer Anda, klik menu navigasi bernama **"Laporan Kerusakan"** (atau LK).

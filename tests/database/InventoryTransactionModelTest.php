@@ -2,6 +2,7 @@
 
 use App\Models\LKModel;
 use App\Models\StokModel;
+use App\Libraries\Metrics;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
 
@@ -18,10 +19,10 @@ final class InventoryTransactionModelTest extends CIUnitTestCase
         foreach (['riwayat_transaksi_stok', 'detail_suku_cadang_lk', 'barang_persediaan'] as $table) {
             $this->db->query('DROP TABLE IF EXISTS ' . $prefix . $table);
         }
-        $this->db->query('CREATE TABLE ' . $prefix . 'barang_persediaan (id TEXT PRIMARY KEY, stok_tersedia INTEGER NOT NULL)');
+        $this->db->query('CREATE TABLE ' . $prefix . 'barang_persediaan (id TEXT PRIMARY KEY, stok_tersedia INTEGER NOT NULL, minimum_stok INTEGER NOT NULL DEFAULT 0)');
         $this->db->query('CREATE TABLE ' . $prefix . 'riwayat_transaksi_stok (id TEXT PRIMARY KEY, id_barang TEXT NOT NULL, nama_barang TEXT, jenis TEXT NOT NULL, jumlah INTEGER NOT NULL, tanggal TEXT, no_dokumen TEXT, keterangan TEXT, petugas TEXT)');
         $this->db->query('CREATE TABLE ' . $prefix . 'detail_suku_cadang_lk (id TEXT PRIMARY KEY, id_lk TEXT NOT NULL, id_barang TEXT, sumber TEXT NOT NULL, nama_barang TEXT, jumlah INTEGER NOT NULL)');
-        $this->db->table('barang_persediaan')->insert(['id' => 'barang-1', 'stok_tersedia' => 5]);
+        $this->db->table('barang_persediaan')->insert(['id' => 'barang-1', 'stok_tersedia' => 5, 'minimum_stok' => 5]);
     }
 
     public function testAtomicDebitWritesBalanceAndLedgerTogether(): void
@@ -53,6 +54,23 @@ final class InventoryTransactionModelTest extends CIUnitTestCase
 
         self::assertSame(5, (int) $this->db->table('barang_persediaan')->where('id', 'barang-1')->get()->getRowArray()['stok_tersedia']);
         self::assertCount(0, $this->db->table('riwayat_transaksi_stok')->get()->getResultArray());
+    }
+
+    public function testBalanceReturnsToLowStockAfterIncomingThenOutgoingMovement(): void
+    {
+        $this->db->table('barang_persediaan')->where('id', 'barang-1')->update(['stok_tersedia' => 0]);
+        $stok = new StokModel();
+        $this->useTestConnection($stok);
+
+        $this->db->transBegin();
+        $stok->catatTransaksi($this->transaction('Masuk', 10));
+        $stok->catatTransaksi($this->transaction('Keluar', 9));
+        $this->db->transCommit();
+
+        $barang = $this->db->table('barang_persediaan')->where('id', 'barang-1')->get()->getRowArray();
+        self::assertSame(1, (int) $barang['stok_tersedia']);
+        self::assertSame('Menipis', Metrics::statusStok((int) $barang['stok_tersedia'], (int) $barang['minimum_stok']));
+        self::assertCount(2, $this->db->table('riwayat_transaksi_stok')->get()->getResultArray());
     }
 
     public function testOnlyGudangPartsAreEligibleForStockRollback(): void

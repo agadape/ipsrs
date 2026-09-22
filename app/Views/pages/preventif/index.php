@@ -1,5 +1,6 @@
 <?php
 $filterParam = $filter ?? '';
+$isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
 ?>
 
 <!-- Page Header -->
@@ -11,6 +12,7 @@ $filterParam = $filter ?? '';
 </div>
 
 <!-- Inline Add Form -->
+<?php if ($isAdmin): ?>
 <div class="card p-6 mb-6">
   <div class="flex items-center gap-2 mb-5">
     <h2 class="text-sm font-semibold text-slate-800">Tambah Jadwal Preventif</h2>
@@ -91,6 +93,7 @@ $filterParam = $filter ?? '';
     </div>
   </form>
 </div>
+<?php endif; ?>
 
 <!-- Filter Tabs -->
 <div class="flex flex-wrap gap-2 mb-4">
@@ -162,6 +165,7 @@ $filterParam = $filter ?? '';
                 Hasil
               </a>
               <?php endif; ?>
+              <?php if ($isAdmin): ?>
               <form method="POST" action="/ipsrs/preventif/<?= esc($jid) ?>/hapus" class="inline" onsubmit="confirmFormSubmit(event, this, 'Hapus jadwal preventif ini?');">
                 <?= csrf_field() ?>
                 <button type="submit" title="Hapus Jadwal"
@@ -169,6 +173,7 @@ $filterParam = $filter ?? '';
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                 </button>
               </form>
+              <?php endif; ?>
             </div>
           </td>
         </tr>

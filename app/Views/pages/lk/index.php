@@ -1,12 +1,21 @@
 <?php
 $total = count($lk ?? []);
+$viewerRole = strtolower((string) (session('user_role') ?? ''));
+$viewerContext = match ($viewerRole) {
+  'pelapor' => ['title' => 'Laporan Kerusakan Saya', 'description' => 'Pantau laporan yang Anda buat dan status penanganannya.', 'badge' => 'Pelapor'],
+  'teknisi' => ['title' => 'Antrean & Pekerjaan Teknisi', 'description' => 'Laporan masuk yang dapat diklaim dan pekerjaan yang ditugaskan kepada Anda.', 'badge' => 'Teknisi'],
+  default => ['title' => 'Laporan Kerusakan', 'description' => 'Kelola dan pantau seluruh laporan kerusakan aset.', 'badge' => 'Admin'],
+};
 ?>
 
 <!-- Page Header -->
 <div class="flex items-center justify-between mb-6">
   <div>
-    <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Laporan Kerusakan</h1>
-    <p class="text-sm text-slate-500 mt-1">Kelola dan pantau laporan kerusakan aset</p>
+    <div class="flex flex-wrap items-center gap-2">
+      <h1 class="text-2xl font-bold text-slate-900 tracking-tight"><?= esc($viewerContext['title']) ?></h1>
+      <span class="badge bg-slate-100 text-slate-700 border border-slate-200"><?= esc($viewerContext['badge']) ?></span>
+    </div>
+    <p class="text-sm text-slate-500 mt-1"><?= esc($viewerContext['description']) ?></p>
   </div>
   <a href="/ipsrs/lk/baru"
      class="inline-flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">

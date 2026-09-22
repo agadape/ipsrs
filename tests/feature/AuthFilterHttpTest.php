@@ -47,6 +47,21 @@ final class AuthFilterHttpTest extends CIUnitTestCase
         $response->assertRedirectTo('/ipsrs');
     }
 
+    public function testTechnicianCannotOpenAdminAssetFormsByDirectUrl(): void
+    {
+        $paths = [
+            'ipsrs/aset/tambah',
+            'ipsrs/aset/mutasi',
+            'ipsrs/aset/tambah-series/aset-1',
+            'ipsrs/aset/series/series-1/edit',
+            'ipsrs/aset/aset-1/edit',
+        ];
+
+        foreach ($paths as $path) {
+            $this->withSession(['user_id' => 'tech-1'])->get($path)->assertRedirectTo('/ipsrs');
+        }
+    }
+
     public function testInactiveSessionIsRedirectedToLogin(): void
     {
         $response = $this->withSession(['user_id' => 'inactive-1'])->get('ipsrs/lk');

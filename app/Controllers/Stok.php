@@ -78,9 +78,27 @@ class Stok extends BaseController
 
     private function catatTransaksi(string $jenis, string $successMsg)
     {
+        $rules = [
+            'id_barang' => 'required',
+            'jumlah'    => 'required|is_natural_no_zero',
+            'tanggal'   => 'permit_empty|valid_date[Y-m-d]',
+        ];
+        $rules['no_dokumen'] = $jenis === 'Masuk'
+            ? 'required|max_length[30]'
+            : 'permit_empty|max_length[30]';
+
+        $validation = $this->validateOrFail(
+            $rules,
+            $jenis === 'Masuk'
+                ? 'Barang masuk wajib memiliki nomor dokumen atau faktur.'
+                : 'Data transaksi stok tidak valid.'
+        );
+        if ($validation !== true) return $validation;
+
         $data   = $this->whitelist(['id_barang', 'jumlah', 'tanggal', 'no_dokumen', 'keterangan']);
         $barang = $this->model->getById($data['id_barang'] ?? '');
         $qty    = (int) ($data['jumlah'] ?? 0);
+        $noDokumen = trim((string) ($data['no_dokumen'] ?? ''));
 
         if (!$barang) {
             return redirect()->to('/ipsrs/stok')->with('error', 'Barang tidak ditemukan');
@@ -97,7 +115,7 @@ class Stok extends BaseController
                 'jenis'       => $jenis,
                 'jumlah'      => $qty,
                 'tanggal'     => $data['tanggal'] ?? date('Y-m-d'),
-                'no_dokumen'  => $data['no_dokumen'] ?? null,
+                'no_dokumen'  => $noDokumen !== '' ? $noDokumen : null,
                 'keterangan'  => $data['keterangan'] ?? null,
                 'petugas'     => session('user_name') ?? 'Admin',
             ]);

@@ -3,7 +3,9 @@ $path = current_url(true)->getPath();
 
 $authName    = session('user_name')    ?? 'User';
 $authInitial = session('user_initial') ?? strtoupper(substr($authName, 0, 1));
-$authRole    = session('user_role')    ?? 'Pengguna';
+$authRole    = strtolower((string) (session('user_role') ?? 'pengguna'));
+$isAdmin     = $authRole === 'admin';
+$isPelapor   = $authRole === 'pelapor';
 
 if (!function_exists('navLink')) {
     function navLink(string $href, string $label, string $icon, string $current, ?int $badge = null): string {
@@ -69,14 +71,16 @@ if (!function_exists('ico')) {
       <?= navLink('/ipsrs', 'Dashboard', ico('<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>'), $path) ?>
     </div>
 
-    <?php if ($authRole !== 'pelapor'): ?>
+    <?php if (!$isPelapor): ?>
     <div>
       <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Inventaris & Lokasi</p>
       <div class="space-y-0.5">
         <?= navLink('/ipsrs/aset',        'Daftar Aset', ico('<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>'), $path) ?>
+        <?php if ($isAdmin): ?>
         <?= navLink('/ipsrs/aset/mutasi', 'Mutasi Aset', ico('<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>'), $path) ?>
         <?= navLink('/ipsrs/peminjaman', 'Peminjaman Aset', ico('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'), $path) ?>
         <?= navLink('/ipsrs/penghapusan', 'Penghapusan Aset', ico('<path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>'), $path) ?>
+        <?php endif; ?>
       </div>
     </div>
     <?php endif; ?>
@@ -85,14 +89,16 @@ if (!function_exists('ico')) {
       <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Pemeliharaan</p>
       <div class="space-y-0.5">
         <?= navLink('/ipsrs/lk',        'Lap. Kerusakan',   ico('<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>'), $path) ?>
-        <?php if ($authRole !== 'pelapor'): ?>
+        <?php if (!$isPelapor): ?>
         <?= navLink('/ipsrs/preventif', 'Lembar Preventif', ico('<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>'), $path) ?>
+        <?php if ($isAdmin): ?>
         <?= navLink('/ipsrs/kanibal',   'Kanibal Alat',     ico('<path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>'), $path) ?>
+        <?php endif; ?>
         <?php endif; ?>
       </div>
     </div>
 
-    <?php if ($authRole !== 'pelapor'): ?>
+    <?php if (!$isPelapor): ?>
     <div>
       <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Logistik</p>
       <div class="space-y-0.5">
@@ -102,7 +108,7 @@ if (!function_exists('ico')) {
     </div>
     <?php endif; ?>
 
-    <?php if ($authRole !== 'pelapor'): ?>
+    <?php if ($isAdmin): ?>
     <div>
       <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Sistem</p>
       <div class="space-y-0.5">

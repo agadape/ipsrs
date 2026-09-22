@@ -5,22 +5,26 @@ Gambar 5.1. Halaman Daftar Peminjaman Aset.
 Selain memindahkan barang atau merawat barang, IPSRS terkadang harus menghadapi situasi khusus, seperti ruangan meminjam kipas angin ekstra, atau AC yang sudah benar-benar hancur dan harus dibuang. Modul ini digunakan untuk mencatat siklus hidup aset dari peminjaman hingga "kematian" aset.
 
 1. Peminjaman Aset (Pinjam Pakai)
-Gunakan menu ini jika ada unit/ruangan yang ingin meminjam sarana IPSRS secara sementara.
+Gunakan menu ini jika ada unit/ruangan yang ingin meminjam sarana IPSRS secara sementara. Pencatatan peminjaman dan pengembalian hanya dapat dilakukan oleh Admin.
 
-Gambar 5.2. Formulir Tambah Peminjaman.
+Gambar 5.2. Tombol Pinjamkan dan Formulir Peminjaman pada Detail Unit Fisik.
 
 A. Mencatat Peminjaman Baru
 Buka menu "Peminjaman Aset" di navigasi sebelah kiri (berada di bawah kelompok "Inventaris & Lokasi").
-Klik tombol "+ Pinjam Baru" di pojok kanan atas.
-Pada kotak pencarian (Pilih Aset), cari dan pilih sarana yang akan dipinjamkan (Contoh: "Kipas Angin Berdiri").
-Pada kolom Peminjam/Ruangan (Wajib Diisi), ketikkan nama orang atau ruangan yang meminjam (Contoh: "Ruang Rapat Utama").
-Pada kolom Tanggal Pinjam (Wajib Diisi), tentukan tanggal barang diserahkan.
-Klik "Simpan Peminjaman". Sistem akan mengubah status Kipas Angin tersebut menjadi "Dipinjam", sehingga teknisi lain tidak kebingungan mencari barang tersebut di gudang.
+Klik tombol "Pinjam Aset" di pojok kanan atas. Sistem membuka daftar aset dengan filter status "Tersedia".
+Buka detail unit fisik yang tepat. Pastikan nomor inventaris, lokasi, dan statusnya benar; peminjaman dilakukan per unit fisik, bukan per nama katalog.
+Pada detail unit berstatus "Tersedia", klik tombol "Pinjamkan".
+Nama Peminjam (Wajib Diisi): ketikkan nama orang penanggung jawab.
+Unit Peminjam (Wajib Diisi): ketikkan unit atau ruangan peminjam (Contoh: "Ruang Rapat Utama").
+Rencana Kembali (Wajib Diisi): pilih tanggal rencana pengembalian.
+Keterangan (Opsional): isi tujuan atau catatan serah terima bila diperlukan.
+Klik "Pinjamkan". Sistem mencatat tanggal pinjam secara otomatis dan mengubah status unit menjadi "Dipinjam".
 
 B. Mengembalikan Barang (Selesai Pinjam)
 Jika acara rapat sudah selesai dan Kipas Angin dikembalikan, Anda wajib menutup catatan ini.
-Cari baris peminjaman Kipas Angin tadi, lalu klik tombol "Kembalikan" (ikon centang).
-Sistem akan mencatat Tanggal Kembali secara otomatis dan merubah status kipas angin kembali "Tersedia".
+Pada tabel Peminjaman Aset, cari catatan yang masih berstatus "Dipinjam", lalu klik "Lihat Aset".
+Pada halaman detail unit, klik "Terima Pengembalian" dan konfirmasi tindakan.
+Sistem mencatat tanggal kembali aktual, menutup catatan peminjaman menjadi "Selesai", dan mengubah status unit kembali menjadi "Tersedia".
 
 2. Penghapusan Aset (Afkir / Pemusnahan)
 Ini adalah menu yang sangat krusial. Jika ada AC atau Genset yang sudah rusak parah, tidak bisa diperbaiki lagi, dan harus dilelang, dibuang, atau dihibahkan, Anda DILARANG menghapusnya begitu saja dari database! Gunakan menu ini agar terdapat Berita Acara (BA) pemusnahan yang sah.

@@ -1,9 +1,13 @@
 ﻿Modul Laporan Kerusakan Khusus Pengguna Ruangan (Sisi Pelapor Internal)
 
-Gambar 2B.1. Halaman Daftar Tiket Laporan Milik Ruangan (Pelapor Internal).
+Gambar 2B.1. Halaman Laporan Kerusakan Saya di Akun Pelapor (badge Pelapor).
 
-Pada Modul 2 sebelumnya, kita telah membahas "Portal Publik" di mana siapa pun bisa melapor tanpa *login*. Namun, bagaimana jika Anda adalah seorang **Kepala Ruangan** (misalnya Kepala IGD) yang ingin memantau seluruh proses perbaikan fasilitas di ruangan Anda secara resmi?
+Catatan penyuntingan gambar: tangkapan layar Gambar 2B.1 sampai Gambar 2B.3 wajib diambil memakai akun ber-role Pelapor. Sidebar akun ini hanya menampilkan Dashboard dan Laporan Kerusakan; menu aset, stok, jadwal preventif, peminjaman, penghapusan, dan administrasi tidak tersedia.
+
+Pada Modul 2 sebelumnya, kita telah membahas "Portal Publik" di mana siapa pun bisa melapor tanpa *login*. Namun, bagaimana jika Anda adalah seorang **Kepala Ruangan** (misalnya Kepala IGD) yang ingin membuat dan memantau laporan resmi melalui akun sendiri?
 Untuk itulah aplikasi IPSRS memberikan akun resmi dengan hak akses sebagai **"Pelapor"** kepada Anda.
+
+Catatan cakupan data: akun Pelapor menampilkan laporan yang nama pelapornya sama dengan nama akun tersebut. Akun ini tidak otomatis menampilkan seluruh laporan publik dari pengguna lain dalam unit yang sama.
 
 1. Masuk ke Sistem (Login)
 Buka halaman awal aplikasi, lalu ketikkan *Username* dan *Password* yang telah diberikan oleh Admin IPSRS kepada Anda.

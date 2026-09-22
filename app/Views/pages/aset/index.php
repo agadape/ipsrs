@@ -1,13 +1,15 @@
 <?php
 $total = count($aset ?? []);
+$isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
 ?>
 
 <!-- Page Header -->
 <div class="flex items-center justify-between mb-6">
   <div>
     <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Daftar Aset</h1>
-    <p class="text-sm text-slate-500 mt-1">Kelola inventaris aset rumah sakit</p>
+    <p class="text-sm text-slate-500 mt-1"><?= $isAdmin ? 'Kelola inventaris aset rumah sakit' : 'Lihat inventaris aset rumah sakit' ?></p>
   </div>
+  <?php if ($isAdmin): ?>
   <a href="/ipsrs/aset/tambah"
      class="inline-flex items-center gap-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -15,6 +17,7 @@ $total = count($aset ?? []);
     </svg>
     Tambah Aset
   </a>
+  <?php endif; ?>
 </div>
 
 <!-- Filter Bar -->

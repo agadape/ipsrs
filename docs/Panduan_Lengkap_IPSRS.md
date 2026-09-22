@@ -98,14 +98,18 @@ Di baris nama alat tersebut, lihat pada ujung paling kanan. Anda akan menemukan 
 
 B. Membuka Formulir Unit Fisik
 Gulir (scroll) layar Anda ke arah bawah secara perlahan hingga Anda menemukan sebuah tabel berjudul "Unit Tersedia".
-Tepat di atas tabel tersebut, klik tombol "+ Tambah Unit (Series)". Sebuah jendela kecil (pop-up) akan muncul di tengah layar.
+Tepat di atas tabel tersebut, klik tombol "Tambah Series". Sistem akan membuka halaman formulir unit fisik.
 
 C. Mengisi Spesifikasi Fisik Unit
 Nomor Aset / Inventaris (Wajib Diisi): Masukkan kode atau nomor unik inventaris resmi dari rumah sakit (Contoh: INV-AC-2026-001). 
 ⚠️ Peringatan Keras: Nomor ini bertindak sebagai KTP dari alat tersebut. Sistem otomatis akan menolak dan menampilkan pesan error warna merah jika Anda mengetikkan Nomor Aset yang sama persis dengan yang sudah dipakai oleh alat lain.
 Serial Number (SN): Masukkan nomor seri mesin bawaan pabrik (biasanya tercetak di pelat bodi alat). Jika tidak ada, biarkan kosong.
+Merk: Isi nama produsen yang tercetak pada unit fisik (Contoh: Daikin). Kolom ini boleh dikosongkan jika identitas pabrik tidak terbaca.
+Model / Tipe: Isi kode model atau tipe unit sesuai pelat spesifikasi (Contoh: FTKC25TVM4). Jangan mengisi nama kategori umum pada kolom ini.
+Kapasitas: Isi kemampuan kerja unit beserta satuannya (Contoh: 1 PK, 500 liter, atau 5 kVA). Kolom ini bersifat opsional.
 Lokasi / Ruangan (Wajib Diisi): Klik kotak ini, lalu pilih nama ruangan dari daftar yang turun (dropdown). Ini menentukan di ruangan mana alat/sarana ini pertama kali dipasang atau didistribusikan (Misal: Pilih "Instalasi Gawat Darurat (IGD)").
-Kondisi Aset (Wajib Diisi): Pilih kondisi fisik sarana saat Anda mendatanya pertama kali (Pilih: Baik / Rusak Ringan / Rusak Berat).
+Kondisi: Pilih kondisi fisik sarana saat didata: Baik, Rusak Ringan, atau Rusak Berat. Form memilih "Baik" secara awal; ubah pilihan jika hasil pemeriksaan fisik berbeda.
+Tahun Pengadaan: Isi empat digit tahun unit diperoleh rumah sakit (Contoh: 2024). Gunakan dokumen pengadaan sebagai acuan dan biarkan kosong jika belum dapat diverifikasi.
 
 D. Menyimpan Unit Fisik
 Setelah kotak-kotak di atas terisi, klik tombol "Simpan" di bagian bawah jendela tersebut. Layar akan memuat sejenak (loading), dan voila! Unit fisik (seperti AC di ruang IGD) ini sekarang sudah sah menjadi inventaris resmi.
@@ -129,32 +133,32 @@ C. Proses Mencetak ke Kertas Stiker
 Untuk mencetaknya, Anda bisa menekan klik kanan pada mouse Anda di area layar yang kosong, lalu pilih menu "Print". Atau cara cepatnya: tekan tahan tombol `Ctrl` lalu huruf `P` pada keyboard komputer Anda.
 Pastikan mesin printer Anda sudah menyala dan terisi kertas stiker label tahan air. Setelah dicetak, tempelkan stiker tersebut ke bagian bodi sarana (misal: penutup depan AC atau bodi Genset) yang rata serta mudah dijangkau oleh kamera HP.
 
-4. Mutasi Aset (Pindah Ruangan & Kanibal Alat)
+4. Mutasi Aset (Pindah Ruangan)
 
 Gambar 1.5. Halaman Formulir Mutasi & Riwayat Perpindahan.
 
-⚠️ Aturan Wajib: Anda DILARANG KERAS memindahkan catatan lokasi sarana prasarana menggunakan tombol "Edit" biasa! Seluruh pergerakan aset—baik yang dibongkar dan dipindahkan ke ruangan lain maupun yang ditarik ke gudang—WAJIB dicatat melalui menu khusus "Mutasi Aset". Hal ini agar jejak rekam pergerakannya (Audit Trail) terekam secara abadi dan jelas pertanggungjawabannya.
+⚠️ Aturan Wajib: Jangan memindahkan lokasi sarana prasarana menggunakan tombol "Edit" biasa. Perpindahan unit ke ruangan lain wajib dicatat melalui menu "Mutasi Aset" agar lokasi terbaru dan riwayat perpindahannya tetap konsisten.
 
 A. Membuka Formulir Mutasi
 Lihat ke navigasi sebelah kiri layar Anda, cari dan klik menu "Mutasi Aset".
-Pada halaman yang terbuka, perhatikan pojok kanan atas, lalu klik tombol biru bertuliskan "+ Mutasi Baru". 
+Formulir "Catat Perpindahan Aset" langsung tersedia pada bagian atas halaman. Menu dan proses mutasi hanya tersedia untuk Admin.
 
 B. Memilih Alat Fisik yang Akan Dipindah
 Pada kotak paling atas (Pilih Aset), klik dan ketikkan nama atau nomor seri alat yang fisiknya ingin Anda pindahkan. Sistem akan mencarikan alat tersebut untuk Anda.
 
 C. Menentukan Tujuan Mutasi (Aksi Pemindahan)
-Di bawahnya, terdapat kotak dropdown berjudul "Jenis Mutasi". Klik kotak tersebut, dan pilihlah salah satu dari 3 kondisi berikut:
-1. Pindah Ruangan: Pilih ini jika alat (misalnya kursi tunggu atau Kipas Angin) akan digeser ke unit lain. Saat opsi ini dipilih, sebuah kotak baru bernama "Ruangan Tujuan" akan muncul. Anda wajib mengekliknya dan memilih nama ruangan penerima sarana tersebut.
-2. Simpan ke Gudang: Pilih ini jika sarana sedang dibongkar/ditarik dari lapangan untuk diistirahatkan atau diamankan ke dalam gudang utama IPSRS.
-3. Jadikan Kanibal (Tindakan Ekstrem): Pilih opsi ini HANYA JIKA sarana tersebut telah hancur atau afkir (tidak bisa diperbaiki lagi), namun pihak teknisi memutuskan untuk mempreteli komponennya (seperti kompresor AC atau motor listriknya) guna disimpan sebagai suku cadang (sparepart) cadangan. Saat Anda memilih ini, sistem akan otomatis "mematikan" status alat tersebut menjadi benda mati (Kanibal) dan tidak lagi dihitung sebagai aset utuh.
+Pada dropdown "Jenis Mutasi", implementasi saat ini menyediakan satu aksi: "Pindah Ruangan". Setelah dipilih, kolom "Lokasi Tujuan" akan muncul dan wajib diisi dengan ruangan penerima.
+
+Pilihan "Dibuang", "Rusak Total", "Simpan ke Gudang", atau "Jadikan Kanibal" tidak berada di dropdown mutasi. Untuk aset yang tidak dapat diperbaiki, buka detail unit fisik lalu gunakan "Tandai Rusak Berat". Setelah status tersebut aktif, Admin dapat melanjutkan proses Kanibalisasi atau Penghapusan melalui alur lifecycle aset yang terpisah. Pemisahan ini mencegah perpindahan lokasi biasa mengubah status akhir aset tanpa proses yang sesuai.
 
 D. Mengisi Petugas & Catatan
-Petugas (Wajib Diisi): Tuliskan nama jelas Anda atau nama teknisi yang bertugas melakukan pembongkaran/pemindahan.
-Catatan/Alasan (Wajib Diisi): Ketikkan alasan singkat mengapa alat ini dipindah (Contoh ketikan: "Dipindah sementara karena AC utama di ruang Rapat sedang rusak").
+Petugas (Wajib Diisi): Pilih Admin atau Teknisi yang melaksanakan perpindahan dari dropdown.
+Tanggal (Wajib Diisi): Isi tanggal perpindahan aktual.
+Catatan (Opsional): Ketikkan alasan singkat mengapa alat dipindah (Contoh: "Dipindah sementara karena AC utama di Ruang Rapat sedang rusak").
 
 E. Menyelesaikan Proses Mutasi
-Klik tombol "Proses Mutasi" di bagian paling bawah. 
-Sistem akan melakukan loading (memproses data). Status lokasi aset akan seketika berubah saat itu juga, dan yang paling penting: riwayat (kapan dipindah, jam berapa, oleh siapa, dan alasannya) akan terkunci secara permanen di dalam tabel riwayat.
+Klik tombol "Simpan Mutasi" di bagian bawah formulir.
+Sistem akan memperbarui lokasi unit dan menambahkan catatan pada tabel riwayat mutasi. Periksa kembali nama aset, lokasi asal, lokasi tujuan, tanggal, dan petugas pada tabel tersebut.
 
 5. Verifikasi Lokasi via HP (QR Scan & Geofencing)
 
@@ -182,7 +186,6 @@ Jika Posisi Anda MENCURIGAKAN (Berada di luar area RSUD): Layar HP akan langsung
 
 E. Perekaman Otomatis
 Tanpa Anda perlu mengetik apa pun lagi, informasi koordinat (titik persis di peta) beserta cap waktu (jam dan tanggal alat ini terakhir dilihat / Last Seen) akan otomatis dikirim ke server pusat. Jika teknisi IPSRS membuka layar komputer mereka, letak alat di peta akan langsung bergeser menyesuaikan titik Anda berdiri saat itu juga.
-
 
 <div style='page-break-after: always;'></div>
 
@@ -229,9 +232,13 @@ Bagian 2: Sisi Teknisi IPSRS (Manajemen Tiket & Perbaikan)
 
 Begitu staf mengirim laporan, tiket tersebut akan masuk ke dalam tabel antrean di akun teknisi. Di sinilah tugas Anda sebagai Teknisi IPSRS dimulai.
 
+Pembatasan hak akses: halaman LK menampilkan konteks akun pada judulnya. Admin melihat seluruh laporan. Teknisi hanya melihat laporan berstatus "Laporan Masuk" yang dapat diklaim serta laporan yang ditugaskan kepada nama teknisi tersebut. Pelapor internal hanya melihat laporan yang dibuat atas nama akunnya. Jika URL laporan milik pengguna lain dibuka secara manual, server menolak akses tersebut.
+
 1. Menerima dan Mengklaim Tiket Laporan Masuk
 
-Gambar 2.3. Halaman Daftar Laporan Kerusakan di Akun Teknisi.
+Gambar 2.3. Halaman "Antrean & Pekerjaan Teknisi" di Akun Teknisi (badge Teknisi).
+
+Catatan penyuntingan gambar: tangkapan layar untuk Gambar 2.3 wajib diambil setelah login memakai akun ber-role Teknisi. Jangan menggunakan tangkapan layar Admin karena daftar data dan kewenangannya berbeda.
 
 Melihat Laporan Masuk:
 Di sebelah kiri layar komputer Anda, klik menu navigasi bernama **"Laporan Kerusakan"** (atau LK).
@@ -282,15 +289,18 @@ Klik tombol **"Simpan & Tutup Laporan"**.
 
 Status laporan akan seketika berubah menjadi Hijau (Selesai), dan waktu respons perbaikan Anda (Response Time) akan tercatat di dalam rapor kinerja teknisi di *Dashboard Analytics* pimpinan!
 
-
 <div style='page-break-after: always;'></div>
 
 Modul Laporan Kerusakan Khusus Pengguna Ruangan (Sisi Pelapor Internal)
 
-Gambar 2B.1. Halaman Daftar Tiket Laporan Milik Ruangan (Pelapor Internal).
+Gambar 2B.1. Halaman Laporan Kerusakan Saya di Akun Pelapor (badge Pelapor).
 
-Pada Modul 2 sebelumnya, kita telah membahas "Portal Publik" di mana siapa pun bisa melapor tanpa *login*. Namun, bagaimana jika Anda adalah seorang **Kepala Ruangan** (misalnya Kepala IGD) yang ingin memantau seluruh proses perbaikan fasilitas di ruangan Anda secara resmi?
+Catatan penyuntingan gambar: tangkapan layar Gambar 2B.1 sampai Gambar 2B.3 wajib diambil memakai akun ber-role Pelapor. Sidebar akun ini hanya menampilkan Dashboard dan Laporan Kerusakan; menu aset, stok, jadwal preventif, peminjaman, penghapusan, dan administrasi tidak tersedia.
+
+Pada Modul 2 sebelumnya, kita telah membahas "Portal Publik" di mana siapa pun bisa melapor tanpa *login*. Namun, bagaimana jika Anda adalah seorang **Kepala Ruangan** (misalnya Kepala IGD) yang ingin membuat dan memantau laporan resmi melalui akun sendiri?
 Untuk itulah aplikasi IPSRS memberikan akun resmi dengan hak akses sebagai **"Pelapor"** kepada Anda.
+
+Catatan cakupan data: akun Pelapor menampilkan laporan yang nama pelapornya sama dengan nama akun tersebut. Akun ini tidak otomatis menampilkan seluruh laporan publik dari pengguna lain dalam unit yang sama.
 
 1. Masuk ke Sistem (Login)
 Buka halaman awal aplikasi, lalu ketikkan *Username* dan *Password* yang telah diberikan oleh Admin IPSRS kepada Anda.
@@ -325,7 +335,6 @@ Aset (Wajib Diisi): Klik kotak dropdown ini, ketik dan cari nama fasilitas/alat 
 Lokasi Spesifik: Jelaskan di sudut mana alat itu berada (Contoh: "Di atas meja pendaftaran").
 Keluhan (Wajib Diisi): Ceritakan kerusakannya dengan sangat rinci agar teknisi membawa alat perkakas yang tepat (Contoh: "Kipas indoor AC tidak berputar dan ada suara berderit yang sangat keras").
 Kirim Laporan: Klik tombol "Simpan" di bagian bawah. Laporan Anda akan seketika masuk ke tabel antrean dan sirine notifikasi akan berbunyi di komputer teknisi IPSRS!
-
 
 <div style='page-break-after: always;'></div>
 
@@ -390,7 +399,6 @@ Kehebatan Sistem: Karena alat tersebut ternyata rusak dan butuh turun mesin atau
 Begitu Anda mengeklik Simpan, sistem akan melakukan *Auto-Generate* (membuat otomatis) sebuah Tiket Laporan Kerusakan (LK) baru!
 Anda akan langsung "dilempar" (diarahkan) masuk ke dalam halaman Tiket Perbaikan Kuratif. Sistem akan membuatkan Nomor Tiket baru, menyalin nama AC tersebut, dan menyalin catatan Anda menjadi "Temuan Preventif".
 Di halaman perbaikan inilah, Anda baru diizinkan oleh sistem untuk meminta Suku Cadang dari gudang atau meminta bantuan Vendor Pihak Ketiga (Sesuai dengan cara kerja pada Panduan Modul 2).
-
 
 <div style='page-break-after: always;'></div>
 
@@ -464,7 +472,6 @@ B. Tindakan Lanjut
 Peringatan tersebut akan berbunyi: "Peringatan! Stok Freon R32 Menipis (Tersisa 5 Tabung)".
 Tepat di sebelah tulisan itu, terdapat tombol pintasan "Restok Sekarang". Tombol ini akan memudahkan Kepala IPSRS untuk segera menelpon *supplier* agar memesan freon baru sebelum gudang benar-benar kehabisan stok, sehingga pelayanan perbaikan rumah sakit tidak pernah terhambat!
 
-
 <div style='page-break-after: always;'></div>
 
 Modul Peminjaman & Penghapusan (Manajemen Khusus)
@@ -474,22 +481,26 @@ Gambar 5.1. Halaman Daftar Peminjaman Aset.
 Selain memindahkan barang atau merawat barang, IPSRS terkadang harus menghadapi situasi khusus, seperti ruangan meminjam kipas angin ekstra, atau AC yang sudah benar-benar hancur dan harus dibuang. Modul ini digunakan untuk mencatat siklus hidup aset dari peminjaman hingga "kematian" aset.
 
 1. Peminjaman Aset (Pinjam Pakai)
-Gunakan menu ini jika ada unit/ruangan yang ingin meminjam sarana IPSRS secara sementara.
+Gunakan menu ini jika ada unit/ruangan yang ingin meminjam sarana IPSRS secara sementara. Pencatatan peminjaman dan pengembalian hanya dapat dilakukan oleh Admin.
 
-Gambar 5.2. Formulir Tambah Peminjaman.
+Gambar 5.2. Tombol Pinjamkan dan Formulir Peminjaman pada Detail Unit Fisik.
 
 A. Mencatat Peminjaman Baru
 Buka menu "Peminjaman Aset" di navigasi sebelah kiri (berada di bawah kelompok "Inventaris & Lokasi").
-Klik tombol "+ Pinjam Baru" di pojok kanan atas.
-Pada kotak pencarian (Pilih Aset), cari dan pilih sarana yang akan dipinjamkan (Contoh: "Kipas Angin Berdiri").
-Pada kolom Peminjam/Ruangan (Wajib Diisi), ketikkan nama orang atau ruangan yang meminjam (Contoh: "Ruang Rapat Utama").
-Pada kolom Tanggal Pinjam (Wajib Diisi), tentukan tanggal barang diserahkan.
-Klik "Simpan Peminjaman". Sistem akan mengubah status Kipas Angin tersebut menjadi "Dipinjam", sehingga teknisi lain tidak kebingungan mencari barang tersebut di gudang.
+Klik tombol "Pinjam Aset" di pojok kanan atas. Sistem membuka daftar aset dengan filter status "Tersedia".
+Buka detail unit fisik yang tepat. Pastikan nomor inventaris, lokasi, dan statusnya benar; peminjaman dilakukan per unit fisik, bukan per nama katalog.
+Pada detail unit berstatus "Tersedia", klik tombol "Pinjamkan".
+Nama Peminjam (Wajib Diisi): ketikkan nama orang penanggung jawab.
+Unit Peminjam (Wajib Diisi): ketikkan unit atau ruangan peminjam (Contoh: "Ruang Rapat Utama").
+Rencana Kembali (Wajib Diisi): pilih tanggal rencana pengembalian.
+Keterangan (Opsional): isi tujuan atau catatan serah terima bila diperlukan.
+Klik "Pinjamkan". Sistem mencatat tanggal pinjam secara otomatis dan mengubah status unit menjadi "Dipinjam".
 
 B. Mengembalikan Barang (Selesai Pinjam)
 Jika acara rapat sudah selesai dan Kipas Angin dikembalikan, Anda wajib menutup catatan ini.
-Cari baris peminjaman Kipas Angin tadi, lalu klik tombol "Kembalikan" (ikon centang).
-Sistem akan mencatat Tanggal Kembali secara otomatis dan merubah status kipas angin kembali "Tersedia".
+Pada tabel Peminjaman Aset, cari catatan yang masih berstatus "Dipinjam", lalu klik "Lihat Aset".
+Pada halaman detail unit, klik "Terima Pengembalian" dan konfirmasi tindakan.
+Sistem mencatat tanggal kembali aktual, menutup catatan peminjaman menjadi "Selesai", dan mengubah status unit kembali menjadi "Tersedia".
 
 2. Penghapusan Aset (Afkir / Pemusnahan)
 Ini adalah menu yang sangat krusial. Jika ada AC atau Genset yang sudah rusak parah, tidak bisa diperbaiki lagi, dan harus dilelang, dibuang, atau dihibahkan, Anda DILARANG menghapusnya begitu saja dari database! Gunakan menu ini agar terdapat Berita Acara (BA) pemusnahan yang sah.
@@ -523,7 +534,6 @@ Pilih Aset Donor: Pilih alat mana yang sudah hancur/mati yang akan dipreteli (Co
 Komponen yang Dicabut: Ketikkan apa yang Anda ambil (Contoh: "Dinamo Motor 2HP").
 Alat Penerima: (Otomatis terisi dengan alat yang sedang Anda perbaiki saat ini).
 Setelah disimpan, laporan ini akan menempel pada Riwayat Kanibal. Ini adalah cara IPSRS menyelamatkan anggaran rumah sakit dengan memanfaatkan bangkai mesin lama secara resmi dan tercatat!
-
 
 <div style='page-break-after: always;'></div>
 
@@ -588,7 +598,5 @@ B. Cetak ke PDF / Excel
 Setelah laporan tampil di layar, Kepala IPSRS cukup menekan tombol "Export ke Excel" atau "Cetak PDF".
 Sistem akan otomatis merapikan tabel tersebut menjadi format yang profesional dan siap di-print untuk dilampirkan pada rapat bulanan direksi!
 
-
 <div style='page-break-after: always;'></div>
-
 

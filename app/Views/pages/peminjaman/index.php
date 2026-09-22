@@ -4,6 +4,15 @@
     <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Catatan Peminjaman Aset</h1>
     <p class="text-sm font-medium text-slate-500 mt-1">Daftar aset yang sedang dan pernah dipinjamkan.</p>
   </div>
+  <a href="/ipsrs/aset?status=Tersedia"
+     class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors shadow-sm">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/></svg>
+    Pinjam Aset
+  </a>
+</div>
+
+<div class="mb-5 rounded-md border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+  Pilih <strong>Pinjam Aset</strong>, buka detail unit fisik yang berstatus <strong>Tersedia</strong>, lalu gunakan tombol <strong>Pinjamkan</strong>.
 </div>
 
 <div class="card p-0 overflow-hidden">

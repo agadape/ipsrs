@@ -89,19 +89,19 @@ $kategoriList = $kategoriList ?? [];
       <!-- Tambah Baris Actions -->
       <div class="mt-6 pt-5 border-t border-dashed border-slate-200 flex flex-wrap gap-3 hidden" id="add-buttons">
         <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center mr-2">Tambah Item:</span>
-        <button type="button" onclick="addCustomRow('Inspeksi')" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-medium rounded-md transition-colors">
+        <button type="button" onclick="addCustomRow('Inspeksi')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-red-50 hover:border-red-400 hover:text-red-800 hover:shadow-sm text-slate-700 text-xs font-medium rounded-md transition-all">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           Inspeksi (Pilihan)
         </button>
-        <button type="button" onclick="addCustomRow('Service')" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-medium rounded-md transition-colors">
+        <button type="button" onclick="addCustomRow('Service')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-red-50 hover:border-red-400 hover:text-red-800 hover:shadow-sm text-slate-700 text-xs font-medium rounded-md transition-all">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           Service (Tindakan)
         </button>
-        <button type="button" onclick="addCustomRow('Pengukuran')" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-medium rounded-md transition-colors">
+        <button type="button" onclick="addCustomRow('Pengukuran')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-red-50 hover:border-red-400 hover:text-red-800 hover:shadow-sm text-slate-700 text-xs font-medium rounded-md transition-all">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
           Pengukuran (Angka)
         </button>
-        <button type="button" onclick="addCustomRow('Teks')" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-medium rounded-md transition-colors">
+        <button type="button" onclick="addCustomRow('Teks')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:bg-red-50 hover:border-red-400 hover:text-red-800 hover:shadow-sm text-slate-700 text-xs font-medium rounded-md transition-all">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
           Input Teks Bebas
         </button>
@@ -218,11 +218,11 @@ $kategoriList = $kategoriList ?? [];
         <div class="flex items-center bg-slate-100 p-1 rounded-md w-full border border-slate-200">
           <label class="flex-1 text-center cursor-pointer relative group">
             <input type="radio" name="items[${i}][hasil]" value="${val1}" class="peer sr-only" required ${!isOpt2 && prefilledValue ? 'checked' : ''}>
-            <div class="px-2 py-1.5 text-[11px] font-bold tracking-wide uppercase text-slate-500 rounded peer-checked:bg-white peer-checked:text-red-700 peer-checked:shadow-sm transition-all">${val1}</div>
+            <div class="px-2 py-1.5 text-[11px] font-bold tracking-wide uppercase text-slate-600 rounded group-hover:bg-white group-hover:text-red-800 group-hover:ring-1 group-hover:ring-red-200 peer-checked:bg-white peer-checked:text-red-700 peer-checked:ring-1 peer-checked:ring-red-300 peer-checked:shadow-sm transition-all">${val1}</div>
           </label>
           <label class="flex-1 text-center cursor-pointer relative group">
             <input type="radio" name="items[${i}][hasil]" value="${val2}" class="peer sr-only" required ${isOpt2 ? 'checked' : ''}>
-            <div class="px-2 py-1.5 text-[11px] font-bold tracking-wide uppercase text-slate-500 rounded peer-checked:bg-white peer-checked:text-red-600 peer-checked:shadow-sm transition-all">${val2}</div>
+            <div class="px-2 py-1.5 text-[11px] font-bold tracking-wide uppercase text-slate-600 rounded group-hover:bg-white group-hover:text-red-800 group-hover:ring-1 group-hover:ring-red-200 peer-checked:bg-white peer-checked:text-red-700 peer-checked:ring-1 peer-checked:ring-red-300 peer-checked:shadow-sm transition-all">${val2}</div>
           </label>
         </div>`;
     } else if (type === 'Pengukuran') {
@@ -248,7 +248,7 @@ $kategoriList = $kategoriList ?? [];
     tr.innerHTML = `
       <div class="w-full md:w-36 shrink-0 relative">
         <input type="hidden" name="items[${i}][no_item]" value="${i}">
-        <select name="items[${i}][jenis]" onchange="updateInputUI(this, ${i})" class="w-full px-3 py-2 bg-white border border-slate-200 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-md text-[11px] font-bold uppercase tracking-wider text-slate-700 appearance-none cursor-pointer transition-colors shadow-sm">
+        <select name="items[${i}][jenis]" onchange="updateInputUI(this, ${i})" aria-label="Jenis isian checklist" class="w-full px-3 py-2 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:border-blue-500 focus:border-blue-600 focus:ring-2 focus:ring-blue-200 rounded-md text-[11px] font-bold uppercase tracking-wider text-blue-900 appearance-none cursor-pointer transition-all shadow-sm">
           <option value="Inspeksi" ${data.jenis === 'Inspeksi' ? 'selected' : ''}>Inspeksi</option>
           <option value="Service" ${data.jenis === 'Service' ? 'selected' : ''}>Service</option>
           <option value="Pengukuran" ${data.jenis === 'Pengukuran' ? 'selected' : ''}>Pengukuran</option>

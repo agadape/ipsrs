@@ -35,9 +35,11 @@
 <div class="bg-white border border-slate-200 rounded-md shadow-sm overflow-hidden">
   <div class="p-6 border-b border-slate-100 flex items-center justify-between">
     <h2 class="text-sm font-bold text-slate-800">Daftar Series / Unit Fisik</h2>
+    <?php if (strtolower((string) (session('user_role') ?? '')) === 'admin'): ?>
     <a href="/ipsrs/aset/tambah-series/<?= esc($aset['id']) ?>" class="px-4 py-2 bg-red-700 hover:bg-red-800 text-white text-sm font-medium rounded-md transition-colors shadow-sm">
       Tambah Series
     </a>
+    <?php endif; ?>
   </div>
   <div class="overflow-x-auto">
     <table class="w-full text-left text-sm">

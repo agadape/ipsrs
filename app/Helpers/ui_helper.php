@@ -45,7 +45,7 @@ if (! function_exists('status_stok_badge')) {
     {
         return match ($status) {
             'Aman'    => 'badge bg-emerald-100 text-emerald-700',
-            'Menipis' => 'badge bg-amber-100 text-amber-700',
+            'Menipis' => 'badge bg-red-50 text-red-700 border border-red-200',
             'Habis'   => 'badge bg-red-100 text-red-600',
             default   => 'badge bg-gray-100 text-gray-500',
         };
