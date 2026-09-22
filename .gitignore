@@ -124,3 +124,7 @@ _modules/*
 
 /results/
 /phpunit*.xml
+
+# Local AI audit, memory, evidence, and conversation exports.
+# Keep these files available to local agents without publishing them.
+/AI/
