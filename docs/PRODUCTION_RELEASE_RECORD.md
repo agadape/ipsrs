@@ -34,6 +34,7 @@ Dokumen ini merekam deployment aktual build IPSRS ke Rumahweb/cPanel. Nilai `PAS
 - `ext-zip` dan extension runtime wajib: **PASS**
 - Dedicated database user, bukan `root`: **PASS**
 - Database password setelah migrasi: **sudah dirotasi**, nilai tidak dicatat dalam dokumen
+- Temporary Codex SSH access: **REVOKED** setelah verifikasi; `authorized_keys` kosong, server-side public key dihapus, dan koneksi baru ditolak
 - Production preflight: **28 PASS / 0 FAIL / 3 MANUAL**
 - Composer install `--no-dev --optimize-autoloader`: **PASS**
 - Composer manifest validation: **PASS**
@@ -82,6 +83,7 @@ Rollback kode dilakukan dengan mengarahkan `/home/ipsc7141/current` ke release s
 - HTTPS/security headers/cookies: **PASS**
 - Hardcoded database credential pada public front controller: **tidak ditemukan**
 - Temporary deployment scripts pada home server: **sudah dihapus**
+- Temporary deployment SSH authorization: **sudah dicabut**
 
 ### UAT browser/perangkat
 
