@@ -4,11 +4,11 @@ Dokumen ini merekam deployment aktual build IPSRS ke Rumahweb/cPanel. Nilai `PAS
 
 ## Identitas release
 
-- Tanggal/waktu aktivasi: 22 September 2026, sekitar 08:00 WIB
-- Waktu verifikasi HTTP terakhir: 22 September 2026, 08:37 WIB
-- Commit aplikasi: `21be750ce4e76b70656bdbfff71bd4e2b2f4525c`
-- Release directory: `/home/ipsc7141/releases/21be750`
-- Active symlink: `/home/ipsc7141/current` -> `/home/ipsc7141/releases/21be750`
+- Tanggal/waktu aktivasi: 22 September 2026, sekitar 16:58 WIB
+- Waktu verifikasi HTTP terakhir: 22 September 2026, sekitar 16:58 WIB
+- Commit aplikasi: `bcccfcbabe3b8858e0b5463c5475f7fa0206ca72`
+- Release directory: `/home/ipsc7141/releases/bcccfcb`
+- Active symlink: `/home/ipsc7141/current` -> `/home/ipsc7141/releases/bcccfcb`
 - URL: `https://ipsrs-rsud-jogja.my.id`
 - IP server hasil migrasi hosting: `103.247.10.56`
 - Operator: project owner dengan deployment assistance Codex
@@ -34,23 +34,26 @@ Dokumen ini merekam deployment aktual build IPSRS ke Rumahweb/cPanel. Nilai `PAS
 - `ext-zip` dan extension runtime wajib: **PASS**
 - Dedicated database user, bukan `root`: **PASS**
 - Database password setelah migrasi: **sudah dirotasi**, nilai tidak dicatat dalam dokumen
-- Temporary Codex SSH access: **REVOKED** setelah verifikasi; `authorized_keys` kosong, server-side public key dihapus, dan koneksi baru ditolak
+- Deployment SSH key `codex_ipsrs_deploy`: **AUTHORIZED/RETAINED** atas instruksi project owner untuk deployment berikutnya; private key tetap berada pada profil SSH lokal operator
 - Production preflight: **28 PASS / 0 FAIL / 3 MANUAL**
 - Composer install `--no-dev --optimize-autoloader`: **PASS**
 - Composer manifest validation: **PASS**
 - Composer locked advisory audit: **PASS**, tidak ada advisory yang diketahui; Packagist sempat timeout lalu audit diulang dengan unreachable-source handling
-- Route/application source: **PASS**; active commit sama dengan release commit dan working tree `app`, `composer.json`, serta `composer.lock` bersih
+- Route/application source: **PASS**; active commit sama dengan release commit; route compilation menghasilkan 87 baris tanpa error
+- Automated regression suite sebelum deployment: **119 tests / 321 assertions PASS**
+- Migration status: migration lama `AddPeminjamanPenghapusan` belum tercatat pada migration history production. Migration tidak dijalankan karena tidak berubah pada release ini dan schema terkait sudah digunakan oleh aplikasi; perlu rekonsiliasi terpisah sebelum migration otomatis dipakai.
 
 Tiga item `MANUAL` pada preflight tidak berarti kegagalan runtime. Document root dan HTTPS telah dibuktikan terpisah melalui cPanel UAPI dan HTTP smoke. Restore MySQL production-equivalent serta workflow browser terautentikasi tetap belum dijalankan.
 
 ## Backup dan recovery
 
-- Backup pre-deploy: `/home/ipsc7141/backups/ipsrs-predeploy-20260922-080253`
-- Database dump: `database.sql` — 529,354 bytes
-- Repository/application archive: `repository.tgz` — 15,957,331 bytes
-- Public document-root archive: `public_html.tgz` — 5,166 bytes
-- Checksum manifest: `SHA256SUMS` — 407 bytes
-- Checksum verification setelah deployment: **PASS** untuk ketiga artefak
+- Backup pre-deploy terbaru: `/home/ipsc7141/backups/ipsrs-predeploy-20260922092716`
+- Database dump: `database.sql` — 516,828 bytes; 22 tabel; footer foreign-key restore tervalidasi
+- Database dump SHA-256: `574d2fefb92ba5b1b095d6e109a90323224f28552d2ad0b981d330c6376f90d0`
+- Persistent data copy: **808 file** dari shared `writable` dan `public_html/uploads`
+- Total backup terbaru: **7.1 MB**
+- Production environment dan public front-controller configuration disalin ke backup dengan permission privat
+- Backup integrity verification sebelum switch: **PASS**
 - Permission backup directory: **700**; file backup: **600**
 - Target restore non-production: belum tersedia
 - Restore MySQL pada target non-production: **PENDING**
@@ -62,7 +65,8 @@ Tiga item `MANUAL` pada preflight tidak berarti kegagalan runtime. Document root
 Release memakai directory versioned dan symlink aktif agar rollback kode tidak bergantung pada working tree lama yang kotor:
 
 ```text
-/home/ipsc7141/releases/21be750   exact application release
+/home/ipsc7141/releases/bcccfcb   exact active application release
+/home/ipsc7141/releases/21be750   previous release retained for code rollback
 /home/ipsc7141/current            symlink ke release aktif
 /home/ipsc7141/public_html        document root publik/front controller
 /home/ipsc7141/home/ipsc7141/ipsrs/writable
@@ -82,8 +86,8 @@ Rollback kode dilakukan dengan mengarahkan `/home/ipsc7141/current` ke release s
 - `GET /check.php`: **404**
 - HTTPS/security headers/cookies: **PASS**
 - Hardcoded database credential pada public front controller: **tidak ditemukan**
-- Temporary deployment scripts pada home server: **sudah dihapus**
-- Temporary deployment SSH authorization: **sudah dicabut**
+- Temporary deployment helper pada server: **sudah dihapus**
+- Deployment SSH key: **dipertahankan atas instruksi project owner**
 
 ### UAT browser/perangkat
 
