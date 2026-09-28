@@ -1,6 +1,11 @@
 <?php
 $period = $period ?? 'bulan';
 $periodInfo = $periodInfo ?? ['label' => 'Bulan berjalan'];
+$exportQuery = http_build_query(array_filter([
+  'period' => $period,
+  'from' => $period === 'custom' ? ($periodInfo['start'] ?? null) : null,
+  'to' => $period === 'custom' ? ($periodInfo['end'] ?? null) : null,
+], static fn($value) => $value !== null));
 ?>
 
 <!-- Page Header -->
@@ -9,11 +14,11 @@ $periodInfo = $periodInfo ?? ['label' => 'Bulan berjalan'];
   <div class="flex flex-wrap items-start justify-between gap-3">
     <div>
       <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Laporan</h1>
-      <p class="text-sm text-slate-500 mt-1">Ringkasan LK berdasarkan tanggal laporan dan jadwal PM berdasarkan tanggal jadwal: <?= esc($periodInfo['label']) ?></p>
+      <p class="text-sm text-slate-500 mt-1">LK berdasarkan tanggal laporan; ringkasan PM berdasarkan tanggal jadwal; ekspor preventif berdasarkan tanggal pemeriksaan LKP. Periode: <?= esc($periodInfo['label']) ?></p>
     </div>
     <!-- Period Filter -->
     <div class="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-md p-1">
-    <?php foreach (['minggu' => 'Minggu', 'bulan' => 'Bulan', 'tahun' => 'Tahun'] as $val => $label): ?>
+    <?php foreach (['minggu' => 'Minggu ini', 'bulan' => 'Bulan ini', 'tahun' => 'Tahun ini'] as $val => $label): ?>
     <a href="/ipsrs/laporan?period=<?= $val ?>"
        class="px-4 py-1.5 rounded-sm text-xs font-medium transition-colors
          <?= $period === $val ? 'bg-white text-slate-900 shadow-sm border border-slate-200' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100' ?>">
@@ -23,18 +28,36 @@ $periodInfo = $periodInfo ?? ['label' => 'Bulan berjalan'];
     </div>
   </div>
 
+  <?php if ($error = session()->getFlashdata('error')): ?>
+  <p role="alert" class="text-sm text-red-800 bg-red-50 border border-red-200 rounded-md px-4 py-3"><?= esc($error) ?></p>
+  <?php endif; ?>
+
+  <form method="get" action="/ipsrs/laporan" class="flex flex-wrap items-end gap-3 bg-white border border-slate-200 rounded-md p-4">
+    <input type="hidden" name="period" value="custom">
+    <div>
+      <label for="report-from" class="block text-xs font-semibold text-slate-600 mb-1">Dari tanggal</label>
+      <input id="report-from" name="from" type="date" required value="<?= esc($periodInfo['start'] ?? '') ?>" class="border border-slate-300 rounded-md px-3 py-2 text-sm">
+    </div>
+    <div>
+      <label for="report-to" class="block text-xs font-semibold text-slate-600 mb-1">Sampai tanggal</label>
+      <input id="report-to" name="to" type="date" required value="<?= esc($periodInfo['end'] ?? '') ?>" class="border border-slate-300 rounded-md px-3 py-2 text-sm">
+    </div>
+    <button type="submit" class="bg-red-700 hover:bg-red-800 text-white text-sm font-semibold rounded-md px-4 py-2">Tampilkan</button>
+    <p class="text-xs text-slate-500">Pilih rentang bebas, termasuk bulan-bulan sebelumnya. Ekspor mengikuti rentang yang ditampilkan.</p>
+  </form>
+
   <!-- Bottom row: Export actions -->
   <div class="flex flex-wrap items-center justify-end gap-3">
     
     <!-- Group LK -->
     <div class="flex items-center bg-white border border-slate-200 rounded-md p-1 shadow-sm">
       <span class="text-[10px] font-semibold text-slate-500 px-3 uppercase tracking-wider border-r border-slate-200">Lap. Kerusakan</span>
-      <a href="/ipsrs/laporan/export-print?period=<?= urlencode($period) ?>" target="_blank"
+      <a href="/ipsrs/laporan/export-print?<?= esc($exportQuery) ?>" target="_blank"
          class="flex items-center gap-1.5 px-3 py-1.5 hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-sm transition-colors">
         <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        Cetak PDF
+        Cetak / Simpan PDF
       </a>
-      <a href="/ipsrs/laporan/export-excel?period=<?= urlencode($period) ?>"
+      <a href="/ipsrs/laporan/export-excel?<?= esc($exportQuery) ?>"
          class="flex items-center gap-1.5 px-3 py-1.5 hover:bg-emerald-50 text-emerald-700 text-xs font-medium rounded-sm transition-colors">
         <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Excel
@@ -44,19 +67,26 @@ $periodInfo = $periodInfo ?? ['label' => 'Bulan berjalan'];
     <!-- Group Preventif -->
     <div class="flex items-center bg-white border border-slate-200 rounded-md p-1 shadow-sm">
       <span class="text-[10px] font-semibold text-slate-500 px-3 uppercase tracking-wider border-r border-slate-200">Preventif</span>
-      <a href="/ipsrs/laporan/export-print-preventif?period=<?= urlencode($period) ?>" target="_blank"
+      <a href="/ipsrs/laporan/export-print-preventif?<?= esc($exportQuery) ?>" target="_blank"
          class="flex items-center gap-1.5 px-3 py-1.5 hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-sm transition-colors">
         <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        Cetak PDF
+        Cetak / Simpan PDF
       </a>
-      <a href="/ipsrs/laporan/export-excel-preventif?period=<?= urlencode($period) ?>"
+      <a href="/ipsrs/laporan/export-excel-preventif?<?= esc($exportQuery) ?>"
          class="flex items-center gap-1.5 px-3 py-1.5 hover:bg-emerald-50 text-emerald-700 text-xs font-medium rounded-sm transition-colors">
         <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Excel
       </a>
     </div>
 
+    <div class="flex items-center bg-white border border-slate-200 rounded-md p-1 shadow-sm">
+      <span class="text-[10px] font-semibold text-slate-500 px-3 uppercase tracking-wider border-r border-slate-200">Daftar Unit Aset</span>
+      <a href="/ipsrs/laporan/export-print-aset" target="_blank" class="px-3 py-1.5 hover:bg-slate-50 text-slate-700 text-xs font-medium rounded-sm">Cetak / Simpan PDF</a>
+      <a href="/ipsrs/laporan/export-excel-aset" class="px-3 py-1.5 hover:bg-emerald-50 text-emerald-700 text-xs font-medium rounded-sm">Excel</a>
+    </div>
+
   </div><!-- /actions -->
+  <p class="text-xs text-slate-500 text-right">Daftar unit aset dan ringkasan stok adalah posisi saat ini, sehingga tidak mengikuti filter tanggal LK/PM.</p>
 </div><!-- /header -->
 
 <!-- Stats Grid -->

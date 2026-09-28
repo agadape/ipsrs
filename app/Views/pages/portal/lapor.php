@@ -75,6 +75,7 @@
     .input-field::placeholder {
         color: #94a3b8;
     }
+    .input-field[aria-invalid="true"] { border-color: #dc2626; background: #fef2f2; }
     
     label { 
         font-size: 0.8125rem; 
@@ -145,7 +146,12 @@
             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
         </div>
         <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Lapor Kerusakan</h1>
-        <p class="mt-2 text-sm text-slate-500 font-medium">Bantu kami menjaga fasilitas RSUD Kota Yogyakarta</p>
+        <p class="mt-2 text-sm text-slate-600 font-medium">Form untuk semua pegawai. Tidak perlu akun atau login.</p>
+    </div>
+
+    <div class="mb-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-slate-700">
+      <p class="font-semibold text-red-800">Cara melapor</p>
+      <p class="mt-1">Isi nama, unit kerja, lokasi benda yang rusak, lalu ceritakan masalahnya. Pilihan aset boleh dikosongkan bila tidak tahu nomor stikernya. Setelah dikirim, catat nomor laporan yang muncul.</p>
     </div>
 
     <!-- Error Alert -->
@@ -158,8 +164,10 @@
 
     <!-- Form Card -->
     <div class="premium-card p-6 sm:p-8">
-        <form method="POST" action="/lapor" class="space-y-6">
+        <form method="POST" action="/lapor" id="lapor-form" class="space-y-6" novalidate>
             <?= csrf_field() ?>
+            <div id="form-errors" role="alert" tabindex="-1" class="hidden rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-800"></div>
+            <p class="text-xs text-slate-600">Kolom bertanda * wajib diisi.</p>
             
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
@@ -168,19 +176,19 @@
                 </div>
 
                 <div>
-                    <label for="unit_pelapor">Unit / Ruangan <span class="text-red-500">*</span></label>
+                    <label for="unit_pelapor">Unit kerja pelapor <span class="text-red-500">*</span></label>
                     <input type="text" id="unit_pelapor" name="unit_pelapor" value="<?= old('unit_pelapor') ?>" required class="input-field" placeholder="Cth: IGD">
                 </div>
             </div>
 
             <div>
-                <label for="lokasi">Lokasi Kerusakan Saat Ini <span class="text-red-500">*</span></label>
+                <label for="lokasi">Di mana kerusakannya? <span class="text-red-500">*</span></label>
                 <input type="text" id="lokasi" name="lokasi" value="<?= old('lokasi') ?>" required class="input-field" placeholder="Cth: Kamar Operasi 2 (Di atas pintu)">
             </div>
 
             <div>
                 <div class="flex items-baseline justify-between mb-1.5">
-                    <label for="id_aset_series" class="!mb-0">Aset yang Rusak</label>
+                    <label for="id_aset_series" class="!mb-0">Nomor aset pada stiker, jika ada</label>
                     <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Opsional</span>
                 </div>
                 <select id="id_aset_series" name="id_aset_series" class="input-field select2-aset" style="width:100%;">
@@ -189,11 +197,11 @@
                         <option value="<?= esc($a['id']) ?>" <?= (isset($aset_id) && $aset_id == $a['id']) ? 'selected' : '' ?>><?= esc($a['nomor_aset']) ?> - <?= esc($a['nama'] ?? '') ?></option>
                     <?php endforeach; ?>
                 </select>
-                <p class="text-xs text-slate-500 mt-2">Jika ada stiker aset, bantu kami dengan memilihnya dari daftar.</p>
+                <p class="text-xs text-slate-500 mt-2">Tidak tahu nomor aset? Biarkan pilihan pertama; laporan tetap bisa dikirim.</p>
             </div>
 
             <div>
-                <label for="keluhan">Deskripsi Kerusakan <span class="text-red-500">*</span></label>
+                <label for="keluhan">Apa yang rusak atau tidak berfungsi? <span class="text-red-500">*</span></label>
                 <textarea id="keluhan" name="keluhan" required class="input-field min-h-[120px] resize-y" placeholder="Jelaskan secara detail masalah yang terjadi agar teknisi dapat menyiapkan peralatan yang tepat..."><?= old('keluhan') ?></textarea>
             </div>
 
@@ -213,6 +221,32 @@
   </div>
 
   <script>
+    const laporForm = document.getElementById('lapor-form');
+    laporForm.addEventListener('submit', function (event) {
+        const required = ['pelapor', 'unit_pelapor', 'lokasi', 'keluhan'];
+        const missing = required.map(id => document.getElementById(id)).filter(field => !field.value.trim());
+        const alertBox = document.getElementById('form-errors');
+        required.forEach(id => document.getElementById(id).removeAttribute('aria-invalid'));
+        if (missing.length) {
+            event.preventDefault();
+            missing.forEach(field => field.setAttribute('aria-invalid', 'true'));
+            const list = document.createElement('ul');
+            list.className = 'list-disc pl-5 mt-1';
+            missing.forEach(field => {
+                const item = document.createElement('li');
+                item.textContent = document.querySelector(`label[for="${field.id}"]`).textContent.trim() + ' belum diisi.';
+                list.appendChild(item);
+            });
+            alertBox.replaceChildren(document.createTextNode('Lengkapi kolom berikut:'), list);
+            alertBox.classList.remove('hidden');
+            alertBox.focus();
+            return;
+        }
+        alertBox.classList.add('hidden');
+        const button = laporForm.querySelector('button[type="submit"]');
+        button.disabled = true;
+        button.textContent = 'Mengirim laporan...';
+    });
     $(document).ready(function() {
         $('.select2-aset').select2({
             placeholder: "-- Pilih Aset Jika Ada --",

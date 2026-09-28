@@ -21,7 +21,7 @@
   <div class="w-full max-w-[1000px] bg-white rounded-[24px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] flex flex-col md:flex-row overflow-hidden border border-slate-200/60 relative z-10">
 
     <!-- ── Left Brand Panel ────────────────────────────────────────────── -->
-    <div class="hidden md:flex flex-col justify-between w-5/12 bg-gradient-to-br from-red-700 via-red-800 to-red-950 p-10 relative overflow-hidden text-white">
+    <div class="hidden md:flex flex-col justify-between w-5/12 bg-red-700 p-10 relative overflow-hidden text-white">
       <!-- Subtle Grid Pattern -->
       <div class="absolute inset-0 opacity-[0.05]" 
            style="background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 24px 24px;">
@@ -42,7 +42,7 @@
         <h1 class="text-3xl font-bold text-white leading-[1.2] tracking-tight mb-4">
           Manajemen<br>
           Pemeliharaan<br>
-          <span class="text-amber-300">Aset & Sarana.</span>
+          <span class="text-white">Aset & Sarana.</span>
         </h1>
         <p class="text-red-100/80 text-sm leading-relaxed max-w-[240px]">
           Platform terpadu untuk monitoring kerusakan, penjadwalan preventif, dan kontrol suku cadang.
@@ -77,8 +77,13 @@
       </div>
 
       <div class="max-w-[360px] w-full mx-auto">
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight mb-2">Masuk ke Akun</h2>
-        <p class="text-sm text-slate-500 mb-8">Masukkan email dan kata sandi Anda untuk melanjutkan.</p>
+        <div class="mb-7 rounded-xl border-2 border-red-200 bg-red-50 p-4">
+          <p class="text-xs font-bold uppercase tracking-wide text-red-800">Untuk pelapor / pengguna umum</p>
+          <p class="mt-1 text-sm text-slate-700">Ada fasilitas rusak? Laporkan langsung tanpa akun dan tanpa masuk ke halaman ini.</p>
+          <a href="/lapor" class="mt-3 inline-flex w-full items-center justify-center rounded-lg bg-red-700 px-4 py-3 text-sm font-bold text-white hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2">Laporkan Kerusakan Tanpa Akun →</a>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-900 tracking-tight mb-2">Masuk Admin / Teknisi</h2>
+        <p class="text-sm text-slate-500 mb-8">Gunakan email dan kata sandi akun internal.</p>
         
         <?php if (!empty(session()->getFlashdata('error'))): ?>
         <div class="mb-6 flex items-start gap-2.5 px-3 py-2.5 rounded-lg bg-red-50 border border-red-100">
@@ -132,21 +137,7 @@
             </svg>
             <span id="btn-text">Masuk Sekarang</span>
           </button>
-            <svg id="btn-loader" class="hidden w-4 h-4 animate-spin text-white/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-            </svg>
-            <span id="btn-text">Masuk Sekarang</span>
-          </button>
-                </form>
-
-        <div class="mt-8 pt-6 border-t border-slate-100 text-center">
-          <p class="text-[13px] text-slate-500 mb-3">Bukan teknisi? Ingin melaporkan kerusakan aset?</p>
-          <a href="/lapor" class="inline-flex items-center justify-center w-full py-2.5 rounded-lg border-2 border-red-100 bg-red-50 text-red-700 hover:bg-red-100 hover:border-red-200 text-[13px] font-semibold transition-all">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            Buka Portal Pelapor Umum
-          </a>
-        </div>
+        </form>
 
         
       </div>

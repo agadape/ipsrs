@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Libraries\ReportPeriod;
 use CodeIgniter\Test\CIUnitTestCase;
 use DateTimeImmutable;
+use InvalidArgumentException;
 
 final class ReportPeriodTest extends CIUnitTestCase
 {
@@ -43,5 +44,29 @@ final class ReportPeriodTest extends CIUnitTestCase
     public function testUnknownPeriodFallsBackToMonth(): void
     {
         self::assertSame('bulan', ReportPeriod::normalize('semua'));
+    }
+
+    public function testCustomRangeCanSelectAnEarlierMonthAndKeepsBothBoundaries(): void
+    {
+        $range = ReportPeriod::fromSelection('custom', '2026-07-01', '2026-07-31', new DateTimeImmutable('2026-09-28'));
+        self::assertSame('custom', $range['key']);
+        self::assertSame(['2026-07-01', '2026-07-31'], [$range['start'], $range['end']]);
+        $rows = [
+            ['tanggal' => '2026-06-30'], ['tanggal' => '2026-07-01'],
+            ['tanggal' => '2026-07-31'], ['tanggal' => '2026-08-01'],
+        ];
+        self::assertSame(['2026-07-01', '2026-07-31'], array_column(ReportPeriod::filterRows($rows, 'tanggal', $range), 'tanggal'));
+    }
+
+    public function testCustomRangeRejectsInvalidOrReversedDates(): void
+    {
+        foreach ([['2026-02-30', '2026-03-01'], ['2026-08-02', '2026-08-01'], ['', '2026-08-01']] as [$from, $to]) {
+            try {
+                ReportPeriod::fromSelection('custom', $from, $to);
+                self::fail('Expected an invalid date range to be rejected.');
+            } catch (InvalidArgumentException $error) {
+                self::assertNotSame('', $error->getMessage());
+            }
+        }
     }
 }

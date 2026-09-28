@@ -74,6 +74,18 @@ $isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
   <?php endif; ?>
 </div>
 
+<?php if ($isAdmin && in_array(($series['status'] ?? ''), ['Tersedia', 'Dalam Perbaikan', 'Dipinjam'], true)): ?>
+<div class="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+  <strong>Ingin menghapuskan aset ini?</strong>
+  <?php if (($series['status'] ?? '') === 'Dipinjam'): ?>
+    Terima pengembaliannya dahulu, lalu tandai aset sebagai <strong>Rusak Berat</strong> pada halaman ini.
+  <?php else: ?>
+    Pastikan aset memang tidak dapat diperbaiki, lalu klik <strong>Tandai Rusak Berat</strong> di atas.
+  <?php endif; ?>
+  Setelah status menjadi Rusak Berat, tombol <strong>Lakukan Penghapusan</strong> akan aktif untuk mengisi Berita Acara.
+</div>
+<?php endif; ?>
+
 <!-- Info Grid -->
 <div class="card p-6 mb-6">
   <h2 class="text-sm font-semibold text-slate-800 mb-5 pb-3 border-b border-slate-100">Informasi Aset</h2>

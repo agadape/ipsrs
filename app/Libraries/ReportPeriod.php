@@ -3,6 +3,7 @@
 namespace App\Libraries;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
 
 /**
  * Canonical inclusive date ranges for IPSRS operational reports.
@@ -52,6 +53,28 @@ final class ReportPeriod
             'end' => $end->format('Y-m-d'),
             'label' => $label,
         ];
+    }
+
+    /** @return array{key: string, start: string, end: string, label: string} */
+    public static function fromSelection(?string $period, ?string $from, ?string $to, ?DateTimeImmutable $anchor = null): array
+    {
+        if ($period !== 'custom') {
+            return self::describe($period, $anchor);
+        }
+
+        foreach ([$from, $to] as $date) {
+            if (!is_string($date) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)
+                || ($parsed = DateTimeImmutable::createFromFormat('!Y-m-d', $date)) === false
+                || $parsed->format('Y-m-d') !== $date) {
+                throw new InvalidArgumentException('Isi tanggal awal dan akhir dengan tanggal yang valid.');
+            }
+        }
+        if ($from > $to) {
+            throw new InvalidArgumentException('Tanggal awal tidak boleh setelah tanggal akhir.');
+        }
+
+        return ['key' => 'custom', 'start' => $from, 'end' => $to,
+            'label' => 'Tanggal ' . $from . ' s.d. ' . $to];
     }
 
     /**

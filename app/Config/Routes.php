@@ -115,6 +115,8 @@ $routes->group('ipsrs', ['filter' => 'auth'], function ($routes) {
     $routes->get('laporan/export-print', 'Laporan::exportPrint');
     $routes->get('laporan/export-excel-preventif', 'Laporan::exportExcelPreventif');
     $routes->get('laporan/export-print-preventif', 'Laporan::exportPrintPreventif');
+    $routes->get('laporan/export-print-aset', 'Laporan::exportPrintAset');
+    $routes->get('laporan/export-excel-aset', 'Laporan::exportExcelAset');
 });
 
 

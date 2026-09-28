@@ -6,6 +6,10 @@
   </div>
 </div>
 
+<div class="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+  <strong>Cara menghapuskan aset:</strong> buka <a href="/ipsrs/aset" class="font-semibold underline">Daftar Aset</a>, pilih unit aset, lalu klik <strong>Tandai Rusak Berat</strong>. Setelah statusnya berubah, klik <strong>Lakukan Penghapusan</strong> dan isi data Berita Acara. Halaman ini menampilkan arsip aset yang prosesnya sudah selesai.
+</div>
+
 <div class="card p-0 overflow-hidden">
   <div class="overflow-x-auto">
     <table class="w-full text-left border-collapse text-sm">

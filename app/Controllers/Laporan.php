@@ -8,10 +8,34 @@ use App\Libraries\SpreadsheetText;
 use App\Models\LKModel;
 use App\Models\StokModel;
 use App\Models\JadwalModel;
+use App\Models\AsetSeriesModel;
+use InvalidArgumentException;
 
 class Laporan extends BaseController
 {
-    private function getData(string $period): array
+    private function selectedPeriod(): array
+    {
+        $period = $this->request->getGet('period');
+        $from = $this->request->getGet('from');
+        $to = $this->request->getGet('to');
+        if ((!is_null($period) && !is_string($period))
+            || (!is_null($from) && !is_string($from))
+            || (!is_null($to) && !is_string($to))) {
+            throw new InvalidArgumentException('Parameter periode tidak valid.');
+        }
+        return ReportPeriod::fromSelection(
+            $period,
+            $from,
+            $to
+        );
+    }
+
+    private function invalidPeriod(InvalidArgumentException $error)
+    {
+        return redirect()->to('/ipsrs/laporan')->with('error', $error->getMessage());
+    }
+
+    private function getData(array $periodInfo): array
     {
         $lkModel     = new LKModel();
         $stokModel   = new StokModel();
@@ -21,7 +45,6 @@ class Laporan extends BaseController
         $allStok   = $stokModel->getAll();
         $allJadwal = $jadwalModel->getAll();
 
-        $periodInfo = ReportPeriod::describe($period);
         $period = $periodInfo['key'];
         $filteredLK = ReportPeriod::filterRows($allLK, 'tanggal', $periodInfo);
 
@@ -60,9 +83,8 @@ class Laporan extends BaseController
     }
 
     /** @return array{period: string, periodInfo: array<string, string>, filtered: array<int, array<string, mixed>>, dataLKP: array<int, array<string, mixed>>} */
-    private function getPreventiveData(string $period): array
+    private function getPreventiveData(array $periodInfo): array
     {
-        $periodInfo = ReportPeriod::describe($period);
         $filtered = ReportPeriod::filterRows((new \App\Models\LkpModel())->getAll(), 'tanggal_pemeriksaan', $periodInfo);
 
         $seriesModel = new \App\Models\AsetSeriesModel();
@@ -97,17 +119,23 @@ class Laporan extends BaseController
         ];
     }
 
-    public function index(): string
+    public function index()
     {
-        $period = $this->request->getGet('period') ?? 'bulan';
-        $data   = $this->getData($period);
+        try {
+            $data = $this->getData($this->selectedPeriod());
+        } catch (InvalidArgumentException $error) {
+            return $this->invalidPeriod($error);
+        }
         return $this->render('pages/laporan/index', $data);
     }
 
     public function exportExcelLK()
     {
-        $period     = $this->request->getGet('period') ?? 'bulan';
-        $data       = $this->getData($period);
+        try {
+            $data = $this->getData($this->selectedPeriod());
+        } catch (InvalidArgumentException $error) {
+            return $this->invalidPeriod($error);
+        }
         $period = $data['period'];
         $filteredLK = $data['filteredLK'];
         $periodStr = $data['periodInfo']['label'];
@@ -223,8 +251,11 @@ class Laporan extends BaseController
 
     public function exportPrint()
     {
-        $period = $this->request->getGet('period') ?? 'bulan';
-        $data   = $this->getData($period);
+        try {
+            $data = $this->getData($this->selectedPeriod());
+        } catch (InvalidArgumentException $error) {
+            return $this->invalidPeriod($error);
+        }
         $data['periodLabel'] = $data['periodInfo']['label'];
         
         $lkModel   = new \App\Models\LKModel();
@@ -252,8 +283,11 @@ class Laporan extends BaseController
 
     public function exportPrintPreventif()
     {
-        $period = $this->request->getGet('period') ?? 'bulan';
-        $data = $this->getPreventiveData($period);
+        try {
+            $data = $this->getPreventiveData($this->selectedPeriod());
+        } catch (InvalidArgumentException $error) {
+            return $this->invalidPeriod($error);
+        }
 
         return view('pages/laporan/print_preventif', [
             'periodLabel' => $data['periodInfo']['label'],
@@ -263,8 +297,11 @@ class Laporan extends BaseController
 
     public function exportExcelPreventif()
     {
-        $period = $this->request->getGet('period') ?? 'bulan';
-        $data = $this->getPreventiveData($period);
+        try {
+            $data = $this->getPreventiveData($this->selectedPeriod());
+        } catch (InvalidArgumentException $error) {
+            return $this->invalidPeriod($error);
+        }
         $periodInfo = $data['periodInfo'];
         
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
@@ -351,6 +388,74 @@ class Laporan extends BaseController
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $writer->save('php://output');
         exit();
+    }
+
+    public function exportPrintAset()
+    {
+        return view('pages/laporan/print_aset', [
+            'aset' => (new AsetSeriesModel())->getAllWithParent(),
+            'exportedAt' => date('d/m/Y H:i'),
+        ]);
+    }
+
+    public function exportExcelAset()
+    {
+        $aset = (new AsetSeriesModel())->getAllWithParent();
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Daftar Unit Aset');
+        $sheet->setCellValue('A1', 'DAFTAR UNIT ASET - RSUD KOTA YOGYAKARTA');
+        $sheet->mergeCells('A1:J1');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->setCellValue('A2', 'Posisi saat ekspor: ' . date('d/m/Y H:i'));
+        $sheet->mergeCells('A2:J2');
+
+        $headers = ['No', 'No. Inventaris', 'Nama Aset', 'Kategori', 'Jenis', 'Merk', 'Model', 'No. Seri', 'Lokasi', 'Status'];
+        foreach ($headers as $index => $header) {
+            $sheet->setCellValue([$index + 1, 4], $header);
+        }
+        $sheet->getStyle('A4:J4')->applyFromArray([
+            'font' => ['bold' => true],
+            'fill' => ['fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FFE5E7EB']],
+            'borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]],
+        ]);
+
+        foreach ($aset as $index => $unit) {
+            $row = $index + 5;
+            $sheet->setCellValue('A' . $row, $index + 1);
+            $values = [
+                $unit['nomor_aset'] ?? '-', $unit['nama'] ?? '-', $unit['kategori'] ?? '-',
+                $unit['jenis'] ?? '-', $unit['merk'] ?? '-', $unit['model'] ?? '-',
+                $unit['no_seri'] ?? '-',
+                implode(' / ', array_filter([$unit['gedung'] ?? null, $unit['lantai'] ?? null,
+                    $unit['ruangan'] ?? null, $unit['unit'] ?? null])) ?: '-',
+                $unit['status'] ?? '-',
+            ];
+            foreach ($values as $column => $value) {
+                SpreadsheetText::set($sheet, chr(ord('B') + $column) . $row, $value);
+            }
+        }
+        $lastRow = max(4, count($aset) + 4);
+        if ($lastRow > 4) {
+            $sheet->getStyle('A5:J' . $lastRow)->applyFromArray([
+                'borders' => ['allBorders' => ['borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN]],
+                'alignment' => ['vertical' => 'top', 'wrapText' => true],
+            ]);
+        }
+        foreach (['A'=>6, 'B'=>20, 'C'=>28, 'D'=>18, 'E'=>18, 'F'=>18, 'G'=>18, 'H'=>20, 'I'=>35, 'J'=>18] as $column => $width) {
+            $sheet->getColumnDimension($column)->setWidth($width);
+        }
+        $sheet->freezePane('A5');
+        $sheet->setAutoFilter('A4:J' . $lastRow);
+
+        ob_start();
+        (new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet))->save('php://output');
+        $content = ob_get_clean();
+        return $this->response
+            ->setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            ->setHeader('Content-Disposition', 'attachment; filename="Daftar_Unit_Aset_' . date('Y-m-d') . '.xlsx"')
+            ->setBody($content);
     }
 }
 
