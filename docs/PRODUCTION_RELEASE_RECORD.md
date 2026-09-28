@@ -1,5 +1,18 @@
 # Production Release Evidence Record
 
+## Release 28 September 2026 — revisi UAT
+
+- Build aplikasi aktif: `e884ee80d42ba3adbf232541e8c64a7fc6746678` (`/home/ipsc7141/releases/e884ee8`, diakses melalui `/home/ipsc7141/current`). Release sebelumnya `bcccfcbabe3b8858e0b5463c5475f7fa0206ca72` tetap tersedia untuk rollback kode.
+- Cakupan: pintasan pelaporan tanpa akun di halaman login, petunjuk form pelapor, penjelasan prasyarat penghapusan aset, filter rentang tanggal bebas untuk laporan, dan ekspor daftar unit aset. Tidak ada perubahan schema atau mutasi data production dalam deployment.
+- Sebelum push: PHPUnit **123 tests / 337 assertions PASS**; `git diff --check` PASS. File UAT lokal yang belum dilacak Git tidak ikut dalam release.
+- Backup sebelum aktivasi: `/home/ipsc7141/backups/ipsrs-predeploy-e884ee8-20260928`; dump database **536.288 byte** dengan footer `SET FOREIGN_KEY_CHECKS=1;`, total **1.027 file**. Direktori backup mode `700`, dump mode `600`. Berkas `writable` tetap memakai direktori persisten yang sama.
+- Persiapan hosting: clone GitHub pada direktori release terpisah, commit SHA cocok; Composer install dari lockfile PASS, manifest valid, audit **0 advisory**; production preflight **28 PASS / 0 FAIL / 3 MANUAL**; route CLI berhasil dimuat; `.env` mode `600`.
+- Aktivasi: symlink `/home/ipsc7141/current` diganti secara atomik setelah preflight. `public_html/index.php` tetap menunjuk ke `/home/ipsc7141/current`; tidak ada perubahan aset publik pada commit ini.
+- Smoke setelah aktivasi: `GET /login` **200** dan memuat tombol “Laporkan Kerusakan Tanpa Akun”; `GET /lapor` **200** dan memuat petunjuk “Cara melapor”; akses anonim ke ekspor aset **302**; `GET /check.php` **404**. Header GET login masih memuat proteksi frame/content/referrer dan cookie `Secure`, `HttpOnly`, `SameSite=Lax`.
+- **Batas verifikasi:** ekspor Excel/PDF dengan sesi Admin dan usability ulang pada browser nyata belum diuji pada release ini. PDF memakai dialog cetak browser dengan opsi simpan PDF. Tidak ada restore database karena tidak ada trigger rollback.
+
+---
+
 Dokumen ini merekam deployment aktual build IPSRS ke Rumahweb/cPanel. Nilai `PASS` di bawah hanya berlaku untuk bukti yang benar-benar diperiksa pada 22 September 2026. Item browser terautentikasi yang belum dijalankan tetap ditandai `PENDING`.
 
 ## Identitas release
