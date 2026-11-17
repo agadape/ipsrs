@@ -159,3 +159,13 @@ _modules/*
 # Local deployment access and disposable database files.
 /writable/deploy-access/
 /writable/*.db
+
+# Local notes, research, documentation drafts, and dev archives.
+# Kept on disk for the author; not part of the application source.
+/docs/
+/_arsip_dev/
+/sql/
+/PROJECT_STATE.md
+/REVISION_LOG.md
+/UAT_Checklist.md
+/app/Database/igrations/
