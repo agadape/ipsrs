@@ -169,3 +169,4 @@ _modules/*
 /REVISION_LOG.md
 /UAT_Checklist.md
 /app/Database/igrations/
+/.claude/
