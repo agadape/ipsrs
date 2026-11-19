@@ -61,7 +61,7 @@ class Kanibal extends BaseController
             return redirect()->to('/ipsrs/lk/' . $idLk)->with('success', 'Kanibal komponen berhasil dicatat');
         } catch (\Throwable $e) {
             log_message('error', '[Kanibal::store] ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal mencatat kanibal: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mencatat kanibal: ' . $this->friendlyError($e));
         }
     }
 

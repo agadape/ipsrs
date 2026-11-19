@@ -39,7 +39,7 @@ class Pengguna extends BaseController
             'email'        => 'required|valid_email',
             'nama_lengkap' => 'required|max_length[100]',
             'password'     => 'required|min_length[6]',
-            'role'         => 'required',
+            'role'         => 'required|in_list[Admin,Teknisi,Pelapor]',
             'unit'         => 'required|max_length[100]',
         ]);
         if ($v !== true) return $v;
@@ -60,7 +60,7 @@ class Pengguna extends BaseController
             $this->penggunaModel->create($payload);
         } catch (\Throwable $e) {
             log_message('error', '[Pengguna::tambah] ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan pengguna: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan pengguna: ' . $this->friendlyError($e));
         }
 
         return redirect()->to('/ipsrs/pengguna')->with('success', "Pengguna \"{$data['nama_lengkap']}\" berhasil ditambahkan.");
@@ -70,7 +70,7 @@ class Pengguna extends BaseController
     {
         $v = $this->validateOrFail([
             'nama_lengkap' => 'required|max_length[100]',
-            'role'         => 'required',
+            'role'         => 'required|in_list[Admin,Teknisi,Pelapor]',
             'unit'         => 'required|max_length[100]',
             'aktif'        => 'required',
         ]);
@@ -89,7 +89,7 @@ class Pengguna extends BaseController
             $this->penggunaModel->update($id, $payload);
         } catch (\Throwable $e) {
             log_message('error', '[Pengguna::edit] ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui pengguna: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui pengguna: ' . $this->friendlyError($e));
         }
 
         return redirect()->to('/ipsrs/pengguna')->with('success', 'Data pengguna berhasil diperbarui.');
@@ -100,7 +100,7 @@ class Pengguna extends BaseController
             $this->penggunaModel->delete($id);
         } catch (\Throwable $e) {
             log_message('error', '[Pengguna::delete] ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal menghapus pengguna. Pastikan data tidak sedang digunakan. Detail: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus pengguna. Pastikan data tidak sedang digunakan. Detail: ' . $this->friendlyError($e));
         }
 
         return redirect()->to('/ipsrs/pengguna')->with('success', 'Pengguna berhasil dihapus.');

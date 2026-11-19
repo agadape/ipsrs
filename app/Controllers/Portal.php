@@ -5,13 +5,19 @@ namespace App\Controllers;
 use App\Models\LKModel;
 use App\Models\AsetSeriesModel;
 use App\Config\IPSRS;
+use App\Libraries\AsetLifecycle;
 
 class Portal extends BaseController
 {
     public function lapor()
     {
+        $aset = array_values(array_filter(
+            (new AsetSeriesModel())->getAllWithParent(),
+            static fn(array $row): bool => AsetLifecycle::canReceiveLk($row['status'] ?? null)
+        ));
+
         return view('pages/portal/lapor', [
-            'aset' => (new AsetSeriesModel())->getAllWithParent(),
+            'aset' => $aset,
             'aset_id' => $this->request->getGet('aset_id')
         ]);
     }
@@ -25,9 +31,9 @@ class Portal extends BaseController
             'lokasi'       => 'required',
         ];
 
-        $v = $this->validateOrFail($rules, 'Mohon lengkapi seluruh data laporan.');
+        $v = $this->validateOrFail($rules, 'Laporan belum lengkap.');
         if ($v !== true) {
-            return redirect()->back()->withInput()->with('error', 'Validasi gagal, mohon periksa kembali isian Anda.');
+            return $v;
         }
 
         try {
@@ -37,27 +43,42 @@ class Portal extends BaseController
             $data['status'] = IPSRS::STATUS_LK[0];
             $data['kode'] = 'PR';
 
+            $asetModel = new AsetSeriesModel();
+            $asset = null;
             if (empty($data['id_aset_series'])) {
                 $data['id_aset_series'] = null;
             } else {
-                $asetModel = new AsetSeriesModel();
                 $asset = $asetModel->getById($data['id_aset_series']);
-                if ($asset) {
-                    $data['nama_aset'] = $asset['nama_aset'];
-                    // Update asset status
-                    $asetModel->update($asset['id'], [
-                        'status' => IPSRS::LK_TO_ASET_STATUS['Survei'],
-                        'lokasi' => $data['lokasi']
-                    ]);
+                if (!$asset || !AsetLifecycle::canReceiveLk($asset['status'] ?? null)) {
+                    return redirect()->back()->withInput()
+                        ->with('error', 'Aset yang dipilih tidak ditemukan atau sudah dihapuskan. Kosongkan pilihan aset bila ragu.');
                 }
+                $data['nama_aset'] = $asset['nama_aset'];
             }
 
+            $db = \Config\Database::connect();
+            $db->transBegin();
             $model = new LKModel();
             $lk = $model->createWithRetry($data, fn() => $model->nextNoOrder(), 'no_order');
 
+            // Pelapor publik hanya menandai unit sedang ditangani; lokasi master aset tidak diubah dari teks bebas.
+            if ($asset && AsetLifecycle::canSyncFromLk($asset['status'] ?? null)) {
+                $asetModel->update($asset['id'], ['status' => IPSRS::LK_TO_ASET_STATUS['Survei']]);
+            }
+
+            if ($db->transStatus() === false) {
+                $db->transRollback();
+                throw new \RuntimeException('Laporan tidak dapat disimpan.');
+            }
+            $db->transCommit();
+
             return redirect()->to('/lapor/sukses?order=' . $lk['no_order']);
-        } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'Gagal: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            if (isset($db) && $db->transDepth > 0) {
+                $db->transRollback();
+            }
+            log_message('error', '[Portal::storeLapor] ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Laporan gagal disimpan. Silakan coba lagi atau hubungi IPSRS.');
         }
     }
 

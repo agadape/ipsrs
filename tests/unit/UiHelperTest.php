@@ -111,4 +111,12 @@ final class UiHelperTest extends CIUnitTestCase
     {
         $this->assertStringContainsString('gray', kode_badge('XX'));
     }
+
+    public function testLokasiLabelSkipsPlaceholderAndDuplicateParts(): void
+    {
+        $this->assertSame('Poliklinik / Rawat Jalan', lokasi_label('Poliklinik / Rawat Jalan', '-'));
+        $this->assertSame('A1 / Vinolia A', lokasi_label('A1', 'Vinolia A'));
+        $this->assertSame('IGD', lokasi_label('IGD', 'IGD'));
+        $this->assertSame('-', lokasi_label(null, ' - '));
+    }
 }

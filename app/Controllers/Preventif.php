@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Config\IPSRS;
 use App\Libraries\AccessPolicy;
+use App\Libraries\AsetLifecycle;
 use App\Libraries\LkpChecklist;
 use App\Models\JadwalModel;
 use App\Models\AsetModel;
@@ -56,11 +57,17 @@ class Preventif extends BaseController
             return redirect()->to('/ipsrs/preventif')->with('error', 'Akses ditolak.');
         }
         $v = $this->validateOrFail([
+            'id_aset' => 'required',
             'teknisi' => 'required',
             'tanggal' => 'required',
             'jam'     => 'required',
-        ], 'Mohon lengkapi teknisi, tanggal, dan jam jadwal.');
+        ], 'Mohon lengkapi aset, teknisi, tanggal, dan jam jadwal.');
         if ($v !== true) return $v;
+
+        $series = (new \App\Models\AsetSeriesModel())->getById((string) $this->request->getPost('id_aset'));
+        if (!$series || !AsetLifecycle::canReceiveLk($series['status'] ?? null)) {
+            return redirect()->back()->withInput()->with('error', 'Aset tidak ditemukan atau sudah dihapuskan.');
+        }
         
         $tanggalJam = $this->request->getPost('tanggal') . ' ' . $this->request->getPost('jam');
         if (strtotime($tanggalJam) < time()) {
@@ -71,12 +78,15 @@ class Preventif extends BaseController
             $data = $this->whitelist([
                 'id_aset', 'aset', 'lokasi', 'teknisi', 'tanggal', 'jam',
             ]);
+            // Nama aset dan lokasi diambil dari data unit, bukan dari isian browser.
+            $data['aset'] = ($series['nama_aset'] ?? '') ?: ($data['aset'] ?? '');
+            $data['lokasi'] = lokasi_label($series['unit'] ?? null, $series['ruangan'] ?? null);
             $data['status'] = IPSRS::STATUS_JADWAL[0]; // Belum
             $this->model->create($data);
             return redirect()->to('/ipsrs/preventif')->with('success', 'Jadwal berhasil ditambahkan');
         } catch (\Throwable $e) {
             log_message('error', '[Preventif::store] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/preventif')->with('error', 'Gagal menambah jadwal: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/preventif')->with('error', 'Gagal menambah jadwal: ' . $this->friendlyError($e));
         }
     }
 
@@ -98,7 +108,7 @@ class Preventif extends BaseController
             return redirect()->to('/ipsrs/preventif')->with('success', 'Jadwal ditandai selesai');
         } catch (\Throwable $e) {
             log_message('error', '[Preventif::selesai] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/preventif')->with('error', 'Gagal menandai selesai: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/preventif')->with('error', 'Gagal menandai selesai: ' . $this->friendlyError($e));
         }
     }
 
@@ -112,7 +122,7 @@ class Preventif extends BaseController
             return redirect()->to('/ipsrs/preventif')->with('success', 'Jadwal dihapus');
         } catch (\Throwable $e) {
             log_message('error', '[Preventif::delete] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/preventif')->with('error', 'Gagal menghapus jadwal: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/preventif')->with('error', 'Gagal menghapus jadwal: ' . $this->friendlyError($e));
         }
     }
 
@@ -255,11 +265,19 @@ class Preventif extends BaseController
                     'id_aset_series' => $idAsetSeries,
                     'nama_aset'   => $jadwal['aset'] ?? null,
                     'teknisi'     => $jadwal['teknisi'] ?? null,
-                    'status'      => IPSRS::STATUS_LK[0],
+                    // Teknisi PM langsung menjadi penanggung jawab, jadi LK masuk tahap Didisposisi.
+                    'status'      => !empty($jadwal['teknisi']) ? IPSRS::STATUS_LK[1] : IPSRS::STATUS_LK[0],
                 ], fn() => $lkModel->nextNoOrder(), 'no_order');
                 $newId = $newLK['id'] ?? null;
                 if (!$newId) {
                     throw new \RuntimeException('LK kuratif dari temuan PM gagal dibuat.');
+                }
+                if ($idAsetSeries) {
+                    $seriesModel = new \App\Models\AsetSeriesModel();
+                    $series = $seriesModel->getById($idAsetSeries);
+                    if ($series && AsetLifecycle::canSyncFromLk($series['status'] ?? null)) {
+                        $seriesModel->update($idAsetSeries, ['status' => IPSRS::LK_TO_ASET_STATUS['Didisposisi']]);
+                    }
                 }
             }
 
@@ -276,7 +294,7 @@ class Preventif extends BaseController
         } catch (\Throwable $e) {
             $db->transRollback();
             log_message('error', '[Preventif::simpanLkp] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/preventif')->with('error', 'Gagal menyimpan LKP: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/preventif')->with('error', 'Gagal menyimpan LKP: ' . $this->friendlyError($e));
         }
     }
 

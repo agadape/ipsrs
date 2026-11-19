@@ -21,6 +21,7 @@ $sBadge = status_lk_badge($status);
 $canAssign   = $status === 'Laporan Masuk';
 $canProgress = in_array($status, ['Didisposisi', 'Survei', 'Dalam Perbaikan', 'Menunggu Suku Cadang', 'Menunggu Vendor']);
 $isSelesai   = $status === 'Selesai';
+$allowedNext = \App\Config\IPSRS::LK_STATUS_TRANSITIONS[$status] ?? [];
 
 $sukuCadang = $sukuCadang ?? [];
 $vendorDetail = $vendorDetail ?? [];
@@ -562,30 +563,40 @@ $vendorList   = $vendorList ?? [];
         <input type="hidden" name="status_baru" id="status_baru" required value="">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-3" id="status-cards">
           
+          <?php if (in_array('Survei', $allowedNext, true)): ?>
           <button type="button" onclick="selectStatus('Survei')" class="status-btn flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 border-slate-200 bg-white hover:border-red-300 hover:bg-red-50 transition-all text-slate-600" data-value="Survei">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             <span class="text-xs font-bold text-center leading-tight">Survei<br><span class="font-medium text-[10px] opacity-80">(Pengecekan)</span></span>
           </button>
+          <?php endif; ?>
 
+          <?php if (in_array('Dalam Perbaikan', $allowedNext, true)): ?>
           <button type="button" onclick="selectStatus('Dalam Perbaikan')" class="status-btn flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 border-slate-200 bg-white hover:border-red-300 hover:bg-red-50 transition-all text-slate-600" data-value="Dalam Perbaikan">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             <span class="text-xs font-bold text-center leading-tight">Dalam<br>Perbaikan</span>
           </button>
+          <?php endif; ?>
 
+          <?php if (in_array('Menunggu Suku Cadang', $allowedNext, true)): ?>
           <button type="button" onclick="selectStatus('Menunggu Suku Cadang')" class="status-btn flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 border-slate-200 bg-white hover:border-amber-300 hover:bg-amber-50 transition-all text-slate-600" data-value="Menunggu Suku Cadang">
             <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
             <span class="text-xs font-bold text-center leading-tight">Menunggu<br>Suku Cadang</span>
           </button>
+          <?php endif; ?>
 
+          <?php if (in_array('Menunggu Vendor', $allowedNext, true)): ?>
           <button type="button" onclick="selectStatus('Menunggu Vendor')" class="status-btn flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 border-slate-200 bg-white hover:border-purple-300 hover:bg-purple-50 transition-all text-slate-600" data-value="Menunggu Vendor">
             <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             <span class="text-xs font-bold text-center leading-tight">Menunggu<br>Vendor</span>
           </button>
+          <?php endif; ?>
 
+          <?php if (in_array('Selesai', $allowedNext, true)): ?>
           <button type="button" onclick="selectStatus('Selesai')" class="status-btn flex flex-col items-center justify-center gap-2 p-3 rounded-lg border-2 border-slate-200 bg-white hover:border-emerald-300 hover:bg-emerald-50 transition-all text-slate-600 col-span-2 md:col-span-1" data-value="Selesai">
             <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
             <span class="text-xs font-bold text-center leading-tight">Selesai</span>
           </button>
+          <?php endif; ?>
 
         </div>
         <script>
@@ -625,7 +636,7 @@ $vendorList   = $vendorList ?? [];
       <div class="md:col-span-2">
         <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Tindakan yang Dilakukan</label>
         <textarea name="tindakan" rows="3"
-                  placeholder="Deskripsikan tindakan perbaikan..." required
+                  id="tindakan" placeholder="Deskripsikan tindakan perbaikan..."
                   class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm resize-none"><?= esc($lk['tindakan'] ?? '') ?></textarea>
       </div>
 
@@ -753,6 +764,9 @@ $vendorList   = $vendorList ?? [];
       }
     });
     
+    const tindakan = document.getElementById('tindakan');
+    if (tindakan) tindakan.required = !!statusSelect && statusSelect.value === 'Selesai';
+
     if (statusSelect && statusSelect.value === 'Selesai') {
       sigContainer.classList.remove('hidden');
       if (!signaturePad) {

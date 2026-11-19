@@ -105,7 +105,7 @@ class Aset extends BaseController
             return redirect()->to('/ipsrs/aset/' . $idParent)->with('success', 'Unit/Series berhasil ditambahkan');
         } catch (\Throwable $e) {
             log_message('error', '[Aset::storeSeries] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/aset/' . $idParent)->with('error', 'Gagal menyimpan unit: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/aset/' . $idParent)->with('error', 'Gagal menyimpan unit: ' . $this->friendlyError($e));
         }
     }
 
@@ -201,7 +201,7 @@ class Aset extends BaseController
             (new \App\Models\AsetSeriesModel())->update($idSeries, $data);
             return redirect()->to('/ipsrs/aset/series/' . $idSeries)->with('success', 'Unit berhasil diperbarui');
         } catch (\Throwable $e) {
-            return redirect()->to('/ipsrs/aset/series/' . $idSeries)->with('error', 'Gagal update: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/aset/series/' . $idSeries)->with('error', 'Gagal update: ' . $this->friendlyError($e));
         }
     }
 
@@ -242,7 +242,7 @@ class Aset extends BaseController
             return redirect()->to('/ipsrs/aset')->with('success', 'Katalog Aset berhasil ditambahkan');
         } catch (\Throwable $e) {
             log_message('error', '[Aset::store] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/aset')->with('error', 'Gagal menyimpan aset: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/aset')->with('error', 'Gagal menyimpan aset: ' . $this->friendlyError($e));
         }
     }
 
@@ -275,7 +275,7 @@ class Aset extends BaseController
             return redirect()->to('/ipsrs/aset/' . $id)->with('success', 'Aset berhasil diperbarui');
         } catch (\Throwable $e) {
             log_message('error', '[Aset::update] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/aset/' . $id)->with('error', 'Gagal memperbarui aset: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/aset/' . $id)->with('error', 'Gagal memperbarui aset: ' . $this->friendlyError($e));
         }
     }
 
@@ -332,10 +332,14 @@ class Aset extends BaseController
                 return redirect()->back()->withInput()->with('error', 'Lokasi tujuan tidak ditemukan.');
             }
 
-            $lokasiTujuan_str = $lokasi['nama_ruangan'] ?? $lokasi['nama_unit'] ?? '';
+            if (($aset['id_lokasi'] ?? null) === $lokasiTujuan_id) {
+                return redirect()->back()->withInput()->with('error', 'Lokasi tujuan sama dengan lokasi unit saat ini.');
+            }
+
+            $lokasiTujuan_str = lokasi_label($lokasi['nama_unit'] ?? null, $lokasi['nama_ruangan'] ?? null);
             $data['id_aset_series'] = $idSeries;
             $data['nama_aset']   = $aset['nama_aset'] ?? ($aset['nomor_aset'] ?? '');
-            $data['lokasi_asal'] = $aset['lokasi'] ?? null;
+            $data['lokasi_asal'] = lokasi_label($aset['unit'] ?? null, $aset['ruangan'] ?? null);
             $data['alasan'] = $jenisMutasi;
             $data['lokasi_tujuan'] = $lokasiTujuan_str;
 
@@ -351,7 +355,7 @@ class Aset extends BaseController
         } catch (\Throwable $e) {
             $db->transRollback();
             log_message('error', '[Aset::storeMutasi] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/aset/mutasi')->with('error', 'Gagal mencatat mutasi: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/aset/mutasi')->with('error', 'Gagal mencatat mutasi: ' . $this->friendlyError($e));
         }
     }
 
@@ -488,7 +492,7 @@ class Aset extends BaseController
             return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dipinjamkan.');
         } catch (\Throwable $e) {
             $db->transRollback();
-            return redirect()->to('/ipsrs/aset/series/' . $id)->with('error', $e->getMessage());
+            return redirect()->to('/ipsrs/aset/series/' . $id)->with('error', $this->friendlyError($e));
         }
     }
 
@@ -519,7 +523,7 @@ class Aset extends BaseController
             return redirect()->to('/ipsrs/aset/series/' . $id)->with('success', 'Aset berhasil dikembalikan.');
         } catch (\Throwable $e) {
             $db->transRollback();
-            return redirect()->to('/ipsrs/aset/series/' . $id)->with('error', $e->getMessage());
+            return redirect()->to('/ipsrs/aset/series/' . $id)->with('error', $this->friendlyError($e));
         }
     }
 

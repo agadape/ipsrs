@@ -38,7 +38,7 @@ class Vendor extends BaseController
             return redirect()->to('/ipsrs/vendor')->with('success', 'Vendor berhasil ditambahkan');
         } catch (\Throwable $e) {
             log_message('error', '[Vendor::store] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/vendor')->with('error', 'Gagal menambah vendor: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/vendor')->with('error', 'Gagal menambah vendor: ' . $this->friendlyError($e));
         }
     }
 
@@ -53,7 +53,7 @@ class Vendor extends BaseController
             return redirect()->to('/ipsrs/vendor')->with('success', 'Vendor berhasil diperbarui');
         } catch (\Throwable $e) {
             log_message('error', '[Vendor::update] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/vendor')->with('error', 'Gagal memperbarui vendor: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/vendor')->with('error', 'Gagal memperbarui vendor: ' . $this->friendlyError($e));
         }
     }
 
@@ -64,7 +64,7 @@ class Vendor extends BaseController
             return redirect()->to('/ipsrs/vendor')->with('success', 'Vendor berhasil dihapus');
         } catch (\Throwable $e) {
             log_message('error', '[Vendor::delete] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/vendor')->with('error', 'Gagal menghapus vendor: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/vendor')->with('error', 'Gagal menghapus vendor: ' . $this->friendlyError($e));
         }
     }
 }

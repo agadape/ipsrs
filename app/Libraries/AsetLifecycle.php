@@ -32,10 +32,19 @@ final class AsetLifecycle
         return $status === 'Tersedia';
     }
 
-    /** LK status must never automatically revive protected lifecycle states. */
+    /**
+     * LK status must never automatically revive protected lifecycle states.
+     * A borrowed unit keeps its loan state until it is returned.
+     */
     public static function canSyncFromLk(?string $status): bool
     {
-        return !in_array($status, ['Dihapuskan', 'Rusak Berat'], true);
+        return !in_array($status, ['Dihapuskan', 'Rusak Berat', 'Dipinjam'], true);
+    }
+
+    /** A disposed unit no longer exists operationally, so it cannot receive new LK. */
+    public static function canReceiveLk(?string $status): bool
+    {
+        return $status !== 'Dihapuskan';
     }
 
     public static function isCanonical(?string $status): bool

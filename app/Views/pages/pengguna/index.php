@@ -38,7 +38,7 @@
         <select name="role" required
                 class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Role --</option>
-          <?php foreach (['Admin', 'Teknisi', 'Pelapor', 'Manajemen'] as $r): ?>
+          <?php foreach (['Admin', 'Teknisi', 'Pelapor'] as $r): ?>
           <option value="<?= $r ?>" <?= old('role') === $r ? 'selected' : '' ?>><?= $r ?></option>
           <?php endforeach; ?>
         </select>
@@ -165,7 +165,7 @@
           <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Role <span class="text-red-500">*</span></label>
           <select name="role" id="edit-role" required
                   class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
-            <?php foreach (['Admin', 'Teknisi', 'Pelapor', 'Manajemen'] as $r): ?>
+            <?php foreach (['Admin', 'Teknisi', 'Pelapor'] as $r): ?>
             <option value="<?= $r ?>"><?= $r ?></option>
             <?php endforeach; ?>
           </select>

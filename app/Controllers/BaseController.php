@@ -44,13 +44,47 @@ abstract class BaseController extends Controller
             return true;
         }
         $msg = $errorMsg ?: 'Mohon lengkapi seluruh data yang wajib diisi.';
-        $msg .= ' Detail: ' . implode(', ', $this->validator->getErrors());
+        $errors = [];
+        foreach ($this->validator->getErrors() as $field => $error) {
+            $label = ucfirst(str_replace(['id_', '_'], ['', ' '], (string) $field));
+            $errors[] = str_replace((string) $field, $label, $error);
+        }
+        $msg .= ' Detail: ' . implode(' ', $errors);
         
         if ($this->request->isAJAX()) {
             return $this->response->setJSON(['success' => false, 'message' => $msg]);
         }
         
         return redirect()->back()->withInput()->with('error', $msg);
+    }
+
+    /**
+     * Ubah exception menjadi pesan yang aman dibaca pengguna.
+     * Error database diterjemahkan; pesan aturan bisnis ditampilkan apa adanya.
+     */
+    protected function friendlyError(\Throwable $e): string
+    {
+        $message = $e->getMessage();
+        $isDatabaseError = $e instanceof \CodeIgniter\Database\Exceptions\DatabaseException
+            || $e instanceof \mysqli_sql_exception
+            || str_starts_with($message, 'MySQL error');
+
+        if (!$isDatabaseError) {
+            return $message;
+        }
+
+        $code = (int) $e->getCode();
+        if ($code === 0 && preg_match('/\((\d{4})\)/', $message, $m)) {
+            $code = (int) $m[1];
+        }
+
+        return match ($code) {
+            1062       => 'Data yang sama sudah terdaftar. Periksa kembali isian yang harus unik (misalnya email, kode, atau nomor).',
+            1451       => 'Data ini masih dipakai oleh data lain sehingga tidak dapat dihapus atau diubah.',
+            1452       => 'Data rujukan yang dipilih tidak ditemukan. Muat ulang halaman lalu coba lagi.',
+            1406       => 'Isian terlalu panjang. Persingkat teks lalu coba lagi.',
+            default    => 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi atau hubungi admin.',
+        };
     }
 
     /**

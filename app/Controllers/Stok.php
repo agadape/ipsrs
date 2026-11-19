@@ -40,7 +40,7 @@ class Stok extends BaseController
         if ($v !== true) return $v;
 
         try {
-            $data = $this->whitelist(['nama', 'kategori', 'satuan', 'minimum_stok', 'keterangan']);
+            $data = $this->whitelist(['nama', 'kategori', 'satuan', 'minimum_stok']);
             $data['stok_tersedia'] = 0;
             $this->model->createWithRetry(
                 $data,
@@ -50,7 +50,7 @@ class Stok extends BaseController
             return redirect()->to('/ipsrs/stok')->with('success', 'Barang berhasil ditambahkan');
         } catch (\Throwable $e) {
             log_message('error', '[Stok::tambahBarang] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/stok')->with('error', 'Gagal menambah barang: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/stok')->with('error', 'Gagal menambah barang: ' . $this->friendlyError($e));
         }
     }
 
@@ -127,7 +127,7 @@ class Stok extends BaseController
         } catch (\Throwable $e) {
             $db->transRollback();
             log_message('error', '[Stok::catatTransaksi] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/stok')->with('error', $e->getMessage());
+            return redirect()->to('/ipsrs/stok')->with('error', $this->friendlyError($e));
         }
     }
 

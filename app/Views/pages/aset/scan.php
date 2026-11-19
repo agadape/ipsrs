@@ -46,7 +46,7 @@
     <div class="text-center mb-6 pb-6 border-b border-gray-100">
       <h1 class="text-2xl font-bold text-slate-900 mb-1"><?= esc($aset['nama'] ?? 'Detail Aset') ?></h1>
       <span class="inline-block px-3 py-1 rounded-full bg-gray-100 text-slate-900 text-xs font-semibold">
-        ID: <?= esc($aset['nomor_aset'] ?? '-') ?>
+        ID: <?= esc($series['nomor_aset'] ?? '-') ?>
       </span>
     </div>
 
@@ -59,14 +59,14 @@
       <div class="bg-slate-50 rounded-lg p-3 border border-slate-200/60">
         <p class="badge-label">Kondisi</p>
         <div class="flex items-center gap-1.5">
-          <?php $isBaik = strtolower($aset['kondisi'] ?? '') === 'baik'; ?>
+          <?php $isBaik = strtolower($series['kondisi'] ?? '') === 'baik'; ?>
           <span class="h-2.5 w-2.5 rounded-full <?= $isBaik ? 'bg-green-500' : 'bg-yellow-500' ?>"></span>
-          <p class="data-value"><?= esc($aset['kondisi'] ?? '-') ?></p>
+          <p class="data-value"><?= esc($series['kondisi'] ?? '-') ?></p>
         </div>
       </div>
       <div class="col-span-2 bg-slate-50 rounded-lg p-3 border border-slate-200/60">
         <p class="badge-label">Lokasi Saat Ini (Sistem)</p>
-        <p class="data-value"><?= esc($aset['lokasi'] ?? '-') ?> <span class="text-gray-400 font-normal">/ <?= esc($aset['ruangan'] ?? '-') ?></span></p>
+        <p class="data-value"><?= esc(lokasi_label($series['unit'] ?? null, $series['ruangan'] ?? null)) ?></p>
       </div>
     </div>
 

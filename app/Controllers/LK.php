@@ -72,7 +72,10 @@ class LK extends BaseController
     {
         $view = session('user_role') === 'pelapor' ? 'pages/lk/form_pelapor' : 'pages/lk/form';
         return $this->render($view, [
-            'aset' => (new \App\Models\AsetSeriesModel())->getAllWithParent(),
+            'aset' => array_values(array_filter(
+                (new \App\Models\AsetSeriesModel())->getAllWithParent(),
+                static fn(array $row): bool => AsetLifecycle::canReceiveLk($row['status'] ?? null)
+            )),
             'kodeKerusakan'  => (new \App\Models\KodeKerusakanModel())->getAll(),
         ]);
     }
@@ -113,6 +116,9 @@ class LK extends BaseController
                 $series = (new \App\Models\AsetSeriesModel())->getById($idAset);
                 if (!$series) {
                     return redirect()->back()->withInput()->with('error', 'Aset yang dipilih tidak ditemukan.');
+                }
+                if (!AsetLifecycle::canReceiveLk($series['status'] ?? null)) {
+                    return redirect()->back()->withInput()->with('error', 'Unit ini sudah dihapuskan sehingga tidak dapat dilaporkan rusak.');
                 }
                 $data['id_aset_series'] = $idAset;
             }
@@ -157,7 +163,7 @@ class LK extends BaseController
             return redirect()->to('/ipsrs/lk')->with('success', 'LK berhasil dibuat');
         } catch (\Throwable $e) {
             log_message('error', '[LK::store] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/lk')->with('error', 'Gagal membuat LK: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/lk')->with('error', 'Gagal membuat LK: ' . $this->friendlyError($e));
         }
     }
 
@@ -188,6 +194,7 @@ class LK extends BaseController
                 ]);
             }
             $this->model->delete($id);
+            $this->releaseSeriesAfterLkRemoval($lk);
             if ($db->transStatus() === false) {
                 throw new \RuntimeException('Penghapusan LK tidak dapat diselesaikan.');
             }
@@ -196,7 +203,7 @@ class LK extends BaseController
         } catch (\Throwable $e) {
             $db->transRollback();
             log_message('error', '[LK::delete] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/lk')->with('error', 'Gagal menghapus laporan: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/lk')->with('error', 'Gagal menghapus laporan: ' . $this->friendlyError($e));
         }
     }
 
@@ -228,7 +235,7 @@ class LK extends BaseController
             return redirect()->to('/ipsrs/lk/' . $id)->with('success', 'Berhasil! Anda telah mengambil tiket perbaikan ini.');
         } catch (\Throwable $e) {
             log_message('error', '[LK::claim] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal klaim pekerjaan: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal klaim pekerjaan: ' . $this->friendlyError($e));
         }
     }
 
@@ -357,7 +364,7 @@ class LK extends BaseController
 
             return redirect()->to('/ipsrs/lk/' . $id)->with('success', 'Status LK diperbarui');
         } catch (\Throwable $e) {
-            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal update status: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal update status: ' . $this->friendlyError($e));
         }
     }
 
@@ -418,7 +425,7 @@ class LK extends BaseController
         } catch (\Throwable $e) {
             $db->transRollback();
             log_message('error', '[LK::addSukuCadang] ' . $e->getMessage());
-            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal mencatat suku cadang: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal mencatat suku cadang: ' . $this->friendlyError($e));
         }
     }
 
@@ -460,7 +467,7 @@ class LK extends BaseController
             return redirect()->to('/ipsrs/lk/' . $id)->with('success', 'Data vendor (Proses III) berhasil dicatat');
         } catch (\Throwable $e) {
             log_message('error', '[LK::storeVendor] add vendor: ' . $e->getMessage());
-            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal mencatat vendor: ' . $e->getMessage());
+            return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal mencatat vendor: ' . $this->friendlyError($e));
         }
     }
 
@@ -533,6 +540,26 @@ class LK extends BaseController
         if ($dt !== null) {
             $data['down_time'] = $dt;
         }
+    }
+
+    /**
+     * Setelah LK dihapus, unit yang masih "Dalam Perbaikan" dikembalikan ke Tersedia
+     * bila tidak ada LK lain yang masih terbuka untuk unit tersebut.
+     */
+    private function releaseSeriesAfterLkRemoval(array $lk): void
+    {
+        if (empty($lk['id_aset_series'])) return;
+
+        $seriesModel = new \App\Models\AsetSeriesModel();
+        $series = $seriesModel->getById($lk['id_aset_series']);
+        if (!$series || ($series['status'] ?? null) !== 'Dalam Perbaikan') return;
+
+        foreach ($this->model->getByAset($lk['id_aset_series']) as $other) {
+            if (($other['status'] ?? '') !== IPSRS::STATUS_LK[6]) {
+                return;
+            }
+        }
+        $seriesModel->update($lk['id_aset_series'], ['status' => 'Tersedia']);
     }
 
     /** Sinkronkan status aset mengikuti status LK. */

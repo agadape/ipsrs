@@ -53,9 +53,9 @@ class KategoriAset extends BaseController
         } catch (\Throwable $e) {
             log_message('error', '[KategoriAset::tambah] ' . $e->getMessage());
             if ($this->request->isAJAX()) {
-                return $this->response->setJSON(['success' => false, 'message' => $e->getMessage()]);
+                return $this->response->setJSON(['success' => false, 'message' => $this->friendlyError($e)]);
             }
-            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan kategori: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan kategori: ' . $this->friendlyError($e));
         }
 
         if ($this->request->isAJAX()) {
@@ -84,7 +84,7 @@ class KategoriAset extends BaseController
             $this->kategoriModel->update($id, $payload);
         } catch (\Throwable $e) {
             log_message('error', '[KategoriAset::edit] ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui kategori: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui kategori: ' . $this->friendlyError($e));
         }
 
         return redirect()->to('/ipsrs/kategori-aset')->with('success', 'Kategori berhasil diperbarui.');
@@ -95,7 +95,7 @@ class KategoriAset extends BaseController
             $this->kategoriModel->delete($id);
         } catch (\Throwable $e) {
             log_message('error', '[KategoriAset::delete] ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal menghapus kategori. Pastikan kategori tidak digunakan di data aset. Detail: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus kategori. Pastikan kategori tidak digunakan di data aset. Detail: ' . $this->friendlyError($e));
         }
 
         return redirect()->to('/ipsrs/kategori-aset')->with('success', 'Kategori berhasil dihapus.');

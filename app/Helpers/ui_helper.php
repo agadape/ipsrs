@@ -86,3 +86,21 @@ if (! function_exists('jam')) {
         return $ts ? date('H:i', $ts) : '-';
     }
 }
+
+if (! function_exists('lokasi_label')) {
+    /**
+     * Label lokasi "Unit / Ruangan" yang mengabaikan nilai kosong atau placeholder "-".
+     */
+    function lokasi_label(?string $unit, ?string $ruangan): string
+    {
+        $parts = [];
+        foreach ([$unit, $ruangan] as $part) {
+            $part = trim((string) $part);
+            if ($part !== '' && $part !== '-' && ! in_array($part, $parts, true)) {
+                $parts[] = $part;
+            }
+        }
+
+        return $parts === [] ? '-' : implode(' / ', $parts);
+    }
+}

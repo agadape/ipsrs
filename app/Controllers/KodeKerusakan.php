@@ -52,7 +52,7 @@ class KodeKerusakan extends BaseController
             $this->kodeModel->create($payload);
         } catch (\Throwable $e) {
             log_message('error', '[KodeKerusakan::tambah] ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan kode kerusakan: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan kode kerusakan: ' . $this->friendlyError($e));
         }
 
         return redirect()->to('/ipsrs/kode-kerusakan')->with('success', "Kode \"{$payload['kode']}\" berhasil ditambahkan.");
@@ -77,7 +77,7 @@ class KodeKerusakan extends BaseController
             $this->kodeModel->update($id, $payload);
         } catch (\Throwable $e) {
             log_message('error', '[KodeKerusakan::edit] ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui kode kerusakan: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui kode kerusakan: ' . $this->friendlyError($e));
         }
 
         return redirect()->to('/ipsrs/kode-kerusakan')->with('success', 'Kode kerusakan berhasil diperbarui.');
@@ -88,7 +88,7 @@ class KodeKerusakan extends BaseController
             $this->kodeModel->delete($id);
         } catch (\Throwable $e) {
             log_message('error', '[KodeKerusakan::delete] ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal menghapus kode kerusakan. Pastikan data tidak digunakan di laporan kerusakan. Detail: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus kode kerusakan. Pastikan data tidak digunakan di laporan kerusakan. Detail: ' . $this->friendlyError($e));
         }
 
         return redirect()->to('/ipsrs/kode-kerusakan')->with('success', 'Kode kerusakan berhasil dihapus.');

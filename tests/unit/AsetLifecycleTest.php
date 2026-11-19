@@ -23,6 +23,21 @@ final class AsetLifecycleTest extends CIUnitTestCase
         }
     }
 
+    public function testBorrowedUnitKeepsLoanStateWhenLkChanges(): void
+    {
+        self::assertFalse(AsetLifecycle::canSyncFromLk('Dipinjam'));
+        self::assertTrue(AsetLifecycle::canSyncFromLk('Tersedia'));
+        self::assertTrue(AsetLifecycle::canSyncFromLk('Dalam Perbaikan'));
+    }
+
+    public function testOnlyDisposedUnitsCannotReceiveNewLk(): void
+    {
+        self::assertFalse(AsetLifecycle::canReceiveLk('Dihapuskan'));
+        foreach (['Tersedia', 'Dipinjam', 'Dalam Perbaikan', 'Rusak Berat'] as $status) {
+            self::assertTrue(AsetLifecycle::canReceiveLk($status));
+        }
+    }
+
     public function testDisposalRequiresRusakBeratAndLegacyValuesAreNotCanonical(): void
     {
         self::assertTrue(AsetLifecycle::canDispose('Rusak Berat'));
