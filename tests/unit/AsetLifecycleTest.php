@@ -30,6 +30,17 @@ final class AsetLifecycleTest extends CIUnitTestCase
         self::assertTrue(AsetLifecycle::canSyncFromLk('Dalam Perbaikan'));
     }
 
+    public function testUnitStatusFollowsOpenLkButNeverOverridesProtectedStates(): void
+    {
+        self::assertSame('Dalam Perbaikan', AsetLifecycle::statusFromOpenLk('Tersedia', true));
+        self::assertSame('Tersedia', AsetLifecycle::statusFromOpenLk('Dalam Perbaikan', false));
+        self::assertSame('Dalam Perbaikan', AsetLifecycle::statusFromOpenLk('Dalam Perbaikan', true));
+        foreach (['Dipinjam', 'Rusak Berat', 'Dihapuskan'] as $status) {
+            self::assertNull(AsetLifecycle::statusFromOpenLk($status, true));
+            self::assertNull(AsetLifecycle::statusFromOpenLk($status, false));
+        }
+    }
+
     public function testOnlyDisposedUnitsCannotReceiveNewLk(): void
     {
         self::assertFalse(AsetLifecycle::canReceiveLk('Dihapuskan'));

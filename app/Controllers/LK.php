@@ -102,13 +102,11 @@ class LK extends BaseController
             $data = $this->whitelist([
                 'tanggal', 'jam_laporan', 'pelapor', 'unit_pelapor',
                 'keluhan', 'kode', 'lokasi', 'nama_aset',
-                'id_aset', 'update_lokasi_aset',
+                'id_aset',
             ]);
             $data['status'] = IPSRS::STATUS_LK[0]; // Laporan Masuk
             $data['kode']   = $data['kode'] ?? 'PR';
 
-            $updateLokasi = !empty($data['update_lokasi_aset']);
-            unset($data['update_lokasi_aset']);
             $idAset = trim((string) ($data['id_aset'] ?? ''));
             unset($data['id_aset']);
 
@@ -133,17 +131,8 @@ class LK extends BaseController
                 'no_order'
             );
 
-            if (!empty($data['id_aset_series'])) {
-                $seriesModel = new \App\Models\AsetSeriesModel();
-                $linkedSeries = $seriesModel->getById($data['id_aset_series']);
-                if ($linkedSeries && AsetLifecycle::canSyncFromLk($linkedSeries['status'] ?? null)) {
-                    $asetUpdate = ['status' => IPSRS::LK_TO_ASET_STATUS['Survei']];
-                    if ($updateLokasi && !empty($data['lokasi'])) {
-                        $asetUpdate['lokasi'] = $data['lokasi'];
-                    }
-                    $seriesModel->update($data['id_aset_series'], $asetUpdate);
-                }
-            }
+            // Lokasi master unit hanya berubah lewat Mutasi, bukan dari form LK.
+            $this->recomputeSeriesStatus($data['id_aset_series'] ?? null);
 
             // Trigger WhatsApp Broadcast Mock/Placeholder
             $lkId = $lk['id'] ?? null;
@@ -194,7 +183,7 @@ class LK extends BaseController
                 ]);
             }
             $this->model->delete($id);
-            $this->releaseSeriesAfterLkRemoval($lk);
+            $this->recomputeSeriesStatus($lk['id_aset_series'] ?? null);
             if ($db->transStatus() === false) {
                 throw new \RuntimeException('Penghapusan LK tidak dapat diselesaikan.');
             }
@@ -253,24 +242,45 @@ class LK extends BaseController
         
         $data = [];
         if (!empty($post['kode'])) $data['kode'] = $post['kode'];
-        if (!empty($post['id_aset'])) $data['id_aset_series'] = $post['id_aset'];
         if (!empty($post['lokasi'])) $data['lokasi'] = $post['lokasi'];
         if (!empty($post['keluhan'])) $data['keluhan'] = $post['keluhan'];
         if (!empty($post['nama_aset'])) $data['nama_aset'] = $post['nama_aset'];
-        
+
+        $oldSeries = $lk['id_aset_series'] ?? null;
+        $newSeries = trim((string) ($post['id_aset'] ?? ''));
+        if ($newSeries !== '' && $newSeries !== $oldSeries) {
+            $series = (new \App\Models\AsetSeriesModel())->getById($newSeries);
+            if (!$series) {
+                return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Aset yang dipilih tidak ditemukan.');
+            }
+            if (!AsetLifecycle::canReceiveLk($series['status'] ?? null)) {
+                return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Unit ini sudah dihapuskan sehingga tidak dapat ditautkan ke LK.');
+            }
+            $data['id_aset_series'] = $newSeries;
+            $data['nama_aset'] = $data['nama_aset'] ?? ($series['nama_aset'] ?? null);
+        }
+
         if (!empty($data)) {
-            $this->model->update($id, $data);
-            
-            // If aset is changed, maybe update aset location
-            if (!empty($post['id_aset']) && !empty($post['update_lokasi_aset']) && !empty($post['lokasi'])) {
-                $seriesModel = new \App\Models\AsetSeriesModel();
-                $series = $seriesModel->getById($post['id_aset']);
-                if ($series && AsetLifecycle::canRelocate($series['status'] ?? null)) {
-                    $seriesModel->update($post['id_aset'], ['lokasi' => $post['lokasi']]);
+            $db = \Config\Database::connect();
+            try {
+                $db->transBegin();
+                $this->model->update($id, $data);
+                // Unit lama dilepas bila tak ada LK aktif lain; unit baru ikut status LK.
+                if (isset($data['id_aset_series'])) {
+                    $this->recomputeSeriesStatus($oldSeries);
+                    $this->recomputeSeriesStatus($newSeries);
                 }
+                if ($db->transStatus() === false) {
+                    throw new \RuntimeException('Detail laporan tidak dapat disimpan.');
+                }
+                $db->transCommit();
+            } catch (\Throwable $e) {
+                $db->transRollback();
+                log_message('error', '[LK::updateDetail] ' . $e->getMessage());
+                return redirect()->to('/ipsrs/lk/' . $id)->with('error', 'Gagal melengkapi data: ' . $this->friendlyError($e));
             }
         }
-        
+
         return redirect()->to('/ipsrs/lk/' . $id)->with('success', 'Detail Laporan berhasil dilengkapi.');
     }
 
@@ -340,9 +350,8 @@ class LK extends BaseController
 
             $this->calcResponseTime($lk, $next, $data);
             $this->calcDownTime($lk, $next, $data);
-            $this->syncAsetStatus($lk, $next);
-
             $this->model->update($id, $data);
+            $this->recomputeSeriesStatus($lk['id_aset_series'] ?? null);
 
             // WhatsApp Notification to Technician
             $newTeknisi = $data['teknisi'] ?? null;
@@ -487,6 +496,11 @@ class LK extends BaseController
             if ($tanggalCek === '' || $jamCek === '' || $responseTime === null) {
                 return 'Tanggal dan jam survei wajib valid dan tidak boleh mendahului waktu laporan.';
             }
+            // Waktu survei tidak boleh di masa depan (toleransi 1 menit untuk selisih jam perangkat).
+            $surveyTs = strtotime($tanggalCek . ' ' . $jamCek);
+            if ($surveyTs === false || $surveyTs > time() + 60) {
+                return 'Waktu survei tidak boleh melebihi waktu sekarang.';
+            }
         }
 
         if ($next === IPSRS::STATUS_LK[array_key_last(IPSRS::STATUS_LK)]) {
@@ -543,37 +557,21 @@ class LK extends BaseController
     }
 
     /**
-     * Setelah LK dihapus, unit yang masih "Dalam Perbaikan" dikembalikan ke Tersedia
-     * bila tidak ada LK lain yang masih terbuka untuk unit tersebut.
+     * Hitung ulang status unit dari seluruh LK-nya: "Dalam Perbaikan" selama masih ada
+     * LK yang belum Selesai, selain itu "Tersedia". Status Dipinjam, Rusak Berat, dan
+     * Dihapuskan tidak pernah diubah otomatis. Panggil SETELAH perubahan LK disimpan.
      */
-    private function releaseSeriesAfterLkRemoval(array $lk): void
+    private function recomputeSeriesStatus(?string $idSeries): void
     {
-        if (empty($lk['id_aset_series'])) return;
+        if (empty($idSeries)) return;
 
         $seriesModel = new \App\Models\AsetSeriesModel();
-        $series = $seriesModel->getById($lk['id_aset_series']);
-        if (!$series || ($series['status'] ?? null) !== 'Dalam Perbaikan') return;
+        $series = $seriesModel->getById($idSeries);
+        if (!$series) return;
 
-        foreach ($this->model->getByAset($lk['id_aset_series']) as $other) {
-            if (($other['status'] ?? '') !== IPSRS::STATUS_LK[6]) {
-                return;
-            }
-        }
-        $seriesModel->update($lk['id_aset_series'], ['status' => 'Tersedia']);
-    }
-
-    /** Sinkronkan status aset mengikuti status LK. */
-    private function syncAsetStatus(array $lk, string $next): void
-    {
-        if (empty($lk['id_aset_series'])) return;
-
-        $asetStatus = IPSRS::LK_TO_ASET_STATUS[$next] ?? null;
-        if ($asetStatus !== null) {
-            $seriesModel = new \App\Models\AsetSeriesModel();
-            $series = $seriesModel->getById($lk['id_aset_series']);
-            if ($series && AsetLifecycle::canSyncFromLk($series['status'] ?? null)) {
-                $seriesModel->update($lk['id_aset_series'], ['status' => $asetStatus]);
-            }
+        $next = AsetLifecycle::statusFromOpenLk($series['status'] ?? null, $this->model->hasOpenLk($idSeries));
+        if ($next !== null && $next !== ($series['status'] ?? null)) {
+            $seriesModel->update($idSeries, ['status' => $next]);
         }
     }
 }

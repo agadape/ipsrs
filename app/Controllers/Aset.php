@@ -515,7 +515,9 @@ class Aset extends BaseController
             if ($db->affectedRows() !== 1) {
                 throw new \RuntimeException('Peminjaman aktif tidak ditemukan atau data ganda terdeteksi.');
             }
-            $db->table('aset_series')->where('id', $id)->where('status', 'Dipinjam')->update(['status' => 'Tersedia']);
+            // Unit yang dilaporkan rusak selama dipinjam kembali ke perbaikan, bukan langsung Tersedia.
+            $statusKembali = (new \App\Models\LKModel())->hasOpenLk($id) ? 'Dalam Perbaikan' : 'Tersedia';
+            $db->table('aset_series')->where('id', $id)->where('status', 'Dipinjam')->update(['status' => $statusKembali]);
             if ($db->affectedRows() !== 1) {
                 throw new \RuntimeException('Status aset sudah berubah; pengembalian dibatalkan.');
             }

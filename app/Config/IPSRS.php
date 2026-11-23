@@ -19,8 +19,9 @@ class IPSRS
     public const SLA_RESPONSE_TIME = 15;
 
     // Laporan Configuration
-    public const NAMA_KEPALA = 'Nama Kepala IPSRS, ST., MT.';
-    public const NIP_KEPALA  = '19800101 200501 1 001';
+    // Dikosongkan untuk tanda tangan basah sampai nama & NIP Ka. IPSRS resmi diberikan.
+    public const NAMA_KEPALA = '(.....................................)';
+    public const NIP_KEPALA  = '.....................................';
 
     // ── ID Prefixes ───────────────────────────────────────────────────────
 

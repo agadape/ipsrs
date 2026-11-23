@@ -41,6 +41,19 @@ final class AsetLifecycle
         return !in_array($status, ['Dihapuskan', 'Rusak Berat', 'Dipinjam'], true);
     }
 
+    /**
+     * Status unit yang seharusnya berdasarkan ada/tidaknya LK yang masih terbuka.
+     * Mengembalikan null bila status unit dilindungi (Dipinjam, Rusak Berat, Dihapuskan).
+     */
+    public static function statusFromOpenLk(?string $current, bool $hasOpenLk): ?string
+    {
+        if (!self::canSyncFromLk($current)) {
+            return null;
+        }
+
+        return $hasOpenLk ? 'Dalam Perbaikan' : 'Tersedia';
+    }
+
     /** A disposed unit no longer exists operationally, so it cannot receive new LK. */
     public static function canReceiveLk(?string $status): bool
     {

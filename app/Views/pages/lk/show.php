@@ -726,14 +726,7 @@ $vendorList   = $vendorList ?? [];
             <?php endforeach; ?>
           </select>
           </div>
-          
-          <!-- Update Aset Checkbox -->
-          <div class="p-3 bg-slate-50 border border-slate-200 rounded-md">
-            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-700">
-              <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded text-red-700 focus:ring-red-600 border-slate-300">
-              Perbarui lokasi master aset sesuai lokasi ini
-            </label>
-          </div>
+          <p class="text-xs text-slate-500">Lokasi di sini hanya untuk laporan ini. Perpindahan aset dicatat lewat menu Mutasi Aset.</p>
         </div>
 
         <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">

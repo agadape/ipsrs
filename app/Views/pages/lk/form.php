@@ -136,11 +136,8 @@
 
   <div id="lokasi-warning" class="hidden mt-4 p-4 bg-amber-50 border border-amber-200 rounded-md text-sm text-amber-800">
     <span class="font-bold">⚠️ Perhatian:</span> Aset ini tercatat di <span id="lokasi-terdaftar" class="font-mono font-semibold"></span>,
-    tapi lokasi laporan berbeda. Apakah aset sudah berpindah?
-    <label class="flex items-center gap-2 mt-3 cursor-pointer">
-      <input type="checkbox" name="update_lokasi_aset" value="1" class="rounded border-amber-300 text-red-700 focus:ring-red-600">
-      <span class="font-medium">Ya, perbarui lokasi aset sesuai lokasi laporan ini</span>
-    </label>
+    tapi lokasi laporan berbeda. Jika aset memang sudah berpindah, catat perpindahannya lewat menu
+    <span class="font-semibold">Mutasi Aset</span> agar riwayat lokasinya tersimpan.
   </div>
 </form>
 

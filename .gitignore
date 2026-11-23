@@ -170,3 +170,6 @@ _modules/*
 /UAT_Checklist.md
 /app/Database/igrations/
 /.claude/
+/.env.bak*
+/.env.*
+!/.env.example

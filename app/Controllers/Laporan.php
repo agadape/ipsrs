@@ -354,7 +354,7 @@ class Laporan extends BaseController
             SpreadsheetText::set($sheet, 'E' . $row, $lkp['kategori']);
             SpreadsheetText::set($sheet, 'F' . $row, $lkp['tanggal']);
             SpreadsheetText::set($sheet, 'G' . $row, $lkp['teknisi'] ?? '-');
-            SpreadsheetText::set($sheet, 'H' . $row, $lkp['hasil_pemeriksaan'] ?? '-');
+            SpreadsheetText::set($sheet, 'H' . $row, $lkp['hasil'] ?? '-');
             SpreadsheetText::set($sheet, 'I' . $row, $lkp['catatan'] ?? '-');
             $row++;
         }

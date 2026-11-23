@@ -27,6 +27,15 @@ class LKModel extends BaseModel
             ->getResultArray();
     }
 
+    /** Apakah unit masih punya LK yang belum Selesai. */
+    public function hasOpenLk(string $idAset): bool
+    {
+        return $this->qb($this->table)
+            ->where('id_aset_series', $idAset)
+            ->where('status !=', IPSRS::STATUS_LK[6])
+            ->countAllResults() > 0;
+    }
+
     // Suku cadang linked to this LK
 
     public function getSukuCadang(string $lkId): array
