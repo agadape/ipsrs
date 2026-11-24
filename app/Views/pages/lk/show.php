@@ -59,7 +59,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
     </div>
     <div class="flex items-center gap-2">
       <?php if ($authRole !== 'pelapor' && $status === 'Laporan Masuk'): ?>
-      <form method="POST" action="/ipsrs/lk/claim/<?= esc($id) ?>" class="inline" onsubmit="confirmFormSubmit(event, this, 'Ambil tiket ini sebagai pekerjaan Anda?');">
+      <form method="POST" action="/ipsrs/lk/claim/<?= esc($id) ?>" class="inline" onsubmit="confirmFormSubmit(event, this, 'Ambil tiket ini sebagai pekerjaan Anda?', 'Ya, ambil tugas');">
         <?= csrf_field() ?>
         <button type="submit" class="flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-md bg-red-700 text-white hover:bg-red-800 transition-colors shadow-sm">
           Ambil Tugas
@@ -104,7 +104,7 @@ $prosesLabels = ['I' => 'Proses I â€” Perbaikan Langsung', 'II' => 'Proses II â€
       <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Aset Terkait</p>
       <?php if (!empty($lk['id_aset_series'])): ?>
       <a href="/ipsrs/aset/series/<?= esc($lk['id_aset_series']) ?>" class="text-sm font-semibold text-red-700 hover:text-red-800 hover:underline">
-        <?= esc($lk['nama_aset'] ?? $lk['id_aset_series']) ?>
+        <?= esc(($lk['nama_aset'] ?? '') !== '' ? $lk['nama_aset'] : 'Lihat unit aset') ?>
       </a>
       <?php else: ?>
       <p class="text-sm font-semibold text-slate-800"><?= esc($lk['nama_aset']) ?></p>
@@ -790,7 +790,7 @@ $vendorList   = $vendorList ?? [];
     
     if (statusSelect && statusSelect.value === 'Selesai') {
       if (signaturePad && signaturePad.isEmpty()) {
-        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Bukti tanda tangan pelapor wajib diisi jika status Selesai!' });
+        Swal.fire({ icon: 'warning', title: 'Tanda tangan belum ada', text: 'Minta pelapor menandatangani bukti serah-terima sebelum menyimpan status Selesai.', confirmButtonColor: '#b91c1c', confirmButtonText: 'Mengerti' });
         return false;
       }
       

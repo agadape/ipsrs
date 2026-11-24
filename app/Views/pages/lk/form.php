@@ -104,7 +104,7 @@
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
             <option value="<?= esc($a['id'] ?? '') ?>"
-                    data-lokasi="<?= esc($a['lokasi'] ?? '') ?>"
+                    data-lokasi="<?= esc(lokasi_label($a['unit'] ?? null, $a['ruangan'] ?? null)) ?>"
                     <?= old('id_aset') == ($a['id'] ?? '') ? 'selected' : '' ?>>
               <?= esc(format_aset_label($a)) ?>
             </option>
@@ -153,7 +153,11 @@
     var opt = sel.options[sel.selectedIndex];
     if (opt && opt.value !== "") {
       var asetUnit = opt.getAttribute('data-lokasi'); 
-      if(asetUnit) {
+      if (asetUnit && asetUnit !== '-') {
+          // Lokasi unit belum tentu ada di daftar unit standar; tambahkan sebagai pilihan agar tidak kosong.
+          if (!selLokasi.find('option').filter(function () { return this.value === asetUnit; }).length) {
+              selLokasi.append(new Option(asetUnit, asetUnit));
+          }
           selLokasi.val(asetUnit).trigger('change');
       }
     }

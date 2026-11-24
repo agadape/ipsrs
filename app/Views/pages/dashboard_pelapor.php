@@ -8,7 +8,7 @@
     
     <div class="relative z-10 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
       <div>
-        <p class="text-red-100 font-medium mb-1"><?= date('l, d F Y') ?></p>
+        <p class="text-red-100 font-medium mb-1"><?= tgl(date('Y-m-d'), 'l, d F Y') ?></p>
         <h1 class="text-3xl font-bold tracking-tight">Halo, <?= esc(session('user_name')) ?>!</h1>
         <p class="mt-2 text-red-100 max-w-md text-sm leading-relaxed">
           Ini adalah dashboard khusus Pelapor. Anda dapat melihat ringkasan status laporan kerusakan yang telah Anda buat untuk unit/ruangan Anda.

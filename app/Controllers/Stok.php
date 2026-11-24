@@ -66,7 +66,7 @@ class Stok extends BaseController
 
     public function riwayat(): string
     {
-        $riwayat = $this->model->getRiwayat();
+        $riwayat = $this->model->getRiwayat((string) ($this->request->getGet('id') ?? ''));
         $filter  = $this->request->getGet('jenis') ?? '';
         if ($filter) {
             $riwayat = array_filter($riwayat, fn($r) => $r['jenis'] === $filter);

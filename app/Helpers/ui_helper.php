@@ -73,7 +73,37 @@ if (! function_exists('tgl')) {
             return '-';
         }
         $ts = strtotime($date);
-        return $ts ? date($format, $ts) : '-';
+        if (! $ts) {
+            return '-';
+        }
+
+        // Nama hari/bulan ditampilkan dalam Bahasa Indonesia.
+        return strtr(date($format, $ts), [
+            'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis',
+            'Friday' => 'Jumat', 'Saturday' => 'Sabtu', 'Sunday' => 'Minggu',
+            'January' => 'Januari', 'February' => 'Februari', 'March' => 'Maret', 'April' => 'April',
+            'May' => 'Mei', 'June' => 'Juni', 'July' => 'Juli', 'August' => 'Agustus',
+            'September' => 'September', 'October' => 'Oktober', 'November' => 'November', 'December' => 'Desember',
+            'Aug' => 'Agu', 'Oct' => 'Okt', 'Dec' => 'Des',
+            'Mon' => 'Sen', 'Tue' => 'Sel', 'Wed' => 'Rab', 'Thu' => 'Kam', 'Fri' => 'Jum', 'Sat' => 'Sab', 'Sun' => 'Min',
+        ]);
+    }
+}
+
+if (! function_exists('durasi_menit')) {
+    /** Ubah jumlah menit menjadi teks mudah dibaca, mis. "45 mnt", "2 jam 5 mnt", "4 hari 8 jam". */
+    function durasi_menit(float|int|null $menit): string
+    {
+        $m = (int) round((float) $menit);
+        if ($m < 60) {
+            return $m . ' mnt';
+        }
+        if ($m < 1440) {
+            $sisa = $m % 60;
+            return intdiv($m, 60) . ' jam' . ($sisa ? ' ' . $sisa . ' mnt' : '');
+        }
+        $jam = intdiv($m % 1440, 60);
+        return intdiv($m, 1440) . ' hari' . ($jam ? ' ' . $jam . ' jam' : '');
     }
 }
 

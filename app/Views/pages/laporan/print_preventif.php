@@ -136,7 +136,7 @@
 
   <!-- Signature Block -->
     <div class="signature">
-      <p>Yogyakarta, <?= date('d F Y') ?></p>
+      <p>Yogyakarta, <?= tgl(date('Y-m-d'), 'd F Y') ?></p>
       <p>Kepala IPSRS RSUD Kota YK,</p>
       <br><br><br><br>
       <p class="name"><?= \App\Config\IPSRS::NAMA_KEPALA ?></p>

@@ -32,7 +32,7 @@ $alasanFilter = $alasan ?? '';
                 class="select2 w-full px-4 py-3 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
           <option value="">-- Pilih Aset Fisik --</option>
           <?php foreach (($aset ?? []) as $a): ?>
-            <option value="<?= esc($a['id'] ?? '') ?>" data-lokasi="<?= esc($a['lokasi'] ?? '-') ?>">
+            <option value="<?= esc($a['id'] ?? '') ?>" data-lokasi="<?= esc(lokasi_label($a['unit'] ?? null, $a['ruangan'] ?? null)) ?>">
               <?= esc(format_aset_label($a)) ?>
             </option>
           <?php endforeach; ?>
@@ -63,7 +63,7 @@ $alasanFilter = $alasan ?? '';
         <select name="lokasi_tujuan" id="lokasi_tujuan" class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm">
           <option value="">-- Pilih Lokasi Tujuan --</option>
           <?php foreach (($masterLokasi ?? []) as $ml): ?>
-            <option value="<?= esc($ml['id']) ?>"><?= esc($ml['gedung'] . ' - ' . ($ml['nama_ruangan'] ?? $ml['nama_unit'])) ?></option>
+            <option value="<?= esc($ml['id']) ?>"><?= esc($ml['gedung'] . ' - ' . lokasi_label($ml['nama_unit'] ?? null, $ml['nama_ruangan'] ?? null)) ?></option>
           <?php endforeach; ?>
         </select>
       </div>

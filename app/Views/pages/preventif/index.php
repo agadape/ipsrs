@@ -30,7 +30,7 @@ $isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
           <option value="">-- Pilih Aset --</option>
           <?php foreach (($aset ?? []) as $a): ?>
           <option value="<?= esc($a['id'] ?? '') ?>"
-                  data-lokasi="<?= esc($a['lokasi'] ?? '') ?>"
+                  data-lokasi="<?= esc(lokasi_label($a['unit'] ?? null, $a['ruangan'] ?? null)) ?>"
                   data-nama="<?= esc($a['nama'] ?? $a['nama_aset'] ?? '') ?>">
             <?= esc(format_aset_label($a)) ?>
           </option>
@@ -76,13 +76,6 @@ $isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
                class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
       </div>
 
-      <!-- Keterangan -->
-      <div class="lg:col-span-3">
-        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Keterangan</label>
-        <input type="text" name="keterangan"
-               placeholder="Catatan jadwal (opsional)"
-               class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
-      </div>
 
     </div>
     <div class="mt-4 flex justify-end">
@@ -151,7 +144,7 @@ $isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
           <td class="px-4 py-3 text-slate-600"><?= esc($j['lokasi'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-600"><?= esc($j['teknisi'] ?? '-') ?></td>
           <td class="px-4 py-3 text-slate-600"><?= esc($j['jam'] ?? '-') ?></td>
-          <td class="px-4 py-3"><span class="<?= $jBadge ?>"><?= esc($j['status'] ?? 'Belum') ?></span></td>
+          <td class="px-4 py-3"><span class="<?= $jBadge ?>"><?= esc($jStatus) ?></span></td>
           <td class="px-4 py-3 text-right">
             <div class="flex items-center justify-end gap-2 flex-nowrap">
               <?php if (($j['status'] ?? '') !== 'Selesai'): ?>
@@ -219,7 +212,8 @@ function validateTime() {
   const t = document.getElementById('preventif_jam');
   if (!d || !t.value) return;
 
-  const today = new Date().toISOString().split('T')[0];
+  const nowLocal = new Date();
+  const today = nowLocal.getFullYear() + '-' + String(nowLocal.getMonth() + 1).padStart(2, '0') + '-' + String(nowLocal.getDate()).padStart(2, '0');
   if (d === today) {
     const now = new Date();
     const currentHours = now.getHours().toString().padStart(2, '0');

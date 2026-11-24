@@ -67,7 +67,7 @@ class Auth extends BaseController
         $user = $this->penggunaModel->findByEmail($email);
 
         if (!$user || !password_verify($password, $user['password_hash'])) {
-            return redirect()->to('/login')->with('error', 'Email atau kata sandi salah.');
+            return redirect()->to('/login')->with('error', 'Email atau kata sandi salah.')->with('old_email', $email);
         }
 
         $role = strtolower(trim((string) ($user['role'] ?? '')));

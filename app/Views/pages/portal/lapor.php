@@ -234,7 +234,7 @@
             list.className = 'list-disc pl-5 mt-1';
             missing.forEach(field => {
                 const item = document.createElement('li');
-                item.textContent = document.querySelector(`label[for="${field.id}"]`).textContent.trim() + ' belum diisi.';
+                item.textContent = document.querySelector(`label[for="${field.id}"]`).textContent.replace('*', '').trim() + ' belum diisi.';
                 list.appendChild(item);
             });
             alertBox.replaceChildren(document.createTextNode('Lengkapi kolom berikut:'), list);

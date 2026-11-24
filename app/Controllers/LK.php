@@ -119,6 +119,9 @@ class LK extends BaseController
                     return redirect()->back()->withInput()->with('error', 'Unit ini sudah dihapuskan sehingga tidak dapat dilaporkan rusak.');
                 }
                 $data['id_aset_series'] = $idAset;
+                if (trim((string) ($data['nama_aset'] ?? '')) === '') {
+                    $data['nama_aset'] = $series['nama_aset'] ?? null;
+                }
             }
 
             if (session('user_role') === 'pelapor') {

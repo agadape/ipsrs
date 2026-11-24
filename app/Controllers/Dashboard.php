@@ -75,7 +75,7 @@ class Dashboard extends BaseController
         $recentLK = array_slice($allLK, 0, 5);
 
         // Upcoming jadwal
-        $upcoming = array_filter($allJadwal, fn($j) => $j['tanggal'] >= $today);
+        $upcoming = array_filter($allJadwal, fn($j) => $j['tanggal'] >= $today && ($j['status'] ?? '') !== 'Selesai');
         usort($upcoming, fn($a, $b) => strcmp($a['tanggal'], $b['tanggal']));
         $upcoming = array_slice(array_values($upcoming), 0, 4);
 

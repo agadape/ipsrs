@@ -69,7 +69,7 @@
             <td class="px-6 py-4 text-slate-600"><?= esc($s['ruangan'] ?? '-') ?> <br><span class="text-xs text-slate-500">Lt. <?= esc($s['lantai'] ?? '') ?></span></td>
             <?php endif; ?>
             <td class="px-6 py-4">
-             <span class="px-2.5 py-1 rounded border <?= ($s['status'] === 'Beroperasi' || $s['status'] === 'Aktif') ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-700 border-red-200' ?> text-xs font-medium">
+             <span class="px-2.5 py-1 rounded border <?= in_array($s['status'] ?? '', ['Tersedia', 'Beroperasi', 'Aktif'], true) ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-700 border-red-200' ?> text-xs font-medium">
                <?= esc($s['status'] ?? '-') ?>
              </span>
           </td>

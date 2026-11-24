@@ -227,7 +227,7 @@ class Laporan extends BaseController
 
         // Signature Block
         $sigRow = $lastRow + 3;
-        $sheet->setCellValue('K' . $sigRow, 'Yogyakarta, ' . date('d F Y'));
+        $sheet->setCellValue('K' . $sigRow, 'Yogyakarta, ' . tgl(date('Y-m-d'), 'd F Y'));
         $sheet->setCellValue('K' . ($sigRow + 1), 'Kepala IPSRS RSUD Kota YK,');
         
         $sheet->setCellValue('K' . ($sigRow + 5), \App\Config\IPSRS::NAMA_KEPALA);
@@ -309,17 +309,17 @@ class Laporan extends BaseController
         
         // Title (Rows 1-3)
         $sheet->setCellValue('A1', 'Rekapitulasi Hasil Preventif');
-        $sheet->mergeCells('A1:K1');
+        $sheet->mergeCells('A1:I1');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         
         $sheet->setCellValue('A2', 'RSUD Kota Yogyakarta');
-        $sheet->mergeCells('A2:K2');
+        $sheet->mergeCells('A2:I2');
         $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
         
         $sheet->setCellValue('A3', 'Periode: ' . $periodInfo['label']);
-        $sheet->mergeCells('A3:K3');
+        $sheet->mergeCells('A3:I3');
         $sheet->getStyle('A3')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('A3')->getAlignment()->setHorizontal('center');
         
@@ -373,7 +373,7 @@ class Laporan extends BaseController
 
         // Signature Block
         $sigRow = $row + 2;
-        $sheet->setCellValue('I' . $sigRow, 'Yogyakarta, ' . date('d F Y'));
+        $sheet->setCellValue('I' . $sigRow, 'Yogyakarta, ' . tgl(date('Y-m-d'), 'd F Y'));
         $sheet->setCellValue('I' . ($sigRow + 1), 'Kepala IPSRS RSUD Kota YK,');
         
         $sheet->setCellValue('I' . ($sigRow + 5), \App\Config\IPSRS::NAMA_KEPALA);

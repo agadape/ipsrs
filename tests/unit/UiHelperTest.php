@@ -19,7 +19,7 @@ final class UiHelperTest extends CIUnitTestCase
 
     public function testTglWithCustomFormat(): void
     {
-        $this->assertSame('19 May 2026', tgl('2026-05-19', 'd M Y'));
+        $this->assertSame('19 Mei 2026', tgl('2026-05-19', 'd M Y'));
     }
 
     public function testTglNullReturnsDash(): void
@@ -118,5 +118,17 @@ final class UiHelperTest extends CIUnitTestCase
         $this->assertSame('A1 / Vinolia A', lokasi_label('A1', 'Vinolia A'));
         $this->assertSame('IGD', lokasi_label('IGD', 'IGD'));
         $this->assertSame('-', lokasi_label(null, ' - '));
+    }
+
+    public function testTglUsesIndonesianDayNames(): void
+    {
+        $this->assertSame('Selasa, 24 November 2026', tgl('2026-11-24', 'l, d F Y'));
+    }
+
+    public function testDurasiMenitIsHumanReadable(): void
+    {
+        $this->assertSame('12 mnt', durasi_menit(12));
+        $this->assertSame('1 jam 15 mnt', durasi_menit(75));
+        $this->assertSame('4 hari 8 jam', durasi_menit(6251));
     }
 }

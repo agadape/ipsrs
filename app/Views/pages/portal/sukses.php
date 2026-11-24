@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Laporan Berhasil ?" RSUD Kota Yogyakarta</title>
+  <title>Laporan Berhasil — RSUD Kota Yogyakarta</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://rsms.me/">
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css">

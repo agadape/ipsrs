@@ -65,7 +65,7 @@ $isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
           <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 3.5V16M4 4h4v4H4V4zm12 0h4v4h-4V4zM4 16h4v4H4v-4z"/></svg>
         </a>
         <?php if ($isAdmin): ?>
-        <a href="/ipsrs/aset/<?= esc($id) ?>/edit" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="Edit Data">
+        <a href="/ipsrs/aset/series/<?= esc($id) ?>/edit" class="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-semibold px-3 py-2 rounded-md transition-colors shadow-sm border border-slate-200" title="Edit Data">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
         </a>
         <?php endif; ?>
@@ -91,7 +91,7 @@ $isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
   <h2 class="text-sm font-semibold text-slate-800 mb-5 pb-3 border-b border-slate-100">Informasi Aset</h2>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-6">
     <?php
-    $locValue = $series['lokasi'] ?? '-';
+    $locValue = lokasi_label($series['unit'] ?? null, $series['ruangan'] ?? null);
     if ($series['status'] === 'Di Gudang') $locValue = 'Gudang IPSRS';
     if ($series['status'] === 'Kanibal') $locValue = 'Gudang Kanibal';
     if ($series['status'] === 'Dihapuskan' || $series['status'] === 'Dibuang') $locValue = 'Tidak Tersedia';
@@ -250,9 +250,9 @@ $isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
           <td class="px-4 py-3 text-slate-600"><?= tgl($rk['tanggal'] ?? '') ?></td>
           <td class="px-4 py-3 font-medium text-slate-800"><?= esc($rk['nama_komponen'] ?? '-') ?></td>
           <td class="px-4 py-3">
-            <?php if (($rk['id_aset_donor'] ?? '') === $id): ?>
+            <?php if (($rk['id_series_donor'] ?? '') === $id): ?>
             <span class="badge bg-red-50 text-red-600 border border-red-200 text-[10px]">Donor (Dipanen)</span>
-            <?php elseif (($rk['id_aset_penerima'] ?? '') === $id): ?>
+            <?php elseif (($rk['id_series_penerima'] ?? '') === $id): ?>
             <span class="badge bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px]">Penerima (Diperbaiki)</span>
             <?php endif; ?>
           </td>
@@ -270,7 +270,9 @@ $isAdmin = strtolower((string) (session('user_role') ?? '')) === 'admin';
 <div class="card p-6 mb-6">
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-sm font-semibold text-slate-800">Riwayat Laporan Kerusakan</h2>
+    <?php if (($series['status'] ?? '') !== 'Dihapuskan'): ?>
     <a href="/lapor?aset_id=<?= esc($series['id']) ?>" class="text-xs font-medium text-red-700 hover:underline">+ Lapor Kerusakan</a>
+    <?php endif; ?>
   </div>
   <?php if (empty($riwayatLK)): ?>
   <p class="text-sm text-slate-500 text-center py-6 border border-dashed border-slate-200 rounded-md">Belum ada laporan kerusakan untuk aset ini.</p>

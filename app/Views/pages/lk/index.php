@@ -44,7 +44,7 @@ $viewerContext = match ($viewerRole) {
       <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Status</label>
       <select name="status" class="w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 focus:border-red-600 transition-colors shadow-sm">
         <option value="">Semua Status</option>
-        <?php foreach (['Laporan Masuk', 'Didisposisi', 'Survei', 'Menunggu Suku Cadang', 'Dalam Perbaikan', 'Selesai'] as $opt): ?>
+        <?php foreach (\App\Config\IPSRS::STATUS_LK as $opt): ?>
         <option value="<?= $opt ?>" <?= ($status ?? '') === $opt ? 'selected' : '' ?>><?= $opt ?></option>
         <?php endforeach; ?>
       </select>

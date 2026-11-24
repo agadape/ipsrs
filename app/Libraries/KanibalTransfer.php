@@ -84,7 +84,7 @@ final class KanibalTransfer
             $recipientData = [
                 'kondisi' => $condition, 'asal' => 'Hasil Kanibal',
                 'id_riwayat_kanibal' => $data['id_riwayat'], 'tanggal_dicatat' => date('Y-m-d'),
-                'keterangan' => 'Dipasang dari aset series: ' . $data['id_series_donor'],
+                'keterangan' => 'Dipasang dari aset ' . $this->donorLabel($data['id_series_donor']),
             ];
             if ($recipientComponent) {
                 $this->db->table('komponen_aset')->where('id', $recipientComponent['id'])->update($recipientData);
@@ -119,5 +119,16 @@ final class KanibalTransfer
             return $component;
         }
         return null;
+    }
+
+    /** Nomor aset donor untuk keterangan komponen; jatuh ke ID bila nomor tidak tersedia. */
+    private function donorLabel(string $idSeries): string
+    {
+        try {
+            $row = $this->db->table('aset_series')->where('id', $idSeries)->get()->getRowArray();
+        } catch (\Throwable) {
+            $row = null;
+        }
+        return (string) (($row['nomor_aset'] ?? '') !== '' ? $row['nomor_aset'] : $idSeries);
     }
 }

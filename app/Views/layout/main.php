@@ -176,16 +176,16 @@ function confirmDelete(url) {
   });
 }
 
-function confirmFormSubmit(event, formElement, message = 'Data yang dihapus tidak dapat dikembalikan!') {
+function confirmFormSubmit(event, formElement, message = 'Data yang dihapus tidak dapat dikembalikan!', confirmText = 'Ya, hapus!') {
   event.preventDefault();
   Swal.fire({
     title: 'Apakah Anda yakin?',
     text: message,
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#ef4444',
+    confirmButtonColor: '#b91c1c',
     cancelButtonColor: '#9ca3af',
-    confirmButtonText: 'Ya, hapus!',
+    confirmButtonText: confirmText,
     cancelButtonText: 'Batal'
   }).then((result) => {
     if (result.isConfirmed) {

@@ -38,7 +38,7 @@ $firstName = explode(' ', session('user_name') ?? 'Admin')[0];
       <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Rata-rata Respon</p>
       <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
     </div>
-    <p class="text-2xl font-bold text-slate-900"><?= number_format($avgRespon ?? 0, 0) ?><span class="text-sm text-slate-500 font-medium ml-1">mnt</span></p>
+    <p class="text-2xl font-bold text-slate-900"><?= esc(durasi_menit($avgRespon ?? 0)) ?></p>
     <p class="text-xs text-slate-500 mt-2.5">Seluruh LK dengan respons tercatat</p>
   </div>
 
