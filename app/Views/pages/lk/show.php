@@ -721,8 +721,15 @@ $vendorList   = $vendorList ?? [];
           <select name="lokasi" required
                   class="select2 w-full px-3 py-2 text-sm bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-red-600 shadow-sm transition-colors">
             <option value="">-- Pilih Unit / Lokasi --</option>
-            <?php foreach (getStandardUnits() as $u): ?>
-              <option value="<?= esc($u) ?>" <?= ($lk['lokasi'] ?? '') === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
+            <?php
+              $lokasiLk = trim((string) ($lk['lokasi'] ?? ''));
+              $unitList = getStandardUnits();
+            ?>
+            <?php if ($lokasiLk !== '' && !in_array($lokasiLk, $unitList, true)): ?>
+              <option value="<?= esc($lokasiLk) ?>" selected><?= esc($lokasiLk) ?></option>
+            <?php endif; ?>
+            <?php foreach ($unitList as $u): ?>
+              <option value="<?= esc($u) ?>" <?= $lokasiLk === $u ? 'selected' : '' ?>><?= esc($u) ?></option>
             <?php endforeach; ?>
           </select>
           </div>
